@@ -1,5 +1,5 @@
 import { Platform } from '@angular/cdk/platform';
-import { DOCUMENT } from '@angular/common';
+
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
@@ -8,7 +8,8 @@ import {
   Input,
   OnDestroy,
   OnInit,
-  ViewEncapsulation
+  ViewEncapsulation,
+  DOCUMENT
 } from '@angular/core';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 // import sdk from '@stackblitz/sdk';
