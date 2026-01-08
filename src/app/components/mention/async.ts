@@ -2,13 +2,14 @@ import { Component, ViewEncapsulation } from '@angular/core';
 import { MentionOnSearchTypes } from 'ng-zorro-antd/mention';
 
 @Component({
-  selector: 'nz-demo-mention-async',
-  encapsulation: ViewEncapsulation.None,
-  template: `
+    selector: 'nz-demo-mention-async',
+    encapsulation: ViewEncapsulation.None,
+    template: `
     <nz-mention [nzSuggestions]="suggestions" [nzLoading]="loading" (nzOnSearchChange)="onSearchChange($event)">
       <input nzMentionTrigger nz-input [(ngModel)]="inputValue" />
     </nz-mention>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoMentionAsyncComponent {
   inputValue: string;

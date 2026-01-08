@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-slider-input-number',
-  template: `
+    selector: 'nz-demo-slider-input-number',
+    template: `
     <nz-row>
       <nz-col nzSpan="12">
         <nz-slider [nzMin]="1" [nzMax]="20" [(ngModel)]="value1"></nz-slider>
@@ -20,7 +20,8 @@ import { Component } from '@angular/core';
         <nz-input-number [nzMin]="0" [nzMax]="1" [ngStyle]="{ marginLeft: '16px' }" [nzStep]="0.01" [(ngModel)]="value2"></nz-input-number>
       </nz-col>
     </nz-row>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoSliderInputNumberComponent {
   value1 = 1;

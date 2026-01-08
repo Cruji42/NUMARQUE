@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-button-loading',
-  template: `
+    selector: 'nz-demo-button-loading',
+    template: `
     <button nz-button nzType="primary" nzLoading><i nz-icon nzType="poweroff"></i>Loading</button>
     <button nz-button nzType="primary" nzSize="small" nzLoading>Loading</button>
     <br />
@@ -12,14 +12,15 @@ import { Component } from '@angular/core';
     <button nz-button nzLoading nzShape="circle"></button>
     <button nz-button nzLoading nzType="primary" nzShape="circle"></button>
   `,
-  styles: [
-    `
+    styles: [
+        `
       [nz-button] {
         margin-right: 8px;
         margin-bottom: 12px;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class NzDemoButtonLoadingComponent {
   isLoadingOne = false;

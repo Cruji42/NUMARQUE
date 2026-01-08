@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-divider-horizontal',
-  template: `
+    selector: 'nz-demo-divider-horizontal',
+    template: `
     <div>
       <p>
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nonne merninisti licere mihi ista probare, quae sunt a te dicta? Refert
@@ -26,6 +26,7 @@ import { Component } from '@angular/core';
         tamen, quo modo.
       </p>
     </div>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoDividerHorizontalComponent {}

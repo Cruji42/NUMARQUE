@@ -2,7 +2,8 @@ import { Directive, AfterViewChecked } from '@angular/core';
 declare var $: any; // JQuery
 
 @Directive({
-    selector: '[sideNav]'
+    selector: '[sideNav]',
+    standalone: false
 })
 export class SideNavDirective implements AfterViewChecked {
 

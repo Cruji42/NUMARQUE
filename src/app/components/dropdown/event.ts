@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-dropdown-event',
-  template: `
+    selector: 'nz-demo-dropdown-event',
+    template: `
     <a nz-dropdown [nzDropdownMenu]="menu">
       Hover me, Click menu item
       <i nz-icon nzType="down"></i>
@@ -14,7 +14,8 @@ import { Component } from '@angular/core';
         <li nz-menu-item (click)="log('3rd menu item')">3rd menu item</li>
       </ul>
     </nz-dropdown-menu>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoDropdownEventComponent {
   log(data: string): void {

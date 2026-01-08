@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-menu-inline-collapsed',
-  template: `
+    selector: 'nz-demo-menu-inline-collapsed',
+    template: `
     <div class="wrapper">
       <button nz-button nzType="primary" (click)="toggleCollapsed()">
         <i nz-icon [nzType]="isCollapsed ? 'menu-unfold' : 'menu-fold'"></i>
@@ -34,8 +34,8 @@ import { Component } from '@angular/core';
       </ul>
     </div>
   `,
-  styles: [
-    `
+    styles: [
+        `
       .wrapper {
         width: 240px;
       }
@@ -44,7 +44,8 @@ import { Component } from '@angular/core';
         margin-bottom: 12px;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class NzDemoMenuInlineCollapsedComponent {
   isCollapsed = false;

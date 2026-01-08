@@ -8,8 +8,8 @@ interface ItemData {
 }
 
 @Component({
-  selector: 'nz-demo-table-edit-row',
-  template: `
+    selector: 'nz-demo-table-edit-row',
+    template: `
     <nz-table #editRowTable nzBordered [nzData]="listOfData" nzTableLayout="fixed">
       <thead>
         <tr>
@@ -40,13 +40,14 @@ interface ItemData {
       </tbody>
     </nz-table>
   `,
-  styles: [
-    `
+    styles: [
+        `
       .save {
         margin-right: 8px;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class NzDemoTableEditRowComponent implements OnInit {
   editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};

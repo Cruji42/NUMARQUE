@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-divider-orientation',
-  template: `
+    selector: 'nz-demo-divider-orientation',
+    template: `
     <div>
       <nz-divider nzText="Left Text" nzOrientation="left"></nz-divider>
       <p>
@@ -15,6 +15,7 @@ import { Component } from '@angular/core';
         tamen, quo modo.
       </p>
     </div>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoDividerOrientationComponent {}

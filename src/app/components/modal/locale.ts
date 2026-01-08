@@ -2,8 +2,8 @@ import { Component } from '@angular/core';
 import { NzModalService } from 'ng-zorro-antd/modal';
 
 @Component({
-  selector: 'nz-demo-modal-locale',
-  template: `
+    selector: 'nz-demo-modal-locale',
+    template: `
     <div>
       <button nz-button nzType="primary" (click)="showModal()">Modal</button>
       <nz-modal
@@ -21,7 +21,8 @@ import { NzModalService } from 'ng-zorro-antd/modal';
     </div>
     <br />
     <button nz-button nzType="info" (click)="showConfirm()">Confirm</button>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoModalLocaleComponent {
   isVisible = false;

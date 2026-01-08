@@ -4,8 +4,8 @@ import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, ValidationErr
 import { Observable, Observer } from 'rxjs';
 
 @Component({
-  selector: 'nz-demo-form-validate-reactive',
-  template: `
+    selector: 'nz-demo-form-validate-reactive',
+    template: `
     <form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm(validateForm.value)">
       <nz-form-item>
         <nz-form-label [nzSpan]="7" nzRequired>Username</nz-form-label>
@@ -69,9 +69,8 @@ import { Observable, Observer } from 'rxjs';
       </nz-form-item>
     </form>
   `,
-
-  styles: [
-    `
+    styles: [
+        `
       [nz-form] {
         max-width: 600px;
       }
@@ -80,7 +79,8 @@ import { Observable, Observer } from 'rxjs';
         margin-left: 8px;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class NzDemoFormValidateReactiveComponent {
   validateForm: UntypedFormGroup;

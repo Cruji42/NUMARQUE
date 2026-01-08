@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-checkbox-group',
-  template: `
+    selector: 'nz-demo-checkbox-group',
+    template: `
     <nz-checkbox-group [(ngModel)]="checkOptionsOne" (ngModelChange)="log(checkOptionsOne)"></nz-checkbox-group>
     <br />
     <br />
@@ -10,7 +10,8 @@ import { Component } from '@angular/core';
     <br />
     <br />
     <nz-checkbox-group [(ngModel)]="checkOptionsThree" (ngModelChange)="log(checkOptionsThree)"></nz-checkbox-group>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoCheckboxGroupComponent {
   checkOptionsOne = [

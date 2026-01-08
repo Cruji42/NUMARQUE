@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-affix-basic',
-  template: `
+    selector: 'nz-demo-affix-basic',
+    template: `
     <nz-affix [nzOffsetTop]="offsetTop">
       <button nz-button nzType="primary" (click)="setOffsetTop()">
         <span>Affix top</span>
@@ -14,7 +14,8 @@ import { Component } from '@angular/core';
         <span>Affix bottom</span>
       </button>
     </nz-affix>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoAffixBasicComponent {
   offsetTop = 10;

@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-radio-disable',
-  template: `
+    selector: 'nz-demo-radio-disable',
+    template: `
     <div>
       <label nz-radio [nzDisabled]="disabled">Disabled</label>
       <br />
@@ -11,7 +11,8 @@ import { Component } from '@angular/core';
       <br />
       <button nz-button nzType="primary" (click)="disabled = !disabled">Toggle disabled</button>
     </div>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoRadioDisableComponent {
   disabled = true;

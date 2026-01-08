@@ -2,8 +2,8 @@ import { Component } from '@angular/core';
 import { NzUploadChangeParam, NzUploadFile } from 'ng-zorro-antd/upload';
 
 @Component({
-  selector: 'nz-demo-upload-upload-with-aliyun-oss',
-  template: `
+    selector: 'nz-demo-upload-upload-with-aliyun-oss',
+    template: `
     <nz-upload
       nzName="file"
       [(nzFileList)]="files"
@@ -14,7 +14,8 @@ import { NzUploadChangeParam, NzUploadFile } from 'ng-zorro-antd/upload';
     >
       Photos: <button nz-button><i nz-icon nzType="upload"></i> Click to Upload</button>
     </nz-upload>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoUploadUploadWithAliyunOssComponent {
   files: NzUploadFile[] = [];

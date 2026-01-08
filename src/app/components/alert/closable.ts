@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-alert-closable',
-  template: `
+    selector: 'nz-demo-alert-closable',
+    template: `
     <nz-alert
       nzType="warning"
       nzCloseable
@@ -19,13 +19,14 @@ import { Component } from '@angular/core';
     >
     </nz-alert>
   `,
-  styles: [
-    `
+    styles: [
+        `
       nz-alert {
         margin-bottom: 16px;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class NzDemoAlertClosableComponent {
   afterClose(): void {

@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-badge-basic',
-  template: `
+    selector: 'nz-demo-badge-basic',
+    template: `
     <nz-badge [nzCount]="5">
       <a class="head-example"></a>
     </nz-badge>
@@ -16,8 +16,8 @@ import { Component } from '@angular/core';
       <i nz-icon nzType="clock-circle" class="ant-scroll-number-custom-component" style="color: #f5222d"></i>
     </ng-template>
   `,
-  styles: [
-    `
+    styles: [
+        `
       nz-badge {
         margin-right: 20px;
       }
@@ -31,6 +31,7 @@ import { Component } from '@angular/core';
         vertical-align: middle;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class NzDemoBadgeBasicComponent {}

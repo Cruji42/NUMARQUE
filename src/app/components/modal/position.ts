@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-modal-position',
-  template: `
+    selector: 'nz-demo-modal-position',
+    template: `
     <button nz-button nzType="primary" (click)="showModalTop()">Display a modal dialog at 20px to Top</button>
     <nz-modal
       [nzStyle]="{ top: '20px' }"
@@ -31,8 +31,8 @@ import { Component } from '@angular/core';
       <p>some contents...</p>
     </nz-modal>
   `,
-  styles: [
-    `
+    styles: [
+        `
       ::ng-deep .vertical-center-modal {
         display: flex;
         align-items: center;
@@ -43,7 +43,8 @@ import { Component } from '@angular/core';
         top: 0;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class NzDemoModalPositionComponent {
   isVisibleTop = false;

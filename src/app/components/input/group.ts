@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-input-group',
-  template: `
+    selector: 'nz-demo-input-group',
+    template: `
     <nz-input-group [nzSize]="'large'">
       <div nz-row nzGutter="8">
         <div nz-col nzSpan="5">
@@ -83,7 +83,8 @@ import { Component } from '@angular/core';
       </nz-select>
       <nz-cascader [nzOptions]="options" style="width: 70%;"></nz-cascader>
     </nz-input-group>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoInputGroupComponent {
   options = [

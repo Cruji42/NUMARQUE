@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-card-basic',
-  template: `
+    selector: 'nz-demo-card-basic',
+    template: `
     <nz-card style="width:300px;" nzTitle="Card title" [nzExtra]="extraTemplate">
       <p>Card content</p>
       <p>Card content</p>
@@ -12,12 +12,13 @@ import { Component } from '@angular/core';
       <a>More</a>
     </ng-template>
   `,
-  styles: [
-    `
+    styles: [
+        `
       p {
         margin: 0;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class NzDemoCardBasicComponent {}

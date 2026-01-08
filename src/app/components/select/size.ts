@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-select-size',
-  template: `
+    selector: 'nz-demo-select-size',
+    template: `
     <nz-radio-group [(ngModel)]="size">
       <label nz-radio-button nzValue="large"><span>Large</span></label>
       <label nz-radio-button nzValue="default"><span>Default</span></label>
@@ -25,13 +25,14 @@ import { Component, OnInit } from '@angular/core';
       <nz-option *ngFor="let option of listOfOption" [nzLabel]="option.label" [nzValue]="option.value"></nz-option>
     </nz-select>
   `,
-  styles: [
-    `
+    styles: [
+        `
       nz-select {
         width: 100%;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class NzDemoSelectSizeComponent implements OnInit {
   listOfOption: Array<{ label: string; value: string }> = [];

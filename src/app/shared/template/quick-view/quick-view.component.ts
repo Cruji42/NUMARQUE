@@ -3,7 +3,8 @@ import { ThemeConstantService } from '../../services/theme-constant.service';
 
 @Component({
     selector: 'app-quick-view',
-    templateUrl: './quick-view.component.html'
+    templateUrl: './quick-view.component.html',
+    standalone: false
 })
 
 

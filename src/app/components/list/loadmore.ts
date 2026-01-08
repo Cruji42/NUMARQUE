@@ -7,8 +7,8 @@ const count = 5;
 const fakeDataUrl = 'https://randomuser.me/api/?results=5&inc=name,gender,email,nat&noinfo';
 
 @Component({
-  selector: 'nz-demo-list-loadmore',
-  template: `
+    selector: 'nz-demo-list-loadmore',
+    template: `
     <nz-list class="demo-loadmore-list" [nzLoading]="initLoading">
       <nz-list-item *ngFor="let item of list">
         <ng-container *ngIf="!item.loading">
@@ -33,8 +33,8 @@ const fakeDataUrl = 'https://randomuser.me/api/?results=5&inc=name,gender,email,
       </div>
     </nz-list>
   `,
-  styles: [
-    `
+    styles: [
+        `
       .demo-loadmore-list {
         min-height: 350px;
       }
@@ -45,7 +45,8 @@ const fakeDataUrl = 'https://randomuser.me/api/?results=5&inc=name,gender,email,
         line-height: 32px;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class NzDemoListLoadmoreComponent implements OnInit {
   initLoading = true; // bug

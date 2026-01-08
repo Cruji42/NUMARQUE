@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 
 @Component({
-  selector: 'nz-demo-form-normal-login',
-  template: `
+    selector: 'nz-demo-form-normal-login',
+    template: `
     <form nz-form [formGroup]="validateForm" class="login-form" (ngSubmit)="submitForm()">
       <nz-form-item>
         <nz-form-control nzErrorTip="Please input your username!">
@@ -33,8 +33,8 @@ import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms
       Or <a> register now! </a>
     </form>
   `,
-  styles: [
-    `
+    styles: [
+        `
       .login-form {
         max-width: 300px;
       }
@@ -51,7 +51,8 @@ import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms
         width: 100%;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class NzDemoFormNormalLoginComponent implements OnInit {
   validateForm: UntypedFormGroup;

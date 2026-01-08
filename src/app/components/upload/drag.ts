@@ -3,8 +3,8 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzUploadChangeParam } from 'ng-zorro-antd/upload';
 
 @Component({
-  selector: 'nz-demo-upload-drag',
-  template: `
+    selector: 'nz-demo-upload-drag',
+    template: `
     <nz-upload
       nzType="drag"
       [nzMultiple]="true"
@@ -19,7 +19,8 @@ import { NzUploadChangeParam } from 'ng-zorro-antd/upload';
         Support for a single or bulk upload. Strictly prohibit from uploading company data or other band files
       </p>
     </nz-upload>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoUploadDragComponent {
   constructor(private msg: NzMessageService) {}

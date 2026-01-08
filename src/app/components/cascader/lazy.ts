@@ -50,10 +50,11 @@ const scenicspots: { [key: string]: Array<{ value: string; label: string; isLeaf
 };
 
 @Component({
-  selector: 'nz-demo-cascader-lazy',
-  template: `
+    selector: 'nz-demo-cascader-lazy',
+    template: `
     <nz-cascader [(ngModel)]="values" [nzLoadData]="loadData" (ngModelChange)="onChanges($event)"> </nz-cascader>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoCascaderLazyComponent {
   values: string[] | null = null;

@@ -50,10 +50,11 @@ const options = [
 ];
 
 @Component({
-  selector: 'nz-demo-cascader-change-on-function',
-  template: `
+    selector: 'nz-demo-cascader-change-on-function',
+    template: `
     <nz-cascader [nzChangeOn]="validate" [nzOptions]="nzOptions" [(ngModel)]="values" (ngModelChange)="onChanges($event)"> </nz-cascader>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoCascaderChangeOnFunctionComponent {
   nzOptions: NzCascaderOption[] = options;

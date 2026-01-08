@@ -2,8 +2,8 @@ import { Component } from '@angular/core';
 import { NzMessageService } from 'ng-zorro-antd/message';
 
 @Component({
-  selector: 'nz-demo-popconfirm-dynamic-trigger',
-  template: `
+    selector: 'nz-demo-popconfirm-dynamic-trigger',
+    template: `
     <a
       nz-popconfirm
       nzPopconfirmTitle="Are you sure delete this task?"
@@ -16,7 +16,8 @@ import { NzMessageService } from 'ng-zorro-antd/message';
     <br />
     Whether directly execute:
     <nz-switch [(ngModel)]="switchValue"></nz-switch>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoPopconfirmDynamicTriggerComponent {
   switchValue = false;

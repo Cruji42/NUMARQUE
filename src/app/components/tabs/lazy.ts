@@ -2,8 +2,8 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-tabs-lazy',
-  template: `
+    selector: 'nz-demo-tabs-lazy',
+    template: `
     <nz-tabset>
       <nz-tab nzTitle="Tab Eagerly 1">
         <nz-demo-tab-content-eagerly></nz-demo-tab-content-eagerly>
@@ -22,15 +22,17 @@ import { Component, OnInit } from '@angular/core';
         </ng-template>
       </nz-tab>
     </nz-tabset>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoTabsLazyComponent {}
 
 @Component({
-  selector: 'nz-demo-tab-content-lazy',
-  template: `
+    selector: 'nz-demo-tab-content-lazy',
+    template: `
     lazy
-  `
+  `,
+    standalone: false
 })
 export class NzDemoTabContentLazyComponent implements OnInit {
   ngOnInit(): void {
@@ -39,10 +41,11 @@ export class NzDemoTabContentLazyComponent implements OnInit {
 }
 
 @Component({
-  selector: 'nz-demo-tab-content-eagerly',
-  template: `
+    selector: 'nz-demo-tab-content-eagerly',
+    template: `
     eagerly
-  `
+  `,
+    standalone: false
 })
 export class NzDemoTabContentEagerlyComponent implements OnInit {
   ngOnInit(): void {

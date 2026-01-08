@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-drawer-multi-level-drawer',
-  template: `
+    selector: 'nz-demo-drawer-multi-level-drawer',
+    template: `
     <button nz-button nzType="primary" (click)="open()">New Cookbook</button>
     <nz-drawer
       [nzClosable]="false"
@@ -44,7 +44,8 @@ import { Component } from '@angular/core';
         </nz-list>
       </nz-drawer>
     </nz-drawer>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoDrawerMultiLevelDrawerComponent {
   visible = false;

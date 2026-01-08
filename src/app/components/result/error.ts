@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-result-error',
-  template: `
+    selector: 'nz-demo-result-error',
+    template: `
     <nz-result
       nzTitle="Submission Failed"
       nzStatus="error"
@@ -26,6 +26,7 @@ import { Component } from '@angular/core';
         <button nz-button>Buy Again</button>
       </div>
     </nz-result>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoResultErrorComponent {}

@@ -4,8 +4,8 @@ import { Component, Input, TemplateRef, ViewChild } from '@angular/core';
 import { NzDrawerRef, NzDrawerService } from 'ng-zorro-antd/drawer';
 
 @Component({
-  selector: 'nz-demo-drawer-service',
-  template: `
+    selector: 'nz-demo-drawer-service',
+    template: `
     <ng-template #drawerTemplate let-data let-drawerRef="drawerRef">
       value: {{ data?.value }}
       <br />
@@ -18,7 +18,8 @@ import { NzDrawerRef, NzDrawerService } from 'ng-zorro-antd/drawer';
     </div>
     <button nz-button nzType="primary" (click)="openTemplate()">Use Template</button>&nbsp;
     <button nz-button nzType="primary" (click)="openComponent()">Use Component</button>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoDrawerServiceComponent {
   @ViewChild('drawerTemplate', { static: false }) drawerTemplate: TemplateRef<{
@@ -70,14 +71,15 @@ export class NzDemoDrawerServiceComponent {
 }
 
 @Component({
-  selector: 'nz-drawer-custom-component',
-  template: `
+    selector: 'nz-drawer-custom-component',
+    template: `
     <div>
       <input nz-input [(ngModel)]="value" />
       <nz-divider></nz-divider>
       <button nzType="primary" (click)="close()" nz-button>Confirm</button>
     </div>
-  `
+  `,
+    standalone: false
 })
 export class NzDrawerCustomComponent {
   @Input() value = '';

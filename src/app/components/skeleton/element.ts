@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-skeleton-element',
-  template: `
+    selector: 'nz-demo-skeleton-element',
+    template: `
     <div nz-row nzAlign="middle" [nzGutter]="8">
       <div nz-col nzSpan="5">
         ButtonActive:
@@ -70,7 +70,8 @@ import { Component } from '@angular/core';
     </div>
     <br />
     <nz-skeleton-element nzType="input" [nzActive]="inputActive" [nzSize]="inputSize" style="width:300px"></nz-skeleton-element>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoSkeletonElementComponent {
   buttonActive = false;

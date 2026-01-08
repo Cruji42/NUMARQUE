@@ -5,8 +5,8 @@ import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { filter } from 'rxjs/operators';
 
 @Component({
-  selector: 'nz-demo-upload-upload-manually',
-  template: `
+    selector: 'nz-demo-upload-upload-manually',
+    template: `
     <nz-upload [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload">
       <button nz-button><i nz-icon nzType="upload"></i>Select File</button>
     </nz-upload>
@@ -20,7 +20,8 @@ import { filter } from 'rxjs/operators';
     >
       {{ uploading ? 'Uploading' : 'Start Upload' }}
     </button>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoUploadUploadManuallyComponent {
   uploading = false;

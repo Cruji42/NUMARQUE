@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-tabs-custom-add-trigger',
-  template: `
+    selector: 'nz-demo-tabs-custom-add-trigger',
+    template: `
     <div style="margin-bottom: 16px;">
       <button nz-button (click)="newTab()">ADD</button>
     </div>
@@ -14,7 +14,8 @@ import { Component } from '@angular/core';
         Content of {{ tab }}
       </nz-tab>
     </nz-tabset>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoTabsCustomAddTriggerComponent {
   index = 0;

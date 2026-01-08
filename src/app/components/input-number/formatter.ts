@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-input-number-formatter',
-  template: `
+    selector: 'nz-demo-input-number-formatter',
+    template: `
     <nz-input-number
       [(ngModel)]="demoValue"
       [nzMin]="1"
@@ -20,13 +20,14 @@ import { Component } from '@angular/core';
       [nzParser]="parserPercent"
     ></nz-input-number>
   `,
-  styles: [
-    `
+    styles: [
+        `
       nz-input-number {
         margin-right: 8px;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class NzDemoInputNumberFormatterComponent {
   demoValue = 100;

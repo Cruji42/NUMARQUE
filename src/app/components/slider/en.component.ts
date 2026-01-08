@@ -2,9 +2,10 @@ import { Component, QueryList, ViewChildren } from '@angular/core';
 import { NzCodeBoxComponent } from '../../shared/components/codebox/codebox.component';
 
 @Component({
-  selector     : 'nz-demo-slider',
-  preserveWhitespaces: false,
-  templateUrl  : './en.html'
+    selector: 'nz-demo-slider',
+    preserveWhitespaces: false,
+    templateUrl: './en.html',
+    standalone: false
 })
 export class NzDemoSliderEnComponent {
   expanded = false;

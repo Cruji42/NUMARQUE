@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-breadcrumb-separator-independent',
-  template: `
+    selector: 'nz-demo-breadcrumb-separator-independent',
+    template: `
     <nz-breadcrumb [nzSeparator]="null">
       <nz-breadcrumb-item>
         Location
@@ -26,6 +26,7 @@ import { Component } from '@angular/core';
         An Application
       </nz-breadcrumb-item>
     </nz-breadcrumb>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoBreadcrumbSeparatorIndependentComponent {}

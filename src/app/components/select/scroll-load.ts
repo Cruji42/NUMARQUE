@@ -4,8 +4,8 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 @Component({
-  selector: 'nz-demo-select-scroll-load',
-  template: `
+    selector: 'nz-demo-select-scroll-load',
+    template: `
     <nz-select
       [(ngModel)]="selectedUser"
       (nzScrollToBottom)="loadMore()"
@@ -19,13 +19,14 @@ import { map } from 'rxjs/operators';
       <nz-spin *ngIf="isLoading"></nz-spin>
     </ng-template>
   `,
-  styles: [
-    `
+    styles: [
+        `
       nz-select {
         width: 100%;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class NzDemoSelectScrollLoadComponent implements OnInit {
   randomUserUrl = 'https://api.randomuser.me/?results=10';

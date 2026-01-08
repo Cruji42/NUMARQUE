@@ -2,7 +2,8 @@ import { Component } from '@angular/core'
 import { ThemeConstantService } from '../../shared/services/theme-constant.service';
 
 @Component({
-    templateUrl: './crm-dashboard.component.html'
+    templateUrl: './crm-dashboard.component.html',
+    standalone: false
 })
 
 export class CrmDashboardComponent {

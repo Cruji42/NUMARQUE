@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-slider-event',
-  template: `
+    selector: 'nz-demo-slider-event',
+    template: `
     <nz-slider [(ngModel)]="singleValue" (ngModelChange)="onChange($event)" (nzOnAfterChange)="onAfterChange($event)"></nz-slider>
     <nz-slider
       nzRange
@@ -11,7 +11,8 @@ import { Component } from '@angular/core';
       (ngModelChange)="onChange($event)"
       (nzOnAfterChange)="onAfterChange($event)"
     ></nz-slider>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoSliderEventComponent {
   singleValue = 30;

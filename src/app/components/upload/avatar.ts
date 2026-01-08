@@ -4,8 +4,8 @@ import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { Observable, Observer } from 'rxjs';
 
 @Component({
-  selector: 'nz-demo-upload-avatar',
-  template: `
+    selector: 'nz-demo-upload-avatar',
+    template: `
     <nz-upload
       class="avatar-uploader"
       nzAction="https://www.mocky.io/v2/5cc8019d300000980a055e76"
@@ -22,14 +22,15 @@ import { Observable, Observer } from 'rxjs';
       <img *ngIf="avatarUrl" [src]="avatarUrl" style="width: 100%" />
     </nz-upload>
   `,
-  styles: [
-    `
+    styles: [
+        `
       :host ::ng-deep .avatar-uploader > .ant-upload {
         width: 128px;
         height: 128px;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class NzDemoUploadAvatarComponent {
   loading = false;

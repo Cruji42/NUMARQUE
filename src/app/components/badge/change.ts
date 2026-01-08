@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-badge-change',
-  template: `
+    selector: 'nz-demo-badge-change',
+    template: `
     <div>
       <nz-badge [nzCount]="count">
         <a class="head-example"></a>
@@ -20,8 +20,8 @@ import { Component } from '@angular/core';
       <nz-switch [(ngModel)]="dot"></nz-switch>
     </div>
   `,
-  styles: [
-    `
+    styles: [
+        `
       nz-badge {
         margin-right: 20px;
       }
@@ -35,7 +35,8 @@ import { Component } from '@angular/core';
         vertical-align: middle;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class NzDemoBadgeChangeComponent {
   count = 5;

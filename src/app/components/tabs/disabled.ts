@@ -1,14 +1,15 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-tabs-disabled',
-  template: `
+    selector: 'nz-demo-tabs-disabled',
+    template: `
     <nz-tabset>
       <nz-tab *ngFor="let tab of tabs" [nzTitle]="tab.name" [nzDisabled]="tab.disabled">
         {{ tab.name }}
       </nz-tab>
     </nz-tabset>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoTabsDisabledComponent {
   tabs = [

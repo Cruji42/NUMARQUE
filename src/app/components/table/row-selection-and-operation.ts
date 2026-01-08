@@ -9,8 +9,8 @@ export interface Data {
 }
 
 @Component({
-  selector: 'nz-demo-table-row-selection-and-operation',
-  template: `
+    selector: 'nz-demo-table-row-selection-and-operation',
+    template: `
     <div class="send-request">
       <button nz-button nzType="primary" [disabled]="setOfCheckedId.size === 0" [nzLoading]="loading" (click)="sendRequest()">
         Send Request
@@ -46,9 +46,8 @@ export interface Data {
       </tbody>
     </nz-table>
   `,
-
-  styles: [
-    `
+    styles: [
+        `
       .send-request {
         margin-bottom: 16px;
       }
@@ -57,7 +56,8 @@ export interface Data {
         margin-left: 8px;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class NzDemoTableRowSelectionAndOperationComponent implements OnInit {
   checked = false;

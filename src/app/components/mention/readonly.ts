@@ -1,9 +1,9 @@
 import { Component, ViewEncapsulation } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-mention-readonly',
-  encapsulation: ViewEncapsulation.None,
-  template: `
+    selector: 'nz-demo-mention-readonly',
+    encapsulation: ViewEncapsulation.None,
+    template: `
     <nz-mention [nzSuggestions]="suggestions">
       <input
         style="margin-bottom: 10px"
@@ -15,7 +15,8 @@ import { Component, ViewEncapsulation } from '@angular/core';
       />
       <input placeholder="this is readOnly Mention" nzMentionTrigger nz-input readOnly [(ngModel)]="inputValue" />
     </nz-mention>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoMentionReadonlyComponent {
   inputValue: string;

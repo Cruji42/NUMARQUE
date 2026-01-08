@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-badge-colorful',
-  template: `
+    selector: 'nz-demo-badge-colorful',
+    template: `
     <div>
       <h4 style="margin-bottom: 16px">Presets:</h4>
       <div *ngFor="let color of colors">
@@ -17,7 +17,8 @@ import { Component } from '@angular/core';
       <br />
       <nz-badge nzColor="#108ee9" nzText="#108ee9"></nz-badge>
     </div>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoBadgeColorfulComponent {
   colors = ['pink', 'red', 'yellow', 'orange', 'cyan', 'green', 'blue', 'purple', 'geekblue', 'magenta', 'volcano', 'gold', 'lime'];

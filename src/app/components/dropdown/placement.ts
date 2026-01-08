@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-dropdown-placement',
-  template: `
+    selector: 'nz-demo-dropdown-placement',
+    template: `
     <div>
       <ng-container *ngFor="let position of listOfPosition">
         <button nz-button nz-dropdown [nzDropdownMenu]="menu" [nzPlacement]="position">{{ position }}</button>
@@ -16,14 +16,15 @@ import { Component } from '@angular/core';
       </ng-container>
     </div>
   `,
-  styles: [
-    `
+    styles: [
+        `
       [nz-button] {
         margin-right: 8px;
         margin-bottom: 8px;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class NzDemoDropdownPlacementComponent {
   listOfPosition: string[] = ['bottomLeft', 'bottomCenter', 'bottomRight', 'topLeft', 'topCenter', 'topRight'];

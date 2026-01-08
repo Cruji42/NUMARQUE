@@ -1,11 +1,12 @@
 import { ChangeDetectionStrategy, Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 @Component({
-  selector: 'nz-highlight',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  template: `
+    selector: 'nz-highlight',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    template: `
     <pre class="language-angular"><code [innerHTML]="code"></code></pre>
-  `
+  `,
+    standalone: false
 })
 export class NzHighlightComponent implements OnInit {
   code: SafeHtml | string;

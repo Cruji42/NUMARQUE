@@ -8,6 +8,7 @@ import { ThemeConstantService } from '../../shared/services/theme-constant.servi
 @Component({
     selector: 'app-common-layout',
     templateUrl: './common-layout.component.html',
+    standalone: false
 })
 
 export class CommonLayoutComponent  {

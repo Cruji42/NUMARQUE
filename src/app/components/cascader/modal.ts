@@ -44,14 +44,15 @@ const options = [
 ];
 
 @Component({
-  selector: 'nz-demo-cascader-modal',
-  template: `
+    selector: 'nz-demo-cascader-modal',
+    template: `
     <nz-modal [(nzVisible)]="isVisible" nzTitle="Please select" (nzOnCancel)="handleCancel($event)" (nzOnOk)="handleOk($event)">
       <nz-cascader [nzOptions]="nzOptions" [(ngModel)]="values" (ngModelChange)="onChanges($event)"> </nz-cascader>
     </nz-modal>
 
     <button nz-button (click)="open()">Open Dialog</button>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoCascaderModalComponent {
   nzOptions: NzCascaderOption[] = options;

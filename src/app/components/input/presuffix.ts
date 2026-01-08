@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-input-presuffix',
-  template: `
+    selector: 'nz-demo-input-presuffix',
+    template: `
     <nz-input-group [nzSuffix]="suffixTemplateInfo" [nzPrefix]="prefixTemplateUser">
       <input type="text" nz-input placeholder="Enter your username" />
     </nz-input-group>
@@ -13,6 +13,7 @@ import { Component } from '@angular/core';
     <nz-input-group nzSuffix="RMB" nzPrefix="￥">
       <input type="text" nz-input />
     </nz-input-group>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoInputPresuffixComponent {}

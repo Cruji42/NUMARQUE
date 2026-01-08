@@ -19,8 +19,8 @@ interface ChildrenItemData {
 }
 
 @Component({
-  selector: 'nz-demo-table-nested-table',
-  template: `
+    selector: 'nz-demo-table-nested-table',
+    template: `
     <nz-table #nestedTable [nzData]="listOfParentData" [nzPageSize]="10">
       <thead>
         <tr>
@@ -93,7 +93,8 @@ interface ChildrenItemData {
         </ng-template>
       </tbody>
     </nz-table>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoTableNestedTableComponent implements OnInit {
   listOfParentData: ParentItemData[] = [];

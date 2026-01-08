@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-date-picker-date-render',
-  template: `
+    selector: 'nz-demo-date-picker-date-render',
+    template: `
     <nz-date-picker [nzDateRender]="tplRender"></nz-date-picker>
     <nz-range-picker [nzDateRender]="tplRender"></nz-range-picker>
 
@@ -12,8 +12,8 @@ import { Component } from '@angular/core';
       </div>
     </ng-template>
   `,
-  styles: [
-    `
+    styles: [
+        `
       nz-date-picker,
       nz-month-picker,
       nz-range-picker,
@@ -25,6 +25,7 @@ import { Component } from '@angular/core';
         border-radius: 50%;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class NzDemoDatePickerDateRenderComponent {}

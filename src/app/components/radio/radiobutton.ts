@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-radio-radiobutton',
-  template: `
+    selector: 'nz-demo-radio-radiobutton',
+    template: `
     <nz-radio-group [(ngModel)]="radioValue">
       <label nz-radio-button nzValue="A">Hangzhou</label>
       <label nz-radio-button nzValue="B">Shanghai</label>
@@ -25,7 +25,8 @@ import { Component } from '@angular/core';
       <label nz-radio-button nzValue="C" nzDisabled>Beijing</label>
       <label nz-radio-button nzValue="D" nzDisabled>Chengdu</label>
     </nz-radio-group>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoRadioRadiobuttonComponent {
   radioValue = 'A';

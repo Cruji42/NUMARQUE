@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-skeleton-children',
-  template: `
+    selector: 'nz-demo-skeleton-children',
+    template: `
     <div class="article">
       <nz-skeleton [nzLoading]="loading">
         <h4>Ant Design, a design language</h4>
@@ -16,8 +16,8 @@ import { Component } from '@angular/core';
       </button>
     </div>
   `,
-  styles: [
-    `
+    styles: [
+        `
       .article h4 {
         margin-bottom: 16px;
       }
@@ -25,7 +25,8 @@ import { Component } from '@angular/core';
         margin-top: 16px;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class NzDemoSkeletonChildrenComponent {
   loading = false;

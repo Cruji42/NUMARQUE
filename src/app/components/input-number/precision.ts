@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-input-number-precision',
-  template: `
+    selector: 'nz-demo-input-number-precision',
+    template: `
     <nz-input-number [(ngModel)]="toFixedValue" [nzPrecision]="precision" nzPlaceHolder="toFixed"></nz-input-number>
     <nz-input-number [(ngModel)]="cutValue" [nzPrecision]="precision" nzPrecisionMode="cut" nzPlaceHolder="cut off"></nz-input-number>
     <nz-input-number
@@ -12,13 +12,14 @@ import { Component } from '@angular/core';
       nzPlaceHolder="cut off"
     ></nz-input-number>
   `,
-  styles: [
-    `
+    styles: [
+        `
       nz-input-number {
         margin-right: 8px;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class NzDemoInputNumberPrecisionComponent {
   toFixedValue = 2;

@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-badge-overflow',
-  template: `
+    selector: 'nz-demo-badge-overflow',
+    template: `
     <nz-badge [nzCount]="99">
       <a class="head-example"></a>
     </nz-badge>
@@ -16,8 +16,8 @@ import { Component } from '@angular/core';
       <a class="head-example"></a>
     </nz-badge>
   `,
-  styles: [
-    `
+    styles: [
+        `
       nz-badge {
         margin-right: 20px;
       }
@@ -31,6 +31,7 @@ import { Component } from '@angular/core';
         vertical-align: middle;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class NzDemoBadgeOverflowComponent {}

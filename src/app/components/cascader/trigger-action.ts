@@ -44,8 +44,8 @@ const options = [
 ];
 
 @Component({
-  selector: 'nz-demo-cascader-trigger-action',
-  template: `
+    selector: 'nz-demo-cascader-trigger-action',
+    template: `
     <nz-cascader
       [nzTriggerAction]="'hover'"
       [nzExpandTrigger]="'hover'"
@@ -54,7 +54,8 @@ const options = [
       (ngModelChange)="onChanges($event)"
     >
     </nz-cascader>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoCascaderTriggerActionComponent {
   nzOptions: NzCascaderOption[] = options;

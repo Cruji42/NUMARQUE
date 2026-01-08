@@ -11,7 +11,8 @@ interface DataItem {
 }
 
 @Component({
-    templateUrl: './orders-list.component.html'
+    templateUrl: './orders-list.component.html',
+    standalone: false
 })
 
 export class OrdersListComponent  {

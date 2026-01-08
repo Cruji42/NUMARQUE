@@ -1,21 +1,22 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-select-label-in-value',
-  template: `
+    selector: 'nz-demo-select-label-in-value',
+    template: `
     <p>The selected option's age is {{ selectedValue?.age }}</p>
     <br />
     <nz-select [(ngModel)]="selectedValue" [compareWith]="compareFn" (ngModelChange)="log($event)" nzAllowClear nzPlaceHolder="Choose">
       <nz-option *ngFor="let option of optionList" [nzValue]="option" [nzLabel]="option.label"></nz-option>
     </nz-select>
   `,
-  styles: [
-    `
+    styles: [
+        `
       nz-select {
         width: 120px;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class NzDemoSelectLabelInValueComponent {
   optionList = [

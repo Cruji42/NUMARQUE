@@ -2,8 +2,8 @@ import { Component } from '@angular/core';
 import { NzFormatEmitEvent } from 'ng-zorro-antd/tree';
 
 @Component({
-  selector: 'nz-demo-tree-basic-controlled',
-  template: `
+    selector: 'nz-demo-tree-basic-controlled',
+    template: `
     <nz-tree
       [nzData]="nodes"
       nzCheckable
@@ -16,7 +16,8 @@ import { NzFormatEmitEvent } from 'ng-zorro-antd/tree';
       (nzCheckBoxChange)="nzEvent($event)"
     >
     </nz-tree>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoTreeBasicControlledComponent {
   defaultCheckedKeys = ['0-0-0'];

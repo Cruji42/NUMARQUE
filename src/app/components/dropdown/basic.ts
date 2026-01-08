@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-dropdown-basic',
-  template: `
+    selector: 'nz-demo-dropdown-basic',
+    template: `
     <a nz-dropdown [nzDropdownMenu]="menu">
       Hover me
       <i nz-icon nzType="down"></i>
@@ -14,6 +14,7 @@ import { Component } from '@angular/core';
         <li nz-menu-item>3rd menu item</li>
       </ul>
     </nz-dropdown-menu>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoDropdownBasicComponent {}

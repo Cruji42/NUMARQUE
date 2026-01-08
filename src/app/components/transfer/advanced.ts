@@ -3,8 +3,8 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 import { TransferItem } from 'ng-zorro-antd/transfer';
 
 @Component({
-  selector: 'nz-demo-transfer-advanced',
-  template: `
+    selector: 'nz-demo-transfer-advanced',
+    template: `
     <nz-transfer
       [nzDataSource]="list"
       nzShowSearch
@@ -22,7 +22,8 @@ import { TransferItem } from 'ng-zorro-antd/transfer';
         </button>
       </ng-template>
     </nz-transfer>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoTransferAdvancedComponent implements OnInit {
   list: TransferItem[] = [];

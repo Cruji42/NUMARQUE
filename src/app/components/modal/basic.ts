@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-modal-basic',
-  template: `
+    selector: 'nz-demo-modal-basic',
+    template: `
     <button nz-button [nzType]="'primary'" (click)="showModal()"><span>Show Modal</span></button>
     <nz-modal [(nzVisible)]="isVisible" nzTitle="The first Modal" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()">
       <p>Content one</p>
@@ -10,7 +10,8 @@ import { Component } from '@angular/core';
       <p>Content three</p>
       <p>Content three</p>
     </nz-modal>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoModalBasicComponent {
   isVisible = false;

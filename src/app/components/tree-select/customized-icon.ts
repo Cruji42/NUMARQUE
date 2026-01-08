@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-tree-select-customized-icon',
-  template: `
+    selector: 'nz-demo-tree-select-customized-icon',
+    template: `
     <nz-tree-select style="width: 250px" [(ngModel)]="value" [nzNodes]="nodes" nzPlaceHolder="Please select" nzShowIcon> </nz-tree-select>
     <br />
     <nz-tree-select style="width: 250px; margin-top: 20px;" [(ngModel)]="value" [nzNodes]="nodes" nzPlaceHolder="Please select">
@@ -12,7 +12,8 @@ import { Component } from '@angular/core';
         </span>
       </ng-template>
     </nz-tree-select>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoTreeSelectCustomizedIconComponent {
   value: string;

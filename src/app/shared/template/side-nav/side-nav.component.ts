@@ -4,7 +4,8 @@ import { ThemeConstantService } from '../../services/theme-constant.service';
 
 @Component({
     selector: 'app-sidenav',
-    templateUrl: './side-nav.component.html'
+    templateUrl: './side-nav.component.html',
+    standalone: false
 })
 
 export class SideNavComponent{

@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-collapse-basic',
-  template: `
+    selector: 'nz-demo-collapse-basic',
+    template: `
     <nz-collapse>
       <nz-collapse-panel *ngFor="let panel of panels" [nzHeader]="panel.name" [nzActive]="panel.active" [nzDisabled]="panel.disabled">
         <p style="margin:0;">
@@ -11,7 +11,8 @@ import { Component } from '@angular/core';
         </p>
       </nz-collapse-panel>
     </nz-collapse>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoCollapseBasicComponent {
   panels = [

@@ -3,12 +3,13 @@ import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { Observable, Observer } from 'rxjs';
 
 @Component({
-  selector: 'nz-demo-upload-transform-file',
-  template: `
+    selector: 'nz-demo-upload-transform-file',
+    template: `
     <nz-upload nzAction="https://www.mocky.io/v2/5cc8019d300000980a055e76" [nzTransformFile]="transformFile">
       <button nz-button><i nz-icon nzType="upload"></i> Upload</button>
     </nz-upload>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoUploadTransformFileComponent {
   transformFile = (file: NzUploadFile) => {

@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-table-break-word',
-  template: `
+    selector: 'nz-demo-table-break-word',
+    template: `
     <nz-table #fixedTable [nzData]="listOfData" [nzScroll]="{ x: '1000px', y: '240px' }">
       <thead>
         <tr>
@@ -37,7 +37,8 @@ import { Component, OnInit } from '@angular/core';
         </tr>
       </tbody>
     </nz-table>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoTableBreakWordComponent implements OnInit {
   listOfData: Array<{ name: string; age: number; address: string }> = [];

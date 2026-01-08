@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-collapse-noarrow',
-  template: `
+    selector: 'nz-demo-collapse-noarrow',
+    template: `
     <nz-collapse>
       <nz-collapse-panel
         *ngFor="let panel of panels"
@@ -17,7 +17,8 @@ import { Component } from '@angular/core';
         </p>
       </nz-collapse-panel>
     </nz-collapse>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoCollapseNoarrowComponent {
   panels = [

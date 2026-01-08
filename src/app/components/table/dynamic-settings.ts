@@ -32,8 +32,8 @@ interface Setting {
 }
 
 @Component({
-  selector: 'nz-demo-table-dynamic-settings',
-  template: `
+    selector: 'nz-demo-table-dynamic-settings',
+    template: `
     <div class="components-table-demo-control-bar">
       <form nz-form nzLayout="inline" [formGroup]="settingForm">
         <nz-form-item *ngFor="let switch of listOfSwitch">
@@ -105,14 +105,15 @@ interface Setting {
       </tbody>
     </nz-table>
   `,
-  styles: [
-    `
+    styles: [
+        `
       form nz-form-item {
         margin-right: 16px;
         margin-bottom: 8px;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class NzDemoTableDynamicSettingsComponent implements OnInit {
   settingForm: UntypedFormGroup;

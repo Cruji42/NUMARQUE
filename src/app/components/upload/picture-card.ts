@@ -11,8 +11,8 @@ function getBase64(file: File): Promise<string | ArrayBuffer | null> {
 }
 
 @Component({
-  selector: 'nz-demo-upload-picture-card',
-  template: `
+    selector: 'nz-demo-upload-picture-card',
+    template: `
     <div class="clearfix">
       <nz-upload
         nzAction="https://www.mocky.io/v2/5cc8019d300000980a055e76"
@@ -32,7 +32,8 @@ function getBase64(file: File): Promise<string | ArrayBuffer | null> {
         </ng-template>
       </nz-modal>
     </div>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoUploadPictureCardComponent {
   fileList: NzUploadFile[] = [

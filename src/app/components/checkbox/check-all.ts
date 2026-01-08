@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-checkbox-check-all',
-  template: `
+    selector: 'nz-demo-checkbox-check-all',
+    template: `
     <div style="border-bottom: 1px solid rgb(233, 233, 233);">
       <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()" [nzIndeterminate]="indeterminate">
         Check all
@@ -10,7 +10,8 @@ import { Component } from '@angular/core';
     </div>
     <br />
     <nz-checkbox-group [(ngModel)]="checkOptionsOne" (ngModelChange)="updateSingleChecked()"></nz-checkbox-group>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoCheckboxCheckAllComponent {
   allChecked = false;

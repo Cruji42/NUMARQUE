@@ -3,7 +3,8 @@ import { UntypedFormBuilder, UntypedFormGroup,  Validators } from '@angular/form
 
 
 @Component({
-    templateUrl: './login-3.component.html'
+    templateUrl: './login-3.component.html',
+    standalone: false
 })
 
 export class Login3Component {

@@ -1,8 +1,8 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-tag-control',
-  template: `
+    selector: 'nz-demo-tag-control',
+    template: `
     <nz-tag *ngFor="let tag of tags; let i = index" [nzMode]="i === 0 ? 'default' : 'closeable'" (nzAfterClose)="handleClose(tag)">
       {{ sliceTagName(tag) }}
     </nz-tag>
@@ -19,14 +19,15 @@ import { Component, ElementRef, ViewChild } from '@angular/core';
       (keydown.enter)="handleInputConfirm()"
     />
   `,
-  styles: [
-    `
+    styles: [
+        `
       .editable-tag {
         background: rgb(255, 255, 255);
         border-style: dashed;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class NzDemoTagControlComponent {
   tags = ['Unremovable', 'Tag 2', 'Tag 3'];

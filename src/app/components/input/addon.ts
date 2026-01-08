@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-input-addon',
-  template: `
+    selector: 'nz-demo-input-addon',
+    template: `
     <div>
       <nz-input-group nzAddOnBefore="Http://" nzAddOnAfter=".com">
         <input type="text" nz-input [(ngModel)]="inputValue" />
@@ -33,13 +33,14 @@ import { Component } from '@angular/core';
       </nz-input-group>
     </div>
   `,
-  styles: [
-    `
+    styles: [
+        `
       div {
         margin-bottom: 16px;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class NzDemoInputAddonComponent {
   inputValue: string = 'my site';

@@ -12,8 +12,8 @@ interface DataItem {
 }
 
 @Component({
-  selector: 'nz-demo-table-grouping-columns',
-  template: `
+    selector: 'nz-demo-table-grouping-columns',
+    template: `
     <nz-table #groupingTable [nzData]="listOfData" nzBordered nzSize="middle" [nzScroll]="{ x: '1200px', y: '240px' }">
       <thead>
         <tr>
@@ -50,7 +50,8 @@ interface DataItem {
         </tr>
       </tbody>
     </nz-table>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoTableGroupingColumnsComponent implements OnInit {
   listOfData: DataItem[] = [];

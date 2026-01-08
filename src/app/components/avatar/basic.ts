@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-avatar-basic',
-  template: `
+    selector: 'nz-demo-avatar-basic',
+    template: `
     <div>
       <nz-avatar [nzSize]="64" nzIcon="user"></nz-avatar>
       <nz-avatar nzSize="large" nzIcon="user"></nz-avatar>
@@ -16,13 +16,14 @@ import { Component } from '@angular/core';
       <nz-avatar [nzShape]="'square'" [nzSize]="'small'" [nzIcon]="'user'"></nz-avatar>
     </div>
   `,
-  styles: [
-    `
+    styles: [
+        `
       nz-avatar {
         margin-top: 16px;
         margin-right: 16px;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class NzDemoAvatarBasicComponent {}

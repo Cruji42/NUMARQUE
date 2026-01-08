@@ -4,7 +4,8 @@ import { ThemeConstantService } from '../../shared/services/theme-constant.servi
 import { Mail } from '../../shared/interfaces/mail.type';
 
 @Component({
-    templateUrl: './mail.component.html'
+    templateUrl: './mail.component.html',
+    standalone: false
 })
 
 export class MailComponent  {

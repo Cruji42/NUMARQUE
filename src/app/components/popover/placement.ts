@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-popover-placement',
-  template: `
+    selector: 'nz-demo-popover-placement',
+    template: `
     <div style="margin-left: 60px">
       <button nz-button nz-popover nzPopoverTitle="Title" [nzPopoverContent]="contentTemplate" nzPopoverPlacement="topLeft">
         TL
@@ -54,8 +54,8 @@ import { Component } from '@angular/core';
       </div>
     </ng-template>
   `,
-  styles: [
-    `
+    styles: [
+        `
       button {
         margin-right: 8px;
         margin-bottom: 8px;
@@ -64,6 +64,7 @@ import { Component } from '@angular/core';
         padding: 0;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class NzDemoPopoverPlacementComponent {}

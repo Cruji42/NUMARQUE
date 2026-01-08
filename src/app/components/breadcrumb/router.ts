@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-breadcrumb-router',
-  template: `
+    selector: 'nz-demo-breadcrumb-router',
+    template: `
     <nz-breadcrumb>
       <nz-breadcrumb-item>
         <a [routerLink]="['../../']">Home</a>
@@ -11,6 +11,7 @@ import { Component } from '@angular/core';
         Breadcrumb
       </nz-breadcrumb-item>
     </nz-breadcrumb>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoBreadcrumbRouterComponent {}

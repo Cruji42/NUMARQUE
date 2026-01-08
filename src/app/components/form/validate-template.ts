@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-form-validate-template',
-  template: `
+    selector: 'nz-demo-form-validate-template',
+    template: `
     <form nz-form>
       <nz-form-item>
         <nz-form-label [nzSpan]="5">Required</nz-form-label>
@@ -47,12 +47,13 @@ import { Component } from '@angular/core';
       </nz-form-item>
     </form>
   `,
-  styles: [
-    `
+    styles: [
+        `
       [nz-form] {
         max-width: 600px;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class NzDemoFormValidateTemplateComponent {}

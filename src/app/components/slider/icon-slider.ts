@@ -1,16 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-slider-icon-slider',
-  template: `
+    selector: 'nz-demo-slider-icon-slider',
+    template: `
     <div class="icon-wrapper test-class">
       <i nz-icon nzType="frown" [class.icon-highlight]="preHighLight"></i>
       <nz-slider [nzMin]="0" [nzMax]="20" [(ngModel)]="sliderValue"></nz-slider>
       <i nz-icon nzType="smile" [class.icon-highlight]="nextHighLight"></i>
     </div>
   `,
-  styles: [
-    `
+    styles: [
+        `
       .icon-wrapper {
         position: relative;
         padding: 0px 30px;
@@ -38,7 +38,8 @@ import { Component, OnInit } from '@angular/core';
         color: rgba(0, 0, 0, 0.45);
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class NzDemoSliderIconSliderComponent implements OnInit {
   min = 0;

@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-menu-horizontal',
-  template: `
+    selector: 'nz-demo-menu-horizontal',
+    template: `
     <ul nz-menu nzMode="horizontal">
       <li nz-menu-item nzSelected>
         <i nz-icon nzType="mail"></i>
@@ -44,6 +44,7 @@ import { Component } from '@angular/core';
         <a href="https://ng.ant.design" target="_blank" rel="noopener noreferrer">Navigation Four - Link</a>
       </li>
     </ul>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoMenuHorizontalComponent {}

@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-drawer-from-drawer',
-  template: `
+    selector: 'nz-demo-drawer-from-drawer',
+    template: `
     <button nz-button nzType="primary" (click)="open()">Create</button>
     <nz-drawer
       [nzBodyStyle]="{ height: 'calc(100% - 55px)', overflow: 'auto', 'padding-bottom': '53px' }"
@@ -81,7 +81,8 @@ import { Component } from '@angular/core';
         </div>
       </form>
     </nz-drawer>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoDrawerFromDrawerComponent {
   visible = false;

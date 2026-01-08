@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 
 @Component({
-  selector: 'nz-demo-form-time-related-controls',
-  template: `
+    selector: 'nz-demo-form-time-related-controls',
+    template: `
     <form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
       <nz-form-item>
         <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired>DatePicker</nz-form-label>
@@ -48,13 +48,14 @@ import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
       </nz-form-item>
     </form>
   `,
-  styles: [
-    `
+    styles: [
+        `
       form {
         max-width: 600px;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class NzDemoFormTimeRelatedControlsComponent implements OnInit {
   validateForm: UntypedFormGroup;

@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-button-size',
-  template: `
+    selector: 'nz-demo-button-size',
+    template: `
     <nz-radio-group [(ngModel)]="size">
       <label nz-radio-button nzValue="large">Large</label>
       <label nz-radio-button nzValue="default">Default</label>
@@ -26,8 +26,8 @@ import { Component } from '@angular/core';
       <button nz-button nzType="primary">Forward<i nz-icon nzType="right"></i></button>
     </nz-button-group>
   `,
-  styles: [
-    `
+    styles: [
+        `
       [nz-button] {
         margin-right: 8px;
         margin-bottom: 12px;
@@ -37,7 +37,8 @@ import { Component } from '@angular/core';
         margin-right: 0;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class NzDemoButtonSizeComponent {
   size = 'large';

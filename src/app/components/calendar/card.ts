@@ -1,12 +1,13 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-calendar-card',
-  template: `
+    selector: 'nz-demo-calendar-card',
+    template: `
     <div [ngStyle]="{ width: '350px', border: '1px solid #d9d9d9', borderRadius: '4px' }">
       <nz-calendar [nzFullscreen]="false" (nzSelectChange)="onValueChange($event)" (nzPanelChange)="onPanelChange($event)"></nz-calendar>
     </div>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoCalendarCardComponent {
   onValueChange(value: Date): void {

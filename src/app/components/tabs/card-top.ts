@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-tabs-card-top',
-  template: `
+    selector: 'nz-demo-tabs-card-top',
+    template: `
     <div class="card-container">
       <nz-tabset [nzTabPosition]="'top'" [nzType]="'card'">
         <nz-tab *ngFor="let tab of tabs" [nzTitle]="'Tab Title ' + tab">
@@ -13,8 +13,8 @@ import { Component } from '@angular/core';
       </nz-tabset>
     </div>
   `,
-  styles: [
-    `
+    styles: [
+        `
       :host {
         background: #f5f5f5;
         overflow: hidden;
@@ -46,7 +46,8 @@ import { Component } from '@angular/core';
         background: #fff;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class NzDemoTabsCardTopComponent {
   tabs = [1, 2, 3];

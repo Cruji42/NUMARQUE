@@ -2,21 +2,22 @@ import { Component, TemplateRef, ViewChild } from '@angular/core';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 
 @Component({
-  selector: 'nz-demo-notification-template',
-  template: `
+    selector: 'nz-demo-notification-template',
+    template: `
     <button nz-button [nzType]="'primary'" (click)="ninja()">Open the notification box</button>
     <ng-template let-fruit="data">
       It's a <nz-tag [nzColor]="fruit.color">{{ fruit.name }}</nz-tag>
       <button nz-button nzType="small">Cut It!</button>
     </ng-template>
   `,
-  styles: [
-    `
+    styles: [
+        `
       button {
         margin-top: 8px;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class NzDemoNotificationTemplateComponent {
   @ViewChild(TemplateRef, { static: false }) template: TemplateRef<{}>;

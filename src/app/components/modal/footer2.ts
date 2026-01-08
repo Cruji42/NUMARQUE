@@ -4,8 +4,8 @@ import { Component } from '@angular/core';
 import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
 
 @Component({
-  selector: 'nz-demo-modal-footer2',
-  template: `
+    selector: 'nz-demo-modal-footer2',
+    template: `
     <button nz-button nzType="primary" (click)="showModal1()">
       <span>In Template</span>
     </button>
@@ -29,7 +29,8 @@ import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
       </div>
     </nz-modal>
   `,
-  styles: []
+    styles: [],
+    standalone: false
 })
 export class NzDemoModalFooter2Component {
   isVisible = false;
@@ -62,8 +63,8 @@ export class NzDemoModalFooter2Component {
 }
 
 @Component({
-  selector: 'nz-modal-custom-footer-component',
-  template: `
+    selector: 'nz-modal-custom-footer-component',
+    template: `
     <div>
       <p>Modal Content</p>
       <p>Modal Content</p>
@@ -75,7 +76,8 @@ export class NzDemoModalFooter2Component {
       <button nz-button nzType="default" (click)="destroyModal()">Custom Callback</button>
       <button nz-button nzType="primary" (click)="destroyModal()">Custom Submit</button>
     </div>
-  `
+  `,
+    standalone: false
 })
 export class NzModalCustomFooterComponent {
   constructor(private modal: NzModalRef) {}

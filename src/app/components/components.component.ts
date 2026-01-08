@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 
 @Component({
     selector: 'demo-component',
-    templateUrl: './components.component.html'
+    templateUrl: './components.component.html',
+    standalone: false
 })
 export class ComponentsComponent implements OnInit {
     constructor() { }

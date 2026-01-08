@@ -3,8 +3,8 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 import { TransferItem } from 'ng-zorro-antd/transfer';
 
 @Component({
-  selector: 'nz-demo-transfer-custom-item',
-  template: `
+    selector: 'nz-demo-transfer-custom-item',
+    template: `
     <nz-transfer
       [nzDataSource]="list"
       [nzListStyle]="{ 'width.px': 300, 'height.px': 300 }"
@@ -14,7 +14,8 @@ import { TransferItem } from 'ng-zorro-antd/transfer';
     >
       <ng-template #render let-item> <i nz-icon nzType="{{ item.icon }}"></i> {{ item.title }} </ng-template>
     </nz-transfer>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoTransferCustomItemComponent implements OnInit {
   list: Array<TransferItem & { description: string; icon: string }> = [];

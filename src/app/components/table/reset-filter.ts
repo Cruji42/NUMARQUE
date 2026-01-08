@@ -16,8 +16,8 @@ interface ColumnItem {
 }
 
 @Component({
-  selector: 'nz-demo-table-reset-filter',
-  template: `
+    selector: 'nz-demo-table-reset-filter',
+    template: `
     <div class="table-operations">
       <button nz-button (click)="sortByAge()">Sort age</button>
       <button nz-button (click)="resetFilters()">Clear filters</button>
@@ -46,8 +46,8 @@ interface ColumnItem {
       </tbody>
     </nz-table>
   `,
-  styles: [
-    `
+    styles: [
+        `
       .table-operations {
         margin-bottom: 16px;
       }
@@ -56,7 +56,8 @@ interface ColumnItem {
         margin-right: 8px;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class NzDemoTableResetFilterComponent {
   listOfColumns: ColumnItem[] = [

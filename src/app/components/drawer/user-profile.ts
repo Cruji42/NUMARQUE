@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-drawer-user-profile',
-  template: `
+    selector: 'nz-demo-drawer-user-profile',
+    template: `
     <nz-list [nzDataSource]="data" [nzRenderItem]="item" [nzItemLayout]="'horizontal'">
       <ng-template #item let-item>
         <nz-list-item [nzActions]="[viewAction]">
@@ -55,8 +55,8 @@ import { Component } from '@angular/core';
       </nz-descriptions>
     </nz-drawer>
   `,
-  styles: [
-    `
+    styles: [
+        `
       .title {
         font-size: 16px;
         color: rgba(0, 0, 0, 0.85);
@@ -76,7 +76,8 @@ import { Component } from '@angular/core';
         color: rgba(0, 0, 0, 0.85);
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class NzDemoDrawerUserProfileComponent {
   data = [

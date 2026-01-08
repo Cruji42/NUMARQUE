@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-table-ellipsis',
-  template: `
+    selector: 'nz-demo-table-ellipsis',
+    template: `
     <nz-table #fixedTable [nzData]="listOfData" nzTableLayout="fixed">
       <thead>
         <tr>
@@ -25,7 +25,8 @@ import { Component, OnInit } from '@angular/core';
         </tr>
       </tbody>
     </nz-table>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoTableEllipsisComponent implements OnInit {
   listOfData: Array<{ name: string; age: number; address: string }> = [];

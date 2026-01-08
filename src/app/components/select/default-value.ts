@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-select-default-value',
-  template: `
+    selector: 'nz-demo-select-default-value',
+    template: `
     <nz-select nzMode="multiple" nzPlaceHolder="Inserted are removed" [(ngModel)]="listOfSelectedValue">
       <nz-option *ngFor="let option of listOfOption" [nzLabel]="option" [nzValue]="option"></nz-option>
       <nz-option *ngFor="let option of defaultOption" [nzLabel]="option" [nzValue]="option" nzHide></nz-option>
@@ -14,13 +14,14 @@ import { Component } from '@angular/core';
       <nz-option nzLabel="Default Value" nzValue="Default" nzHide></nz-option>
     </nz-select>
   `,
-  styles: [
-    `
+    styles: [
+        `
       nz-select {
         width: 100%;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class NzDemoSelectDefaultValueComponent {
   listOfOption = ['Option 01', 'Option 02'];

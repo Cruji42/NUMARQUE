@@ -1,9 +1,9 @@
 import { Component, ViewEncapsulation } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-auto-complete-uncertain-category',
-  encapsulation: ViewEncapsulation.None,
-  template: `
+    selector: 'nz-demo-auto-complete-uncertain-category',
+    encapsulation: ViewEncapsulation.None,
+    template: `
     <div class="example-input">
       <nz-input-group nzSearch nzSize="large" [nzAddOnAfter]="suffixIconButton">
         <input placeholder="input here" nz-input [(ngModel)]="inputValue" (input)="onChange($event)" [nzAutocomplete]="auto" />
@@ -29,8 +29,8 @@ import { Component, ViewEncapsulation } from '@angular/core';
       </nz-autocomplete>
     </div>
   `,
-  styles: [
-    `
+    styles: [
+        `
       .global-search-item {
         display: flex;
       }
@@ -45,7 +45,8 @@ import { Component, ViewEncapsulation } from '@angular/core';
         flex: none;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class NzDemoAutoCompleteUncertainCategoryComponent {
   inputValue: string;

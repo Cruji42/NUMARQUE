@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-slider-tooltip',
-  template: `
+    selector: 'nz-demo-slider-tooltip',
+    template: `
     <nz-slider [nzTooltipVisible]="'always'"></nz-slider>
     <nz-slider [nzTooltipVisible]="'never'"></nz-slider>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoSliderTooltipComponent {}

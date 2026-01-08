@@ -9,8 +9,8 @@ interface ItemData {
 }
 
 @Component({
-  selector: 'nz-demo-list-vertical',
-  template: `
+    selector: 'nz-demo-list-vertical',
+    template: `
     <nz-list nzItemLayout="vertical">
       <nz-list-item *ngFor="let item of data">
         <nz-list-item-meta>
@@ -33,7 +33,8 @@ interface ItemData {
         </nz-list-item-extra>
       </nz-list-item>
     </nz-list>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoListVerticalComponent implements OnInit {
   data: ItemData[] = [];

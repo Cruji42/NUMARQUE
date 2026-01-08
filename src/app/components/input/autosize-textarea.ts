@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-input-autosize-textarea',
-  template: `
+    selector: 'nz-demo-input-autosize-textarea',
+    template: `
     <div>
       <textarea nz-input placeholder="Autosize height based on content lines" nzAutosize></textarea>
       <textarea
@@ -13,12 +13,13 @@ import { Component } from '@angular/core';
       <textarea nz-input placeholder="Controlled autosize" [nzAutosize]="{ minRows: 3, maxRows: 5 }"></textarea>
     </div>
   `,
-  styles: [
-    `
+    styles: [
+        `
       textarea + textarea {
         margin-top: 24px;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class NzDemoInputAutosizeTextareaComponent {}

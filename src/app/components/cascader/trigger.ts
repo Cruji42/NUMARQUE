@@ -44,8 +44,8 @@ const options = [
 ];
 
 @Component({
-  selector: 'nz-demo-cascader-trigger',
-  template: `
+    selector: 'nz-demo-cascader-trigger',
+    template: `
     {{ text }}
     <nz-cascader
       [nzShowInput]="false"
@@ -56,7 +56,8 @@ const options = [
     >
       <a href="javascript: void(0)">Change city</a>
     </nz-cascader>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoCascaderTriggerComponent {
   nzOptions: NzCascaderOption[] = options;

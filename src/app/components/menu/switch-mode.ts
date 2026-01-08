@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-menu-switch-mode',
-  template: `
+    selector: 'nz-demo-menu-switch-mode',
+    template: `
     <nz-switch [(ngModel)]="mode"></nz-switch>
     Change Mode
     <nz-divider nzType="vertical"></nz-divider>
@@ -48,13 +48,14 @@ import { Component } from '@angular/core';
       </li>
     </ul>
   `,
-  styles: [
-    `
+    styles: [
+        `
       [nz-menu] {
         width: 240px;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class NzDemoMenuSwitchModeComponent {
   mode = false;

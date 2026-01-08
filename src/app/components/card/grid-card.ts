@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-card-grid-card',
-  template: `
+    selector: 'nz-demo-card-grid-card',
+    template: `
     <nz-card nzTitle="Cart Title">
       <div nz-card-grid [ngStyle]="gridStyle">Content</div>
       <div nz-card-grid [ngStyle]="gridStyle">Content</div>
@@ -12,7 +12,8 @@ import { Component } from '@angular/core';
       <div nz-card-grid [ngStyle]="gridStyle">Content</div>
       <div nz-card-grid [ngStyle]="gridStyle">Content</div>
     </nz-card>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoCardGridCardComponent {
   gridStyle = {

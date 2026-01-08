@@ -12,8 +12,8 @@ export interface TreeNodeInterface {
 }
 
 @Component({
-  selector: 'nz-demo-table-expand-children',
-  template: `
+    selector: 'nz-demo-table-expand-children',
+    template: `
     <nz-table #expandTable [nzData]="listOfMapData" nzTableLayout="fixed">
       <thead>
         <tr>
@@ -41,7 +41,8 @@ export interface TreeNodeInterface {
         </ng-container>
       </tbody>
     </nz-table>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoTableExpandChildrenComponent implements OnInit {
   listOfMapData: TreeNodeInterface[] = [

@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-grid-sort',
-  template: `
+    selector: 'nz-demo-grid-sort',
+    template: `
     <div nz-row>
       <div nz-col [nzSpan]="18" [nzPush]="6">
         col-18 col-push-6
@@ -11,6 +11,7 @@ import { Component } from '@angular/core';
         col-6 col-pull-18
       </div>
     </div>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoGridSortComponent {}

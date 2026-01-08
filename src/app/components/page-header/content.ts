@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-page-header-content',
-  template: `
+    selector: 'nz-demo-page-header-content',
+    template: `
     <nz-page-header class="site-page-header">
       <!--breadcrumb-->
       <nz-breadcrumb nz-page-header-breadcrumb>
@@ -68,8 +68,8 @@ import { Component } from '@angular/core';
       </nz-page-header-content>
     </nz-page-header>
   `,
-  styles: [
-    `
+    styles: [
+        `
       .content {
         flex: 1;
       }
@@ -103,6 +103,7 @@ import { Component } from '@angular/core';
         }
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class NzDemoPageHeaderContentComponent {}

@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 
 @Component({
-  selector: 'nz-demo-form-dynamic-form-item',
-  template: `
+    selector: 'nz-demo-form-dynamic-form-item',
+    template: `
     <form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
       <nz-form-item *ngFor="let control of listOfControl; let i = index">
         <nz-form-label [nzXs]="24" [nzSm]="4" *ngIf="i == 0" [nzFor]="control.controlInstance">Passengers </nz-form-label>
@@ -38,9 +38,8 @@ import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } 
       </nz-form-item>
     </form>
   `,
-
-  styles: [
-    `
+    styles: [
+        `
       .dynamic-delete-button {
         cursor: pointer;
         position: relative;
@@ -67,7 +66,8 @@ import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } 
         width: 60%;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class NzDemoFormDynamicFormItemComponent implements OnInit {
   validateForm: UntypedFormGroup;

@@ -4,8 +4,8 @@ import setHours from 'date-fns/setHours';
 import { DisabledTimeFn, DisabledTimePartial } from 'ng-zorro-antd/date-picker';
 
 @Component({
-  selector: 'nz-demo-date-picker-disabled-date',
-  template: `
+    selector: 'nz-demo-date-picker-disabled-date',
+    template: `
     <nz-date-picker
       nzFormat="yyyy-MM-dd HH:mm:ss"
       [nzDisabledDate]="disabledDate"
@@ -25,8 +25,8 @@ import { DisabledTimeFn, DisabledTimePartial } from 'ng-zorro-antd/date-picker';
       nzFormat="yyyy-MM-dd HH:mm:ss"
     ></nz-range-picker>
   `,
-  styles: [
-    `
+    styles: [
+        `
       nz-date-picker,
       nz-month-picker,
       nz-year-picker,
@@ -35,7 +35,8 @@ import { DisabledTimeFn, DisabledTimePartial } from 'ng-zorro-antd/date-picker';
         margin: 0 8px 12px 0;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class NzDemoDatePickerDisabledDateComponent {
   today = new Date();

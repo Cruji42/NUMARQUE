@@ -3,7 +3,8 @@ import { ThemeConstantService } from '../../shared/services/theme-constant.servi
 import { NzCodeBoxComponent } from '../../shared/components/codebox/codebox.component';
 
 @Component({
-    templateUrl: './chartjs.component.html'
+    templateUrl: './chartjs.component.html',
+    standalone: false
 })
 
 export class ChartjsComponent {

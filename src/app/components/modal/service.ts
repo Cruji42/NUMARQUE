@@ -4,8 +4,8 @@ import { Component, Input, TemplateRef, ViewContainerRef } from '@angular/core';
 import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
 
 @Component({
-  selector: 'nz-demo-modal-service',
-  template: `
+    selector: 'nz-demo-modal-service',
+    template: `
     <button nz-button nzType="primary" (click)="createModal()">
       <span>String</span>
     </button>
@@ -43,13 +43,14 @@ import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
       >This is a non-service html modal</nz-modal
     >
   `,
-  styles: [
-    `
+    styles: [
+        `
       button {
         margin-right: 8px;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class NzDemoModalServiceComponent {
   tplModal: NzModalRef;
@@ -180,8 +181,8 @@ export class NzDemoModalServiceComponent {
 }
 
 @Component({
-  selector: 'nz-modal-custom-component',
-  template: `
+    selector: 'nz-modal-custom-component',
+    template: `
     <div>
       <h2>{{ title }}</h2>
       <h4>{{ subtitle }}</h4>
@@ -190,7 +191,8 @@ export class NzDemoModalServiceComponent {
         <button nz-button [nzType]="'primary'" (click)="destroyModal()">destroy modal in the component</button>
       </p>
     </div>
-  `
+  `,
+    standalone: false
 })
 export class NzModalCustomComponent {
   @Input() title: string;

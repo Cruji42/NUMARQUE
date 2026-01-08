@@ -1,20 +1,21 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-select-big-data',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  template: `
+    selector: 'nz-demo-select-big-data',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    template: `
     <nz-select nzMode="multiple" nzPlaceHolder="Please select" [(ngModel)]="listOfSelectedValue">
       <nz-option *ngFor="let item of listOfOption" [nzLabel]="item" [nzValue]="item"></nz-option>
     </nz-select>
   `,
-  styles: [
-    `
+    styles: [
+        `
       nz-select {
         width: 100%;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class NzDemoSelectBigDataComponent implements OnInit {
   listOfOption: string[] = [];

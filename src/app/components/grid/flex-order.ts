@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-grid-flex-order',
-  template: `
+    selector: 'nz-demo-grid-flex-order',
+    template: `
     <div>
       <div nz-row>
         <div nz-col nzSpan="6" nzOrder="4">
@@ -20,12 +20,13 @@ import { Component } from '@angular/core';
       </div>
     </div>
   `,
-  styles: [
-    `
+    styles: [
+        `
       [nz-row] {
         background-color: rgba(128, 128, 128, 0.08);
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class NzDemoGridFlexOrderComponent {}

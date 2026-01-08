@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-descriptions-custom-size',
-  template: `
+    selector: 'nz-demo-descriptions-custom-size',
+    template: `
     <nz-radio-group [(ngModel)]="size">
       <label nz-radio nzValue="default">default</label>
       <label nz-radio nzValue="middle">middle</label>
@@ -34,7 +34,8 @@ import { Component } from '@angular/core';
         <br />
       </nz-descriptions-item>
     </nz-descriptions>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoDescriptionsCustomSizeComponent {
   size = 'default';

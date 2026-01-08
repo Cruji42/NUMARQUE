@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-statistic-card',
-  template: `
+    selector: 'nz-demo-statistic-card',
+    template: `
     <div style="background: #ECECEC; padding: 30px;">
       <nz-row [nzGutter]="16">
         <nz-col [nzSpan]="12">
@@ -33,6 +33,7 @@ import { Component } from '@angular/core';
         </nz-col>
       </nz-row>
     </div>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoStatisticCardComponent {}

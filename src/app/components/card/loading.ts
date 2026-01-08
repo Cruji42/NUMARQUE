@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-card-loading',
-  template: `
+    selector: 'nz-demo-card-loading',
+    template: `
     <nz-switch [(ngModel)]="loading"></nz-switch>
     <nz-card style="width: 300px;margin-top: 16px" [nzLoading]="loading">
       <nz-card-meta [nzAvatar]="avatarTemplate" nzTitle="Card title" nzDescription="This is the description"></nz-card-meta>
@@ -24,7 +24,8 @@ import { Component } from '@angular/core';
     <ng-template #actionEllipsis>
       <i nz-icon nzType="ellipsis"></i>
     </ng-template>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoCardLoadingComponent {
   loading = true;

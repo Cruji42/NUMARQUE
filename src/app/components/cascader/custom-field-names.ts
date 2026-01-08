@@ -50,8 +50,8 @@ const options = [
 ];
 
 @Component({
-  selector: 'nz-demo-cascader-custom-field-names',
-  template: `
+    selector: 'nz-demo-cascader-custom-field-names',
+    template: `
     <nz-cascader
       [nzChangeOn]="validate"
       [nzOptions]="nzOptions"
@@ -62,7 +62,8 @@ const options = [
       (ngModelChange)="onChanges($event)"
     >
     </nz-cascader>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoCascaderCustomFieldNamesComponent {
   nzOptions: NzCascaderOption[] = options;

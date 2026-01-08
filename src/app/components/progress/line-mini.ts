@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-progress-line-mini',
-  template: `
+    selector: 'nz-demo-progress-line-mini',
+    template: `
     <div style="width: 170px;">
       <nz-progress [nzPercent]="30" nzSize="small"></nz-progress>
       <nz-progress [nzPercent]="50" nzSize="small" nzStatus="active"></nz-progress>
@@ -10,6 +10,7 @@ import { Component } from '@angular/core';
       <nz-progress [nzPercent]="100" nzSize="small"></nz-progress>
       <nz-progress [nzPercent]="50" nzSize="small" [nzShowInfo]="false"></nz-progress>
     </div>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoProgressLineMiniComponent {}

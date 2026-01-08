@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-select-multiple',
-  template: `
+    selector: 'nz-demo-select-multiple',
+    template: `
     <nz-select
       [nzMaxTagCount]="3"
       [nzMaxTagPlaceholder]="tagPlaceHolder"
@@ -14,13 +14,14 @@ import { Component, OnInit } from '@angular/core';
     </nz-select>
     <ng-template #tagPlaceHolder let-selectedList> and {{ selectedList.length }} more selected </ng-template>
   `,
-  styles: [
-    `
+    styles: [
+        `
       nz-select {
         width: 100%;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class NzDemoSelectMultipleComponent implements OnInit {
   listOfOption: string[] = [];

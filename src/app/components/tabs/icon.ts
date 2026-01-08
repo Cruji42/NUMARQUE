@@ -1,15 +1,16 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-tabs-icon',
-  template: `
+    selector: 'nz-demo-tabs-icon',
+    template: `
     <nz-tabset>
       <nz-tab *ngFor="let tab of tabs" [nzTitle]="titleTemplate">
         <ng-template #titleTemplate> <i nz-icon [nzType]="tab.icon"></i>{{ tab.name }} </ng-template>
         {{ tab.name }}
       </nz-tab>
     </nz-tabset>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoTabsIconComponent {
   tabs = [

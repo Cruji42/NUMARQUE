@@ -5,7 +5,8 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzMessageService } from 'ng-zorro-antd/message';
 
 @Component({
-    templateUrl: './setting.component.html'
+    templateUrl: './setting.component.html',
+    standalone: false
 })
 
 export class SettingComponent {

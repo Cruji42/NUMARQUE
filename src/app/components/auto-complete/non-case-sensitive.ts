@@ -1,14 +1,15 @@
 import { Component, ViewEncapsulation } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-auto-complete-non-case-sensitive',
-  encapsulation: ViewEncapsulation.None,
-  template: `
+    selector: 'nz-demo-auto-complete-non-case-sensitive',
+    encapsulation: ViewEncapsulation.None,
+    template: `
     <div class="example-input">
       <input placeholder="try to type \`b\`" nz-input [(ngModel)]="inputValue" (ngModelChange)="onChange($event)" [nzAutocomplete]="auto" />
       <nz-autocomplete [nzDataSource]="filteredOptions" #auto></nz-autocomplete>
     </div>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoAutoCompleteNonCaseSensitiveComponent {
   inputValue: string;

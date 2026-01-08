@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-select-coordinate',
-  template: `
+    selector: 'nz-demo-select-coordinate',
+    template: `
     <div>
       <nz-select [(ngModel)]="selectedProvince" (ngModelChange)="provinceChange($event)">
         <nz-option *ngFor="let p of provinceData" [nzValue]="p" [nzLabel]="p"></nz-option>
@@ -12,14 +12,15 @@ import { Component } from '@angular/core';
       </nz-select>
     </div>
   `,
-  styles: [
-    `
+    styles: [
+        `
       nz-select {
         margin-right: 8px;
         width: 120px;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class NzDemoSelectCoordinateComponent {
   selectedProvince = 'Zhejiang';

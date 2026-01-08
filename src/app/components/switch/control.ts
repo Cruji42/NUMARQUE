@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-switch-control',
-  template: `
+    selector: 'nz-demo-switch-control',
+    template: `
     <nz-switch [(ngModel)]="switchValue" [nzControl]="true" (click)="clickSwitch()" [nzLoading]="loading"></nz-switch>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoSwitchControlComponent {
   switchValue = false;

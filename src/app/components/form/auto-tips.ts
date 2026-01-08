@@ -4,8 +4,8 @@ import { NzSafeAny } from 'ng-zorro-antd/core/types';
 import { Observable, Observer } from 'rxjs';
 
 @Component({
-  selector: 'nz-demo-form-auto-tips',
-  template: `
+    selector: 'nz-demo-form-auto-tips',
+    template: `
     <form nz-form [nzAutoTips]="autoTips" [formGroup]="validateForm" (ngSubmit)="submitForm(validateForm.value)">
       <nz-form-item>
         <nz-form-label [nzSpan]="7" nzRequired>Username</nz-form-label>
@@ -52,13 +52,14 @@ import { Observable, Observer } from 'rxjs';
       </nz-form-item>
     </form>
   `,
-  styles: [
-    `
+    styles: [
+        `
       [nz-form] {
         max-width: 600px;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class NzDemoFormAutoTipsComponent {
   validateForm: UntypedFormGroup;

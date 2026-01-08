@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-button-disabled',
-  template: `
+    selector: 'nz-demo-button-disabled',
+    template: `
     <button nz-button nzType="primary">Primary</button>
     <button nz-button nzType="primary" disabled>Primary(disabled)</button>
     <br />
@@ -25,13 +25,14 @@ import { Component } from '@angular/core';
       <button nz-button nzGhost disabled>Ghost(disabled)</button>
     </div>
   `,
-  styles: [
-    `
+    styles: [
+        `
       [nz-button] {
         margin-right: 8px;
         margin-bottom: 12px;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class NzDemoButtonDisabledComponent {}

@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-tree-customized-icon',
-  template: `
+    selector: 'nz-demo-tree-customized-icon',
+    template: `
     <nz-tree [nzData]="nodes" nzShowIcon></nz-tree>
     <nz-tree [nzData]="nodes" nzShowIcon [nzExpandedIcon]="multiExpandedIconTpl">
       <ng-template #multiExpandedIconTpl let-node let-origin="origin">
@@ -10,7 +10,8 @@ import { Component } from '@angular/core';
         <i *ngIf="origin.isLeaf" nz-icon nzType="file" class="ant-tree-switcher-line-icon"></i>
       </ng-template>
     </nz-tree>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoTreeCustomizedIconComponent {
   nodes = [

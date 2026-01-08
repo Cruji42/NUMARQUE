@@ -1,14 +1,15 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-collapse-accordion',
-  template: `
+    selector: 'nz-demo-collapse-accordion',
+    template: `
     <nz-collapse nzAccordion>
       <nz-collapse-panel *ngFor="let panel of panels" [nzHeader]="panel.name" [nzActive]="panel.active">
         <p>{{ panel.name }} content</p>
       </nz-collapse-panel>
     </nz-collapse>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoCollapseAccordionComponent {
   panels = [

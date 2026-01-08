@@ -8,8 +8,8 @@ interface ItemData {
 }
 
 @Component({
-  selector: 'nz-demo-table-edit-cell',
-  template: `
+    selector: 'nz-demo-table-edit-cell',
+    template: `
     <button nz-button (click)="addRow()" nzType="primary">Add</button>
     <br />
     <br />
@@ -39,8 +39,8 @@ interface ItemData {
       </tbody>
     </nz-table>
   `,
-  styles: [
-    `
+    styles: [
+        `
       .editable-cell {
         position: relative;
         padding: 5px 12px;
@@ -53,7 +53,8 @@ interface ItemData {
         padding: 4px 11px;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class NzDemoTableEditCellComponent implements OnInit {
   i = 0;

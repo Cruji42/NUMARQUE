@@ -1,7 +1,8 @@
 import { Component } from '@angular/core'
 
 @Component({
-    templateUrl: './pricing.component.html'
+    templateUrl: './pricing.component.html',
+    standalone: false
 })
 
 export class PricingComponent {

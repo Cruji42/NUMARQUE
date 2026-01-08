@@ -1,19 +1,20 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-select-tags',
-  template: `
+    selector: 'nz-demo-select-tags',
+    template: `
     <nz-select nzMode="tags" nzPlaceHolder="Tag Mode" [(ngModel)]="listOfTagOptions">
       <nz-option *ngFor="let option of listOfOption" [nzLabel]="option.label" [nzValue]="option.value"></nz-option>
     </nz-select>
   `,
-  styles: [
-    `
+    styles: [
+        `
       nz-select {
         width: 100%;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class NzDemoSelectTagsComponent implements OnInit {
   listOfOption: Array<{ label: string; value: string }> = [];

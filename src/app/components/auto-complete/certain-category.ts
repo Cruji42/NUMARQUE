@@ -7,9 +7,9 @@ export interface AutocompleteOptionGroups {
 }
 
 @Component({
-  selector: 'nz-demo-auto-complete-certain-category',
-  encapsulation: ViewEncapsulation.None,
-  template: `
+    selector: 'nz-demo-auto-complete-certain-category',
+    encapsulation: ViewEncapsulation.None,
+    template: `
     <div class="example-input">
       <nz-input-group nzSize="large" [nzSuffix]="suffixIcon">
         <input placeholder="input here" nz-input [(ngModel)]="inputValue" (ngModelChange)="onChange($event)" [nzAutocomplete]="auto" />
@@ -33,8 +33,8 @@ export interface AutocompleteOptionGroups {
       </nz-autocomplete>
     </div>
   `,
-  styles: [
-    `
+    styles: [
+        `
       .certain-search-item-count {
         position: absolute;
         color: #999;
@@ -45,7 +45,8 @@ export interface AutocompleteOptionGroups {
         float: right;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class NzDemoAutoCompleteCertainCategoryComponent implements OnInit {
   inputValue: string;

@@ -7,8 +7,8 @@ interface ItemData {
 }
 
 @Component({
-  selector: 'nz-demo-table-fixed-header',
-  template: `
+    selector: 'nz-demo-table-fixed-header',
+    template: `
     <nz-table #headerTable [nzData]="listOfData" [nzPageSize]="50" [nzScroll]="{ y: '240px' }">
       <thead>
         <tr>
@@ -25,7 +25,8 @@ interface ItemData {
         </tr>
       </tbody>
     </nz-table>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoTableFixedHeaderComponent implements OnInit {
   listOfData: ItemData[] = [];

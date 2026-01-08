@@ -4,8 +4,8 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { debounceTime, map, switchMap } from 'rxjs/operators';
 
 @Component({
-  selector: 'nz-demo-select-select-users',
-  template: `
+    selector: 'nz-demo-select-select-users',
+    template: `
     <nz-select
       nzMode="multiple"
       nzPlaceHolder="Select users"
@@ -23,8 +23,8 @@ import { debounceTime, map, switchMap } from 'rxjs/operators';
       </nz-option>
     </nz-select>
   `,
-  styles: [
-    `
+    styles: [
+        `
       nz-select {
         width: 100%;
       }
@@ -33,7 +33,8 @@ import { debounceTime, map, switchMap } from 'rxjs/operators';
         margin-right: 8px;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class NzDemoSelectSelectUsersComponent implements OnInit {
   randomUserUrl = 'https://api.randomuser.me/?results=5';

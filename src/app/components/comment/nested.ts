@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-comment-nested',
-  template: `
+    selector: 'nz-demo-comment-nested',
+    template: `
     <ng-template #commentTemplateRef let-comment="comment">
       <nz-comment [nzAuthor]="comment.author">
         <nz-avatar nz-comment-avatar nzIcon="user" [nzSrc]="comment.avatar"></nz-avatar>
@@ -19,7 +19,8 @@ import { Component } from '@angular/core';
     </ng-template>
 
     <ng-template [ngTemplateOutlet]="commentTemplateRef" [ngTemplateOutletContext]="{ comment: data }"> </ng-template>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoCommentNestedComponent {
   data = {

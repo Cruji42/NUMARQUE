@@ -2,20 +2,21 @@ import { Component } from '@angular/core';
 import { NzModalService } from 'ng-zorro-antd/modal';
 
 @Component({
-  selector: 'nz-demo-modal-info',
-  template: `
+    selector: 'nz-demo-modal-info',
+    template: `
     <button nz-button (click)="info()">Info</button>
     <button nz-button (click)="success()">Success</button>
     <button nz-button (click)="error()">Error</button>
     <button nz-button (click)="warning()">Warning</button>
   `,
-  styles: [
-    `
+    styles: [
+        `
       button {
         margin-right: 8px;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class NzDemoModalInfoComponent {
   constructor(private modal: NzModalService) {}

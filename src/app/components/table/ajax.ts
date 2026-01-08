@@ -41,8 +41,8 @@ export class RandomUserService {
 }
 
 @Component({
-  selector: 'nz-demo-table-ajax',
-  template: `
+    selector: 'nz-demo-table-ajax',
+    template: `
     <nz-table
       nzShowSizeChanger
       [nzData]="listOfRandomUser"
@@ -68,7 +68,8 @@ export class RandomUserService {
         </tr>
       </tbody>
     </nz-table>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoTableAjaxComponent implements OnInit {
   total = 1;

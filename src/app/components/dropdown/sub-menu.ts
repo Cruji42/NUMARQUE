@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-dropdown-sub-menu',
-  template: `
+    selector: 'nz-demo-dropdown-sub-menu',
+    template: `
     <a nz-dropdown [nzDropdownMenu]="menu" (nzVisibleChange)="change($event)">
       Cascading menu
       <i nz-icon nzType="down"></i>
@@ -25,7 +25,8 @@ import { Component } from '@angular/core';
         </li>
       </ul>
     </nz-dropdown-menu>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoDropdownSubMenuComponent {
   change(value: boolean): void {

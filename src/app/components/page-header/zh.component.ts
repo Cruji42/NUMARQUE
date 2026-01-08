@@ -2,9 +2,10 @@ import { Component, QueryList, ViewChildren } from '@angular/core';
 import { NzCodeBoxComponent } from '../../shared/components/codebox/codebox.component';
 
 @Component({
-  selector     : 'nz-demo-page-header',
-  preserveWhitespaces: false,
-  templateUrl  : './zh.html'
+    selector: 'nz-demo-page-header',
+    preserveWhitespaces: false,
+    templateUrl: './zh.html',
+    standalone: false
 })
 export class NzDemoPageHeaderZhComponent {
   expanded = false;

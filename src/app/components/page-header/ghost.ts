@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-page-header-ghost',
-  template: `
+    selector: 'nz-demo-page-header-ghost',
+    template: `
     <div class="site-page-header-ghost-wrapper">
       <nz-page-header nzBackIcon [nzGhost]="false">
         <nz-page-header-title>Title</nz-page-header-title>
@@ -25,6 +25,7 @@ import { Component } from '@angular/core';
         </nz-page-header-content>
       </nz-page-header>
     </div>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoPageHeaderGhostComponent {}

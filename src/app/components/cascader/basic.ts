@@ -81,23 +81,24 @@ const otherOptions = [
 ];
 
 @Component({
-  selector: 'nz-demo-cascader-basic',
-  template: `
+    selector: 'nz-demo-cascader-basic',
+    template: `
     <nz-cascader [nzOptions]="nzOptions" [(ngModel)]="values" (ngModelChange)="onChanges($event)"></nz-cascader>
     &nbsp;
     <a href="javascript:;" (click)="changeNzOptions()" class="change-options">
       Change Options
     </a>
   `,
-  styles: [
-    `
+    styles: [
+        `
       .change-options {
         display: inline-block;
         font-size: 12px;
         margin-top: 8px;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class NzDemoCascaderBasicComponent implements OnInit {
   nzOptions: any[] | null = null;

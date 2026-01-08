@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 
 @Component({
-  selector: 'nz-demo-form-dynamic-rule',
-  template: `
+    selector: 'nz-demo-form-dynamic-rule',
+    template: `
     <form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
       <nz-form-item>
         <nz-form-label [nzSpan]="4" nzRequired nzFor="name">Name</nz-form-label>
@@ -28,7 +28,8 @@ import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms
         </nz-form-control>
       </nz-form-item>
     </form>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoFormDynamicRuleComponent implements OnInit {
   validateForm: UntypedFormGroup;

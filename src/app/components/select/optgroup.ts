@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-select-optgroup',
-  template: `
+    selector: 'nz-demo-select-optgroup',
+    template: `
     <nz-select [(ngModel)]="selectedValue" nzAllowClear nzPlaceHolder="Choose">
       <nz-option-group nzLabel="Manager">
         <nz-option nzValue="jack" nzLabel="Jack"></nz-option>
@@ -13,13 +13,14 @@ import { Component } from '@angular/core';
       </nz-option-group>
     </nz-select>
   `,
-  styles: [
-    `
+    styles: [
+        `
       nz-select {
         width: 120px;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class NzDemoSelectOptgroupComponent {
   selectedValue = 'lucy';

@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-skeleton-list',
-  template: `
+    selector: 'nz-demo-skeleton-list',
+    template: `
     <nz-switch [(ngModel)]="loading"></nz-switch>
     <nz-list [nzDataSource]="listData" [nzRenderItem]="item" [nzItemLayout]="'vertical'">
       <ng-template #item let-item>
@@ -27,7 +27,8 @@ import { Component } from '@angular/core';
         </nz-list-item>
       </ng-template>
     </nz-list>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoSkeletonListComponent {
   loading = true;

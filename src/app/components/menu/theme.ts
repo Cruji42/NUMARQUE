@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-menu-theme',
-  template: `
+    selector: 'nz-demo-menu-theme',
+    template: `
     <nz-switch [(ngModel)]="theme">
       <span checked>Dark</span>
       <span unchecked>Light</span>
@@ -46,7 +46,8 @@ import { Component } from '@angular/core';
         </ul>
       </li>
     </ul>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoMenuThemeComponent {
   theme = true;

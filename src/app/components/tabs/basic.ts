@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-tabs-basic',
-  template: `
+    selector: 'nz-demo-tabs-basic',
+    template: `
     <nz-tabset>
       <nz-tab nzTitle="Tab 1">
         Content of Tab Pane 1
@@ -14,6 +14,7 @@ import { Component } from '@angular/core';
         Content of Tab Pane 3
       </nz-tab>
     </nz-tabset>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoTabsBasicComponent {}

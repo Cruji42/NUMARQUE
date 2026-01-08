@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-alert-description',
-  template: `
+    selector: 'nz-demo-alert-description',
+    template: `
     <nz-alert nzType="success" nzMessage="Success Text" nzDescription="Success Description Success Description Success Description">
     </nz-alert>
     <nz-alert nzType="info" nzMessage="Info Text" nzDescription="Info Description Info Description Info Description Info Description">
@@ -16,12 +16,13 @@ import { Component } from '@angular/core';
     <nz-alert nzType="error" nzMessage="Error Text" nzDescription="Error Description Error Description Error Description Error Description">
     </nz-alert>
   `,
-  styles: [
-    `
+    styles: [
+        `
       nz-alert {
         margin-bottom: 16px;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class NzDemoAlertDescriptionComponent {}

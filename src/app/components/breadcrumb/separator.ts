@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-breadcrumb-separator',
-  template: `
+    selector: 'nz-demo-breadcrumb-separator',
+    template: `
     <h4>String</h4>
     <nz-breadcrumb nzSeparator=">">
       <nz-breadcrumb-item>
@@ -30,8 +30,8 @@ import { Component } from '@angular/core';
     </nz-breadcrumb>
     <ng-template #iconTemplate><i nz-icon nzType="arrow-right"></i></ng-template>
   `,
-  styles: [
-    `
+    styles: [
+        `
       h4:first-child {
         margin-top: 0;
       }
@@ -43,6 +43,7 @@ import { Component } from '@angular/core';
         font-weight: normal;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class NzDemoBreadcrumbSeparatorComponent {}

@@ -4,10 +4,11 @@ import { Observable, of } from 'rxjs';
 import { delay } from 'rxjs/operators';
 
 @Component({
-  selector: 'nz-demo-transfer-can-move',
-  template: `
+    selector: 'nz-demo-transfer-can-move',
+    template: `
     <nz-transfer [nzDataSource]="list" [nzCanMove]="canMove" (nzSelectChange)="select($event)" (nzChange)="change($event)"> </nz-transfer>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoTransferCanMoveComponent implements OnInit {
   list: TransferItem[] = [];

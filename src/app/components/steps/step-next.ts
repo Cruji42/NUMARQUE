@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-steps-step-next',
-  template: `
+    selector: 'nz-demo-steps-step-next',
+    template: `
     <nz-steps [nzCurrent]="current">
       <nz-step nzTitle="Finished"></nz-step>
       <nz-step nzTitle="In Progress"></nz-step>
@@ -22,8 +22,8 @@ import { Component } from '@angular/core';
       </button>
     </div>
   `,
-  styles: [
-    `
+    styles: [
+        `
       .steps-content {
         margin-top: 16px;
         border: 1px dashed #e9e9e9;
@@ -42,7 +42,8 @@ import { Component } from '@angular/core';
         margin-right: 8px;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class NzDemoStepsStepNextComponent {
   current = 0;

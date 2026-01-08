@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-slider-vertical',
-  template: `
+    selector: 'nz-demo-slider-vertical',
+    template: `
     <div [ngStyle]="{ height: '300px' }">
       <div [ngStyle]="style">
         <nz-slider nzVertical [ngModel]="30"></nz-slider>
@@ -14,7 +14,8 @@ import { Component } from '@angular/core';
         <nz-slider nzVertical nzRange [nzMarks]="marks" [ngModel]="[26, 37]"></nz-slider>
       </div>
     </div>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoSliderVerticalComponent {
   style = {

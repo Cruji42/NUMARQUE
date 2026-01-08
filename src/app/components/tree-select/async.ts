@@ -2,8 +2,8 @@ import { Component } from '@angular/core';
 import { NzFormatEmitEvent, NzTreeNodeOptions } from 'ng-zorro-antd/tree';
 
 @Component({
-  selector: 'nz-demo-tree-select-async',
-  template: `
+    selector: 'nz-demo-tree-select-async',
+    template: `
     <nz-tree-select
       style="width: 250px"
       nzPlaceHolder="Please select"
@@ -16,7 +16,8 @@ import { NzFormatEmitEvent, NzTreeNodeOptions } from 'ng-zorro-antd/tree';
       (nzExpandChange)="onExpandChange($event)"
     >
     </nz-tree-select>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoTreeSelectAsyncComponent {
   expandKeys = ['0-0'];

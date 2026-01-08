@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-button-icon',
-  template: `
+    selector: 'nz-demo-button-icon',
+    template: `
     <button nz-button nzType="primary" nzShape="circle"><i nz-icon nzType="search"></i></button>
     <button nz-button nzType="primary" nzShape="circle">A</button>
     <button nz-button nzType="primary"><i nz-icon nzType="search"></i>Search</button>
@@ -14,13 +14,14 @@ import { Component } from '@angular/core';
     <button nz-button nzType="dashed" nzShape="circle"><i nz-icon nzType="search"></i></button>
     <button nz-button nzType="dashed"><i nz-icon nzType="search"></i>Search</button>
   `,
-  styles: [
-    `
+    styles: [
+        `
       [nz-button] {
         margin-right: 8px;
         margin-bottom: 12px;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class NzDemoButtonIconComponent {}

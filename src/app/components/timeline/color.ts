@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-timeline-color',
-  template: `
+    selector: 'nz-demo-timeline-color',
+    template: `
     <nz-timeline>
       <nz-timeline-item nzColor="green">Create a services site 2015-09-01</nz-timeline-item>
       <nz-timeline-item nzColor="green">Solve initial network problems 2015-09-01</nz-timeline-item>
@@ -27,6 +27,7 @@ import { Component } from '@angular/core';
         <p>Technical testing 3 2015-09-01</p>
       </nz-timeline-item>
     </nz-timeline>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoTimelineColorComponent {}

@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-tabs-size',
-  template: `
+    selector: 'nz-demo-tabs-size',
+    template: `
     <nz-radio-group [(ngModel)]="size">
       <label nz-radio-button nzValue="small"><span>Small</span></label>
       <label nz-radio-button nzValue="default"><span>Default</span></label>
@@ -11,7 +11,8 @@ import { Component } from '@angular/core';
     <nz-tabset [nzSize]="size">
       <nz-tab *ngFor="let tab of tabs" [nzTitle]="'Tab ' + tab"> Content of tab {{ tab }} </nz-tab>
     </nz-tabset>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoTabsSizeComponent {
   size = 'small';

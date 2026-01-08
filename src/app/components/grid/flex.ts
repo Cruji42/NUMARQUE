@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-grid-flex',
-  template: `
+    selector: 'nz-demo-grid-flex',
+    template: `
     <div>
       <p>sub-element align left</p>
       <div nz-row nzJustify="start">
@@ -41,12 +41,13 @@ import { Component } from '@angular/core';
       </div>
     </div>
   `,
-  styles: [
-    `
+    styles: [
+        `
       [nz-row] {
         background-color: rgba(128, 128, 128, 0.08);
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class NzDemoGridFlexComponent {}

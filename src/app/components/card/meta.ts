@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-card-meta',
-  template: `
+    selector: 'nz-demo-card-meta',
+    template: `
     <nz-card style="width:300px;" [nzCover]="coverTemplate" [nzActions]="[actionSetting, actionEdit, actionEllipsis]">
       <nz-card-meta nzTitle="Card title" nzDescription="This is the description" [nzAvatar]="avatarTemplate"></nz-card-meta>
     </nz-card>
@@ -21,6 +21,7 @@ import { Component } from '@angular/core';
     <ng-template #actionEllipsis>
       <i nz-icon nzType="ellipsis"></i>
     </ng-template>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoCardMetaComponent {}

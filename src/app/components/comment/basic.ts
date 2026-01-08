@@ -2,8 +2,8 @@ import { Component } from '@angular/core';
 import { formatDistance } from 'date-fns';
 
 @Component({
-  selector: 'nz-demo-comment-basic',
-  template: `
+    selector: 'nz-demo-comment-basic',
+    template: `
     <nz-comment nzAuthor="Han Solo" [nzDatetime]="time">
       <nz-avatar nz-comment-avatar nzIcon="user" nzSrc="//zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"></nz-avatar>
       <nz-comment-content>
@@ -23,14 +23,15 @@ import { formatDistance } from 'date-fns';
       <nz-comment-action>Reply to</nz-comment-action>
     </nz-comment>
   `,
-  styles: [
-    `
+    styles: [
+        `
       .count {
         padding-left: 8px;
         cursor: auto;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class NzDemoCommentBasicComponent {
   likes = 0;

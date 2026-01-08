@@ -8,8 +8,8 @@ interface DataItem {
 }
 
 @Component({
-  selector: 'nz-demo-table-multiple-sorter',
-  template: `
+    selector: 'nz-demo-table-multiple-sorter',
+    template: `
     <nz-table #sortTable [nzData]="listOfData" nzTableLayout="fixed">
       <thead>
         <tr>
@@ -25,7 +25,8 @@ interface DataItem {
         </tr>
       </tbody>
     </nz-table>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoTableMultipleSorterComponent {
   listOfColumn = [

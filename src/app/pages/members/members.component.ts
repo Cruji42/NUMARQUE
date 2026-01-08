@@ -1,7 +1,8 @@
 import { Component } from '@angular/core'
 
 @Component({
-    templateUrl: './members.component.html'
+    templateUrl: './members.component.html',
+    standalone: false
 })
 
 export class MembersComponent {

@@ -1,13 +1,14 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-typography-suffix',
-  template: `
+    selector: 'nz-demo-typography-suffix',
+    template: `
     <nz-slider [(ngModel)]="rows" [nzMax]="10" [nzMin]="1"></nz-slider>
     <p nz-typography nzEllipsis nzExpandable [attr.title]="content + suffix" [nzEllipsisRows]="rows" [nzSuffix]="suffix">
       {{ content }}
     </p>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoTypographySuffixComponent {
   content =

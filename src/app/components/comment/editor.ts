@@ -2,8 +2,8 @@ import { Component } from '@angular/core';
 import { formatDistance } from 'date-fns';
 
 @Component({
-  selector: 'nz-demo-comment-editor',
-  template: `
+    selector: 'nz-demo-comment-editor',
+    template: `
     <nz-list *ngIf="data.length" [nzDataSource]="data" [nzRenderItem]="item" [nzItemLayout]="'horizontal'">
       <ng-template #item let-item>
         <nz-comment [nzAuthor]="item.author" [nzDatetime]="item.displayTime">
@@ -27,7 +27,8 @@ import { formatDistance } from 'date-fns';
         </nz-form-item>
       </nz-comment-content>
     </nz-comment>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoCommentEditorComponent {
   // tslint:disable-next-line:no-any

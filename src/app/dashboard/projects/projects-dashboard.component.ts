@@ -3,13 +3,14 @@ import { ThemeConstantService } from '../../shared/services/theme-constant.servi
 
 @Component({
     templateUrl: './projects-dashboard.component.html',
-    styles : [`
+    styles: [`
         @media only screen and (min-width: 992px) {
             .completion-chart {
                 width: calc(100% - 330px);
             }
         }
-    `]
+    `],
+    standalone: false
 })
 
 export class ProjectsDashboardComponent {

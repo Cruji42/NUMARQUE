@@ -1,14 +1,14 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-spin-inside',
-  template: `
+    selector: 'nz-demo-spin-inside',
+    template: `
     <div class="example">
       <nz-spin nzSimple></nz-spin>
     </div>
   `,
-  styles: [
-    `
+    styles: [
+        `
       .example {
         text-align: center;
         background: rgba(0, 0, 0, 0.05);
@@ -18,6 +18,7 @@ import { Component } from '@angular/core';
         margin: 20px 0;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class NzDemoSpinInsideComponent {}

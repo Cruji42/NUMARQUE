@@ -11,8 +11,8 @@ export interface VirtualDataInterface {
 }
 
 @Component({
-  selector: 'nz-demo-table-virtual',
-  template: `
+    selector: 'nz-demo-table-virtual',
+    template: `
     <button nz-button (click)="scrollToIndex(200)">Scroll To Index 200</button>
     <br />
     <br />
@@ -62,7 +62,8 @@ export interface VirtualDataInterface {
         </ng-template>
       </tbody>
     </nz-table>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoTableVirtualComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('virtualTable', { static: false }) nzTableComponent?: NzTableComponent<VirtualDataInterface>;

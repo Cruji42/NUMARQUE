@@ -2,8 +2,8 @@ import { Component } from '@angular/core';
 import { NzMarks } from 'ng-zorro-antd/slider';
 
 @Component({
-  selector: 'nz-demo-slider-mark',
-  template: `
+    selector: 'nz-demo-slider-mark',
+    template: `
     <div>
       <h4>included=true</h4>
       <nz-slider [nzMarks]="marks" [ngModel]="37"></nz-slider>
@@ -18,8 +18,8 @@ import { NzMarks } from 'ng-zorro-antd/slider';
       Change nzMarks dynamically: <button nz-button (click)="changeMarks()">Change nzMarks</button>
     </div>
   `,
-  styles: [
-    `
+    styles: [
+        `
       h4 {
         margin: 0 0 16px;
       }
@@ -28,7 +28,8 @@ import { NzMarks } from 'ng-zorro-antd/slider';
         margin-bottom: 44px;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class NzDemoSliderMarkComponent {
   marks: NzMarks = {

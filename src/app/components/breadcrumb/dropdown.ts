@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-breadcrumb-dropdown',
-  template: `
+    selector: 'nz-demo-breadcrumb-dropdown',
+    template: `
     <nz-breadcrumb>
       <nz-breadcrumb-item>
         Ant Design
@@ -24,6 +24,7 @@ import { Component } from '@angular/core';
         <li nz-menu-item>Navigation</li>
       </ul>
     </nz-dropdown-menu>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoBreadcrumbDropdownComponent {}

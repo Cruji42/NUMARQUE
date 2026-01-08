@@ -6,8 +6,8 @@ interface DataItem {
   address: string;
 }
 @Component({
-  selector: 'nz-demo-table-custom-filter-panel',
-  template: `
+    selector: 'nz-demo-table-custom-filter-panel',
+    template: `
     <nz-table #nzTable [nzData]="listOfDisplayData" nzTableLayout="fixed">
       <thead>
         <tr>
@@ -41,8 +41,8 @@ interface DataItem {
       </div>
     </nz-dropdown-menu>
   `,
-  styles: [
-    `
+    styles: [
+        `
       .search-box {
         padding: 8px;
       }
@@ -61,7 +61,8 @@ interface DataItem {
         margin-right: 8px;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class NzDemoTableCustomFilterPanelComponent {
   searchValue = '';

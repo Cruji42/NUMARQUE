@@ -4,7 +4,8 @@ let blogData = require('../../../../assets/data/pages/blog-data.json');
 declare var require: any
 
 @Component({
-    templateUrl: './blog-list.component.html'
+    templateUrl: './blog-list.component.html',
+    standalone: false
 })
 
 export class BlogListComponent {

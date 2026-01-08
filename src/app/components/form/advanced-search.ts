@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 
 @Component({
-  selector: 'nz-demo-form-advanced-search',
-  template: `
+    selector: 'nz-demo-form-advanced-search',
+    template: `
     <form nz-form [formGroup]="validateForm" class="ant-advanced-search-form">
       <div nz-row [nzGutter]="24">
         <div nz-col [nzSpan]="8" *ngFor="let control of controlArray" [hidden]="!control.show">
@@ -30,9 +30,8 @@ import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angul
       Search Result List
     </div>
   `,
-
-  styles: [
-    `
+    styles: [
+        `
       .ant-advanced-search-form {
         padding: 24px;
         background: #fbfbfb;
@@ -67,7 +66,8 @@ import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angul
         text-align: right;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class NzDemoFormAdvancedSearchComponent implements OnInit {
   validateForm: UntypedFormGroup;

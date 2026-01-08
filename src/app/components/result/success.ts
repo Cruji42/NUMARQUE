@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-result-success',
-  template: `
+    selector: 'nz-demo-result-success',
+    template: `
     <nz-result
       nzStatus="success"
       nzTitle="Successfully Purchased Cloud Server ECS!"
@@ -13,6 +13,7 @@ import { Component } from '@angular/core';
         <button nz-button>Buy Again</button>
       </div>
     </nz-result>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoResultSuccessComponent {}

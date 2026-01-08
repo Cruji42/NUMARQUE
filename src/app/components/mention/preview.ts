@@ -1,9 +1,9 @@
 import { Component, ViewEncapsulation } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 @Component({
-  selector: 'nz-demo-mention-preview',
-  encapsulation: ViewEncapsulation.None,
-  template: `
+    selector: 'nz-demo-mention-preview',
+    encapsulation: ViewEncapsulation.None,
+    template: `
     <nz-tabset>
       <nz-tab nzTitle="Write">
         <nz-mention [nzSuggestions]="suggestions">
@@ -21,7 +21,8 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
         <pre [innerHTML]="preview"></pre>
       </nz-tab>
     </nz-tabset>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoMentionPreviewComponent {
   inputValue: string = 'Switch tab view preview @NG-ZORRO ';

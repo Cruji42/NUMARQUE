@@ -18,8 +18,8 @@ interface ColumnItem {
 }
 
 @Component({
-  selector: 'nz-demo-table-sort-filter',
-  template: `
+    selector: 'nz-demo-table-sort-filter',
+    template: `
     <nz-table #filterTable [nzData]="listOfData" nzTableLayout="fixed">
       <thead>
         <tr>
@@ -44,7 +44,8 @@ interface ColumnItem {
         </tr>
       </tbody>
     </nz-table>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoTableSortFilterComponent {
   listOfColumns: ColumnItem[] = [

@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-menu-recursive',
-  template: `
+    selector: 'nz-demo-menu-recursive',
+    template: `
     <ul nz-menu nzMode="inline" style="width: 240px;">
       <ng-container *ngTemplateOutlet="menuTpl; context: { $implicit: menus }"></ng-container>
       <ng-template #menuTpl let-menus>
@@ -33,7 +33,8 @@ import { Component } from '@angular/core';
         </ng-container>
       </ng-template>
     </ul>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoMenuRecursiveComponent {
   mode = false;

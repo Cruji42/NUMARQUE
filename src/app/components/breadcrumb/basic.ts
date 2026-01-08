@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-breadcrumb-basic',
-  template: `
+    selector: 'nz-demo-breadcrumb-basic',
+    template: `
     <nz-breadcrumb>
       <nz-breadcrumb-item>
         Home
@@ -14,6 +14,7 @@ import { Component } from '@angular/core';
         An Application
       </nz-breadcrumb-item>
     </nz-breadcrumb>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoBreadcrumbBasicComponent {}

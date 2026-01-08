@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-badge-status',
-  template: `
+    selector: 'nz-demo-badge-status',
+    template: `
     <nz-badge nzStatus="success"></nz-badge>
     <nz-badge nzStatus="error"></nz-badge>
     <nz-badge nzStatus="default"></nz-badge>
@@ -19,6 +19,7 @@ import { Component } from '@angular/core';
     <br />
     <nz-badge nzStatus="warning" nzText="Warning"></nz-badge>
     <br />
-  `
+  `,
+    standalone: false
 })
 export class NzDemoBadgeStatusComponent {}

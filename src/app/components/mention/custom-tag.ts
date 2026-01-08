@@ -1,16 +1,17 @@
 import { Component, ViewEncapsulation } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-mention-custom-tag',
-  encapsulation: ViewEncapsulation.None,
-  template: `
+    selector: 'nz-demo-mention-custom-tag',
+    encapsulation: ViewEncapsulation.None,
+    template: `
     <nz-mention [nzSuggestions]="webFrameworks" [nzValueWith]="valueWith" (nzOnSelect)="onSelect($event)">
       <input placeholder="@someone" nz-input nzMentionTrigger [(ngModel)]="inputValue" />
       <ng-container *nzMentionSuggestion="let framework">
         <span>{{ framework.name }} - {{ framework.type }}</span>
       </ng-container>
     </nz-mention>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoMentionCustomTagComponent {
   inputValue: string;

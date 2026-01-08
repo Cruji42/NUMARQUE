@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-grid-offset',
-  template: `
+    selector: 'nz-demo-grid-offset',
+    template: `
     <div nz-row>
       <div nz-col nzSpan="8">
         col-8
@@ -24,6 +24,7 @@ import { Component } from '@angular/core';
         col-12 col-offset-6
       </div>
     </div>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoGridOffsetComponent {}

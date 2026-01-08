@@ -1,16 +1,16 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-badge-link',
-  template: `
+    selector: 'nz-demo-badge-link',
+    template: `
     <a>
       <nz-badge [nzCount]="5">
         <a class="head-example"></a>
       </nz-badge>
     </a>
   `,
-  styles: [
-    `
+    styles: [
+        `
       .head-example {
         width: 42px;
         height: 42px;
@@ -20,6 +20,7 @@ import { Component } from '@angular/core';
         vertical-align: middle;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class NzDemoBadgeLinkComponent {}

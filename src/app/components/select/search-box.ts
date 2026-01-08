@@ -2,8 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-select-search-box',
-  template: `
+    selector: 'nz-demo-select-search-box',
+    template: `
     <nz-select
       nzShowSearch
       nzServerSearch
@@ -16,13 +16,14 @@ import { Component } from '@angular/core';
       <nz-option *ngFor="let o of listOfOption" [nzLabel]="o.text" [nzValue]="o.value"> </nz-option>
     </nz-select>
   `,
-  styles: [
-    `
+    styles: [
+        `
       nz-select {
         width: 200px;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class NzDemoSelectSearchBoxComponent {
   selectedValue = null;

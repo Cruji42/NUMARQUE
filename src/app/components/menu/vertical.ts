@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-menu-vertical',
-  template: `
+    selector: 'nz-demo-menu-vertical',
+    template: `
     <ul nz-menu [nzMode]="'vertical'">
       <li nz-submenu nzTitle="Navigation One" nzIcon="mail">
         <ul>
@@ -41,13 +41,14 @@ import { Component } from '@angular/core';
       </li>
     </ul>
   `,
-  styles: [
-    `
+    styles: [
+        `
       [nz-menu] {
         width: 240px;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class NzDemoMenuVerticalComponent {
   change(value: boolean): void {

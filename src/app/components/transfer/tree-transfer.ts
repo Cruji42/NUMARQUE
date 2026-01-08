@@ -4,8 +4,8 @@ import { TransferChange, TransferItem } from 'ng-zorro-antd/transfer';
 import { NzTreeComponent } from 'ng-zorro-antd/tree';
 
 @Component({
-  selector: 'nz-demo-transfer-tree-transfer',
-  template: `
+    selector: 'nz-demo-transfer-tree-transfer',
+    template: `
     <nz-transfer [nzDataSource]="list" [nzShowSelectAll]="false" [nzRenderList]="[leftRenderList, null]" (nzChange)="change($event)">
       <ng-template #leftRenderList let-items let-onItemSelectAll="onItemSelectAll" let-onItemSelect="onItemSelect">
         <nz-tree #tree [nzData]="treeData" nzExpandAll nzBlockNode>
@@ -26,7 +26,8 @@ import { NzTreeComponent } from 'ng-zorro-antd/tree';
       </ng-template>
     </nz-transfer>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class NzDemoTransferTreeTransferComponent {
   @ViewChild('tree', { static: true }) tree: NzTreeComponent;

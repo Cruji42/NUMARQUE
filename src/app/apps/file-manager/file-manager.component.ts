@@ -6,7 +6,8 @@ import { NzContextMenuService, NzDropdownMenuComponent } from 'ng-zorro-antd/dro
 import { Files } from '../../shared/interfaces/file-manager.type';
 
 @Component({
-    templateUrl: './file-manager.component.html'
+    templateUrl: './file-manager.component.html',
+    standalone: false
 })
 
 export class FileManagerComponent  {

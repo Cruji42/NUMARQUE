@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-back-top-target',
-  template: `
+    selector: 'nz-demo-back-top-target',
+    template: `
     Scroll down to see the bottom-right
     <strong> gray </strong>
     button.
@@ -11,8 +11,8 @@ import { Component } from '@angular/core';
       <nz-back-top [nzTarget]="divTarget"></nz-back-top>
     </div>
   `,
-  styles: [
-    `
+    styles: [
+        `
       :host ::ng-deep .long-div {
         height: 300px;
         overflow-y: scroll;
@@ -31,6 +31,7 @@ import { Component } from '@angular/core';
         color: rgba(64, 64, 64, 0.6);
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class NzDemoBackTopTargetComponent {}

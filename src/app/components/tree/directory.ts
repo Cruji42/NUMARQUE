@@ -3,8 +3,8 @@ import { NzContextMenuService, NzDropdownMenuComponent } from 'ng-zorro-antd/dro
 import { NzFormatEmitEvent, NzTreeNode } from 'ng-zorro-antd/tree';
 
 @Component({
-  selector: 'nz-demo-tree-directory',
-  template: `
+    selector: 'nz-demo-tree-directory',
+    template: `
     <nz-tree
       nzBlockNode
       [nzData]="nodes"
@@ -33,8 +33,8 @@ import { NzFormatEmitEvent, NzTreeNode } from 'ng-zorro-antd/tree';
       </ul>
     </nz-dropdown-menu>
   `,
-  styles: [
-    `
+    styles: [
+        `
       nz-tree {
         overflow: hidden;
         margin: 0 -24px;
@@ -63,7 +63,8 @@ import { NzFormatEmitEvent, NzTreeNode } from 'ng-zorro-antd/tree';
         left: 12px;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class NzDemoTreeDirectoryComponent {
   // activated node

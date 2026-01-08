@@ -3,7 +3,8 @@ import { Chat } from '../../shared/interfaces/chat.type';
 import { AppsService } from '../../shared/services/apps.service';
 
 @Component({
-    templateUrl: './chat.component.html'
+    templateUrl: './chat.component.html',
+    standalone: false
 })
 
 export class ChatComponent implements OnInit, AfterViewChecked {

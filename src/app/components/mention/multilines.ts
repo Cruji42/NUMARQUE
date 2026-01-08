@@ -1,13 +1,14 @@
 import { Component, ViewEncapsulation } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-mention-multilines',
-  encapsulation: ViewEncapsulation.None,
-  template: `
+    selector: 'nz-demo-mention-multilines',
+    encapsulation: ViewEncapsulation.None,
+    template: `
     <nz-mention [nzSuggestions]="suggestions">
       <textarea nz-input [nzAutosize]="{ minRows: 4, maxRows: 4 }" [(ngModel)]="inputValue" nzMentionTrigger> </textarea>
     </nz-mention>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoMentionMultilinesComponent {
   inputValue: string;

@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-tree-select-checkable',
-  template: `
+    selector: 'nz-demo-tree-select-checkable',
+    template: `
     <nz-tree-select
       style="width: 250px"
       [(ngModel)]="value"
@@ -13,7 +13,8 @@ import { Component } from '@angular/core';
       nzPlaceHolder="Please select"
     >
     </nz-tree-select>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoTreeSelectCheckableComponent {
   value: string[] = ['0-0-0'];

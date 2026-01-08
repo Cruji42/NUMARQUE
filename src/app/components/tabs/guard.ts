@@ -4,13 +4,14 @@ import { NzTabsCanDeactivateFn } from 'ng-zorro-antd/tabs';
 import { Observable } from 'rxjs';
 
 @Component({
-  selector: 'nz-demo-tabs-guard',
-  template: `
+    selector: 'nz-demo-tabs-guard',
+    template: `
     <nz-tabset [nzCanDeactivate]="canDeactivate">
       <nz-tab *ngFor="let tab of tabs" [nzTitle]="'Tab' + tab"> Content of tab {{ tab }} </nz-tab>
     </nz-tabset>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class NzDemoTabsGuardComponent {
   tabs = [1, 2, 3, 4];

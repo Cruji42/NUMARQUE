@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-input-allow-clear',
-  template: `
+    selector: 'nz-demo-input-allow-clear',
+    template: `
     <nz-input-group [nzSuffix]="inputClearTpl">
       <input type="text" nz-input [(ngModel)]="inputValue" placeholder="input with clear icon" />
     </nz-input-group>
@@ -24,7 +24,8 @@ import { Component } from '@angular/core';
         (click)="textValue = null"
       ></i
     ></ng-template>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoInputAllowClearComponent {
   inputValue: string | null;

@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-switch-text',
-  template: `
+    selector: 'nz-demo-switch-text',
+    template: `
     <nz-switch [ngModel]="true" nzCheckedChildren="开" nzUnCheckedChildren="关"></nz-switch>
     <br />
     <br />
@@ -12,6 +12,7 @@ import { Component } from '@angular/core';
     <nz-switch [ngModel]="true" [nzCheckedChildren]="checkedTemplate" [nzUnCheckedChildren]="unCheckedTemplate"></nz-switch>
     <ng-template #checkedTemplate><i nz-icon nzType="check"></i></ng-template>
     <ng-template #unCheckedTemplate><i nz-icon nzType="close"></i></ng-template>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoSwitchTextComponent {}

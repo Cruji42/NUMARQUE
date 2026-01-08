@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-statistic-countdown',
-  template: `
+    selector: 'nz-demo-statistic-countdown',
+    template: `
     <nz-row [nzGutter]="16">
       <nz-col [nzSpan]="12">
         <nz-countdown [nzValue]="deadline" [nzTitle]="'Countdown'"></nz-countdown>
@@ -14,7 +14,8 @@ import { Component } from '@angular/core';
         <nz-countdown [nzValue]="deadline" [nzTitle]="'Day Level'" [nzFormat]="'D 天 H 时 m 分 s 秒'"></nz-countdown>
       </nz-col>
     </nz-row>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoStatisticCountdownComponent {
   deadline = Date.now() + 1000 * 60 * 60 * 24 * 2 + 1000 * 30;

@@ -2,8 +2,8 @@ import { Component, TemplateRef, ViewChild } from '@angular/core';
 import { NzConfigService } from 'ng-zorro-antd/core/config';
 
 @Component({
-  selector: 'nz-demo-empty-config',
-  template: `
+    selector: 'nz-demo-empty-config',
+    template: `
     <nz-switch
       [nzUnCheckedChildren]="'default'"
       [nzCheckedChildren]="'customize'"
@@ -47,14 +47,15 @@ import { NzConfigService } from 'ng-zorro-antd/core/config';
       </div>
     </ng-template>
   `,
-  styles: [
-    `
+    styles: [
+        `
       h3 {
         font-size: inherit;
         margin: 16px 0 8px 0;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class NzDemoEmptyConfigComponent {
   @ViewChild('customTpl', { static: false }) customTpl: TemplateRef<any>; // tslint:disable-line:no-any

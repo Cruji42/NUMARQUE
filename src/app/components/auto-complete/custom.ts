@@ -1,9 +1,9 @@
 import { Component, ViewEncapsulation } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-auto-complete-custom',
-  encapsulation: ViewEncapsulation.None,
-  template: `
+    selector: 'nz-demo-auto-complete-custom',
+    encapsulation: ViewEncapsulation.None,
+    template: `
     <div class="example-input">
       <textarea
         placeholder="input here"
@@ -17,7 +17,8 @@ import { Component, ViewEncapsulation } from '@angular/core';
         <nz-auto-option *ngFor="let option of options" [nzValue]="option">{{ option }}</nz-auto-option>
       </nz-autocomplete>
     </div>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoAutoCompleteCustomComponent {
   inputValue: string;

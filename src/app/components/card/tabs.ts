@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-card-tabs',
-  template: `
+    selector: 'nz-demo-card-tabs',
+    template: `
     <nz-card style="width: 100%;" nzTitle="Card title" [nzExtra]="extraTemplate">
       <nz-card-tab>
         <nz-tabset nzSize="large" [(nzSelectedIndex)]="index1">
@@ -27,7 +27,8 @@ import { Component } from '@angular/core';
       </nz-card-tab>
       content{{ index2 }}
     </nz-card>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoCardTabsComponent {
   index1 = 0;

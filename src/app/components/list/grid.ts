@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-list-grid',
-  template: `
+    selector: 'nz-demo-list-grid',
+    template: `
     <nz-list nzGrid>
       <div nz-row [nzGutter]="16">
         <div nz-col [nzSpan]="6" *ngFor="let item of data">
@@ -14,7 +14,8 @@ import { Component } from '@angular/core';
         </div>
       </div>
     </nz-list>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoListGridComponent {
   data = [

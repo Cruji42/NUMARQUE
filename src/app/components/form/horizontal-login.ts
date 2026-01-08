@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 
 @Component({
-  selector: 'nz-demo-form-horizontal-login',
-  template: `
+    selector: 'nz-demo-form-horizontal-login',
+    template: `
     <form nz-form [nzLayout]="'inline'" [formGroup]="validateForm" (ngSubmit)="submitForm()">
       <nz-form-item>
         <nz-form-control nzErrorTip="Please input your username!">
@@ -25,7 +25,8 @@ import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms
         </nz-form-control>
       </nz-form-item>
     </form>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoFormHorizontalLoginComponent implements OnInit {
   validateForm: UntypedFormGroup;

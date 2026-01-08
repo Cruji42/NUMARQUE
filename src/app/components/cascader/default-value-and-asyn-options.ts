@@ -44,10 +44,11 @@ const options = [
 ];
 
 @Component({
-  selector: 'nz-demo-cascader-default-value-and-asyn-options',
-  template: `
+    selector: 'nz-demo-cascader-default-value-and-asyn-options',
+    template: `
     <nz-cascader [(ngModel)]="values" [nzOptions]="nzOptions" (ngModelChange)="onChanges($event)"> </nz-cascader>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoCascaderDefaultValueAndAsynOptionsComponent implements OnInit {
   nzOptions: NzCascaderOption[] | null = null;

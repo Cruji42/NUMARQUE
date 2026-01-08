@@ -8,8 +8,8 @@ interface ItemData {
 }
 
 @Component({
-  selector: 'nz-demo-table-row-selection-custom',
-  template: `
+    selector: 'nz-demo-table-row-selection-custom',
+    template: `
     <nz-table #rowSelectionTable nzShowSizeChanger [nzData]="listOfData" (nzCurrentPageDataChange)="onCurrentPageDataChange($event)">
       <thead>
         <tr>
@@ -33,7 +33,8 @@ interface ItemData {
         </tr>
       </tbody>
     </nz-table>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoTableRowSelectionCustomComponent implements OnInit {
   listOfSelection = [

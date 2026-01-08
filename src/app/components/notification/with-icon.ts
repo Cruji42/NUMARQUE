@@ -2,20 +2,21 @@ import { Component } from '@angular/core';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 
 @Component({
-  selector: 'nz-demo-notification-with-icon',
-  template: `
+    selector: 'nz-demo-notification-with-icon',
+    template: `
     <button nz-button (click)="createNotification('success')">Success</button>
     <button nz-button (click)="createNotification('info')">Info</button>
     <button nz-button (click)="createNotification('warning')">Warning</button>
     <button nz-button (click)="createNotification('error')">Error</button>
   `,
-  styles: [
-    `
+    styles: [
+        `
       button {
         margin-right: 1em;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class NzDemoNotificationWithIconComponent {
   createNotification(type: string): void {

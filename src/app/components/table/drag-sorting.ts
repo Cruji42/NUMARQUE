@@ -2,8 +2,8 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-table-drag-sorting',
-  template: `
+    selector: 'nz-demo-table-drag-sorting',
+    template: `
     <nz-table [nzData]="listOfData" [nzFrontPagination]="false" [nzShowPagination]="false">
       <thead>
         <tr>
@@ -21,8 +21,8 @@ import { Component } from '@angular/core';
       </tbody>
     </nz-table>
   `,
-  styles: [
-    `
+    styles: [
+        `
       ::ng-deep .cdk-drag-preview {
         display: table;
       }
@@ -31,7 +31,8 @@ import { Component } from '@angular/core';
         opacity: 0;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class NzDemoTableDragSortingComponent {
   listOfData = [

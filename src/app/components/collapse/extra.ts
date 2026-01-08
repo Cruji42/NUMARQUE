@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-collapse-extra',
-  template: `
+    selector: 'nz-demo-collapse-extra',
+    template: `
     <nz-collapse>
       <nz-collapse-panel
         *ngFor="let panel of panels"
@@ -21,7 +21,8 @@ import { Component } from '@angular/core';
       <!-- You can use stopPropagation if you don't want the panel to toggle -->
       <i nz-icon nzType="setting" (click)="$event.stopPropagation()"></i>
     </ng-template>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoCollapseExtraComponent {
   panels = [

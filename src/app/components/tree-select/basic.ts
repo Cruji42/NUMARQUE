@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-tree-select-basic',
-  template: `
+    selector: 'nz-demo-tree-select-basic',
+    template: `
     <nz-tree-select
       style="width: 250px"
       [nzExpandedKeys]="expandKeys"
@@ -13,7 +13,8 @@ import { Component, OnInit } from '@angular/core';
       (ngModelChange)="onChange($event)"
     >
     </nz-tree-select>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoTreeSelectBasicComponent implements OnInit {
   expandKeys = ['100', '1001'];

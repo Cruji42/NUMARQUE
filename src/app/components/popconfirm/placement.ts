@@ -2,8 +2,8 @@ import { Component } from '@angular/core';
 import { NzMessageService } from 'ng-zorro-antd/message';
 
 @Component({
-  selector: 'nz-demo-popconfirm-placement',
-  template: `
+    selector: 'nz-demo-popconfirm-placement',
+    template: `
     <div style="margin-left: 60px">
       <button
         nz-popconfirm
@@ -133,8 +133,8 @@ import { NzMessageService } from 'ng-zorro-antd/message';
       </button>
     </div>
   `,
-  styles: [
-    `
+    styles: [
+        `
       button {
         margin-right: 8px;
         margin-bottom: 8px;
@@ -143,7 +143,8 @@ import { NzMessageService } from 'ng-zorro-antd/message';
         padding: 0;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class NzDemoPopconfirmPlacementComponent {
   cancel(): void {

@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-popover-control',
-  template: `
+    selector: 'nz-demo-popover-control',
+    template: `
     <button
       nz-button
       nzType="primary"
@@ -18,7 +18,8 @@ import { Component } from '@angular/core';
     <ng-template #contentTemplate>
       <a (click)="clickMe()">Close</a>
     </ng-template>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoPopoverControlComponent {
   visible: boolean = false;

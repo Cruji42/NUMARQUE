@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-typography-ellipsis',
-  template: `
+    selector: 'nz-demo-typography-ellipsis',
+    template: `
     <p nz-typography nzEllipsis>
       Ant Design, a design language for background applications, is refined by Ant UED Team. Ant Design, a design language for background
       applications, is refined by Ant UED Team. Ant Design, a design language for background applications, is refined by Ant UED Team. Ant
@@ -18,7 +18,8 @@ import { Component } from '@angular/core';
     </p>
     <br />
     <p nz-typography nzEllipsis nzEditable [nzEllipsisRows]="2" [nzContent]="dynamicContent" (nzContentChange)="onChange($event)"></p>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoTypographyEllipsisComponent {
   dynamicContent = `Ant Design, a design language for background applications, is refined by Ant UED Team.

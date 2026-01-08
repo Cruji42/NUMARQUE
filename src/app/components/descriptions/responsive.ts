@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-descriptions-responsive',
-  template: `
+    selector: 'nz-demo-descriptions-responsive',
+    template: `
     <nz-descriptions nzTitle="Responsive Descriptions" nzBordered [nzColumn]="{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }">
       <nz-descriptions-item nzTitle="Product">
         Cloud Database
@@ -27,6 +27,7 @@ import { Component } from '@angular/core';
         <br />
       </nz-descriptions-item>
     </nz-descriptions>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoDescriptionsResponsiveComponent {}

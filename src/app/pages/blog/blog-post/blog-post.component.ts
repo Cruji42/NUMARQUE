@@ -1,7 +1,8 @@
 import { Component } from '@angular/core'
 
 @Component({
-    templateUrl: './blog-post.component.html'
+    templateUrl: './blog-post.component.html',
+    standalone: false
 })
 
 export class BlogPostComponent {

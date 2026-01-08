@@ -3,7 +3,8 @@ import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup,  Validators }
 
 
 @Component({
-    templateUrl: './sign-up-1.component.html'
+    templateUrl: './sign-up-1.component.html',
+    standalone: false
 })
 
 export class SignUp1Component {

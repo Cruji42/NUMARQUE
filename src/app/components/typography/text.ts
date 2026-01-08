@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-typography-text',
-  template: `
+    selector: 'nz-demo-typography-text',
+    template: `
     <span nz-typography>Ant Design</span>
     <br />
     <span nz-typography nzType="secondary">Ant Design</span>
@@ -23,6 +23,7 @@ import { Component } from '@angular/core';
     <br />
     <span nz-typography><strong>Ant Design</strong></span>
   `,
-  styles: []
+    styles: [],
+    standalone: false
 })
 export class NzDemoTypographyTextComponent {}

@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-table-size',
-  template: `
+    selector: 'nz-demo-table-size',
+    template: `
     <h4>Middle size table</h4>
     <nz-table #middleTable nzSize="middle" [nzData]="data">
       <thead>
@@ -38,13 +38,14 @@ import { Component } from '@angular/core';
       </tbody>
     </nz-table>
   `,
-  styles: [
-    `
+    styles: [
+        `
       h4 {
         margin-bottom: 16px;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class NzDemoTableSizeComponent {
   data = [

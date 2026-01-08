@@ -2,9 +2,10 @@ import { Component, QueryList, ViewChildren } from '@angular/core';
 import { NzCodeBoxComponent } from '../../shared/components/codebox/codebox.component';
 
 @Component({
-  selector     : 'nz-demo-comment',
-  preserveWhitespaces: false,
-  templateUrl  : './zh.html'
+    selector: 'nz-demo-comment',
+    preserveWhitespaces: false,
+    templateUrl: './zh.html',
+    standalone: false
 })
 export class NzDemoCommentZhComponent {
   expanded = false;

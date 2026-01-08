@@ -2,8 +2,8 @@ import { Component } from '@angular/core';
 import { NzMessageService } from 'ng-zorro-antd/message';
 
 @Component({
-  selector: 'nz-demo-popconfirm-basic',
-  template: `
+    selector: 'nz-demo-popconfirm-basic',
+    template: `
     <a
       nz-popconfirm
       nzPopconfirmTitle="Are you sure delete this task?"
@@ -12,7 +12,8 @@ import { NzMessageService } from 'ng-zorro-antd/message';
       (nzOnCancel)="cancel()"
       >Delete</a
     >
-  `
+  `,
+    standalone: false
 })
 export class NzDemoPopconfirmBasicComponent {
   cancel(): void {

@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-steps-clickable',
-  template: `
+    selector: 'nz-demo-steps-clickable',
+    template: `
     <nz-steps [nzCurrent]="index" (nzIndexChange)="onIndexChange($event)">
       <nz-step nzTitle="Finished" [nzDisabled]="disable" nzDescription="This is a description."></nz-step>
       <nz-step nzTitle="In Progress" nzDescription="This is a description."></nz-step>
@@ -14,7 +14,8 @@ import { Component } from '@angular/core';
       <nz-step nzTitle="In Progress" nzDescription="This is a description."></nz-step>
       <nz-step nzTitle="Waiting" nzDescription="This is a description."></nz-step>
     </nz-steps>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoStepsClickableComponent {
   index = 0;

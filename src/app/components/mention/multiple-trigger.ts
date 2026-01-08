@@ -2,13 +2,14 @@ import { Component, ViewEncapsulation } from '@angular/core';
 import { MentionOnSearchTypes } from 'ng-zorro-antd/mention';
 
 @Component({
-  selector: 'nz-demo-mention-multiple-trigger',
-  encapsulation: ViewEncapsulation.None,
-  template: `
+    selector: 'nz-demo-mention-multiple-trigger',
+    encapsulation: ViewEncapsulation.None,
+    template: `
     <nz-mention [nzSuggestions]="suggestions" (nzOnSearchChange)="onSearchChange($event)" [nzPrefix]="['#', '@']">
       <input placeholder="input @ to mention people, # to mention tag" nzMentionTrigger nz-input [(ngModel)]="inputValue" />
     </nz-mention>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoMentionMultipleTriggerComponent {
   inputValue: string;

@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-button-button-group',
-  template: `
+    selector: 'nz-demo-button-button-group',
+    template: `
     <h4>Basic</h4>
     <nz-button-group>
       <button nz-button>Cancel</button>
@@ -29,8 +29,8 @@ import { Component } from '@angular/core';
       <button nz-button nzType="primary"><i nz-icon nzType="cloud-download"></i></button>
     </nz-button-group>
   `,
-  styles: [
-    `
+    styles: [
+        `
       h4 {
         margin: 16px 0;
         font-size: 14px;
@@ -51,6 +51,7 @@ import { Component } from '@angular/core';
         margin-right: 8px;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class NzDemoButtonButtonGroupComponent {}

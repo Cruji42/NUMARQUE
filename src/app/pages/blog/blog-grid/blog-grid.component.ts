@@ -4,7 +4,8 @@ let blogData = require('../../../../assets/data/pages/blog-data.json');
 declare var require: any
 
 @Component({
-    templateUrl: './blog-grid.component.html'
+    templateUrl: './blog-grid.component.html',
+    standalone: false
 })
 
 export class BlogGridComponent {

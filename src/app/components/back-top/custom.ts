@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-back-top-custom',
-  template: `
+    selector: 'nz-demo-back-top-custom',
+    template: `
     <nz-back-top [nzTemplate]="tpl" [nzVisibilityHeight]="100" (nzOnClick)="notify()">
       <ng-template #tpl>
         <div class="ant-back-top-inner">UP</div>
@@ -12,8 +12,8 @@ import { Component } from '@angular/core';
     <strong> blue </strong>
     button.
   `,
-  styles: [
-    `
+    styles: [
+        `
       :host ::ng-deep .ant-back-top {
         bottom: 100px;
       }
@@ -33,7 +33,8 @@ import { Component } from '@angular/core';
         color: #1088e9;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class NzDemoBackTopCustomComponent {
   notify(): void {

@@ -1,9 +1,9 @@
 import { Component, ElementRef, ViewChild, ViewEncapsulation } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-input-tooltip',
-  encapsulation: ViewEncapsulation.None,
-  template: `
+    selector: 'nz-demo-input-tooltip',
+    encapsulation: ViewEncapsulation.None,
+    template: `
     <input
       #inputElement
       style="width: 120px"
@@ -19,8 +19,8 @@ import { Component, ElementRef, ViewChild, ViewEncapsulation } from '@angular/co
       (blur)="onBlur()"
     />
   `,
-  styles: [
-    `
+    styles: [
+        `
       .numeric-input .ant-tooltip-inner {
         min-width: 32px;
         min-height: 37px;
@@ -30,7 +30,8 @@ import { Component, ElementRef, ViewChild, ViewEncapsulation } from '@angular/co
         font-size: 14px;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class NzDemoInputTooltipComponent {
   value = '';

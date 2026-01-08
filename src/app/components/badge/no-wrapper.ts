@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-badge-no-wrapper',
-  template: `
+    selector: 'nz-demo-badge-no-wrapper',
+    template: `
     <nz-badge [nzCount]="25"></nz-badge>
     <nz-badge
       [nzCount]="4"
@@ -11,12 +11,13 @@ import { Component } from '@angular/core';
     ></nz-badge>
     <nz-badge [nzCount]="109" [nzStyle]="{ backgroundColor: '#52c41a' }"></nz-badge>
   `,
-  styles: [
-    `
+    styles: [
+        `
       nz-badge {
         margin-right: 20px;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class NzDemoBadgeNoWrapperComponent {}

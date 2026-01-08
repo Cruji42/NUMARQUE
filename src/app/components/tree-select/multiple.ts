@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-tree-select-multiple',
-  template: `
+    selector: 'nz-demo-tree-select-multiple',
+    template: `
     <nz-tree-select
       style="width: 250px"
       nzPlaceHolder="Please select"
@@ -17,7 +17,8 @@ import { Component } from '@angular/core';
     >
     </nz-tree-select>
     <ng-template #omittedPlaceHolder let-omittedValues> and {{ omittedValues.length }} more... </ng-template>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoTreeSelectMultipleComponent {
   value: string[] = [];

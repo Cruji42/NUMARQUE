@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 
 @Component({
-  selector: 'nz-demo-form-coordinated',
-  template: `
+    selector: 'nz-demo-form-coordinated',
+    template: `
     <form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
       <nz-form-item>
         <nz-form-label [nzSpan]="5" nzRequired nzFor="note">Note</nz-form-label>
@@ -32,13 +32,14 @@ import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms
       </nz-form-item>
     </form>
   `,
-  styles: [
-    `
+    styles: [
+        `
       [nz-form] {
         max-width: 600px;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class NzDemoFormCoordinatedComponent implements OnInit {
   validateForm: UntypedFormGroup;

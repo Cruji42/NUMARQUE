@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-tooltip-placement',
-  template: `
+    selector: 'nz-demo-tooltip-placement',
+    template: `
     <div style="margin-left:60px;">
       <button nzTooltipTitle="prompt text" nzTooltipPlacement="topLeft" nz-button nz-tooltip>TL</button>
       <button nzTooltipTitle="prompt text" nzTooltipPlacement="top" nz-button nz-tooltip>Top</button>
@@ -24,8 +24,8 @@ import { Component } from '@angular/core';
       <button nzTooltipTitle="prompt text" nzTooltipPlacement="bottomRight" nz-button nz-tooltip>BR</button>
     </div>
   `,
-  styles: [
-    `
+    styles: [
+        `
       button {
         width: 70px;
         text-align: center;
@@ -34,6 +34,7 @@ import { Component } from '@angular/core';
         margin-bottom: 8px;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class NzDemoTooltipPlacementComponent {}

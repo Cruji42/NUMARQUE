@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-table-colspan-rowspan',
-  template: `
+    selector: 'nz-demo-table-colspan-rowspan',
+    template: `
     <nz-table #colSpanTable [nzData]="listOfData" nzBordered>
       <thead>
         <tr>
@@ -40,7 +40,8 @@ import { Component } from '@angular/core';
         </tr>
       </tbody>
     </nz-table>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoTableColspanRowspanComponent {
   listOfData = [

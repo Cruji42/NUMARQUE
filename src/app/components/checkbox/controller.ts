@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-checkbox-controller',
-  template: `
+    selector: 'nz-demo-checkbox-controller',
+    template: `
     <p style="margin-bottom: 20px;">
       <label nz-checkbox [(ngModel)]="isCheckedButton" [nzDisabled]="isDisabledButton">
         {{ isCheckedButton ? 'Checked' : 'Unchecked' }} - {{ isDisabledButton ? 'Disabled' : 'Enabled' }}
@@ -17,13 +17,14 @@ import { Component } from '@angular/core';
       </button>
     </p>
   `,
-  styles: [
-    `
+    styles: [
+        `
       button {
         margin-right: 8px;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class NzDemoCheckboxControllerComponent {
   isCheckedButton = true;

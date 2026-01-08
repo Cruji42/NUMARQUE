@@ -16,8 +16,8 @@ interface Name {
 }
 
 @Component({
-  selector: 'nz-demo-list-infinite-load',
-  template: `
+    selector: 'nz-demo-list-infinite-load',
+    template: `
     <div>
       <cdk-virtual-scroll-viewport itemSize="73" class="demo-infinite-container">
         <nz-list>
@@ -37,8 +37,8 @@ interface Name {
       </cdk-virtual-scroll-viewport>
     </div>
   `,
-  styles: [
-    `
+    styles: [
+        `
       .demo-infinite-container {
         height: 300px;
         border: 1px solid #e8e8e8;
@@ -49,8 +49,9 @@ interface Name {
         padding: 24px;
       }
     `
-  ],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class NzDemoListInfiniteLoadComponent {
   ds = new MyDataSource(this.http);

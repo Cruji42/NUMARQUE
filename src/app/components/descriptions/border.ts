@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-descriptions-border',
-  template: `
+    selector: 'nz-demo-descriptions-border',
+    template: `
     <nz-descriptions nzTitle="User Info" nzBordered>
       <nz-descriptions-item nzTitle="Product">Cloud Database</nz-descriptions-item>
       <nz-descriptions-item nzTitle="Billing Mode">Prepaid</nz-descriptions-item>
@@ -33,6 +33,7 @@ import { Component } from '@angular/core';
         Region: East China 1<br />
       </nz-descriptions-item>
     </nz-descriptions>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoDescriptionsBorderComponent {}

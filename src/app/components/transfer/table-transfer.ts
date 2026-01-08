@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { TransferChange, TransferItem } from 'ng-zorro-antd/transfer';
 
 @Component({
-  selector: 'nz-demo-transfer-table-transfer',
-  template: `
+    selector: 'nz-demo-transfer-table-transfer',
+    template: `
     <nz-transfer
       [nzDataSource]="list"
       [nzDisabled]="disabled"
@@ -53,7 +53,8 @@ import { TransferChange, TransferItem } from 'ng-zorro-antd/transfer';
       <nz-switch [(ngModel)]="disabled" nzCheckedChildren="disabled" nzUnCheckedChildren="disabled"></nz-switch>
       <nz-switch [(ngModel)]="showSearch" nzCheckedChildren="showSearch" nzUnCheckedChildren="showSearch"></nz-switch>
     </div>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoTransferTableTransferComponent implements OnInit {
   list: TransferItem[] = [];

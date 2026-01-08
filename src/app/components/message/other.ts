@@ -2,19 +2,20 @@ import { Component } from '@angular/core';
 import { NzMessageService } from 'ng-zorro-antd/message';
 
 @Component({
-  selector: 'nz-demo-message-other',
-  template: `
+    selector: 'nz-demo-message-other',
+    template: `
     <button nz-button (click)="createMessage('success')">Success</button>
     <button nz-button (click)="createMessage('error')">Error</button>
     <button nz-button (click)="createMessage('warning')">Warning</button>
   `,
-  styles: [
-    `
+    styles: [
+        `
       [nz-button] {
         margin-right: 8px;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class NzDemoMessageOtherComponent {
   createMessage(type: string): void {

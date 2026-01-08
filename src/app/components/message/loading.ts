@@ -2,10 +2,11 @@ import { Component } from '@angular/core';
 import { NzMessageService } from 'ng-zorro-antd/message';
 
 @Component({
-  selector: 'nz-demo-message-loading',
-  template: `
+    selector: 'nz-demo-message-loading',
+    template: `
     <button nz-button [nzType]="'default'" (click)="createBasicMessage()">Display a loading indicator</button>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoMessageLoadingComponent {
   constructor(private message: NzMessageService) {}

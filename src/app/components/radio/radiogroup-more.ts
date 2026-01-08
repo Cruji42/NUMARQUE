@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-radio-radiogroup-more',
-  template: `
+    selector: 'nz-demo-radio-radiogroup-more',
+    template: `
     <nz-radio-group [(ngModel)]="radioValue">
       <label nz-radio [ngStyle]="style" nzValue="A">Option A</label>
       <label nz-radio [ngStyle]="style" nzValue="B">Option B</label>
@@ -13,8 +13,8 @@ import { Component } from '@angular/core';
       </label>
     </nz-radio-group>
   `,
-  styles: [
-    `
+    styles: [
+        `
       [nz-radio] {
         display: block;
       }
@@ -23,7 +23,8 @@ import { Component } from '@angular/core';
         margin-left: 10px;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class NzDemoRadioRadiogroupMoreComponent {
   radioValue = 'A';

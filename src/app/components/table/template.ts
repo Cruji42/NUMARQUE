@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-table-template',
-  template: `
+    selector: 'nz-demo-table-template',
+    template: `
     <nz-table nzTemplateMode>
       <thead>
         <tr>
@@ -44,6 +44,7 @@ import { Component } from '@angular/core';
         </tr>
       </tbody>
     </nz-table>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoTableTemplateComponent {}

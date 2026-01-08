@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-table-basic',
-  template: `
+    selector: 'nz-demo-table-basic',
+    template: `
     <nz-table #basicTable [nzData]="listOfData">
       <thead>
         <tr>
@@ -25,7 +25,8 @@ import { Component } from '@angular/core';
         </tr>
       </tbody>
     </nz-table>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoTableBasicComponent {
   listOfData = [

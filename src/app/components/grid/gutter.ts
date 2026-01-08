@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-grid-gutter',
-  template: `
+    selector: 'nz-demo-grid-gutter',
+    template: `
     <nz-divider nzOrientation="left" nzText="Horizontal"></nz-divider>
     <div nz-row [nzGutter]="16">
       <div nz-col class="gutter-row" [nzSpan]="6"><div class="inner-box">col-6</div></div>
@@ -29,8 +29,8 @@ import { Component } from '@angular/core';
       <div nz-col class="gutter-row" [nzSpan]="6"><div class="inner-box">col-6</div></div>
     </div>
   `,
-  styles: [
-    `
+    styles: [
+        `
       nz-divider {
         color: #333;
         font-weight: normal;
@@ -40,6 +40,7 @@ import { Component } from '@angular/core';
         padding: 8px 0;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class NzDemoGridGutterComponent {}

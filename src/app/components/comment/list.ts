@@ -2,8 +2,8 @@ import { Component } from '@angular/core';
 import { addDays, formatDistance } from 'date-fns';
 
 @Component({
-  selector: 'nz-demo-comment-list',
-  template: `
+    selector: 'nz-demo-comment-list',
+    template: `
     <nz-list [nzDataSource]="data" [nzRenderItem]="item" [nzItemLayout]="'horizontal'">
       <ng-template #item let-item>
         <nz-comment [nzAuthor]="item.author" [nzDatetime]="item.datetime">
@@ -15,7 +15,8 @@ import { addDays, formatDistance } from 'date-fns';
         </nz-comment>
       </ng-template>
     </nz-list>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoCommentListComponent {
   data = [

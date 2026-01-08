@@ -1,14 +1,15 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-progress-dynamic',
-  template: `
+    selector: 'nz-demo-progress-dynamic',
+    template: `
     <nz-progress [nzPercent]="percent"></nz-progress>
     <nz-button-group>
       <button nz-button (click)="decline()"><i nz-icon nzType="minus"></i></button>
       <button nz-button (click)="increase()"><i nz-icon nzType="plus"></i></button>
     </nz-button-group>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoProgressDynamicComponent {
   percent = 0;

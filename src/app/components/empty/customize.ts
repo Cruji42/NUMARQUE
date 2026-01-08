@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-empty-customize',
-  template: `
+    selector: 'nz-demo-empty-customize',
+    template: `
     <nz-empty
       nzNotFoundImage="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
       [nzNotFoundContent]="contentTpl"
@@ -15,7 +15,8 @@ import { Component } from '@angular/core';
         <button nz-button nzType="primary" (click)="onClick()">Create Now</button>
       </ng-template>
     </nz-empty>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoEmptyCustomizeComponent {
   onClick(): void {

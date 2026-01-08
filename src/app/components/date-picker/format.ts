@@ -1,16 +1,16 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-date-picker-format',
-  template: `
+    selector: 'nz-demo-date-picker-format',
+    template: `
     <nz-date-picker [nzFormat]="dateFormat"></nz-date-picker>
     <br />
     <nz-month-picker [nzFormat]="monthFormat" nzPlaceHolder="Select month"></nz-month-picker>
     <br />
     <nz-range-picker [nzFormat]="dateFormat"></nz-range-picker>
   `,
-  styles: [
-    `
+    styles: [
+        `
       nz-date-picker,
       nz-month-picker,
       nz-range-picker,
@@ -18,7 +18,8 @@ import { Component } from '@angular/core';
         margin: 0 8px 12px 0;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class NzDemoDatePickerFormatComponent {
   dateFormat = 'yyyy/MM/dd';

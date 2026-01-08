@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-table-fixed-columns',
-  template: `
+    selector: 'nz-demo-table-fixed-columns',
+    template: `
     <nz-table #columnTable [nzData]="listOfData" [nzScroll]="{ x: '1100px' }">
       <thead>
         <tr>
@@ -37,7 +37,8 @@ import { Component } from '@angular/core';
         </tr>
       </tbody>
     </nz-table>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoTableFixedColumnsComponent {
   listOfData = [

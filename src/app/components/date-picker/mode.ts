@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-date-picker-mode',
-  template: `
+    selector: 'nz-demo-date-picker-mode',
+    template: `
     <nz-date-picker
       [nzMode]="dateMode"
       nzShowTime
@@ -11,8 +11,8 @@ import { Component } from '@angular/core';
     >
     </nz-date-picker>
   `,
-  styles: [
-    `
+    styles: [
+        `
       nz-date-picker,
       nz-month-picker,
       nz-range-picker,
@@ -20,7 +20,8 @@ import { Component } from '@angular/core';
         margin: 0 8px 12px 0;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class NzDemoDatePickerModeComponent {
   dateMode = 'time';

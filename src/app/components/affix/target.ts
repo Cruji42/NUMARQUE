@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-affix-target',
-  template: `
+    selector: 'nz-demo-affix-target',
+    template: `
     <div class="scrollable-container" #target>
       <div class="background">
         <nz-affix [nzTarget]="target" id="affix-container-target">
@@ -13,8 +13,8 @@ import { Component } from '@angular/core';
       </div>
     </div>
   `,
-  styles: [
-    `
+    styles: [
+        `
       .scrollable-container {
         height: 100px;
         overflow-y: scroll;
@@ -26,6 +26,7 @@ import { Component } from '@angular/core';
         background-image: url(//zos.alipayobjects.com/rmsportal/RmjwQiJorKyobvI.jpg);
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class NzDemoAffixTargetComponent {}

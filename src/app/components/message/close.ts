@@ -3,10 +3,11 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 import { concatMap } from 'rxjs/operators';
 
 @Component({
-  selector: 'nz-demo-message-close',
-  template: `
+    selector: 'nz-demo-message-close',
+    template: `
     <button nz-button [nzType]="'default'" (click)="startShowMessages()">Display a sequence of messages</button>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoMessageCloseComponent {
   constructor(private message: NzMessageService) {}

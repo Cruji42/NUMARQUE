@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-date-picker-start-end',
-  template: `
+    selector: 'nz-demo-date-picker-start-end',
+    template: `
     <nz-date-picker
       [nzDisabledDate]="disabledStartDate"
       nzShowTime
@@ -25,13 +25,14 @@ import { Component } from '@angular/core';
     >
     </nz-date-picker>
   `,
-  styles: [
-    `
+    styles: [
+        `
       nz-date-picker {
         margin: 0 8px 12px 0;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class NzDemoDatePickerStartEndComponent {
   startValue: Date | null = null;

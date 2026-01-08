@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-button-multiple',
-  template: `
+    selector: 'nz-demo-button-multiple',
+    template: `
     <button nz-button nzType="primary">primary</button>
     <button nz-button nzType="default">secondary</button>
     <button nz-button nz-dropdown [nzDropdownMenu]="menu">Actions<i nz-icon nzType="down"></i></button>
@@ -20,13 +20,14 @@ import { Component } from '@angular/core';
       </ul>
     </nz-dropdown-menu>
   `,
-  styles: [
-    `
+    styles: [
+        `
       [nz-button] {
         margin-right: 8px;
         margin-bottom: 12px;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class NzDemoButtonMultipleComponent {}

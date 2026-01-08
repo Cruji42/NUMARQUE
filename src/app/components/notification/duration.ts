@@ -2,10 +2,11 @@ import { Component } from '@angular/core';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 
 @Component({
-  selector: 'nz-demo-notification-duration',
-  template: `
+    selector: 'nz-demo-notification-duration',
+    template: `
     <button nz-button [nzType]="'primary'" (click)="createBasicNotification()">Open the notification box</button>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoNotificationDurationComponent {
   createBasicNotification(): void {

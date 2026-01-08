@@ -19,11 +19,12 @@ import { CodeBoxService, DemoCode } from './codebox.service';
 // import { stackBlitzConfiguration } from './stack-blitz';
 
 @Component({
-  selector       : 'nz-code-box',
-  encapsulation  : ViewEncapsulation.None,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  templateUrl    : './codebox.component.html',
-  styleUrls      : [ './codebox.component.less' ]
+    selector: 'nz-code-box',
+    encapsulation: ViewEncapsulation.None,
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    templateUrl: './codebox.component.html',
+    styleUrls: ['./codebox.component.less'],
+    standalone: false
 })
 export class NzCodeBoxComponent implements OnInit, OnDestroy {
   highlightCode: string;

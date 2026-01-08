@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-dropdown-dropdown-button',
-  template: `
+    selector: 'nz-demo-dropdown-dropdown-button',
+    template: `
     <nz-button-group>
       <button nz-button (click)="log()">DropDown</button>
       <button nz-button nz-dropdown [nzDropdownMenu]="menu1" nzPlacement="bottomRight">
@@ -54,13 +54,14 @@ import { Component } from '@angular/core';
       </ul>
     </nz-dropdown-menu>
   `,
-  styles: [
-    `
+    styles: [
+        `
       nz-button-group {
         margin: 0 8px 8px 0;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class NzDemoDropdownDropdownButtonComponent {
   log(): void {

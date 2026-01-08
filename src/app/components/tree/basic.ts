@@ -2,8 +2,8 @@ import { AfterViewInit, Component, ViewChild } from '@angular/core';
 import { NzFormatEmitEvent, NzTreeComponent, NzTreeNodeOptions } from 'ng-zorro-antd/tree';
 
 @Component({
-  selector: 'nz-demo-tree-basic',
-  template: `
+    selector: 'nz-demo-tree-basic',
+    template: `
     <nz-tree
       #nzTreeComponent
       [nzData]="nodes"
@@ -17,7 +17,8 @@ import { NzFormatEmitEvent, NzTreeComponent, NzTreeNodeOptions } from 'ng-zorro-
       (nzExpandChange)="nzCheck($event)"
     >
     </nz-tree>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoTreeBasicComponent implements AfterViewInit {
   @ViewChild('nzTreeComponent', { static: false }) nzTreeComponent: NzTreeComponent;

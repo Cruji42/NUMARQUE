@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-anchor-basic',
-  template: `
+    selector: 'nz-demo-anchor-basic',
+    template: `
     <nz-anchor>
       <nz-link nzHref="#components-anchor-demo-basic" nzTitle="Basic demo"></nz-link>
       <nz-link nzHref="#components-anchor-demo-static" nzTitle="Static demo"></nz-link>
@@ -11,6 +11,7 @@ import { Component } from '@angular/core';
         <nz-link nzHref="#nz-link" nzTitle="nz-link"></nz-link>
       </nz-link>
     </nz-anchor>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoAnchorBasicComponent {}

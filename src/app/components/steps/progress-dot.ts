@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-steps-progress-dot',
-  template: `
+    selector: 'nz-demo-steps-progress-dot',
+    template: `
     <nz-steps [nzCurrent]="1" nzProgressDot>
       <nz-step nzTitle="Finished" nzDescription="This is a description."></nz-step>
       <nz-step nzTitle="In Progress" nzDescription="This is a description."></nz-step>
@@ -16,6 +16,7 @@ import { Component } from '@angular/core';
       <nz-step nzTitle="Waiting" nzDescription="This is a description."></nz-step>
       <nz-step nzTitle="Waiting" nzDescription="This is a description."></nz-step>
     </nz-steps>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoStepsProgressDotComponent {}

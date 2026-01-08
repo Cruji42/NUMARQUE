@@ -3,8 +3,8 @@ import getISOWeek from 'date-fns/getISOWeek';
 import { en_US, NzI18nService, zh_CN } from 'ng-zorro-antd/i18n';
 
 @Component({
-  selector: 'nz-demo-date-picker-basic',
-  template: `
+    selector: 'nz-demo-date-picker-basic',
+    template: `
     <nz-date-picker [(ngModel)]="date" (ngModelChange)="onChange($event)"></nz-date-picker>
     <br />
     <nz-month-picker [(ngModel)]="date" (ngModelChange)="onChange($event)" nzPlaceHolder="Select month"></nz-month-picker>
@@ -17,8 +17,8 @@ import { en_US, NzI18nService, zh_CN } from 'ng-zorro-antd/i18n';
     <br />
     <button nz-button nzType="default" (click)="changeLanguage()">Switch language for all pickers</button>
   `,
-  styles: [
-    `
+    styles: [
+        `
       nz-date-picker,
       nz-month-picker,
       nz-year-picker,
@@ -27,7 +27,8 @@ import { en_US, NzI18nService, zh_CN } from 'ng-zorro-antd/i18n';
         margin: 0 8px 12px 0;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class NzDemoDatePickerBasicComponent {
   date = null;

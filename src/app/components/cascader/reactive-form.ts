@@ -46,8 +46,8 @@ const options = [
 ];
 
 @Component({
-  selector: 'nz-demo-cascader-reactive-form',
-  template: `
+    selector: 'nz-demo-cascader-reactive-form',
+    template: `
     <form [formGroup]="form" novalidate>
       <nz-cascader [nzOptions]="nzOptions" [formControlName]="'name'"> </nz-cascader>
     </form>
@@ -55,13 +55,14 @@ const options = [
     <button nz-button (click)="reset()">Reset</button>
     <button nz-button (click)="submit()">Submit</button>
   `,
-  styles: [
-    `
+    styles: [
+        `
       button {
         margin-right: 8px;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class NzDemoCascaderReactiveFormComponent implements OnDestroy {
   form: UntypedFormGroup;

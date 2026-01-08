@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-popover-trigger-type',
-  template: `
+    selector: 'nz-demo-popover-trigger-type',
+    template: `
     <ng-template #contentTemplate>
       <div>
         <p>Content</p>
@@ -19,12 +19,13 @@ import { Component } from '@angular/core';
       Focus me
     </button>
   `,
-  styles: [
-    `
+    styles: [
+        `
       button {
         margin-right: 8px;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class NzDemoPopoverTriggerTypeComponent {}

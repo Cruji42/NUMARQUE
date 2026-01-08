@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-modal-footer',
-  template: `
+    selector: 'nz-demo-modal-footer',
+    template: `
     <button nz-button nzType="primary" (click)="showModal()">
       <span>Show Modal</span>
     </button>
@@ -31,7 +31,8 @@ import { Component } from '@angular/core';
         <button nz-button nzType="primary" (click)="handleOk()" [nzLoading]="isConfirmLoading">Custom Submit</button>
       </ng-template>
     </nz-modal>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoModalFooterComponent {
   isVisible = false;

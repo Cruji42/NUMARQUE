@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-calendar-basic',
-  template: `
+    selector: 'nz-demo-calendar-basic',
+    template: `
     <nz-calendar [(ngModel)]="date" [(nzMode)]="mode" (nzPanelChange)="panelChange($event)"></nz-calendar>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoCalendarBasicComponent {
   date = new Date(2012, 11, 21);

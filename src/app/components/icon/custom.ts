@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-icon-custom',
-  template: `
+    selector: 'nz-demo-icon-custom',
+    template: `
     <div class="icons-list">
       <i nz-icon style="color: hotpink;">
         <svg>
@@ -49,13 +49,14 @@ import { Component } from '@angular/core';
       </i>
     </div>
   `,
-  styles: [
-    `
+    styles: [
+        `
       [nz-icon] {
         margin-right: 6px;
         font-size: 24px;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class NzDemoIconCustomComponent {}

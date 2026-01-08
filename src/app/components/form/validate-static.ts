@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-form-validate-static',
-  template: `
+    selector: 'nz-demo-form-validate-static',
+    template: `
     <form nz-form>
       <nz-form-item>
         <nz-form-label [nzSpan]="5">Fail</nz-form-label>
@@ -78,8 +78,8 @@ import { Component } from '@angular/core';
       </nz-form-item>
     </form>
   `,
-  styles: [
-    `
+    styles: [
+        `
       [nz-form] {
         max-width: 600px;
       }
@@ -93,6 +93,7 @@ import { Component } from '@angular/core';
         width: 100%;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class NzDemoFormValidateStaticComponent {}

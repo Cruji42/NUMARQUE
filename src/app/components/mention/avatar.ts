@@ -1,9 +1,9 @@
 import { Component, ViewEncapsulation } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-mention-avatar',
-  encapsulation: ViewEncapsulation.None,
-  template: `
+    selector: 'nz-demo-mention-avatar',
+    encapsulation: ViewEncapsulation.None,
+    template: `
     <nz-mention [nzSuggestions]="webFrameworks" [nzValueWith]="valueWith" (nzOnSelect)="onSelect($event)">
       <input nz-input nzMentionTrigger [(ngModel)]="inputValue" />
       <ng-container *nzMentionSuggestion="let framework">
@@ -12,8 +12,8 @@ import { Component, ViewEncapsulation } from '@angular/core';
       </ng-container>
     </nz-mention>
   `,
-  styles: [
-    `
+    styles: [
+        `
       .ant-avatar.ant-avatar-sm {
         width: 14px;
         height: 14px;
@@ -21,7 +21,8 @@ import { Component, ViewEncapsulation } from '@angular/core';
         position: relative;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class NzDemoMentionAvatarComponent {
   inputValue: string;

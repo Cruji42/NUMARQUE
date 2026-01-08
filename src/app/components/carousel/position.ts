@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-carousel-position',
-  template: `
+    selector: 'nz-demo-carousel-position',
+    template: `
     <nz-radio-group [(ngModel)]="dotPosition">
       <label nz-radio-button nzValue="bottom">Bottom</label>
       <label nz-radio-button nzValue="top">Top</label>
@@ -15,8 +15,8 @@ import { Component } from '@angular/core';
       </div>
     </nz-carousel>
   `,
-  styles: [
-    `
+    styles: [
+        `
       nz-radio-group {
         margin-bottom: 8px;
       }
@@ -36,7 +36,8 @@ import { Component } from '@angular/core';
         margin-top: 50px;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class NzDemoCarouselPositionComponent {
   array = [1, 2, 3, 4];

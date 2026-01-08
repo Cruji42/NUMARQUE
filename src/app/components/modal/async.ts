@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-modal-async',
-  template: `
+    selector: 'nz-demo-modal-async',
+    template: `
     <button nz-button nzType="primary" (click)="showModal()">
       <span>Show Modal</span>
     </button>
@@ -15,7 +15,8 @@ import { Component } from '@angular/core';
     >
       <p>Modal Content</p>
     </nz-modal>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoModalAsyncComponent {
   isVisible = false;

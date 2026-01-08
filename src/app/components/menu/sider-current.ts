@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-menu-sider-current',
-  template: `
+    selector: 'nz-demo-menu-sider-current',
+    template: `
     <ul nz-menu nzMode="inline" style="width: 240px;">
       <li nz-submenu [(nzOpen)]="openMap.sub1" (nzOpenChange)="openHandler('sub1')" nzTitle="Navigation One" nzIcon="mail">
         <ul>
@@ -40,7 +40,8 @@ import { Component } from '@angular/core';
         </ul>
       </li>
     </ul>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoMenuSiderCurrentComponent {
   openMap: { [name: string]: boolean } = {

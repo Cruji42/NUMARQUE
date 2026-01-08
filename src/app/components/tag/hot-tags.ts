@@ -3,8 +3,8 @@ import { Component } from '@angular/core';
 const tagsFromServer = ['Movie', 'Books', 'Music', 'Sports'];
 
 @Component({
-  selector: 'nz-demo-tag-hot-tags',
-  template: `
+    selector: 'nz-demo-tag-hot-tags',
+    template: `
     <strong>Categories: </strong>
     <nz-tag
       *ngFor="let tag of hotTags"
@@ -14,7 +14,8 @@ const tagsFromServer = ['Movie', 'Books', 'Music', 'Sports'];
     >
       {{ tag }}
     </nz-tag>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoTagHotTagsComponent {
   hotTags = tagsFromServer;

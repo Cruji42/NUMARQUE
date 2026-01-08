@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 
 @Component({
-  selector: 'nz-demo-form-layout',
-  template: `
+    selector: 'nz-demo-form-layout',
+    template: `
     <form nz-form [nzLayout]="validateForm.get('formLayout')?.value" [formGroup]="validateForm" (ngSubmit)="submitForm()">
       <nz-form-item>
         <nz-form-label [nzSpan]="isHorizontal ? 4 : null">Form Layout</nz-form-label>
@@ -34,13 +34,14 @@ import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms
       </nz-form-item>
     </form>
   `,
-  styles: [
-    `
+    styles: [
+        `
       [nz-form]:not(.ant-form-inline):not(.ant-form-vertical) {
         max-width: 600px;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class NzDemoFormLayoutComponent implements OnInit {
   validateForm: UntypedFormGroup;

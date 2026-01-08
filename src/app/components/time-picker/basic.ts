@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-time-picker-basic',
-  template: `
+    selector: 'nz-demo-time-picker-basic',
+    template: `
     <nz-time-picker [(ngModel)]="time" [nzDefaultOpenValue]="defaultOpenValue"></nz-time-picker>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoTimePickerBasicComponent {
   time: Date | null = null;

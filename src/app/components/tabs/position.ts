@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-tabs-position',
-  template: `
+    selector: 'nz-demo-tabs-position',
+    template: `
     <div style="margin-bottom: 16px;">
       Tab position：
       <nz-select [(ngModel)]="position" style="width: 80px;">
@@ -12,7 +12,8 @@ import { Component } from '@angular/core';
     <nz-tabset [nzTabPosition]="position" [nzType]="'line'">
       <nz-tab *ngFor="let tab of tabs" [nzTitle]="'Tab ' + tab"> Content of tab {{ tab }} </nz-tab>
     </nz-tabset>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoTabsPositionComponent {
   position = 'top';

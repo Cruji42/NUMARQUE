@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-list-basic',
-  template: `
+    selector: 'nz-demo-list-basic',
+    template: `
     <div style="margin-bottom: 8px;"><button nz-button (click)="change()">Switch Data</button></div>
     <nz-list nzItemLayout="horizontal" [nzLoading]="loading">
       <nz-list-item *ngFor="let item of data">
@@ -17,7 +17,8 @@ import { Component } from '@angular/core';
       </nz-list-item>
       <nz-list-empty *ngIf="data.length === 0"></nz-list-empty>
     </nz-list>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoListBasicComponent {
   loading = false;

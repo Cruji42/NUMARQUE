@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-timeline-alternate',
-  template: `
+    selector: 'nz-demo-timeline-alternate',
+    template: `
     <nz-timeline nzMode="alternate">
       <nz-timeline-item>Create a services site 2015-09-01</nz-timeline-item>
       <nz-timeline-item nzColor="green">Solve initial network problems 2015-09-01</nz-timeline-item>
@@ -17,6 +17,7 @@ import { Component } from '@angular/core';
     <ng-template #dotTemplate>
       <i nz-icon nzType="clock-circle-o" style="font-size: 16px;"></i>
     </ng-template>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoTimelineAlternateComponent {}

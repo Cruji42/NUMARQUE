@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-menu-inline',
-  template: `
+    selector: 'nz-demo-menu-inline',
+    template: `
     <ul nz-menu nzMode="inline">
       <li nz-submenu nzTitle="Navigation One" nzIcon="mail" nzOpen>
         <ul>
@@ -47,12 +47,13 @@ import { Component } from '@angular/core';
       </li>
     </ul>
   `,
-  styles: [
-    `
+    styles: [
+        `
       [nz-menu] {
         width: 240px;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class NzDemoMenuInlineComponent {}

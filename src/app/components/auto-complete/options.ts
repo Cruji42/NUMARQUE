@@ -1,16 +1,17 @@
 import { Component, ViewEncapsulation } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-auto-complete-options',
-  encapsulation: ViewEncapsulation.None,
-  template: `
+    selector: 'nz-demo-auto-complete-options',
+    encapsulation: ViewEncapsulation.None,
+    template: `
     <div class="example-input">
       <input placeholder="input here" nz-input [(ngModel)]="inputValue" (input)="onInput($event)" [nzAutocomplete]="auto" />
       <nz-autocomplete #auto>
         <nz-auto-option *ngFor="let option of options" [nzValue]="option">{{ option }}</nz-auto-option>
       </nz-autocomplete>
     </div>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoAutoCompleteOptionsComponent {
   inputValue: string;

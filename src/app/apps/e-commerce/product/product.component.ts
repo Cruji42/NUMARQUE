@@ -5,7 +5,8 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 
 @Component({
-    templateUrl: './product.component.html'
+    templateUrl: './product.component.html',
+    standalone: false
 })
 
 export class ProductComponent  {

@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-table-expand',
-  template: `
+    selector: 'nz-demo-table-expand',
+    template: `
     <nz-table #nzTable [nzData]="listOfData" nzTableLayout="fixed">
       <thead>
         <tr>
@@ -26,7 +26,8 @@ import { Component } from '@angular/core';
         </ng-container>
       </tbody>
     </nz-table>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoTableExpandComponent {
   expandSet = new Set<number>();

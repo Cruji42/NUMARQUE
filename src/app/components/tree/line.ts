@@ -2,8 +2,9 @@ import { Component } from '@angular/core';
 import { NzFormatEmitEvent } from 'ng-zorro-antd/tree';
 
 @Component({
-  selector: 'nz-demo-tree-line',
-  template: ` <nz-tree [nzData]="nodes" nzShowLine (nzClick)="nzEvent($event)"> </nz-tree> `
+    selector: 'nz-demo-tree-line',
+    template: ` <nz-tree [nzData]="nodes" nzShowLine (nzClick)="nzEvent($event)"> </nz-tree> `,
+    standalone: false
 })
 export class NzDemoTreeLineComponent {
   nodes = [

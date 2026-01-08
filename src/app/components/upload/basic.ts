@@ -3,8 +3,8 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzUploadChangeParam } from 'ng-zorro-antd/upload';
 
 @Component({
-  selector: 'nz-demo-upload-basic',
-  template: `
+    selector: 'nz-demo-upload-basic',
+    template: `
     <nz-upload
       nzAction="https://www.mocky.io/v2/5cc8019d300000980a055e76"
       [nzHeaders]="{ authorization: 'authorization-text' }"
@@ -12,7 +12,8 @@ import { NzUploadChangeParam } from 'ng-zorro-antd/upload';
     >
       <button nz-button><i nz-icon nzType="upload"></i>Click to Upload</button>
     </nz-upload>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoUploadBasicComponent {
   constructor(private msg: NzMessageService) {}

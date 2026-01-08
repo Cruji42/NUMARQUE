@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-tabs-slide',
-  template: `
+    selector: 'nz-demo-tabs-slide',
+    template: `
     <nz-radio-group [(ngModel)]="nzTabPosition">
       <label nz-radio-button [nzValue]="'top'">Horizontal</label>
       <label nz-radio-button [nzValue]="'left'">Vertical</label>
@@ -19,7 +19,8 @@ import { Component, OnInit } from '@angular/core';
         {{ tab.content }}
       </nz-tab>
     </nz-tabset>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoTabsSlideComponent implements OnInit {
   tabs: Array<{ name: string; content: string }> = [];

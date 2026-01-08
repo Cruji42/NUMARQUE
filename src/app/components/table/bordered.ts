@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-table-bordered',
-  template: `
+    selector: 'nz-demo-table-bordered',
+    template: `
     <nz-table #borderedTable nzBordered nzFooter="Footer" nzTitle="Header" [nzData]="dataSet">
       <thead>
         <tr>
@@ -19,7 +19,8 @@ import { Component } from '@angular/core';
         </tr>
       </tbody>
     </nz-table>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoTableBorderedComponent {
   dataSet = [

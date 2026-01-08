@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-icon-basic',
-  template: `
+    selector: 'nz-demo-icon-basic',
+    template: `
     <div class="icons-list">
       <i nz-icon [nzType]="'home'"></i>
       <i nz-icon [nzType]="'setting'" [nzTheme]="'fill'"></i>
@@ -13,13 +13,14 @@ import { Component } from '@angular/core';
       <i nz-icon [nzType]="'loading'"></i>
     </div>
   `,
-  styles: [
-    `
+    styles: [
+        `
       [nz-icon] {
         margin-right: 6px;
         font-size: 24px;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class NzDemoIconBasicComponent {}

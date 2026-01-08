@@ -10,7 +10,8 @@ import { Component } from '@angular/core';
         :host ::ng-deep .ant-timeline-item-head-custom {
             margin-top: 10px;
         }
-    `]
+    `],
+    standalone: false
 })
 
 export class ProjectDetailsComponent  {

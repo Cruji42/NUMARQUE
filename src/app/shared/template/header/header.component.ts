@@ -3,7 +3,8 @@ import { ThemeConstantService } from '../../services/theme-constant.service';
 
 @Component({
     selector: 'app-header',
-    templateUrl: './header.component.html'
+    templateUrl: './header.component.html',
+    standalone: false
 })
 
 export class HeaderComponent{

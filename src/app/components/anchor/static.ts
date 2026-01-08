@@ -1,9 +1,9 @@
 import { Component, ViewEncapsulation } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-anchor-static',
-  encapsulation: ViewEncapsulation.None,
-  template: `
+    selector: 'nz-demo-anchor-static',
+    encapsulation: ViewEncapsulation.None,
+    template: `
     <nz-anchor [nzAffix]="false">
       <nz-link nzHref="#components-anchor-demo-basic" nzTitle="Basic demo"></nz-link>
       <nz-link nzHref="#components-anchor-demo-static" nzTitle="Static demo"></nz-link>
@@ -12,6 +12,7 @@ import { Component, ViewEncapsulation } from '@angular/core';
         <nz-link nzHref="#nz-link" nzTitle="nz-link"></nz-link>
       </nz-link>
     </nz-anchor>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoAnchorStaticComponent {}

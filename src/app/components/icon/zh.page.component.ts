@@ -229,8 +229,8 @@ const newIconNames: string[] = [
 ];
 
 @Component({
-  selector: 'nz-page-demo-icon-zh',
-  template: `
+    selector: 'nz-page-demo-icon-zh',
+    template: `
     <h3>{{ localeObj.chooseTheme }}</h3>
     <div class="icon-selector">
       <nz-radio-group [ngModel]="currentTheme" (ngModelChange)="setIconsShouldBeDisplayed($event)">
@@ -287,19 +287,19 @@ const newIconNames: string[] = [
       </ul>
     </ng-container>
   `,
-  styles: [
-    `
+    styles: [
+        `
       h3 {
         margin: 1.6em 0 0.6em;
         font-size: 18px;
       }
     `,
-    `
+        `
       ul.anticons-list li .anticon {
         font-size: 24px;
       }
     `,
-    `
+        `
       .icon-selector {
         display: flex;
         justify-content: space-between;
@@ -310,7 +310,8 @@ const newIconNames: string[] = [
         flex: 1 1 0%;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class NzPageDemoIconZhComponent implements OnInit {
   displayedNames: Array<{ name: string; icons: string[] }> = [];

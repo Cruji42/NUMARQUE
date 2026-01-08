@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-select-custom-template',
-  template: `
+    selector: 'nz-demo-select-custom-template',
+    template: `
     <nz-select nzAllowClear nzPlaceHolder="Select OS" [nzCustomTemplate]="defaultTemplate">
       <nz-option nzLabel="Windows" nzValue="windows"></nz-option>
       <nz-option nzLabel="Apple" nzValue="apple"></nz-option>
@@ -20,12 +20,13 @@ import { Component } from '@angular/core';
       <div class="ant-select-selection-item-content"><i nz-icon [nzType]="selected.nzValue"></i> {{ selected.nzLabel }}</div>
     </ng-template>
   `,
-  styles: [
-    `
+    styles: [
+        `
       nz-select {
         width: 100%;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class NzDemoSelectCustomTemplateComponent {}

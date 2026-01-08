@@ -3,9 +3,9 @@ import { AbstractControl, UntypedFormBuilder, UntypedFormControl, UntypedFormGro
 import { NzMentionComponent } from 'ng-zorro-antd/mention';
 
 @Component({
-  selector: 'nz-demo-mention-controlled',
-  encapsulation: ViewEncapsulation.None,
-  template: `
+    selector: 'nz-demo-mention-controlled',
+    encapsulation: ViewEncapsulation.None,
+    template: `
     <form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
       <nz-form-item>
         <nz-form-label [nzSm]="6" nzFor="mention">Top coders</nz-form-label>
@@ -23,7 +23,8 @@ import { NzMentionComponent } from 'ng-zorro-antd/mention';
         </nz-form-control>
       </nz-form-item>
     </form>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoMentionControlledComponent implements OnInit {
   suggestions = ['afc163', 'benjycui', 'yiminghe', 'RaoHai', '中文', 'にほんご'];

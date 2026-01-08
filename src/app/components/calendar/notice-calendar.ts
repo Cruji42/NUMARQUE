@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-calendar-notice-calendar',
-  template: `
+    selector: 'nz-demo-calendar-notice-calendar',
+    template: `
     <nz-calendar>
       <ul *nzDateCell="let date" class="events">
         <ng-container [ngSwitch]="date.getDate()">
@@ -31,8 +31,8 @@ import { Component } from '@angular/core';
       </ng-container>
     </nz-calendar>
   `,
-  styles: [
-    `
+    styles: [
+        `
       .events {
         list-style: none;
         margin: 0;
@@ -56,7 +56,8 @@ import { Component } from '@angular/core';
         font-size: 28px;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class NzDemoCalendarNoticeCalendarComponent {
   listDataMap = {

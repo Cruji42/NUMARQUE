@@ -2,8 +2,8 @@ import { Component } from '@angular/core';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 
 @Component({
-  selector: 'nz-demo-upload-picture-style',
-  template: `
+    selector: 'nz-demo-upload-picture-style',
+    template: `
     <div class="clearfix">
       <nz-upload nzAction="https://www.mocky.io/v2/5cc8019d300000980a055e76" nzListType="picture" [(nzFileList)]="fileList1">
         <button nz-button><i nz-icon nzType="upload"></i>Upload</button>
@@ -23,8 +23,8 @@ import { NzUploadFile } from 'ng-zorro-antd/upload';
       </nz-upload>
     </div>
   `,
-  styles: [
-    `
+    styles: [
+        `
       :host ::ng-deep .upload-list-inline .ant-upload-list-item {
         float: left;
         width: 200px;
@@ -40,7 +40,8 @@ import { NzUploadFile } from 'ng-zorro-antd/upload';
         animation-name: uploadAnimateInlineOut;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class NzDemoUploadPictureStyleComponent {
   defaultFileList: NzUploadFile[] = [

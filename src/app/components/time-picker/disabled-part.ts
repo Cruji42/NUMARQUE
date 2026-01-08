@@ -1,14 +1,15 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-time-picker-disabled-part',
-  template: `
+    selector: 'nz-demo-time-picker-disabled-part',
+    template: `
     <nz-time-picker
       [nzDisabledHours]="disabledHours"
       [nzDisabledMinutes]="disabledMinutes"
       [nzDisabledSeconds]="disabledSeconds"
     ></nz-time-picker>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoTimePickerDisabledPartComponent {
   disabledHours(): number[] {

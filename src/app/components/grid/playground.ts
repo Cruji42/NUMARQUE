@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-grid-playground',
-  template: `
+    selector: 'nz-demo-grid-playground',
+    template: `
     <div class="slider-container">
       <span>Horizontal Gutter (px): </span>
       <div class="slider">
@@ -36,8 +36,8 @@ import { Component } from '@angular/core';
       </div>
     </div>
   `,
-  styles: [
-    `
+    styles: [
+        `
       .slider {
         width: 50%;
       }
@@ -52,7 +52,8 @@ import { Component } from '@angular/core';
         border-radius: 4px;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class NzDemoGridPlaygroundComponent {
   hGutter = 16;

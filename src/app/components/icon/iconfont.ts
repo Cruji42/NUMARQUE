@@ -2,22 +2,23 @@ import { Component } from '@angular/core';
 import { NzIconService } from 'ng-zorro-antd/icon';
 
 @Component({
-  selector: 'nz-demo-icon-iconfont',
-  template: `
+    selector: 'nz-demo-icon-iconfont',
+    template: `
     <div class="icons-list">
       <i nz-icon [nzIconfont]="'icon-tuichu'"></i>
       <i nz-icon [nzIconfont]="'icon-facebook'"></i>
       <i nz-icon [nzIconfont]="'icon-twitter'"></i>
     </div>
   `,
-  styles: [
-    `
+    styles: [
+        `
       [nz-icon] {
         margin-right: 6px;
         font-size: 24px;
       }
     `
-  ]
+    ],
+    standalone: false
 })
 export class NzDemoIconIconfontComponent {
   constructor(private iconService: NzIconService) {

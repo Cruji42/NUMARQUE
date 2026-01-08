@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-tabs-editable-card',
-  template: `
+    selector: 'nz-demo-tabs-editable-card',
+    template: `
     <nz-tabset [nzType]="'card'" [nzTabBarExtraContent]="extraTemplate">
       <nz-tab *ngFor="let tab of tabs" [nzTitle]="titleTemplate">
         <ng-template #titleTemplate>
@@ -17,7 +17,8 @@ import { Component } from '@angular/core';
     <ng-template #extraTemplate>
       <i class="ant-tabs-new-tab" nz-icon nzType="plus" (click)="newTab()"></i>
     </ng-template>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoTabsEditableCardComponent {
   tabs = ['Tab 1', 'Tab 2'];

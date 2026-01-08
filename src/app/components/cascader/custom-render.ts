@@ -47,8 +47,8 @@ const options = [
 ];
 
 @Component({
-  selector: 'nz-demo-cascader-custom-render',
-  template: `
+    selector: 'nz-demo-cascader-custom-render',
+    template: `
     <nz-cascader [nzLabelRender]="renderTpl" [nzOptions]="nzOptions" [(ngModel)]="values" (ngModelChange)="onChanges($event)">
     </nz-cascader>
 
@@ -62,7 +62,8 @@ const options = [
         </span>
       </ng-container>
     </ng-template>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoCascaderCustomRenderComponent {
   nzOptions: NzCascaderOption[] = options;

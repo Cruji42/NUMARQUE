@@ -5,7 +5,8 @@ import { ProjectList } from '../../../shared/interfaces/project-list.type';
 import { TableService } from '../../../shared/services/table.service';
 
 @Component({
-    templateUrl: './project-list.component.html'
+    templateUrl: './project-list.component.html',
+    standalone: false
 })
 
 export class ProjectListComponent  {

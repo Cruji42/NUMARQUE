@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-drawer-placement',
-  template: `
+    selector: 'nz-demo-drawer-placement',
+    template: `
     <nz-radio-group [(ngModel)]="placement">
       <label nz-radio nzValue="top">top</label>
       <label nz-radio nzValue="right">right</label>
@@ -15,7 +15,8 @@ import { Component } from '@angular/core';
       <p>Some contents...</p>
       <p>Some contents...</p>
     </nz-drawer>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoDrawerPlacementComponent {
   visible = false;

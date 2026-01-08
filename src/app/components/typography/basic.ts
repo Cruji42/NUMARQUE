@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-typography-basic',
-  template: `
+    selector: 'nz-demo-typography-basic',
+    template: `
     <article nz-typography>
       <h1 nz-typography>Introduction</h1>
       <p nz-typography>
@@ -75,6 +75,7 @@ import { Component } from '@angular/core';
         </ul>
       </article>
     </article>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoTypographyBasicComponent {}

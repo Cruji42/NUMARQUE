@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'nz-demo-input-search-input',
-  template: `
+    selector: 'nz-demo-input-search-input',
+    template: `
     <nz-input-group [nzSuffix]="suffixIconSearch">
       <input type="text" nz-input placeholder="input search text" />
     </nz-input-group>
@@ -25,6 +25,7 @@ import { Component } from '@angular/core';
     <ng-template #suffixButton>
       <button nz-button nzType="primary" nzSize="large" nzSearch>Search</button>
     </ng-template>
-  `
+  `,
+    standalone: false
 })
 export class NzDemoInputSearchInputComponent {}
