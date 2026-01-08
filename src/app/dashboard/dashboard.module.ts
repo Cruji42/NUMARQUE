@@ -1,8 +1,7 @@
-import { NgModule } from '@angular/core';
+import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
 import { CommonModule } from "@angular/common";
 import { SharedModule } from '../shared/shared.module';
 import { DashboardRoutingModule } from "./dashboard-routing.module";
-import { NgChartsModule } from 'ng2-charts';
 
 import { ThemeConstantService } from '../shared/services/theme-constant.service';
 
@@ -52,7 +51,6 @@ const antdModule = [
         CommonModule,
         SharedModule,
         DashboardRoutingModule,
-        NgChartsModule,
         ...antdModule
     ],
     exports: [],
@@ -65,5 +63,6 @@ const antdModule = [
     providers: [
         ThemeConstantService
     ],
+    schemas: [NO_ERRORS_SCHEMA]
 })
 export class DashboardModule { }

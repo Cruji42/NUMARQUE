@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentsRoutingModule } from './components-routing.module';
 import { IconDefinition } from '@ant-design/icons-angular';
 import { LeftOutline, RightOutline } from '@ant-design/icons-angular/icons';
@@ -33,7 +33,8 @@ const icons: IconDefinition[] = [LeftOutline, RightOutline];
     NzIconModule,
     NzBadgeModule
 
-  ]
+  ],
+  schemas: [NO_ERRORS_SCHEMA]
 })
 export class ComponentsModule {
 }

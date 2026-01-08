@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
 import { CommonModule } from "@angular/common";
 import { SharedModule } from '../shared/shared.module';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -77,7 +77,8 @@ const antdModule = [
         BlogPostComponent
     ],
     providers: [
-    ]
+    ],
+    schemas: [NO_ERRORS_SCHEMA]
 })
 
 export class PagesModule {}

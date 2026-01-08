@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
 import { SharedModule } from '../shared/shared.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { AppsRoutingModule } from './apps-routing.module';
@@ -90,7 +90,8 @@ const antdModule = [
         ThemeConstantService,
         AppsService,
         TableService
-    ]
+    ],
+    schemas: [NO_ERRORS_SCHEMA]
 })
 
 export class AppsModule {}

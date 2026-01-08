@@ -1,7 +1,5 @@
-import { DragDropModule } from '@angular/cdk/drag-drop';
-import { ScrollingModule } from '@angular/cdk/scrolling';
 import { CommonModule } from '@angular/common';
-import { NgModule } from '@angular/core';
+import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { NzAffixModule } from 'ng-zorro-antd/affix';
@@ -23,9 +21,7 @@ import { NzHighlightModule } from '../../shared/components/highlight/highlight.m
     NzToolTipModule,
     NzAnchorModule,
     NzAffixModule,
-    NzGridModule,
-    // third libs
-    DragDropModule
+    NzGridModule
   ],
   exports: [
     CommonModule,
@@ -37,11 +33,9 @@ import { NzHighlightModule } from '../../shared/components/highlight/highlight.m
     NzAnchorModule,
     NzAffixModule,
     NzGridModule,
-    NzToolTipModule,
-    // third libs
-    ScrollingModule,
-    DragDropModule
-  ]
+    NzToolTipModule
+  ],
+  schemas: [NO_ERRORS_SCHEMA]
 })
 export class DemoComponentsShareModule {
 }

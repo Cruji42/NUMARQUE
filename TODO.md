@@ -18,6 +18,6 @@
 - [x] Update ng-zorro-antd to latest compatible version (20.4.4) - requires code updates for breaking changes
 - [ ] Migrate e2e from Protractor to Cypress
 - [x] Update other dependencies (ng2-charts to 8.0.0)
-- [ ] Test the application (build fails due to ng-zorro API changes)
-- [ ] Fix any breaking changes (update code for ng-zorro 20 API)
+- [x] Test the application (build fails due to ng-zorro API changes and missing modules)
+- [ ] Fix any breaking changes (update code for ng-zorro 20 API, add missing module imports, fix CDK imports)
 

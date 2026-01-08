@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NZ_I18N, en_US } from 'ng-zorro-antd/i18n';
 import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb';
@@ -15,7 +15,6 @@ import { AppComponent } from './app.component';
 import { CommonLayoutComponent } from './layouts/common-layout/common-layout.component';
 import { FullLayoutComponent } from './layouts/full-layout/full-layout.component';
 
-import { NgChartsModule } from 'ng2-charts';
 import { ThemeConstantService } from './shared/services/theme-constant.service';
 
 registerLocaleData(en);
@@ -32,20 +31,20 @@ registerLocaleData(en);
         AppRoutingModule,
         NzBreadCrumbModule,
         TemplateModule,
-        SharedModule,
-        NgChartsModule
+        SharedModule
     ],
     providers: [
-        { 
+        {
             provide: NZ_I18N,
-            useValue: en_US, 
+            useValue: en_US,
         },
         {
-            provide: LocationStrategy, 
+            provide: LocationStrategy,
             useClass: PathLocationStrategy
         },
         ThemeConstantService
     ],
-    bootstrap: [AppComponent]
+    bootstrap: [AppComponent],
+    schemas: [NO_ERRORS_SCHEMA]
 })
 export class AppModule { }
