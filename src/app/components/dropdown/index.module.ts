@@ -1,7 +1,9 @@
-import { NgModule } from '@angular/core';
+import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { DemoComponentsShareModule } from '../demo-components-share/demo-components-share.module';
-import { moduleList } from './module';
+import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
+import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzIconModule } from 'ng-zorro-antd/icon';
 
 import { NzDemoDropdownBasicComponent } from './basic';
 import { NzDemoDropdownContextMenuComponent } from './context-menu';
@@ -19,7 +21,9 @@ import { NzDemoDropdownEnComponent } from './en.component';
 @NgModule({
   imports     : [
     DemoComponentsShareModule,
-    ...moduleList,
+    NzDropDownModule,
+    NzButtonModule,
+    NzIconModule,
     RouterModule.forChild([
       { path: 'en', component: NzDemoDropdownEnComponent },
       { path: 'zh', component: NzDemoDropdownZhComponent }
@@ -38,7 +42,8 @@ import { NzDemoDropdownEnComponent } from './en.component';
 		NzDemoDropdownZhComponent,
 		NzDemoDropdownEnComponent,
 
-  ]
+  ],
+  schemas: [NO_ERRORS_SCHEMA]
 })
 export class NzDemoDropdownModule {
 

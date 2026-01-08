@@ -1,7 +1,10 @@
-import { NgModule } from '@angular/core';
+import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { DemoComponentsShareModule } from '../demo-components-share/demo-components-share.module';
-import { moduleList } from './module';
+import { NzBadgeModule } from 'ng-zorro-antd/badge';
+import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzSwitchModule } from 'ng-zorro-antd/switch';
+import { NzIconModule } from 'ng-zorro-antd/icon';
 
 import { NzDemoBadgeBasicComponent } from './basic';
 import { NzDemoBadgeChangeComponent } from './change';
@@ -18,7 +21,10 @@ import { NzDemoBadgeEnComponent } from './en.component';
 @NgModule({
   imports     : [
     DemoComponentsShareModule,
-    ...moduleList,
+    NzBadgeModule,
+    NzButtonModule,
+    NzSwitchModule,
+    NzIconModule,
     RouterModule.forChild([
       { path: 'en', component: NzDemoBadgeEnComponent },
       { path: 'zh', component: NzDemoBadgeZhComponent }
@@ -36,7 +42,8 @@ import { NzDemoBadgeEnComponent } from './en.component';
 		NzDemoBadgeZhComponent,
 		NzDemoBadgeEnComponent,
 
-  ]
+  ],
+  schemas: [NO_ERRORS_SCHEMA]
 })
 export class NzDemoBadgeModule {
 

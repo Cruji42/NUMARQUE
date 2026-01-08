@@ -31,7 +31,7 @@ export class ProjectListComponent  {
         this.projectList = this.tablesvc.search(this.searchInput, data )
     }
 
-    showNewProject(newProjectContent: TemplateRef<{}>) {
+    showNewProject(newProjectContent: TemplateRef<any>) {
         const modal = this.modalService.create({
             nzTitle: 'Create New Project',
             nzContent: newProjectContent,

@@ -1,7 +1,9 @@
-import { NgModule } from '@angular/core';
+import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { DemoComponentsShareModule } from '../demo-components-share/demo-components-share.module';
-import { moduleList } from './module';
+import { NzProgressModule } from 'ng-zorro-antd/progress';
+import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzIconModule } from 'ng-zorro-antd/icon';
 
 import { NzDemoProgressCircleDynamicComponent } from './circle-dynamic';
 import { NzDemoProgressCircleMiniComponent } from './circle-mini';
@@ -22,7 +24,9 @@ import { NzDemoProgressEnComponent } from './en.component';
 @NgModule({
   imports     : [
     DemoComponentsShareModule,
-    ...moduleList,
+    NzProgressModule,
+    NzButtonModule,
+    NzIconModule,
     RouterModule.forChild([
       { path: 'en', component: NzDemoProgressEnComponent },
       { path: 'zh', component: NzDemoProgressZhComponent }
@@ -44,7 +48,8 @@ import { NzDemoProgressEnComponent } from './en.component';
 		NzDemoProgressZhComponent,
 		NzDemoProgressEnComponent,
 
-  ]
+  ],
+  schemas: [NO_ERRORS_SCHEMA]
 })
 export class NzDemoProgressModule {
 

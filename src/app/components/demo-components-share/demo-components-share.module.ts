@@ -4,6 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { NzAffixModule } from 'ng-zorro-antd/affix';
 import { NzAnchorModule } from 'ng-zorro-antd/anchor';
+import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzGridModule } from 'ng-zorro-antd/grid';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 
@@ -21,7 +22,8 @@ import { NzHighlightModule } from '../../shared/components/highlight/highlight.m
     NzToolTipModule,
     NzAnchorModule,
     NzAffixModule,
-    NzGridModule
+    NzGridModule,
+    NzButtonModule
   ],
   exports: [
     CommonModule,
@@ -33,7 +35,8 @@ import { NzHighlightModule } from '../../shared/components/highlight/highlight.m
     NzAnchorModule,
     NzAffixModule,
     NzGridModule,
-    NzToolTipModule
+    NzToolTipModule,
+    NzButtonModule
   ],
   schemas: [NO_ERRORS_SCHEMA]
 })

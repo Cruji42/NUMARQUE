@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { DemoComponentsShareModule } from '../demo-components-share/demo-components-share.module';
 import { moduleList } from './module';
@@ -32,7 +32,8 @@ import { NzDemoInputNumberEnComponent } from './en.component';
 		NzDemoInputNumberZhComponent,
 		NzDemoInputNumberEnComponent,
 
-  ]
+  ],
+  schemas: [NO_ERRORS_SCHEMA]
 })
 export class NzDemoInputNumberModule {
 

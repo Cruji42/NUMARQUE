@@ -1,7 +1,10 @@
-import { NgModule } from '@angular/core';
+import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { DemoComponentsShareModule } from '../demo-components-share/demo-components-share.module';
-import { moduleList } from './module';
+import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
+import { NzRadioModule } from 'ng-zorro-antd/radio';
+import { NzIconModule } from 'ng-zorro-antd/icon';
 
 import { NzDemoButtonBasicComponent } from './basic';
 import { NzDemoButtonBlockComponent } from './block';
@@ -20,7 +23,10 @@ import { NzDemoButtonEnComponent } from './en.component';
 @NgModule({
   imports     : [
     DemoComponentsShareModule,
-    ...moduleList,
+    NzButtonModule,
+    NzDropDownModule,
+    NzRadioModule,
+    NzIconModule,
     RouterModule.forChild([
       { path: 'en', component: NzDemoButtonEnComponent },
       { path: 'zh', component: NzDemoButtonZhComponent }
@@ -40,7 +46,8 @@ import { NzDemoButtonEnComponent } from './en.component';
 		NzDemoButtonZhComponent,
 		NzDemoButtonEnComponent,
 
-  ]
+  ],
+  schemas: [NO_ERRORS_SCHEMA]
 })
 export class NzDemoButtonModule {
 

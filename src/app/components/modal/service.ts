@@ -69,7 +69,7 @@ export class NzDemoModalServiceComponent {
     });
   }
 
-  createTplModal(tplTitle: TemplateRef<{}>, tplContent: TemplateRef<{}>, tplFooter: TemplateRef<{}>): void {
+  createTplModal(tplTitle: TemplateRef<any>, tplContent: TemplateRef<any>, tplFooter: TemplateRef<any>): void {
     this.tplModal = this.modal.create({
       nzTitle: tplTitle,
       nzContent: tplContent,

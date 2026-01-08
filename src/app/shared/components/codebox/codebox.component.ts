@@ -1,4 +1,4 @@
-import { Platform } from '@angular/cdk/platform';
+
 
 import {
   ChangeDetectionStrategy,
@@ -58,9 +58,7 @@ export class NzCodeBoxComponent implements OnInit, OnDestroy {
   }
 
   navigateToFragment(): void {
-    if (this.platform.isBrowser) {
-      window.location.hash = this.nzLink;
-    }
+    window.location.hash = this.nzLink;
   }
 
   copyCode(): void {
@@ -145,8 +143,7 @@ export class NzCodeBoxComponent implements OnInit, OnDestroy {
   constructor(@Inject(DOCUMENT) private dom: any,
               private sanitizer: DomSanitizer,
               private cdr: ChangeDetectorRef,
-              private codeBoxService: CodeBoxService,
-              private platform: Platform) {
+              private codeBoxService: CodeBoxService) {
   }
 
   ngOnInit(): void {
