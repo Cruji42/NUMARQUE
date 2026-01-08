@@ -89,8 +89,8 @@
 	</div>
 </div><section class="markdown api-container" ngNonBindable><h2 id="api"><span>API</span><a onclick="window.location.hash = 'api'" class="anchor">#</a></h2><p><strong>注意：</strong>Calendar 的部分 locale 来自于 Angular 自身的国际化支持，需要在 app.module.ts 文件中 引入相应的 Angular 语言包。</p>
 <p>例如：</p>
-<pre class="language-typescript"><code><span class="token keyword">import</span> <span class="token punctuation">&#123;</span> registerLocaleData <span class="token punctuation">&#125;</span> <span class="token keyword">from</span> <span class="token string">'@angular/common'</span><span class="token punctuation">;</span>
-<span class="token keyword">import</span> zh <span class="token keyword">from</span> <span class="token string">'@angular/common/locales/zh'</span><span class="token punctuation">;</span>
+<pre class="language-typescript"><code><span class="token keyword">import</span> <span class="token punctuation">&#123;</span> registerLocaleData <span class="token punctuation">&#125;</span> <span class="token keyword">from</span> <span class="token string">'&#64;angular/common'</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> zh <span class="token keyword">from</span> <span class="token string">'&#64;angular/common/locales/zh'</span><span class="token punctuation">;</span>
 <span class="token function">registerLocaleData</span><span class="token punctuation">(</span>zh<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
 <pre class="language-html"><code><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>nz-calendar</span>
   <span class="token attr-name">[nzDateCell]</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>dateCellTpl<span class="token punctuation">"</span></span>

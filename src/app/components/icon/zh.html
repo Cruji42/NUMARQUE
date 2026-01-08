@@ -203,23 +203,23 @@
 <pre class="language-html"><code><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>i</span> <span class="token attr-name">nz-icon</span> <span class="token attr-name">[nzType]</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span><span class="token punctuation">'</span>message<span class="token punctuation">'</span><span class="token punctuation">"</span></span><span class="token style-attr language-css"><span class="token attr-name"> <span class="token attr-name">style</span></span><span class="token punctuation">="</span><span class="token attr-value"><span class="token property">font-size</span><span class="token punctuation">:</span> <span class="token number">16</span>px<span class="token punctuation">;</span> <span class="token property">color</span><span class="token punctuation">:</span> <span class="token hexcode">#08c</span><span class="token punctuation">;</span></span><span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>i</span><span class="token punctuation">></span></span></code></pre>
 <h3 id="静态加载与动态加载"><span>静态加载与动态加载</span><a onclick="window.location.hash = '静态加载与动态加载'" class="anchor">#</a></h3><p>对于 Ant Design 提供的图标，我们提供了两种方式来加载图标资源文件。</p>
 <p>静态加载，在 <code>AppModule</code> 里加入你需要的图标（推荐）或者是全部的图标，例如：</p>
-<pre class="language-ts"><code><span class="token keyword">import</span> <span class="token punctuation">&#123;</span> IconDefinition <span class="token punctuation">&#125;</span> <span class="token keyword">from</span> <span class="token string">'@ant-design/icons-angular'</span><span class="token punctuation">;</span>
+<pre class="language-ts"><code><span class="token keyword">import</span> <span class="token punctuation">&#123;</span> IconDefinition <span class="token punctuation">&#125;</span> <span class="token keyword">from</span> <span class="token string">'&#64;ant-design/icons-angular'</span><span class="token punctuation">;</span>
 <span class="token keyword">import</span> <span class="token punctuation">&#123;</span> NzIconModule <span class="token punctuation">&#125;</span> <span class="token keyword">from</span> <span class="token string">'ng-zorro-antd/icon'</span><span class="token punctuation">;</span>
 
 <span class="token comment" spellcheck="true">// 引入你需要的图标，比如你需要 fill 主题的 AccountBook Alert 和 outline 主题的 Alert，推荐 ✔️</span>
-<span class="token keyword">import</span> <span class="token punctuation">&#123;</span> AccountBookFill<span class="token punctuation">,</span> AlertFill<span class="token punctuation">,</span> AlertOutline <span class="token punctuation">&#125;</span> <span class="token keyword">from</span> <span class="token string">'@ant-design/icons-angular/icons'</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token punctuation">&#123;</span> AccountBookFill<span class="token punctuation">,</span> AlertFill<span class="token punctuation">,</span> AlertOutline <span class="token punctuation">&#125;</span> <span class="token keyword">from</span> <span class="token string">'&#64;ant-design/icons-angular/icons'</span><span class="token punctuation">;</span>
 
 <span class="token keyword">const</span> icons<span class="token punctuation">:</span> IconDefinition<span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token punctuation">[</span> AccountBookFill<span class="token punctuation">,</span> AlertOutline<span class="token punctuation">,</span> AlertFill <span class="token punctuation">]</span><span class="token punctuation">;</span>
 
 <span class="token comment" spellcheck="true">// 引入全部的图标，不推荐 ❌</span>
-<span class="token comment" spellcheck="true">// import * as AllIcons from '@ant-design/icons-angular/icons';</span>
+<span class="token comment" spellcheck="true">// import * as AllIcons from '&#64;ant-design/icons-angular/icons';</span>
 
 <span class="token comment" spellcheck="true">// const antDesignIcons = AllIcons as &#123;</span>
 <span class="token comment" spellcheck="true">//   [key: string]: IconDefinition;</span>
 <span class="token comment" spellcheck="true">// &#125;;</span>
 <span class="token comment" spellcheck="true">// const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesignIcons[key])</span>
 
-@<span class="token function">NgModule</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span>
+&#64;<span class="token function">NgModule</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span>
   declarations<span class="token punctuation">:</span> <span class="token punctuation">[</span>
     AppComponent
   <span class="token punctuation">]</span><span class="token punctuation">,</span>
@@ -239,7 +239,7 @@
   <span class="token property">"assets"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
     <span class="token punctuation">&#123;</span>
       <span class="token property">"glob"</span><span class="token operator">:</span> <span class="token string">"**/*"</span><span class="token punctuation">,</span>
-      <span class="token property">"input"</span><span class="token operator">:</span> <span class="token string">"./node_modules/@ant-design/icons-angular/src/inline-svg/"</span><span class="token punctuation">,</span>
+      <span class="token property">"input"</span><span class="token operator">:</span> <span class="token string">"./node_modules/&#64;ant-design/icons-angular/src/inline-svg/"</span><span class="token punctuation">,</span>
       <span class="token property">"output"</span><span class="token operator">:</span> <span class="token string">"/assets/"</span>
     <span class="token punctuation">&#125;</span>
   <span class="token punctuation">]</span>
@@ -248,7 +248,7 @@
 <p>例如，你在 <code>https://mycdn.somecdn.com/icons/assets</code> 目录下部署了静态资源文件，那么你就可以通过调用 <code>changeAssetsSource(&#39;https://mycdn.somecdn.com/icons&#39;)</code>，来告诉 NG-ZORRO 从这个位置动态加载图标资源。</p>
 <p>请在 constructor 里或者在 <code>AppInitService</code> 里调用这个方法。</p>
 <h3 id="在子模块中补充图标"><span>在子模块中补充图标</span><a onclick="window.location.hash = '在子模块中补充图标'" class="anchor">#</a></h3><p>有时候，为了避免增大 main.js 的体积，你可能想要从懒加载模块中引入图标，这时你就可以使用 <code>NzIconModule.forChild</code> 来追加图标。</p>
-<pre class="language-ts"><code>@<span class="token function">NgModule</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span>
+<pre class="language-ts"><code>&#64;<span class="token function">NgModule</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span>
   imports<span class="token punctuation">:</span> <span class="token punctuation">[</span>CommonModule<span class="token punctuation">,</span> NzIconModule<span class="token punctuation">.</span><span class="token function">forChild</span><span class="token punctuation">(</span><span class="token punctuation">[</span>QuestionOutline<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
 <span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
 <span class="token keyword">class</span> <span class="token class-name">ChildModule</span> <span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span></code></pre>
@@ -285,7 +285,7 @@
 <p>动态引入，只需要保证 SVG 资源文件放到了相应的目录，即 <code>assets/$&#123;namespace&#125;</code> 即可。例如你在 <code>zoo</code> 命名空间下有一个 <code>panda</code> 图标，你需要做的就是将 <code>panda.svg</code> 放到 <code>assets/zoo</code> 目录底下。</p>
 <h2 id="常见问题"><span>常见问题</span><a onclick="window.location.hash = '常见问题'" class="anchor">#</a></h2><h3 id="图标都不见了！"><span>图标都不见了！</span><a onclick="window.location.hash = '图标都不见了！'" class="anchor">#</a></h3><p>你是不是没有阅读以上的文档？</p>
 <h3 id="我想静态引入全部的图标，该怎么做？"><span>我想静态引入全部的图标，该怎么做？</span><a onclick="window.location.hash = '我想静态引入全部的图标，该怎么做？'" class="anchor">#</a></h3><p>实际上我们已经在 <a href="/components/icon/zh#%E9%9D%99%E6%80%81%E5%8A%A0%E8%BD%BD%E4%B8%8E%E5%8A%A8%E6%80%81%E5%8A%A0%E8%BD%BD">静态加载与动态加载</a> 部分演示过了：</p>
-<pre class="language-ts"><code><span class="token comment" spellcheck="true">// import * as AllIcons from '@ant-design/icons-angular/icons';</span>
+<pre class="language-ts"><code><span class="token comment" spellcheck="true">// import * as AllIcons from '&#64;ant-design/icons-angular/icons';</span>
 
 <span class="token comment" spellcheck="true">// const antDesignIcons = AllIcons as &#123;</span>
 <span class="token comment" spellcheck="true">//   [key: string]: IconDefinition;</span>

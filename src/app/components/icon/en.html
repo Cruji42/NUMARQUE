@@ -203,23 +203,23 @@
 <pre class="language-html"><code><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>i</span> <span class="token attr-name">nz-icon</span> <span class="token attr-name">[nzType]</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span><span class="token punctuation">'</span>message<span class="token punctuation">'</span><span class="token punctuation">"</span></span><span class="token style-attr language-css"><span class="token attr-name"> <span class="token attr-name">style</span></span><span class="token punctuation">="</span><span class="token attr-value"><span class="token property">font-size</span><span class="token punctuation">:</span> <span class="token number">16</span>px<span class="token punctuation">;</span> <span class="token property">color</span><span class="token punctuation">:</span> <span class="token hexcode">#08c</span><span class="token punctuation">;</span></span><span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>i</span><span class="token punctuation">></span></span></code></pre>
 <h3 id="static-loading-and-dynamic-loading"><span>Static loading and dynamic loading</span><a onclick="window.location.hash = 'static-loading-and-dynamic-loading'" class="anchor">#</a></h3><p>As for icons provided by Ant Design, there are two ways of importing them into your project.</p>
 <p>Static loading. By registering icons to <code>AppModule</code> you load icons statically.</p>
-<pre class="language-ts"><code><span class="token keyword">import</span> <span class="token punctuation">&#123;</span> IconDefinition <span class="token punctuation">&#125;</span> <span class="token keyword">from</span> <span class="token string">'@ant-design/icons-angular'</span><span class="token punctuation">;</span>
+<pre class="language-ts"><code><span class="token keyword">import</span> <span class="token punctuation">&#123;</span> IconDefinition <span class="token punctuation">&#125;</span> <span class="token keyword">from</span> <span class="token string">'&#64;ant-design/icons-angular'</span><span class="token punctuation">;</span>
 <span class="token keyword">import</span> <span class="token punctuation">&#123;</span> NzIconModule <span class="token punctuation">&#125;</span> <span class="token keyword">from</span> <span class="token string">'ng-zorro-antd/icon'</span><span class="token punctuation">;</span>
 
 <span class="token comment" spellcheck="true">// Import what you need. RECOMMENDED. ✔️</span>
-<span class="token keyword">import</span> <span class="token punctuation">&#123;</span> AccountBookFill<span class="token punctuation">,</span> AlertFill<span class="token punctuation">,</span> AlertOutline <span class="token punctuation">&#125;</span> <span class="token keyword">from</span> <span class="token string">'@ant-design/icons-angular/icons'</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token punctuation">&#123;</span> AccountBookFill<span class="token punctuation">,</span> AlertFill<span class="token punctuation">,</span> AlertOutline <span class="token punctuation">&#125;</span> <span class="token keyword">from</span> <span class="token string">'&#64;ant-design/icons-angular/icons'</span><span class="token punctuation">;</span>
 
 <span class="token keyword">const</span> icons<span class="token punctuation">:</span> IconDefinition<span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token punctuation">[</span> AccountBookFill<span class="token punctuation">,</span> AlertOutline<span class="token punctuation">,</span> AlertFill <span class="token punctuation">]</span><span class="token punctuation">;</span>
 
 <span class="token comment" spellcheck="true">// Import all. NOT RECOMMENDED. ❌</span>
-<span class="token comment" spellcheck="true">// import * as AllIcons from '@ant-design/icons-angular/icons';</span>
+<span class="token comment" spellcheck="true">// import * as AllIcons from '&#64;ant-design/icons-angular/icons';</span>
 
 <span class="token comment" spellcheck="true">// const antDesignIcons = AllIcons as &#123;</span>
 <span class="token comment" spellcheck="true">//   [key: string]: IconDefinition;</span>
 <span class="token comment" spellcheck="true">// &#125;;</span>
 <span class="token comment" spellcheck="true">// const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesignIcons[key])</span>
 
-@<span class="token function">NgModule</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span>
+&#64;<span class="token function">NgModule</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span>
   declarations<span class="token punctuation">:</span> <span class="token punctuation">[</span>
     AppComponent
   <span class="token punctuation">]</span><span class="token punctuation">,</span>
@@ -239,7 +239,7 @@
   <span class="token property">"assets"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
     <span class="token punctuation">&#123;</span>
       <span class="token property">"glob"</span><span class="token operator">:</span> <span class="token string">"**/*"</span><span class="token punctuation">,</span>
-      <span class="token property">"input"</span><span class="token operator">:</span> <span class="token string">"./node_modules/@ant-design/icons-angular/src/inline-svg/"</span><span class="token punctuation">,</span>
+      <span class="token property">"input"</span><span class="token operator">:</span> <span class="token string">"./node_modules/&#64;ant-design/icons-angular/src/inline-svg/"</span><span class="token punctuation">,</span>
       <span class="token property">"output"</span><span class="token operator">:</span> <span class="token string">"/assets/"</span>
     <span class="token punctuation">&#125;</span>
   <span class="token punctuation">]</span>
@@ -248,7 +248,7 @@
 <p>Let&#39;s assume that you deploy static assets under <code>https://mycdn.somecdn.com/icons/assets</code>. You can call <code>changeAssetsSource(&#39;https://mycdn.somecdn.com/icons&#39;)</code> to tell NG-ZORRO that all your resources are located there.</p>
 <p>Please call this in component&#39;s constructor or <code>AppInitService</code>.</p>
 <h3 id="add-icons-in-lazy-loaded-modules"><span>Add Icons in Lazy-loaded Modules</span><a onclick="window.location.hash = 'add-icons-in-lazy-loaded-modules'" class="anchor">#</a></h3><p>Sometimes, you want to import icons in lazy modules to avoid increasing the size of the main.js. You can use <code>NzIconModule.forChild</code>.</p>
-<pre class="language-ts"><code>@<span class="token function">NgModule</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span>
+<pre class="language-ts"><code>&#64;<span class="token function">NgModule</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span>
   imports<span class="token punctuation">:</span> <span class="token punctuation">[</span>CommonModule<span class="token punctuation">,</span> NzIconModule<span class="token punctuation">.</span><span class="token function">forChild</span><span class="token punctuation">(</span><span class="token punctuation">[</span>QuestionOutline<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
 <span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
 <span class="token keyword">class</span> <span class="token class-name">ChildModule</span> <span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span></code></pre>
@@ -286,9 +286,9 @@
 <p>Static importing. Invoke <code>addIconLiteral</code> of <code>NzIconService</code>.</p>
 <p>Dynamic importing. Make sure that you have put your SVG resources in dir like <code>assets/$&#123;namespace&#125;</code>. For example, if you have a <code>panda</code> icon and in <code>zoo</code> namespace, you should put <code>panda.svg</code> in <code>assets/zoo</code>.</p>
 <h2 id="faq"><span>FAQ</span><a onclick="window.location.hash = 'faq'" class="anchor">#</a></h2><h3 id="all-my-icons-are-gone!"><span>All my icons are gone!</span><a onclick="window.location.hash = 'all-my-icons-are-gone!'" class="anchor">#</a></h3><p>Have you read the docs above?</p>
-<h3 id="there-are-two-similar-icons-in-a-<code>&lt;i&gt;&lt;/i&gt;</code>-tag--what-happened"><span>There are two similar icons in a <code>&lt;i&gt;&lt;/i&gt;</code> tag. What happened?</span><a onclick="window.location.hash = 'there-are-two-similar-icons-in-a-<code>&lt;i&gt;&lt;/i&gt;</code>-tag--what-happened'" class="anchor">#</a></h3><p>In older versions of NG-ZORRO, there was a font file which would use <code>:before</code> to insert a icon according to a <code>i</code> tag&#39;s <code>className</code>. So if you have two icons, try to remove <code>node_modules</code> and reinstall. If the problem is still there, search <code>@icon-url</code> and remove that line.</p>
+<h3 id="there-are-two-similar-icons-in-a-<code>&lt;i&gt;&lt;/i&gt;</code>-tag--what-happened"><span>There are two similar icons in a <code>&lt;i&gt;&lt;/i&gt;</code> tag. What happened?</span><a onclick="window.location.hash = 'there-are-two-similar-icons-in-a-<code>&lt;i&gt;&lt;/i&gt;</code>-tag--what-happened'" class="anchor">#</a></h3><p>In older versions of NG-ZORRO, there was a font file which would use <code>:before</code> to insert a icon according to a <code>i</code> tag&#39;s <code>className</code>. So if you have two icons, try to remove <code>node_modules</code> and reinstall. If the problem is still there, search <code>&#64;icon-url</code> and remove that line.</p>
 <h3 id="i-want-to-import-all-icons-statically--what-should-i-do"><span>I want to import all icons statically. What should I do?</span><a onclick="window.location.hash = 'i-want-to-import-all-icons-statically--what-should-i-do'" class="anchor">#</a></h3><p>Actually we demonstrate it here <a href="/components/icon/en#static-loading-and-dynamic-loading">Static loading and dynamic loading</a>:</p>
-<pre class="language-ts"><code><span class="token comment" spellcheck="true">// import * as AllIcons from '@ant-design/icons-angular/icons';</span>
+<pre class="language-ts"><code><span class="token comment" spellcheck="true">// import * as AllIcons from '&#64;ant-design/icons-angular/icons';</span>
 
 <span class="token comment" spellcheck="true">// const antDesignIcons = AllIcons as &#123;</span>
 <span class="token comment" spellcheck="true">//   [key: string]: IconDefinition;</span>
