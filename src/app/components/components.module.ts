@@ -11,7 +11,7 @@ import { NzI18nModule } from 'ng-zorro-antd/i18n';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzMenuModule } from 'ng-zorro-antd/menu';
-import { NzMessageModule } from 'ng-zorro-antd/message';
+
 import { NzPopoverModule } from 'ng-zorro-antd/popover';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { ComponentsComponent } from './components.component';
@@ -27,13 +27,12 @@ const icons: IconDefinition[] = [LeftOutline, RightOutline];
     NzMenuModule,
     NzI18nModule,
     NzSelectModule,
-    NzMessageModule,
     NzPopoverModule,
     NzButtonModule,
     NzInputModule,
     NzIconModule,
     NzBadgeModule
-    
+
   ]
 })
 export class ComponentsModule {

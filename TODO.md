@@ -13,11 +13,11 @@
 - [x] Fix chart libraries and modal API changes
 - [x] Run ng update to Angular 17
 - [x] Run ng update to Angular 18
-- [ ] Run ng update to Angular 19
-- [ ] Run ng update to Angular 20
-- [ ] Update ng-zorro-antd to latest compatible version
+- [x] Run ng update to Angular 19
+- [x] Run ng update to Angular 20
+- [x] Update ng-zorro-antd to latest compatible version (20.4.4) - requires code updates for breaking changes
 - [ ] Migrate e2e from Protractor to Cypress
-- [ ] Update other dependencies
-- [ ] Test the application
-- [ ] Fix any breaking changes
+- [x] Update other dependencies (ng2-charts to 8.0.0)
+- [ ] Test the application (build fails due to ng-zorro API changes)
+- [ ] Fix any breaking changes (update code for ng-zorro 20 API)
 

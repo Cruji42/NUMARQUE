@@ -23,7 +23,7 @@ import { NzSwitchModule } from 'ng-zorro-antd/switch';
 import { NzUploadModule } from 'ng-zorro-antd/upload';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { NzModalModule } from 'ng-zorro-antd/modal';
-import { NzMessageModule } from 'ng-zorro-antd/message';
+
 import { NzInputModule } from 'ng-zorro-antd/input';
 
 import { ProfileComponent } from './profile/profile.component';
@@ -55,7 +55,6 @@ const antdModule = [
     NzUploadModule,
     NzToolTipModule,
     NzModalModule,
-    NzMessageModule,
     NzInputModule
 ]
 
