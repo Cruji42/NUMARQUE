@@ -11,7 +11,7 @@
 - [x] Fix RxJS Subject typing issues
 - [x] Run ng update to Angular 16
 - [x] Fix chart libraries and modal API changes
-- [ ] Run ng update to Angular 17
+- [x] Run ng update to Angular 17
 - [ ] Run ng update to Angular 18
 - [ ] Update ng-zorro-antd to latest compatible version
 - [ ] Migrate e2e from Protractor to Cypress
