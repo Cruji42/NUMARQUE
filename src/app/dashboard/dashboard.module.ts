@@ -26,6 +26,7 @@ import { DefaultDashboardComponent } from './default/default-dashboard.component
 import { EcommerceDashboardComponent } from './e-commerce/e-commerce-dashboard.component';
 import { ProjectsDashboardComponent } from './projects/projects-dashboard.component';
 import { CrmDashboardComponent } from './crm/crm-dashboard.component';
+import { BaseChartDirective, NgChartsModule } from 'ng2-charts';
 
 const antdModule = [
     NzButtonModule,
@@ -50,6 +51,7 @@ const antdModule = [
     imports: [
         CommonModule,
         SharedModule,
+        NgChartsModule,
         DashboardRoutingModule,
         ...antdModule
     ],

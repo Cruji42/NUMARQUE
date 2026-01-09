@@ -26,10 +26,10 @@ const routes: Routes = [
         }
     },
     {
-        path: 'login-3',
+        path: 'login',
         component: Login3Component,
         data: {
-            title: 'Login 3'
+            title: 'Login'
         }
     },
     {
@@ -47,10 +47,10 @@ const routes: Routes = [
         }
     },
     {
-        path: 'sign-up-3',
+        path: 'sign',
         component: SignUp3Component,
         data: {
-            title: 'Sign Up 2'
+            title: 'Sign Up'
         }
     },
     {

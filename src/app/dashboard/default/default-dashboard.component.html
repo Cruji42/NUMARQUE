@@ -1,3 +1,12 @@
+<div style="width: 600px; height: 400px; background: #f5f5f5;">
+  <canvas
+    baseChart
+    [type]="'line'"
+    [data]="testData">
+  </canvas>
+</div>
+
+
 <div class="row">
     <div class="col-md-6 col-lg-3">
         <nz-card>
@@ -57,12 +66,21 @@
                 </div>
             </div>
             <div class="m-t-50" style="height: 330px">
-                <canvas baseChart
+                <!-- <canvas baseChart
                     [data]="revenueChartDataObj"
                     [options]="revenueChartOptions"
                     [type]="revenueChartType">
-                </canvas>
+                </canvas> -->
+                <canvas
+  baseChart
+  [type]="'line'"
+  [data]="{
+    labels: ['A','B','C'],
+    datasets: [{ data: [10,20,30], label: 'OK' }]
+  }">
+</canvas>
             </div>
+            
         </nz-card>
     </div>
     <div class="col-md-12 col-lg-4">

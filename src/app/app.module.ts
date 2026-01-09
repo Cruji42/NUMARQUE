@@ -16,6 +16,8 @@ import { CommonLayoutComponent } from './layouts/common-layout/common-layout.com
 import { FullLayoutComponent } from './layouts/full-layout/full-layout.component';
 
 import { ThemeConstantService } from './shared/services/theme-constant.service';
+import { NgChartsModule } from 'ng2-charts';
+// import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
 
 registerLocaleData(en);
 
@@ -31,9 +33,11 @@ registerLocaleData(en);
         AppRoutingModule,
         NzBreadCrumbModule,
         TemplateModule,
-        SharedModule
+        SharedModule,
+        NgChartsModule
     ],
     providers: [
+        // provideCharts(withDefaultRegisterables()),
         {
             provide: NZ_I18N,
             useValue: en_US,
@@ -45,6 +49,6 @@ registerLocaleData(en);
         ThemeConstantService
     ],
     bootstrap: [AppComponent],
-    schemas: [NO_ERRORS_SCHEMA]
+    // schemas: [NO_ERRORS_SCHEMA]
 })
 export class AppModule { }

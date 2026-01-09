@@ -24,6 +24,17 @@ export class DefaultDashboardComponent {
 
     revenueChartFormat: string = 'revenueMonth';
 
+    testData = {
+  labels: ['A', 'B', 'C'],
+  datasets: [
+    {
+      data: [10, 20, 30],
+      label: 'Test'
+    }
+  ]
+};
+
+
     revenueChartDataObj: any = {
         labels: ["16th", "17th", "18th", "19th", "20th", "21th", "22th", "23th", "24th", "25th", "26th"],
         datasets: [{
