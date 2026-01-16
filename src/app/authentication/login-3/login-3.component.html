@@ -11,27 +11,34 @@
                         </div>
                         <form nz-form [formGroup]="loginForm" nzLayout="vertical" class="login-form" (ngSubmit)="submitForm()">
                             <nz-form-item>
-                                <nz-form-label nzRequired nzFor="userName">Username</nz-form-label>
-                                <nz-form-control nzErrorTip="Please input your username!">
+                                <nz-form-label nzRequired nzFor="userName">Correo Electronico</nz-form-label>
+                                <nz-form-control nzErrorTip="¡Favor de ingresar su correo!">
                                     <nz-input-group [nzPrefix]="prefixUser">
-                                        <input type="text" nz-input formControlName="userName" placeholder="Username">
+                                        <input type="text" nz-input formControlName="email" placeholder="Correo Electronico">
                                     </nz-input-group>
                                 </nz-form-control>
                             </nz-form-item>
                             <nz-form-item class="relative">
-                                <nz-form-label nzRequired nzFor="password">Password</nz-form-label>
-                                <a class="float-right font-size-13 text-muted" style="position:absolute; right: 0" [routerLink]="['/authentication/reset-password-1']">Forget Password?</a>
-                                <nz-form-control nzErrorTip="Please input your Password!">
+                                <nz-form-label nzRequired nzFor="password">Contraseña</nz-form-label>
+                                <a class="float-right font-size-13 text-muted" style="position:absolute; right: 0" [routerLink]="['/authentication/reset-password-1']">¿Olvidaste tu contraseña?</a>
+                                <nz-form-control nzErrorTip="¡Favor fr ingresar su contraseña!">
                                     <nz-input-group [nzPrefix]="prefixLock">
                                         <input type="password" nz-input formControlName="password" placeholder="Password">
                                     </nz-input-group>
                                 </nz-form-control>
                             </nz-form-item>
+                             <nz-form-item class="relative">
+                                <nz-form-control>
+                                    <label class="d-flex align-items-center">
+                                        <div id="googleBtn"></div>
+                                    </label>
+                                </nz-form-control>
+                             </nz-form-item>
                             <nz-form-item>
                                 <nz-form-control>
                                     <div class="d-flex align-items-center justify-content-between">
-                                        <span class="font-size-13 text-muted">Don't have an account? <a class="small" [routerLink]="['/authentication/sign']"> Signup</a></span>
-                                        <button nz-button class="login-form-button" [nzType]="'primary'" [routerLink]="['/dashboard/default']">Sign In</button>
+                                        <span class="font-size-13 text-muted">¿No tienes una cuenta? <a class="small" [routerLink]="['/authentication/sign']"> Signup</a></span>
+                                        <button nz-button class="login-form-button" [nzType]="'primary'" >Sign In</button>
                                     </div>
                                 </nz-form-control>
                             </nz-form-item>

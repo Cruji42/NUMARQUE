@@ -18,6 +18,7 @@ import { SignUp2Component } from './sign-up-2/sign-up-2.component';
 import { SignUp3Component } from './sign-up-3/sign-up-3.component';
 import { Error1Component } from './error-1/error-1.component';
 import { Error2Component } from './error-2/error-2.component';
+import { AuthService } from '../core/service/auth-service';
 
 const antdModule= [
     NzFormModule,
@@ -33,6 +34,7 @@ const antdModule= [
         SharedModule,
         ReactiveFormsModule,
         AuthenticationRoutingModule,
+        
         ...antdModule
     ],
     declarations: [
@@ -45,7 +47,8 @@ const antdModule= [
         Error1Component,
         Error2Component
     ],
-    schemas: [NO_ERRORS_SCHEMA]
+    schemas: [NO_ERRORS_SCHEMA],
+    providers: [AuthService],
 })
 
 export class AuthenticationModule {}
