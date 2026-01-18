@@ -22,9 +22,26 @@ export class AuthService {
     public authStatus = computed(() => this._authStatus());
 
     private _token = signal<string | null>(this.getTokenFromStorage());
-     isAuthenticated = computed(() => { const token = this._token(); if (!token) return false; return !this.isTokenExpired(token);});
+
     user = computed<JwtPayload | null>(() => { const token = this._token(); return token ? this.decodeToken(token) : null; });
 
+    isAuthenticated(): boolean {
+        const token = this._token() ?? localStorage.getItem('token');
+
+        if (!token) return false;
+
+        if (this.isTokenExpired(token)) {
+            this.clearAuth();
+            return false;
+        }
+
+        return true;
+    }
+
+    clearAuth(): void {
+        localStorage.removeItem('token');
+        this._token.set(null);
+    }
 
 
     setToken(token: string): void {
@@ -36,6 +53,8 @@ export class AuthService {
     logout(): void {
         localStorage.removeItem('token');
         this._token.set(null);
+        this.isAuthenticated();
+
     }
 
     getToken(): string | null {
@@ -47,7 +66,9 @@ export class AuthService {
         return this.endPointAuthService.login({ email, password }).pipe(
             map(response => {
                 // Handle successful login, e.g., store token
-                this.setToken(response.token);
+                this.setToken(response.access_token);
+                
+                this.isAuthenticated()
                 return response;
             }),
             catchError(error => {
@@ -62,7 +83,9 @@ export class AuthService {
         return this.endPointAuthService.loginGoogle({ token }).pipe(
             map(response => {
                 // Handle successful login, e.g., store token
-                this.setToken(response.token);
+                // console.log(response);
+                this.setToken(response.access_token);
+                this.isAuthenticated();
                 return response;
             }),
             catchError(error => {

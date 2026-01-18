@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { ThemeConstantService } from '../../services/theme-constant.service';
+import { AuthService } from 'src/app/core/service/auth-service';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-header',
@@ -14,7 +16,7 @@ export class HeaderComponent{
     isFolded : boolean;
     isExpand : boolean;
 
-    constructor( private themeService: ThemeConstantService) {}
+    constructor( private themeService: ThemeConstantService, private authService: AuthService, private router: Router) {}
 
     ngOnInit(): void {
         this.themeService.isMenuFoldedChanges.subscribe(isFolded => this.isFolded = isFolded);
@@ -31,6 +33,18 @@ export class HeaderComponent{
         this.isExpand = !this.isExpand;
         this.themeService.toggleExpand(this.isExpand);
         this.themeService.toggleFold(this.isFolded);
+    }
+
+
+    logOut(): void {
+
+        this.authService.logout();
+        // this.authService.isAuthenticated();
+        // console.log(this.authService.isAuthenticated())
+        this.router.navigateByUrl('/authentication/login');
+    
+        
+
     }
 
     searchToggle(): void {

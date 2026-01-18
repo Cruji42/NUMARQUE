@@ -3,6 +3,7 @@ import { UntypedFormBuilder, UntypedFormGroup,  Validators } from '@angular/form
 import { AuthService } from '../../core/service/auth-service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { environment } from '../../../environments/environment';
+import { NgZone } from '@angular/core';
 
 declare const google: any;
 
@@ -23,7 +24,7 @@ export class Login3Component implements AfterViewInit {
     //     }
     // }
 
-    constructor(private fb: UntypedFormBuilder, private authService: AuthService, public router: Router) {
+    constructor(private fb: UntypedFormBuilder, private authService: AuthService, public router: Router, private ngZone: NgZone) {
     }
 
     ngOnInit(): void {
@@ -54,7 +55,20 @@ export class Login3Component implements AfterViewInit {
   handleGoogleLogin(response: any) {
     const idToken = response.credential;
 
-    this.authService.loginWithGoogle(idToken).subscribe();
+    this.authService.loginWithGoogle(idToken).subscribe(
+      {
+        next: (res) => {
+          // console.log('Google login successful:', res);
+          this.router.navigateByUrl('/dashboard/default');
+          // this.ngZone.run(() => {
+          //   this.router.navigateByUrl('/dashboard/default');
+          // });
+        },
+        error: (err) => {
+          console.error('Google login failed:', err);
+        }
+      }
+    );
   }
 
     // initGoogle() {
