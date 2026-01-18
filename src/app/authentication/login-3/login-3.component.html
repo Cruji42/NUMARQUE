@@ -9,10 +9,20 @@
                             <img class="img-fluid" alt="" src="assets/images/logo/logo.png">
                             <h2 class="m-b-0">Sign In</h2>
                         </div>
+
+                        <ng-template #emailError let-control>
+                            <ng-container *ngIf="control.hasError('required')">
+                                ¡Favor de ingresar su correo!
+                            </ng-container>
+
+                            <ng-container *ngIf="control.hasError('email')">
+                                El formato del correo no es válido
+                            </ng-container>
+                        </ng-template>
                         <form nz-form [formGroup]="loginForm" nzLayout="vertical" class="login-form" (ngSubmit)="submitForm()">
                             <nz-form-item>
                                 <nz-form-label nzRequired nzFor="userName">Correo Electronico</nz-form-label>
-                                <nz-form-control nzErrorTip="¡Favor de ingresar su correo!">
+                                <nz-form-control [nzErrorTip]="emailError">
                                     <nz-input-group [nzPrefix]="prefixUser">
                                         <input type="text" nz-input formControlName="email" placeholder="Correo Electronico">
                                     </nz-input-group>

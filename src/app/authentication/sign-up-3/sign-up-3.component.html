@@ -11,41 +11,53 @@
                         </div>
                         <form nz-form [formGroup]="signUpForm" class="login-form" nzLayout="vertical" (ngSubmit)="submitForm()">
                             <nz-form-item>
-                                <nz-form-label nzRequired nzFor="userName">Username</nz-form-label>
-                                <nz-form-control nzErrorTip="Please input your username!">
-                                    <input type="text" nz-input formControlName="userName" placeholder="Username" id="userName">
+                                <nz-form-label nzRequired nzFor="name">Nombre</nz-form-label>
+                                <nz-form-control nzErrorTip="¡Favor de ingresar tu nombre!">
+                                    <input type="text" nz-input formControlName="name" placeholder="Nombre" id="name">
                                 </nz-form-control>
                             </nz-form-item>
                             <nz-form-item>
-                                <nz-form-label nzRequired nzFor="email">Email</nz-form-label>
-                                <nz-form-control nzErrorTip="The input is not valid E-mail!">
-                                    <input type="text" nz-input formControlName="email" placeholder="Username" id="email">
+                                <nz-form-label nzRequired nzFor="last_name">Apellido</nz-form-label>
+                                <nz-form-control nzErrorTip="¡Favor de ingresar tu apellido!">
+                                    <input type="text" nz-input formControlName="last_name" placeholder="Apellido" id="last_name">
+                                </nz-form-control>
+                            </nz-form-item>
+                              <nz-form-item>
+                                <nz-form-label nzRequired nzFor="company">Empresa</nz-form-label>
+                                <nz-form-control nzErrorTip="¡Favor de ingresar tu empresa!">
+                                    <input type="text" nz-input formControlName="company" placeholder="Empresa" id="company">
                                 </nz-form-control>
                             </nz-form-item>
                             <nz-form-item>
-                                <nz-form-label nzRequired nzFor="password">Password</nz-form-label>
-                                <nz-form-control nzErrorTip="Please input your Password!">
-                                    <input type="password" nz-input formControlName="password" placeholder="Password" id="password">
+                                <nz-form-label nzRequired nzFor="email">Correo electrónico</nz-form-label>
+                                <nz-form-control nzErrorTip="¡Favor de ingresar tu correo electrónico!">
+                                    <input type="text" nz-input formControlName="email" placeholder="Correo electrónico" id="email">
                                 </nz-form-control>
                             </nz-form-item>
                             <nz-form-item>
-                                <nz-form-label nzFor="checkPassword" nzRequired>Confirm Password</nz-form-label>
-                                <nz-form-control nzErrorTip="Please confirm your password!">
-                                    <input nz-input type="password" formControlName="checkPassword"  placeholder="Confirm Password" id="checkPassword">
+                                <nz-form-label nzRequired nzFor="password">Contraseña</nz-form-label>
+                                <nz-form-control nzErrorTip="¡Favor de ingresar tu contraseña!">
+                                    <input type="password" nz-input formControlName="password" placeholder="Contraseña" id="password">
                                 </nz-form-control>
                             </nz-form-item>
-                            <div class="d-flex align-items-center justify-content-between">
+                            <nz-form-item>
+                                <nz-form-label nzFor="checkPassword" nzRequired>Confirma tu contraseña</nz-form-label>
+                                <nz-form-control nzErrorTip="¡Favor de confirmar tu contraseña!">
+                                    <input nz-input type="password" formControlName="checkPassword"  placeholder="Confirmar contraseña" id="checkPassword">
+                                </nz-form-control>
+                            </nz-form-item>
+                            <div class="d-flex align-items-center justify-content-center align-items-center flex-column">
                                 <nz-form-item>
                                     <nz-form-control>
                                         <label nz-checkbox formControlName="agree">
-                                            <span>I have read the <a>agreement</a></span>
+                                            <span>Al hacer clic aquí, declaro que he leído y entendido los <a>términos y condiciones</a></span>
                                         </label>
                                     </nz-form-control>
                                 </nz-form-item>
                                 <nz-form-item>
                                     <nz-form-control>
                                         <div >
-                                            <button nz-button class="login-form-button" [nzType]="'primary'">Sign Up</button>
+                                            <button nz-button class="login-form-button" [nzType]="'primary'" [disabled]="signUpForm.invalid">Sign Up</button>
                                         </div>
                                     </nz-form-control>
                                 </nz-form-item>   
