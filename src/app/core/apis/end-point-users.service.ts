@@ -16,9 +16,22 @@ export class EndPointUsersService {
    
     ) { }
 
+    configHeaders() {
+        const token = localStorage.getItem('token');
+        const headers = {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        };
+        return headers;
+    }
 
     createUser(userData: User): Observable<any> {
         return this.http.post<any>(`${this.apiUrl}/users`, userData, { observe: 'response' });
+    }
+
+
+    getUsers(): Observable<User[]> {
+        return this.http.get<User[]>(`${this.apiUrl}/users`, { headers: this.configHeaders() });
     }
 
     

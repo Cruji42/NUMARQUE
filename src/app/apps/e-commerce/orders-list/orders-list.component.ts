@@ -1,13 +1,19 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, Input, TemplateRef, ViewContainerRef, ViewChild } from '@angular/core';
 import { TableService } from '../../../shared/services/table.service';
 import { NzTableFilterFn, NzTableFilterList, NzTableSortFn, NzTableSortOrder } from 'ng-zorro-antd/table';
+import { UsersService } from '../../../core/service/users.service';
+
+
+
+
+import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
 
 interface DataItem {
     id: number;
     name: string;
     date: string;
     amount: number;
-    status:  string;
+    status: string;
 }
 
 @Component({
@@ -15,12 +21,23 @@ interface DataItem {
     standalone: false
 })
 
-export class OrdersListComponent  {
+export class OrdersListComponent implements OnInit {
 
     allChecked: boolean = false;
     indeterminate: boolean = false;
     displayData = [];
     searchInput: string
+
+
+    @ViewChild('tplTitle', { static: true }) tplTitle!: TemplateRef<any>;
+    @ViewChild('tplContent', { static: true }) tplContent!: TemplateRef<any>;
+    @ViewChild('tplFooter', { static: true }) tplFooter!: TemplateRef<any>;
+
+    roleList = [
+        { text: 'Administrador', value: '1' },
+        { text: 'Vendedor', value: '2' },
+        { text: 'Cliente', value: '3' },
+    ];
 
     orderColumn = [
         {
@@ -28,23 +45,31 @@ export class OrdersListComponent  {
             compare: (a: DataItem, b: DataItem) => a.id - b.id,
         },
         {
-            title: 'Customer',
+            title: 'Usuario',
             compare: (a: DataItem, b: DataItem) => a.name.localeCompare(b.name)
         },
         {
-            title: 'Date',
+            title: 'Fecha de registro',
             compare: (a: DataItem, b: DataItem) => a.name.localeCompare(b.name)
         },
         {
-            title: 'Amount',
+            title: 'Compañia',
             compare: (a: DataItem, b: DataItem) => a.amount - b.amount,
         },
         {
-            title: 'Status',
+            title: 'Marcas',
             compare: (a: DataItem, b: DataItem) => a.name.localeCompare(b.name)
         },
         {
-            title: ''
+            title: 'Rol',
+            compare: (a: DataItem, b: DataItem) => a.amount - b.amount,
+        },
+        {
+            title: 'Estatus',
+            compare: (a: DataItem, b: DataItem) => a.name.localeCompare(b.name)
+        },
+        {
+            title: 'Opciones'
         }
     ]
 
@@ -56,7 +81,7 @@ export class OrdersListComponent  {
             date: '8 May 2019',
             amount: 137,
             status: 'approved',
-            checked : false
+            checked: false
         },
         {
             id: 5375,
@@ -65,7 +90,7 @@ export class OrdersListComponent  {
             date: '6 May 2019',
             amount: 322,
             status: 'approved',
-            checked : false
+            checked: false
         },
         {
             id: 5762,
@@ -74,7 +99,7 @@ export class OrdersListComponent  {
             date: '1 May 2019',
             amount: 543,
             status: 'approved',
-            checked : false
+            checked: false
         },
         {
             id: 5865,
@@ -83,7 +108,7 @@ export class OrdersListComponent  {
             date: '28 April 2019',
             amount: 876,
             status: 'pending',
-            checked : false
+            checked: false
         },
         {
             id: 5213,
@@ -92,7 +117,7 @@ export class OrdersListComponent  {
             date: '28 April 2019',
             amount: 241,
             status: 'approved',
-            checked : false
+            checked: false
         },
         {
             id: 5311,
@@ -101,7 +126,7 @@ export class OrdersListComponent  {
             date: '19 April 2019',
             amount: 872,
             status: 'rejected',
-            checked : false
+            checked: false
         },
         {
             id: 5387,
@@ -110,7 +135,7 @@ export class OrdersListComponent  {
             date: '18 April 2019',
             amount: 728,
             status: 'approved',
-            checked : false
+            checked: false
         },
         {
             id: 5390,
@@ -119,7 +144,7 @@ export class OrdersListComponent  {
             date: '16 April 2019',
             amount: 802,
             status: 'pending',
-            checked : false
+            checked: false
         },
         {
             id: 5317,
@@ -128,7 +153,7 @@ export class OrdersListComponent  {
             date: '12 April 2019',
             amount: 569,
             status: 'approved',
-            checked : false
+            checked: false
         },
         {
             id: 5291,
@@ -137,7 +162,7 @@ export class OrdersListComponent  {
             date: '10 April 2019',
             amount: 132,
             status: 'approved',
-            checked : false
+            checked: false
         },
         {
             id: 5288,
@@ -146,7 +171,7 @@ export class OrdersListComponent  {
             date: '8 April 2019',
             amount: 528,
             status: 'rejected',
-            checked : false
+            checked: false
         },
         {
             id: 5301,
@@ -155,7 +180,7 @@ export class OrdersListComponent  {
             date: '8 April 2019',
             amount: 632,
             status: 'approved',
-            checked : false
+            checked: false
         },
         {
             id: 5355,
@@ -164,17 +189,86 @@ export class OrdersListComponent  {
             date: '6 April 2019',
             amount: 987,
             status: 'approved',
-            checked : false
+            checked: false
         },
     ]
 
-    constructor(private tableSvc : TableService) {
-        this.displayData = this.ordersList
+    ngOnInit(): void {
+        this.getUsersData();
     }
+
+
+    constructor(private tableSvc: TableService, private service: UsersService, private modal: NzModalService, private viewContainerRef: ViewContainerRef) {
+        // this.displayData = this.ordersList
+    }
+
+    getUsersData() {
+        // Use the UsersService to fetch user data
+        this.service.getUsers().subscribe({
+            next: (users) => {
+                console.log('Fetched users:', users);
+                this.displayData = users;
+                this.displayData.forEach((user: any) => {
+                    // Map roles based on role_id
+                    this.roleList.find((role: any) => {
+                        // console.log('Comparing role:', role.value, 'with user role_id:', user.role_id);
+                        if (role.value === user.role_id) {
+                            // console.log('Match found for user:', user, 'with role:', role);
+                            user.role_label = role.text;
+                            return true; // Exit the loop early
+                        }
+                    })
+                    //  role.value === user.role_id)?.text; 
+                    // console.log('User role label:', user.role_label)
+                })
+            },
+            error: (error) => {
+                console.error('Error fetching users:', error);
+            }
+        })
+    }
+
 
     search() {
         const data = this.ordersList
-        this.displayData = this.tableSvc.search(this.searchInput, data )
+        this.displayData = this.tableSvc.search(this.searchInput, data)
     }
+
+
+    // createTplModal(tplTitle: TemplateRef<{}>, tplContent: TemplateRef<{}>, tplFooter: TemplateRef<{}>): void {
+    //     this.modal.create({
+    //         nzTitle: tplTitle,
+    //         nzContent: tplContent,
+    //         nzFooter: tplFooter,
+    //         nzMaskClosable: false,
+    //         nzClosable: false,
+    //         nzData: {
+    //             value: 'Template Context'
+    //         },
+    //         nzOnOk: () => console.log('Click ok')
+    //     });
+    // }
+
+
+openEditModal(item: any): void {
+  console.log('ITEM QUE SE ENVÍA:', item);
+
+  this.modal.create({
+    nzTitle: 'Información de usuario',
+    nzContent: this.tplContent,
+    nzFooter: this.tplFooter,
+    nzViewContainerRef: this.viewContainerRef,
+    nzData: {
+      item
+    },
+    nzMaskClosable: false,
+    nzClosable: false
+  });
+}
+
+
+
+
+
 
 }    

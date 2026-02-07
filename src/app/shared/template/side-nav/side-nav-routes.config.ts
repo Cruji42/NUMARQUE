@@ -2,45 +2,71 @@ import { SideNavInterface } from '../../interfaces/side-nav.type';
 
 export const ROUTES: SideNavInterface[] = [
     {
-        path: '',
+        path: '/dashboard/default',
         title: 'Dashboard',
         iconType: 'nzIcon',
         iconTheme: 'outline',
         icon: 'dashboard',
-        submenu: [
-            {
-                path: '/dashboard/default',
-                title: 'Default',
-                iconType: '',
-                icon: '',
-                iconTheme: '',
-                submenu: []
-            },
-            {
-                path: '/dashboard/crm',
-                title: 'CRM',
-                iconType: '',
-                icon: '',
-                iconTheme: '',
-                submenu: []
-            },
-            {
-                path: '/dashboard/e-commerce',
-                title: 'E-commerce',
-                iconType: '',
-                icon: '',
-                iconTheme: '',
-                submenu: []
-            },
-            {
-                path: '/dashboard/projects',
-                title: 'Projects',
-                iconType: '',
-                icon: '',
-                iconTheme: '',
-                submenu: []
-            },
-        ]
+        submenu: []
+        // submenu: [
+        //     {
+        //         path: '/dashboard/default',
+        //         title: 'Default',
+        //         iconType: '',
+        //         icon: '',
+        //         iconTheme: '',
+        //         submenu: []
+        //     },
+        //     {
+        //         path: '/dashboard/crm',
+        //         title: 'CRM',
+        //         iconType: '',
+        //         icon: '',
+        //         iconTheme: '',
+        //         submenu: []
+        //     },
+        //     {
+        //         path: '/dashboard/e-commerce',
+        //         title: 'E-commerce',
+        //         iconType: '',
+        //         icon: '',
+        //         iconTheme: '',
+        //         submenu: []
+        //     },
+        //     {
+        //         path: '/dashboard/projects',
+        //         title: 'Projects',
+        //         iconType: '',
+        //         icon: '',
+        //         iconTheme: '',
+        //         submenu: []
+        //     },
+        // ]
+    },
+    
+    {
+        path: '/apps/e-commerce/orders-list',
+        title: 'Usuarios',
+        iconType: 'nzIcon',
+        icon: 'ordered-list',
+        iconTheme: 'outline',
+        submenu: []
+    },
+    {
+        path: '/apps/e-commerce/products-list',
+        title: 'Products List',
+        iconType: 'nzIcon',
+        icon: 'profile',
+        iconTheme: 'outline',
+        submenu: []
+    },
+    {
+        path: '/pages/setting',
+        title: 'Perfil',
+        iconType: 'nzIcon',
+        icon: 'user',
+        iconTheme: 'outline',
+        submenu: []
     },
     {
         path: '',

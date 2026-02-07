@@ -42,6 +42,9 @@ import { OrdersListComponent } from './e-commerce/orders-list/orders-list.compon
 import { ProductsListComponent } from './e-commerce/products-list/products-list.component';
 import { ProductComponent } from './e-commerce/product/product.component';
 
+//modals 
+// import {}
+
 const antdModule = [
     NzButtonModule,
     NzCardModule,

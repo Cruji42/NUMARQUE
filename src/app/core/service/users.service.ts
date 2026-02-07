@@ -20,4 +20,15 @@ export class UsersService {
             })
         );
     }
+
+    getUsers(): Observable<User[]> {
+        return this.endPointUsersService.getUsers().pipe(
+            map((users: User[]) => {
+                return users;
+            }),
+            catchError((error) => {
+                return throwError(() => error);
+            })
+        );
+    }
 }
