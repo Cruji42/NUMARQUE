@@ -3,6 +3,7 @@ import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzMessageService } from 'ng-zorro-antd/message';
+import { UsersService } from 'src/app/core/service/users.service';
 
 @Component({
     templateUrl: './setting.component.html',
@@ -11,10 +12,19 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 
 export class SettingComponent {
 
+
+
     changePWForm: UntypedFormGroup;
+    form: UntypedFormGroup
+
     avatarUrl: string = "http://www.themenate.net/applicator/dist/assets/images/avatars/thumb-13.jpg";
     selectedCountry: any;
     selectedLanguage: any;
+
+    profile_picture: string;
+    isConfirmLoading = false;
+    brands_data: any;
+
 
     networkList = [
         {
@@ -127,31 +137,89 @@ export class SettingComponent {
         },
     ]
 
-    constructor(private fb: UntypedFormBuilder, private modalService: NzModalService, private message: NzMessageService) {
+    constructor(private fb: UntypedFormBuilder, private modalService: NzModalService, private message: NzMessageService, private service: UsersService) {
+        this.service.getUser().subscribe((res: any) => {
+            console.log(res)
+        })
+        // console.log('hola')
     }
 
     ngOnInit(): void {
+        this.getUserData()
         this.changePWForm = this.fb.group({
-            oldPassword: [ null, [ Validators.required ] ],
-            newPassword: [ null, [ Validators.required ] ],
-            confirmPassword: [ null, [ Validators.required ] ]
+            oldPassword: [null, [Validators.required]],
+            newPassword: [null, [Validators.required]],
+            confirmPassword: [null, [Validators.required]]
         });
+        this.form = this.fb.group({
+            user_id: [null, Validators.required],
+            name: [null, [Validators.required]],
+            last_name: [null, [Validators.required]],
+            company: [null, [Validators.required]],
+
+        })
+    }
+
+    getUserData() {
+
+        this.service.getUser().subscribe({
+            next: (user: any) => {
+                console.log('Fetched users:', user);
+                this.form.patchValue({
+                    ...user,
+                    user_id: user.id
+                })
+                this.profile_picture = user.profile_picture
+                this.brands_data = user.brands
+
+            },
+            error: (error) => {
+                console.error('Error fetching users:', error);
+            }
+        })
     }
 
     showConfirm(): void {
         this.modalService.confirm({
-            nzTitle  : '<i>Do you want to change your password?</i>',
-            nzOnOk   : () => this.message.success('Password Change Successfully')
+            nzTitle: '<i>Do you want to change your password?</i>',
+            nzOnOk: () => this.message.success('Password Change Successfully')
         });
     }
 
+    // submitForm(): void {
+    //     for (const i in this.changePWForm.controls) {
+    //         this.changePWForm.controls[i].markAsDirty();
+    //         this.changePWForm.controls[i].updateValueAndValidity();
+    //     }
+
+    //     this.showConfirm();
+    // }
+
     submitForm(): void {
-        for (const i in this.changePWForm.controls) {
-            this.changePWForm.controls[ i ].markAsDirty();
-            this.changePWForm.controls[ i ].updateValueAndValidity();
+        console.log(this.form.value)
+        if (this.form.valid) {
+            this.isConfirmLoading = true
+
+            this.service.updateUser(this.form.value).subscribe({
+                next: (res) => {
+                    console.log('User update successfully', res);
+                    this.isConfirmLoading = false
+                    this.getUserData()
+
+                },
+                error: (err) => {
+                    console.error('Error update user', err);
+                }
+            })
+        } else {
+            for (const i in this.form.controls) {
+                this.form.controls[i].markAsDirty();
+                this.form.controls[i].updateValueAndValidity();
+            }
         }
 
-        this.showConfirm();
+
+        // this.showConfirm();
     }
 
     private getBase64(img: File, callback: (img: {}) => void): void {

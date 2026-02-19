@@ -2,6 +2,7 @@ import { Observable, catchError, map, of, throwError} from 'rxjs';
 import { EndPointUsersService } from '../apis/end-point-users.service';
 import { computed, Injectable, signal } from '@angular/core';
 import { User } from '../interfaces';
+import { jwtDecode, JwtDecodeOptions } from 'jwt-decode';
 
 
 @Injectable({
@@ -9,6 +10,13 @@ import { User } from '../interfaces';
 })
 export class UsersService {
     constructor(private endPointUsersService: EndPointUsersService) { }
+
+    decodeToken(){
+        let token = localStorage.getItem('token');
+        let  data =  jwtDecode(token)
+        // console.log(data)
+        return data
+    }
 
     createUser(userData: User): Observable<any> {
         return this.endPointUsersService.createUser(userData).pipe(
@@ -30,5 +38,31 @@ export class UsersService {
                 return throwError(() => error);
             })
         );
+    }
+
+
+        updateUser(userData: User): Observable<any> {
+        return this.endPointUsersService.updateUser(userData).pipe(
+            map((response: any) => {
+                return response;
+            }),
+            catchError((error) => {
+                return throwError(() => error);
+            })
+        );
+    }
+
+    getUser(){
+        let user_data: any = this.decodeToken()
+        console.log( user_data)
+            return this.endPointUsersService.getUser(user_data.id).pipe(
+            map((users: User) => {
+                return users;
+            }),
+            catchError((error) => {
+                return throwError(() => error);
+            })
+        );
+  
     }
 }

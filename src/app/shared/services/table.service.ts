@@ -7,7 +7,7 @@ export class TableService {
     deepCopy(object: any | any[]) {
         return JSON.parse(JSON.stringify(object));
     }
-    
+
     /**
      * sort array via single
      * @param sortAttribute {key: property of the object, value: 'ascend' or 'descend'}
@@ -25,7 +25,7 @@ export class TableService {
                 case sortAttribute.key:
                     return this.compare(
                         typeof a[sortAttribute.key] !== "string" ? a[sortAttribute.key] : a[sortAttribute.key].toUpperCase(),
-                        typeof b[sortAttribute.key] !== "string" ? b[sortAttribute.key] : b[sortAttribute.key].toUpperCase(),isAsc
+                        typeof b[sortAttribute.key] !== "string" ? b[sortAttribute.key] : b[sortAttribute.key].toUpperCase(), isAsc
                     );
                 default:
                     return 0;
@@ -40,29 +40,78 @@ export class TableService {
      * @param inputData
      */
     search(input: any, inputData: any[]) {
-        const searchText = (item) => {
-            for (let key in item) {
-                if (item[key] == null) {
-                    continue;
-                }
+        if (!input) return inputData;
 
-                if (typeof item[key] == 'number' && item[key] != 0) {
-                    let date = formatDate(item[key], 'yyyy-MM-dd HH:mm:ss', 'en');
-                    if (date.indexOf(input.toString()) !== -1) {
+        const term = input.toString().toUpperCase();
+
+        const searchText = (item: any): boolean => {
+
+            /* =========================
+               1️⃣ BUSCAR EN TODO EL OBJETO
+               ========================= */
+            for (const key in item) {
+                const value = item[key];
+
+                if (value == null) continue;
+
+                // 🔢 números / timestamps
+                if (typeof value === 'number') {
+                    if (value.toString().includes(term)) {
                         return true;
                     }
                     continue;
                 }
 
-                if (item[key].toString().toUpperCase().indexOf(input.toString().toUpperCase()) !== -1) {
+                // 📅 strings (incluye created_at crudo)
+                if (
+                    value.toString().toUpperCase().includes(term)
+                ) {
                     return true;
                 }
             }
-        };
-        inputData = inputData.filter(value => searchText(value));
-        return inputData;
-    }
 
+            /* =========================
+               2️⃣ CAMPOS DERIVADOS / TABLA
+               ========================= */
+
+            // 📅 Fecha formateada
+            if (item.created_at) {
+                const date = formatDate(item.created_at, 'dd/MM/yyyy', 'en');
+                if (date.includes(term)) return true;
+            }
+
+            // 🏷️ Brands (array → string)
+            if (Array.isArray(item.brands)) {
+                const brands = item.brands
+                    .map(b => b.name)
+                    .join(' ')
+                    .toUpperCase();
+
+                if (brands.includes(term)) return true;
+            }
+
+            // 👤 Rol (id → label)
+            if (item.role_id != null) {
+                const role =
+                    item.role_id === 1 ? 'ADMINISTRADOR' : 'USUARIO';
+
+                if (role.includes(term)) return true;
+            }
+
+            // 🟢 Estatus cuenta
+            if (item.account_status) {
+                if (
+                    item.account_status.toUpperCase().includes(term)
+                ) {
+                    return true;
+                }
+            }
+
+            return false;
+        };
+
+        return inputData.filter(item => searchText(item));
+    }
     /**
      * if isAsc is true
      * a > b    = 1
@@ -84,7 +133,7 @@ export class TableService {
         if (!b) b = '-';
 
         if (a === b) return 0;
-        
+
         return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
     }
 }

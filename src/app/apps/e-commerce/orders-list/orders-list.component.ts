@@ -2,23 +2,31 @@ import { Component, OnInit, Input, TemplateRef, ViewContainerRef, ViewChild } fr
 import { TableService } from '../../../shared/services/table.service';
 import { NzTableFilterFn, NzTableFilterList, NzTableSortFn, NzTableSortOrder } from 'ng-zorro-antd/table';
 import { UsersService } from '../../../core/service/users.service';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+
 
 
 
 
 import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
+import { BrandsService } from 'src/app/core/service/brands.service';
+import { Brand } from 'src/app/core/interfaces';
 
 interface DataItem {
     id: number;
     name: string;
-    date: string;
-    amount: number;
-    status: string;
+    email: string;
+    created_at: string;
+    company: string;
+    brands: any;
+    role_id: number;
+    account_status: string;
 }
 
 @Component({
     templateUrl: './orders-list.component.html',
-    standalone: false
+    standalone: false,
+    styles: './orders-list.component.sccs'
 })
 
 export class OrdersListComponent implements OnInit {
@@ -26,7 +34,15 @@ export class OrdersListComponent implements OnInit {
     allChecked: boolean = false;
     indeterminate: boolean = false;
     displayData = [];
+    userData: any;
+    auxUserData: any;
+    catBrands = []
     searchInput: string
+    searchSelect: any;
+    userForm!: FormGroup;
+
+    modalRef!: NzModalRef;
+    isConfirmLoading = false;
 
 
     @ViewChild('tplTitle', { static: true }) tplTitle!: TemplateRef<any>;
@@ -39,167 +55,76 @@ export class OrdersListComponent implements OnInit {
         { text: 'Cliente', value: '3' },
     ];
 
+
+
+    getRoleLabel(roleId: number): string {
+        return roleId === 1 ? 'Administrador' : 'Usuario';
+    }
+
+    getBrandsLabel(brands: any[]): string {
+        if (!Array.isArray(brands)) return '';
+        return brands.map(b => b.name).join(', ');
+    }
+
+
     orderColumn = [
         {
             title: 'ID',
-            compare: (a: DataItem, b: DataItem) => a.id - b.id,
+            compare: (a: DataItem, b: DataItem) => a.id - b.id
         },
         {
             title: 'Usuario',
-            compare: (a: DataItem, b: DataItem) => a.name.localeCompare(b.name)
+            compare: (a: DataItem, b: DataItem) =>
+                (a.name || '').localeCompare(b.name || '')
+        },
+         {
+            title: 'Correo',
+            compare: (a: DataItem, b: DataItem) =>
+                (a.email || '').localeCompare(b.email || '')
         },
         {
             title: 'Fecha de registro',
-            compare: (a: DataItem, b: DataItem) => a.name.localeCompare(b.name)
+            compare: (a: DataItem, b: DataItem) =>
+                new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
         },
         {
-            title: 'Compañia',
-            compare: (a: DataItem, b: DataItem) => a.amount - b.amount,
+            title: 'Compañía',
+            compare: (a: DataItem, b: DataItem) =>
+                (a.company || '').localeCompare(b.company || '')
         },
         {
             title: 'Marcas',
-            compare: (a: DataItem, b: DataItem) => a.name.localeCompare(b.name)
+            compare: (a: DataItem, b: DataItem) =>
+                this.getBrandsLabel(a.brands)
+                    .localeCompare(this.getBrandsLabel(b.brands))
         },
         {
             title: 'Rol',
-            compare: (a: DataItem, b: DataItem) => a.amount - b.amount,
+            compare: (a: DataItem, b: DataItem) =>
+                this.getRoleLabel(a.role_id)
+                    .localeCompare(this.getRoleLabel(b.role_id))
         },
         {
             title: 'Estatus',
-            compare: (a: DataItem, b: DataItem) => a.name.localeCompare(b.name)
+            compare: (a: DataItem, b: DataItem) =>
+                (a.account_status || '').localeCompare(b.account_status || '')
         },
         {
             title: 'Opciones'
         }
-    ]
+    ];
 
-    ordersList = [
-        {
-            id: 5331,
-            name: 'Erin Gonzales',
-            avatar: 'assets/images/avatars/thumb-1.jpg',
-            date: '8 May 2019',
-            amount: 137,
-            status: 'approved',
-            checked: false
-        },
-        {
-            id: 5375,
-            name: 'Darryl Day',
-            avatar: 'assets/images/avatars/thumb-2.jpg',
-            date: '6 May 2019',
-            amount: 322,
-            status: 'approved',
-            checked: false
-        },
-        {
-            id: 5762,
-            name: 'Marshall Nichols',
-            avatar: 'assets/images/avatars/thumb-3.jpg',
-            date: '1 May 2019',
-            amount: 543,
-            status: 'approved',
-            checked: false
-        },
-        {
-            id: 5865,
-            name: 'Virgil Gonzales',
-            avatar: 'assets/images/avatars/thumb-4.jpg',
-            date: '28 April 2019',
-            amount: 876,
-            status: 'pending',
-            checked: false
-        },
-        {
-            id: 5213,
-            name: 'Nicole Wyne',
-            avatar: 'assets/images/avatars/thumb-5.jpg',
-            date: '28 April 2019',
-            amount: 241,
-            status: 'approved',
-            checked: false
-        },
-        {
-            id: 5311,
-            name: 'Riley Newman',
-            avatar: 'assets/images/avatars/thumb-6.jpg',
-            date: '19 April 2019',
-            amount: 872,
-            status: 'rejected',
-            checked: false
-        },
-        {
-            id: 5387,
-            name: 'Pamela Wanda',
-            avatar: 'assets/images/avatars/thumb-7.jpg',
-            date: '18 April 2019',
-            amount: 728,
-            status: 'approved',
-            checked: false
-        },
-        {
-            id: 5390,
-            name: 'Pamela Wanda',
-            avatar: 'assets/images/avatars/thumb-7.jpg',
-            date: '16 April 2019',
-            amount: 802,
-            status: 'pending',
-            checked: false
-        },
-        {
-            id: 5317,
-            name: 'Lilian Stone',
-            avatar: 'assets/images/avatars/thumb-8.jpg',
-            date: '12 April 2019',
-            amount: 569,
-            status: 'approved',
-            checked: false
-        },
-        {
-            id: 5291,
-            name: 'Victor Terry',
-            avatar: 'assets/images/avatars/thumb-9.jpg',
-            date: '10 April 2019',
-            amount: 132,
-            status: 'approved',
-            checked: false
-        },
-        {
-            id: 5288,
-            name: 'Wilma Young',
-            avatar: 'assets/images/avatars/thumb-10.jpg',
-            date: '8 April 2019',
-            amount: 528,
-            status: 'rejected',
-            checked: false
-        },
-        {
-            id: 5301,
-            name: 'Jane Wilson',
-            avatar: 'assets/images/avatars/thumb-11.jpg',
-            date: '8 April 2019',
-            amount: 632,
-            status: 'approved',
-            checked: false
-        },
-        {
-            id: 5355,
-            name: 'Evelyn Silva',
-            avatar: 'assets/images/avatars/thumb-12.jpg',
-            date: '6 April 2019',
-            amount: 987,
-            status: 'approved',
-            checked: false
-        },
-    ]
+
+
 
     ngOnInit(): void {
         this.getUsersData();
+        this.getBrandData()
     }
 
 
-    constructor(private tableSvc: TableService, private service: UsersService, private modal: NzModalService, private viewContainerRef: ViewContainerRef) {
-        // this.displayData = this.ordersList
+    constructor(private tableSvc: TableService, private service: UsersService, private brandService: BrandsService, private modal: NzModalService, private viewContainerRef: ViewContainerRef, public fb: FormBuilder) {
+
     }
 
     getUsersData() {
@@ -208,19 +133,8 @@ export class OrdersListComponent implements OnInit {
             next: (users) => {
                 console.log('Fetched users:', users);
                 this.displayData = users;
-                this.displayData.forEach((user: any) => {
-                    // Map roles based on role_id
-                    this.roleList.find((role: any) => {
-                        // console.log('Comparing role:', role.value, 'with user role_id:', user.role_id);
-                        if (role.value === user.role_id) {
-                            // console.log('Match found for user:', user, 'with role:', role);
-                            user.role_label = role.text;
-                            return true; // Exit the loop early
-                        }
-                    })
-                    //  role.value === user.role_id)?.text; 
-                    // console.log('User role label:', user.role_label)
-                })
+                this.userData = users;
+
             },
             error: (error) => {
                 console.error('Error fetching users:', error);
@@ -228,46 +142,94 @@ export class OrdersListComponent implements OnInit {
         })
     }
 
+    getBrandData() {
+        // Use the UsersService to fetch user data
+        this.brandService.getBrands().subscribe({
+            next: (brands) => {
+                console.log('Fetched users:', brands);
+                this.catBrands = brands
 
-    search() {
-        const data = this.ordersList
-        this.displayData = this.tableSvc.search(this.searchInput, data)
+            },
+            error: (error) => {
+                console.error('Error fetching users:', error);
+            }
+        })
+    }
+
+    applyFilters() {
+        let data = [...this.userData];
+
+        // 🔍 Filtro por texto
+        if (this.searchInput && this.searchInput.trim() !== '') {
+            data = this.tableSvc.search(this.searchInput, data);
+        }
+
+        // 🟢 Filtro por estatus
+        if (this.searchSelect && this.searchSelect !== 'all') {
+            data = data.filter(item =>
+                item.account_status?.toLowerCase() === this.searchSelect.toLowerCase()
+            );
+        }
+
+        this.displayData = data;
     }
 
 
-    // createTplModal(tplTitle: TemplateRef<{}>, tplContent: TemplateRef<{}>, tplFooter: TemplateRef<{}>): void {
-    //     this.modal.create({
-    //         nzTitle: tplTitle,
-    //         nzContent: tplContent,
-    //         nzFooter: tplFooter,
-    //         nzMaskClosable: false,
-    //         nzClosable: false,
-    //         nzData: {
-    //             value: 'Template Context'
-    //         },
-    //         nzOnOk: () => console.log('Click ok')
-    //     });
-    // }
-
-
-openEditModal(item: any): void {
-  console.log('ITEM QUE SE ENVÍA:', item);
-
-  this.modal.create({
-    nzTitle: 'Información de usuario',
-    nzContent: this.tplContent,
-    nzFooter: this.tplFooter,
-    nzViewContainerRef: this.viewContainerRef,
-    nzData: {
-      item
-    },
-    nzMaskClosable: false,
-    nzClosable: false
-  });
-}
 
 
 
+
+    openEditModal(item: any): void {
+        console.log('ITEM QUE SE ENVÍA:', item);
+
+        this.userForm = this.fb.group({
+            user_id: [item.id],
+            brand_ids: [item.brands?.map((b: any) => b.id) || []],
+            account_status: [item.account_status || 'Pending', Validators.required],
+            role_id: [item.role_id, Validators.required]
+        });
+
+
+        this.modalRef = this.modal.create({
+            nzTitle: 'Información de usuario',
+            nzContent: this.tplContent,
+            nzFooter: this.tplFooter,
+            nzViewContainerRef: this.viewContainerRef,
+            nzData: {
+                item
+            },
+            nzMaskClosable: false,
+            nzClosable: false
+        });
+    }
+
+
+    closeModal(): void {
+        this.modalRef.destroy();
+    }
+
+    submitForm(): void {
+        if (this.userForm.valid) {
+            this.isConfirmLoading = true
+            this.service.updateUser(this.userForm.value).subscribe({
+                next: (res) => {
+                    this.modalRef.destroy()
+                    this.isConfirmLoading = false
+                    this.getUsersData()
+                    console.log('User updated successfully', res);
+
+                },
+                error: (err) => {
+                    console.error('Error updating user', err);
+                }
+            });
+        } else {
+            for (const i in this.userForm.controls) {
+                this.userForm.controls[i].markAsDirty();
+                this.userForm.controls[i].updateValueAndValidity();
+            }
+        }
+    }
 
 
 

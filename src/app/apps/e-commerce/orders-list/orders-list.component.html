@@ -5,16 +5,16 @@
                 <div class="m-b-10 m-r-20">
                     <nz-input-group [nzPrefix]="prefixTemplate">
                         <input type="text" nz-input placeholder="Search Project" [(ngModel)]="searchInput"
-                            (ngModelChange)="search()">
+                            (ngModelChange)="applyFilters()">
                     </nz-input-group>
                     <ng-template #prefixTemplate>
                         <i nz-icon nzType="search" class="opacity-05"></i>
                     </ng-template>
                 </div>
-                <div class="m-b-10 m-r-20 d-flex align-items-center">
-                    <nz-select style="min-width: 220px;" class="w-100" nzPlaceHolder="Status">
+                <div class="m-b-10 m-r-20 d-flex align-items-center" >
+                    <nz-select style="min-width: 220px;" class="w-100" nzPlaceHolder="Status" [(ngModel)]="searchSelect"  (ngModelChange)="applyFilters()">
                         <nz-option nzLabel="All" nzValue="all"></nz-option>
-                        <nz-option nzLabel="Approved" nzValue="approved"></nz-option>
+                        <nz-option nzLabel="Active" nzValue="active"></nz-option>
                         <nz-option nzLabel="Pending" nzValue="pending"></nz-option>
                         <nz-option nzLabel="Rejected" nzValue="rejected"></nz-option>
                     </nz-select>
@@ -39,10 +39,11 @@
                 <td>#{{item.id}}</td>
                 <td>
                     <div class="d-flex align-items-center">
-                        <nz-avatar [nzSize]="30" nzIcon="user" [nzSrc]="item.avatar"></nz-avatar>
+                        <nz-avatar [nzSize]="30" nzIcon="user" [nzSrc]="item.profile_picture"></nz-avatar>
                         <h6 class="m-l-10 m-b-0">{{item.name}}</h6>
                     </div>
                 </td>
+                <td>{{item.email}}</td>
                 <td>{{item.created_at | date: 'dd/MM/yyyy'}}</td>
                 <td>{{item.company}}</td>
                 <td>
@@ -55,7 +56,7 @@
                         <nz-tag *ngFor="let b of item.brands">{{b.name}}</nz-tag>
                     </div>
                 </td>
-                <td>{{item.role_id}}</td>
+                <td>{{item.role_id == 1 ? 'Administrador' : 'Usuario'}}</td>
                 <td>
                     <nz-badge *ngIf="item.account_status == 'Active'" nzStatus="success"></nz-badge>
                     <nz-badge *ngIf="item.account_status == 'Rejected'" nzStatus="error"></nz-badge>
@@ -83,26 +84,155 @@
 
 <!-- TITLE (sin nzData) -->
 <ng-template #tplTitle>
-  <span>Editar usuario</span>
+    <span>Editar usuario</span>
 </ng-template>
 
 <!-- CONTENT (AQUÍ sí existe nzData) -->
-<ng-template #tplContent let-data>
-  <pre>{{ data | json }}</pre>
-
+<!-- <ng-template #tplContent let-data>
   <div *ngIf="data?.item">
-    <!-- <p><strong>ID:</strong> {{ data.item.id }}</p> -->
-    <p><strong>Nombre:</strong> {{ data.item.name +  ' ' + data.item.last_name }} </p>
-    <p><strong>Compañia:</strong> {{ data.item.company }}</p>
+    <!- - <pre>{{data.item | json}}</pre> - ->
+    <nz-card nzBordered="false">
+      <div nz-row nzGutter="16" class="user-card">
+
+        <div class="avatar-col d-block w-100 text-center mb-2">
+            <nz-avatar class="text-center"  [nzSize]="80" nzIcon="user" [nzSrc]="data.item.profile_picture || null"></nz-avatar>
+        </div>
+        <!  -- FOTO - ->
+        <!- - <div nz-col nzSpan="24" class="avatar-col text-center">
+          <nz-avatar
+            nzSize="200"
+            nzIcon="user"
+            [nzSrc]="'https://picsum.photos/200'">
+          </nz-avatar>
+        </div> - ->
+
+        <!- - INFO - ->
+        <div nz-col nzSpan="24">
+          <h4 class="m-b-10 text-center">
+            {{ data.item.name }} {{ data.item.last_name }}
+          </h4>
+
+          <p class="info-line text-center">
+            <i nz-icon nzType="bank"></i>
+            {{ data.item.company }}
+          </p>
+
+          <p class="info-line text-center">
+            <i nz-icon nzType="mail"></i>
+            {{ data.item.email }}
+          </p>
+
+          <p class="info-line text-center">
+            <i nz-icon nzType="calendar"></i>
+            {{ data.item.created_at | date: 'dd/MM/yyyy' }}
+          </p>
+        </div>
+
+        <hr>
+
+      </div>
+    </nz-card>
   </div>
+</ng-template> -->
+
+<ng-template #tplContent let-data>
+    <div *ngIf="data?.item">
+
+
+        <nz-card nzBordered="false">
+            <div nz-row nzGutter="16" class="user-card">
+
+                <div class="avatar-col d-block w-100 text-center mb-2">
+                    <nz-avatar class="text-center" [nzSize]="80" nzIcon="user"
+                        [nzSrc]="data.item.profile_picture || null"></nz-avatar>
+                </div>
+
+                <div nz-col nzSpan="24">
+                    <h3 class="m-b-10 text-center">
+                        {{ data.item.name }} {{ data.item.last_name }}
+                    </h3>
+
+                    <h4 class="info-line text-center" [nzSize]="80" >
+                        <i nz-icon nzType="bank"></i>
+                        {{ data.item.company }}
+                    </h4>
+
+                    <h4 class="info-line text-center">
+                        <i nz-icon nzType="mail"></i>
+                        {{ data.item.email }}
+                    </h4>
+
+                    <h4 class="info-line text-center">
+                        <i nz-icon nzType="calendar"></i>
+                        {{ data.item.created_at | date: 'dd/MM/yyyy' }}
+                    </h4>
+                </div>
+            </div>
+        </nz-card>
+
+        <!-- PERFIL -->
+        <!-- <nz-card nzBordered="false" class="profile-card">
+      <nz-avatar
+        nzSize="200"
+        [nzSrc]="data.item.avatar || null">
+      </nz-avatar>
+
+      <h3 class="m-t-10">
+        {{ data.item.name }} {{ data.item.last_name }}
+      </h3>
+
+      <p>{{ data.item.email }}</p>
+      <p>{{ data.item.company }}</p>
+    </nz-card> -->
+
+        <nz-divider></nz-divider>
+
+        <!-- FORMULARIO -->
+        <form nz-form [formGroup]="userForm" nzLayout="vertical">
+
+            <!-- MARCAS -->
+            <nz-form-item>
+                <nz-form-label>Marcas</nz-form-label>
+                <nz-form-control>
+                    <nz-select nzMode="multiple" nzPlaceHolder="Selecciona marcas" formControlName="brand_ids">
+                        <nz-option *ngFor="let brand of catBrands" [nzLabel]="brand.name" [nzValue]="brand.id">
+                        </nz-option>
+                    </nz-select>
+                </nz-form-control>
+            </nz-form-item>
+
+            <!-- ESTATUS -->
+            <nz-form-item>
+                <nz-form-label>Estatus de la cuenta</nz-form-label>
+                <nz-form-control>
+                    <nz-radio-group formControlName="account_status">
+                        <label nz-radio nzValue="Active">Activo</label>
+                        <label nz-radio nzValue="Rejected">Rechazado</label>
+                    </nz-radio-group>
+                </nz-form-control>
+            </nz-form-item>
+
+            <!-- ROL -->
+            <nz-form-item>
+                <nz-form-label>Rol</nz-form-label>
+                <nz-form-control>
+                    <nz-select formControlName="role_id">
+                        <nz-option nzLabel="Usuario" [nzValue]="2"></nz-option>
+                        <nz-option nzLabel="Administrador" [nzValue]="1"></nz-option>
+                    </nz-select>
+                </nz-form-control>
+            </nz-form-item>
+
+        </form>
+    </div>
 </ng-template>
 
 
 
 <!-- FOOTER -->
 <ng-template #tplFooter let-modal>
-  <button nz-button (click)="modal.destroy()">Cancelar</button>
-  <button nz-button nzType="primary" (click)="modal.destroy(true)">
-    Guardar
-  </button>
+    <button nz-button (click)="closeModal()">Cancelar</button>
+    <button nz-button nzType="primary" (click)="submitForm()" [nzLoading]="isConfirmLoading">
+        Guardar
+    </button>
 </ng-template>

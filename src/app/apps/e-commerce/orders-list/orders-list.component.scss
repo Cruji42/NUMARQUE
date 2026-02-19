@@ -1,0 +1,22 @@
+.user-card {
+  align-items: center;
+}
+
+.avatar-col {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.info-line {
+  margin-bottom: 6px;
+  font-size: 24px;
+  color: #9b9a9a !important;
+
+}
+
+.info-line i {
+  margin-right: 8px;
+  color: #1890ff;
+}

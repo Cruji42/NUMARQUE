@@ -29,10 +29,22 @@ export class EndPointUsersService {
         return this.http.post<any>(`${this.apiUrl}/users`, userData, { observe: 'response' });
     }
 
+    updateUser(userData: User): Observable<any>{
+        return this.http.put<any>(`${this.apiUrl}/users/` + userData.user_id, userData, { headers: this.configHeaders() })
+    }
+
 
     getUsers(): Observable<User[]> {
         return this.http.get<User[]>(`${this.apiUrl}/users`, { headers: this.configHeaders() });
     }
+
+    getUser(id: number): Observable<User>{
+        console.log(id)
+        return this.http.get<User>(`${this.apiUrl}/users/` + id,{ headers: this.configHeaders()} )
+    }
+
+    
+    
 
     
 }
