@@ -7,22 +7,22 @@
                         <i class="text-primary" nz-icon nzType="folder-open" theme="outline"></i>
                         <span>My Files</span>
                     </li>
-                    <li nz-menu-item>
+                    <!-- <li nz-menu-item>
                         <i class="text-primary" nz-icon nzType="clock-circle" theme="outline"></i>
                         <span>Recent</span>
-                    </li>
+                    </li> -->
                     <li nz-menu-item>
                         <i class="text-primary" nz-icon nzType="share-alt" theme="outline"></i>
                         <span>Shared with me</span>
                     </li>
-                    <li nz-menu-item>
+                    <!-- <li nz-menu-item>
                         <i class="text-primary" nz-icon nzType="star" theme="outline"></i>
                         <span>Favorite</span>
-                    </li>
-                    <li nz-menu-item>
+                    </li> -->
+                    <!-- <li nz-menu-item>
                         <i class="text-primary" nz-icon nzType="delete" theme="outline"></i>
                         <span>Trash</span>
-                    </li>
+                    </li> -->
                 </ul>
             </div>
             <div class="m-b-30 m-h-25">
@@ -43,8 +43,10 @@
     <div class="file-manager-content">
         <div class="file-manager-content-header">
             <div class="file-manager-search">
-                <i (click)="navToggler()" *ngIf="isNavOpen" nz-icon nzType="menu-fold" theme="outline" class="toggle-icon"></i>
-                <i (click)="navToggler()" *ngIf="!isNavOpen" nz-icon nzType="menu-unfold" theme="outline" class="toggle-icon"></i>
+                <i (click)="navToggler()" *ngIf="isNavOpen" nz-icon nzType="menu-fold" theme="outline"
+                    class="toggle-icon"></i>
+                <i (click)="navToggler()" *ngIf="!isNavOpen" nz-icon nzType="menu-unfold" theme="outline"
+                    class="toggle-icon"></i>
                 <i nz-icon nzType="search" theme="outline" class="search-icon"></i>
                 <input placeholder="Search...">
             </div>
@@ -58,10 +60,12 @@
                         </nz-upload>
                     </li>
                     <li class="list-inline-item">
-                        <a *ngIf="!listView" class="text-dark" nz-tooltip nzTooltipPlacement="bottom" nzTooltipTitle="List View" (click)="changeView()">
+                        <a *ngIf="!listView" class="text-dark" nz-tooltip nzTooltipPlacement="bottom"
+                            nzTooltipTitle="List View" (click)="changeView()">
                             <i nz-icon nzType="bars" theme="outline"></i>
                         </a>
-                        <a *ngIf="listView" class="text-dark" nz-tooltip nzTooltipPlacement="bottom" nzTooltipTitle="Column View" (click)="changeView()">
+                        <a *ngIf="listView" class="text-dark" nz-tooltip nzTooltipPlacement="bottom"
+                            nzTooltipTitle="Column View" (click)="changeView()">
                             <i nz-icon nzType="appstore" theme="outline"></i>
                         </a>
                     </li>
@@ -72,17 +76,29 @@
                     </li>
                 </ul>
             </div>
-        </div>    
+        </div>
         <div class="file-manager-content-body">
             <div class="file-manager-content-files">
-                <div class="unselect-bg" (click)="unselectFile()"></div>
-                <h5 class="relative">Folders</h5>
+                <!-- <div class="unselect-bg" (click)="unselectFile()"></div> -->
+                <div class="breadcrumb-wrapper m-b-20">
+
+                    <span class="breadcrumb-item" (click)="navigateTo(-1)">
+                        Mis carpetas
+                    </span>
+
+                    <ng-container *ngFor="let item of breadcrumb; let i = index">
+                        <span class="separator"> / </span>
+                        <span class="breadcrumb-item" (click)="navigateTo(i)">
+                            {{ item.name }}
+                        </span>
+                    </ng-container>
+
+                </div>
+                <!-- <h5 class="relative">Folders</h5> -->
                 <div class="file-wrapper m-t-20" [ngClass]="{'list-view': listView}">
-                    <ng-container *ngFor="let item of files">
-                        <div class="file" 
-                            *ngIf="item.type == 'folder'" 
-                            [ngClass]="{'active': selectedFile === item.name}" 
-                            (click)="selectFile(item.name)" 
+                    <ng-container *ngFor="let item of currentNodes">
+                        <div class="file" *ngIf="item.is_dir" [ngClass]="{'active': selectedFile === item.name}"
+                            (click)="openFolder(item)"
                             (contextmenu)="contextMenu($event,contextDropdownTpl, item.name)">
                             <div class="media align-items-center">
                                 <div class="m-r-15 font-size-30">
@@ -94,48 +110,83 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="file vertical" *ngIf="!item.is_dir"
+                            [ngClass]="{'active': selectedFile == item.name}" (click)="selectFile(item.name)"
+                            (contextmenu)="contextMenu($event,contextDropdownTpl, item)">
+                            <div class="font-size-40">
+
+                                <ng-container [ngSwitch]="item.fileType">
+
+                                    <i *ngSwitchCase="'pdf'" [twoToneColor]="colorRed" nz-icon nzType="file-pdf"
+                                        theme="twotone"></i>
+
+                                    <i *ngSwitchCase="'doc'" [twoToneColor]="colorBlue" nz-icon nzType="file-word"
+                                        theme="twotone"></i>
+
+                                    <i *ngSwitchCase="'xls'" [twoToneColor]="colorCyan" nz-icon nzType="file-excel"
+                                        theme="twotone"></i>
+
+                                    <i *ngSwitchCase="'ppt'" [twoToneColor]="colorVolcano" nz-icon nzType="file-ppt"
+                                        theme="twotone"></i>
+
+                                    <i *ngSwitchCase="'txt'" [twoToneColor]="colorPurple" nz-icon nzType="file-text"
+                                        theme="twotone"></i>
+
+                                    <i *ngSwitchDefault nz-icon nzType="file" theme="outline"></i>
+
+                                </ng-container>
+
+                            </div>
+                            <div class="m-t-10">
+                                <h6 class="mb-0">{{item.name}}</h6>
+                                <span class="font-size-13 text-muted">{{item.size}}</span>
+                            </div>
+                        </div>
                     </ng-container>
                     <nz-dropdown-menu #contextDropdownTpl="nzDropdownMenu">
                         <ul nz-menu nzInDropDown (nzClick)="close()">
                             <li nz-menu-item>
                                 <i nz-icon nzType="user-add" theme="outline"></i>
-                                <span class="m-l-5">Share</span>
+                                <span class="m-l-5">Compartir</span>
                             </li>
                             <li nz-menu-item>
                                 <i nz-icon nzType="edit" theme="outline"></i>
-                                <span class="m-l-5">Rename</span>
+                                <span class="m-l-5">Renombrar</span>
                             </li>
-                            <li nz-menu-item>
+                            <!-- <li nz-menu-item>
                                 <i nz-icon nzType="star" theme="outline"></i>
                                 <span class="m-l-5">Mark as favorite</span>
-                            </li>
+                            </li> -->
                             <li nz-menu-divider></li>
-                            <li nz-menu-item>
+                            <li nz-menu-item (click)="downloadFile()">
                                 <i nz-icon nzType="download" theme="outline"></i>
-                                <span class="m-l-5">Download</span>
+                                <span class="m-l-5">Descargar</span>
                             </li>
                             <li nz-menu-divider></li>
                             <li nz-menu-item>
                                 <i nz-icon nzType="delete" theme="outline"></i>
-                                <span class="m-l-5">Remove</span>
+                                <span class="m-l-5">Eliminar</span>
                             </li>
                         </ul>
                     </nz-dropdown-menu>
                 </div>
-                <h5 class="m-t-60 relative">Files</h5>
+                <!-- <h5 class="m-t-60 relative">Files</h5>
                 <div class="file-wrapper m-t-20" [ngClass]="{'list-view': listView}">
-                    <ng-container *ngFor="let item of files">
-                        <div class="file vertical" 
-                            *ngIf="item.type !== 'folder'" 
-                            [ngClass]="{'active': selectedFile == item.name}" 
-                            (click)="selectFile(item.name)" 
+                    <ng-container *ngFor="let item of currentNodes">
+                        <div class="file vertical" *ngIf="!item.is_dir"
+                            [ngClass]="{'active': selectedFile == item.name}" (click)="selectFile(item.name)"
                             (contextmenu)="contextMenu($event,contextDropdownTpl, item.name)">
                             <div class="font-size-40">
-                                <i *ngIf="item.type == 'pdf'" [twoToneColor]="colorRed" nz-icon nzType="file-pdf" theme="twotone"></i>
-                                <i *ngIf="item.type == 'doc'" [twoToneColor]="colorBlue" nz-icon nzType="file-word" theme="twotone"></i>
-                                <i *ngIf="item.type == 'xls'" [twoToneColor]="colorCyan" nz-icon nzType="file-excel" theme="twotone"></i>
-                                <i *ngIf="item.type == 'ppt'" [twoToneColor]="colorVolcano" nz-icon nzType="file-ppt" theme="twotone"></i>
-                                <i *ngIf="item.type == 'txt'" [twoToneColor]="colorPurple" nz-icon nzType="file-text" theme="twotone"></i>
+                                <i *ngIf="item.type == 'pdf'" [twoToneColor]="colorRed" nz-icon nzType="file-pdf"
+                                    theme="twotone"></i>
+                                <i *ngIf="item.type == 'doc'" [twoToneColor]="colorBlue" nz-icon nzType="file-word"
+                                    theme="twotone"></i>
+                                <i *ngIf="item.type == 'xls'" [twoToneColor]="colorCyan" nz-icon nzType="file-excel"
+                                    theme="twotone"></i>
+                                <i *ngIf="item.type == 'ppt'" [twoToneColor]="colorVolcano" nz-icon nzType="file-ppt"
+                                    theme="twotone"></i>
+                                <i *ngIf="item.type == 'txt'" [twoToneColor]="colorPurple" nz-icon nzType="file-text"
+                                    theme="twotone"></i>
                                 <img *ngIf="item.type == 'image'" [src]="item.url" alt="">
                             </div>
                             <div class="m-t-10">
@@ -144,10 +195,10 @@
                             </div>
                         </div>
                     </ng-container>
-                </div>    
+                </div> -->
             </div>
             <div class="file-manager-content-details" [ngClass]="{'details-open': isDetailsOpen}">
-                <ng-container *ngFor="let item of files">
+                <ng-container *ngFor="let item of currentNodes">
                     <div *ngIf="selectedFile == item.name">
                         <div class="p-h-25 p-v-15 d-flex justify-content-between align-items-center border-bottom">
                             <h5 class="m-b-0">{{item.name}}</h5>
@@ -158,53 +209,61 @@
                             </div>
                         </div>
                         <div class="m-b-10">
-                            <div *ngIf="item.type !== 'image'" class="d-flex justify-content-around display-3 align-items-center content-details-file">
-                                <i *ngIf="item.type == 'folder'" [twoToneColor]="colorGold" nz-icon nzType="folder-open" theme="twotone"></i>
-                                <i *ngIf="item.type == 'pdf'" [twoToneColor]="colorRed" nz-icon nzType="file-pdf" theme="twotone"></i>
-                                <i *ngIf="item.type == 'doc'" [twoToneColor]="colorBlue" nz-icon nzType="file-word" theme="twotone"></i>
-                                <i *ngIf="item.type == 'xls'" [twoToneColor]="colorCyan" nz-icon nzType="file-excel" theme="twotone"></i>
-                                <i *ngIf="item.type == 'ppt'" [twoToneColor]="colorVolcano" nz-icon nzType="file-ppt" theme="twotone"></i>
-                                <i *ngIf="item.type == 'txt'" [twoToneColor]="colorPurple" nz-icon nzType="file-text" theme="twotone"></i>
+                            <div *ngIf="item.type !== 'image'"
+                                class="d-flex justify-content-around display-3 align-items-center content-details-file">
+                                <i *ngIf="item.type == 'folder'" [twoToneColor]="colorGold" nz-icon nzType="folder-open"
+                                    theme="twotone"></i>
+                                <i *ngIf="item.type == 'pdf'" [twoToneColor]="colorRed" nz-icon nzType="file-pdf"
+                                    theme="twotone"></i>
+                                <i *ngIf="item.type == 'doc'" [twoToneColor]="colorBlue" nz-icon nzType="file-word"
+                                    theme="twotone"></i>
+                                <i *ngIf="item.type == 'xls'" [twoToneColor]="colorCyan" nz-icon nzType="file-excel"
+                                    theme="twotone"></i>
+                                <i *ngIf="item.type == 'ppt'" [twoToneColor]="colorVolcano" nz-icon nzType="file-ppt"
+                                    theme="twotone"></i>
+                                <i *ngIf="item.type == 'txt'" [twoToneColor]="colorPurple" nz-icon nzType="file-text"
+                                    theme="twotone"></i>
                             </div>
-                            <img class="img-fluid" *ngIf="item.type == 'image'" [src]="item.url" alt="">
+                            <img class="img-fluid" *ngIf="item.fileType == 'image'" [src]="item.url" alt="">
                         </div>
                         <nz-tabset>
                             <nz-tab nzTitle="Details">
                                 <div class="p-h-25 p-v-15">
                                     <dl class="row m-b-10">
                                         <dt class="col-5 text-dark">Type:</dt>
-                                        <dd class="col-7">{{item.type}}</dd>
-                                    </dl>   
+                                        <dd class="col-7">{{item.fileType}}</dd>
+                                    </dl>
                                     <dl class="row m-b-10">
                                         <dt class="col-5 text-dark">Size:</dt>
                                         <dd class="col-7">{{item.size}}</dd>
-                                    </dl>   
+                                    </dl>
                                     <dl class="row m-b-10">
                                         <dt class="col-5 text-dark">Modified:</dt>
                                         <dd class="col-7">{{item.modifiedDate}}</dd>
-                                    </dl>   
+                                    </dl>
                                     <dl class="row m-b-10">
                                         <dt class="col-5 text-dark">Created:</dt>
                                         <dd class="col-7">{{item.date}}</dd>
-                                    </dl> 
+                                    </dl>
                                     <dl class="row m-b-10">
                                         <dt class="col-5 text-dark">Author:</dt>
                                         <dd class="col-7">{{item.author}}</dd>
-                                    </dl>    
+                                    </dl>
                                 </div>
                                 <div class="border-top border-bottom p-h-25 p-v-10 d-flex align-items-center">
-                                    <span class="text-dark font-weight-semibold m-r-10">Add Description</span> 
-                                    <a nz-button nzType="link" nzShape="circle" >
+                                    <span class="text-dark font-weight-semibold m-r-10">Add Description</span>
+                                    <a nz-button nzType="link" nzShape="circle">
                                         <i nz-icon nzType="edit" theme="outline"></i>
                                     </a>
-                                </div> 
+                                </div>
                             </nz-tab>
                             <nz-tab nzTitle="Activity">
                                 <div class="p-h-20 p-v-15">
                                     <div class="m-b-25" *ngFor="let item of item.activity; let last = last">
                                         <div class="p-b-10" [ngClass]="{'border-bottom': !last}">
                                             <div class="d-flex align-items-center">
-                                                <nz-avatar class="m-r-10" nzIcon="user" [nzSrc]="item.avatar"></nz-avatar>
+                                                <nz-avatar class="m-r-10" nzIcon="user"
+                                                    [nzSrc]="item.avatar"></nz-avatar>
                                                 <div class="text-gray">
                                                     <span class="text-dark font-weight-semibold">{{item.name}} </span>
                                                     <span>{{item.action}} </span>
@@ -216,11 +275,22 @@
                                             </div>
                                             <ul class="list-unstyled m-l-50 m-t-15">
                                                 <li class="m-b-15" *ngFor="let item of item.files">
-                                                    <nz-avatar *ngIf="item.substr(item.length -3) == 'pdf'" nzIcon="file-pdf" nzSize="small" class="ant-avatar-red m-r-10"></nz-avatar>
-                                                    <nz-avatar *ngIf="item.substr(item.length -3) == 'doc'" nzIcon="file-word" nzSize="small" class="ant-avatar-blue m-r-10"></nz-avatar>
-                                                    <nz-avatar *ngIf="item.substr(item.length -3) == 'xls'" nzIcon="file-excel" nzSize="small" class="ant-avatar-cyan m-r-10"></nz-avatar>
-                                                    <nz-avatar *ngIf="item.substr(item.length -3) == 'ppt'" nzIcon="file-ppt" nzSize="small" class="ant-avatar-volcano m-r-10"></nz-avatar>
-                                                    <nz-avatar *ngIf="item.substr(item.length -3) == 'jpg' || item.substr(item.length -3) == 'png'" nzIcon="picture" nzSize="small" class="ant-avatar-purple m-r-10"></nz-avatar>
+                                                    <nz-avatar *ngIf="item.substr(item.length -3) == 'pdf'"
+                                                        nzIcon="file-pdf" nzSize="small"
+                                                        class="ant-avatar-red m-r-10"></nz-avatar>
+                                                    <nz-avatar *ngIf="item.substr(item.length -3) == 'doc'"
+                                                        nzIcon="file-word" nzSize="small"
+                                                        class="ant-avatar-blue m-r-10"></nz-avatar>
+                                                    <nz-avatar *ngIf="item.substr(item.length -3) == 'xls'"
+                                                        nzIcon="file-excel" nzSize="small"
+                                                        class="ant-avatar-cyan m-r-10"></nz-avatar>
+                                                    <nz-avatar *ngIf="item.substr(item.length -3) == 'ppt'"
+                                                        nzIcon="file-ppt" nzSize="small"
+                                                        class="ant-avatar-volcano m-r-10"></nz-avatar>
+                                                    <nz-avatar
+                                                        *ngIf="item.substr(item.length -3) == 'jpg' || item.substr(item.length -3) == 'png'"
+                                                        nzIcon="picture" nzSize="small"
+                                                        class="ant-avatar-purple m-r-10"></nz-avatar>
                                                     <span class="text-gray">{{item}}</span>
                                                 </li>
                                             </ul>
@@ -230,14 +300,14 @@
                             </nz-tab>
                         </nz-tabset>
                     </div>
-                </ng-container>   
+                </ng-container>
                 <div class="content-details-no-data" *ngIf="selectedFile == ''">
                     <div class="text-center">
                         <img class="img-fluid opacity-04" src="assets/images/others/file-manager.png" alt="">
                         <p class="text-muted m-t-20">Select folder or file to view details</p>
                     </div>
-                </div> 
-            </div>    
-        </div>    
+                </div>
+            </div>
+        </div>
     </div>
-</div>    
+</div>

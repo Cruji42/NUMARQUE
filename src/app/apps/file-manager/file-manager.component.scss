@@ -1,0 +1,18 @@
+.breadcrumb-wrapper {
+  font-size: 14px;
+}
+
+.breadcrumb-item {
+  cursor: pointer;
+  color: #1677ff;
+  font-weight: 500;
+}
+
+.breadcrumb-item:hover {
+  text-decoration: underline;
+}
+
+.separator {
+  margin: 0 6px;
+  color: #999;
+}

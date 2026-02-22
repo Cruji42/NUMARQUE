@@ -28,8 +28,12 @@ export class EndPointFilesService {
 
     
 
-   getRoot(): Observable<any> {
-        return this.http.get(`${this.apiUrl}/root`, { headers: this.configHeaders() });
+   getDirMenu(id: number): Observable<any> {
+        return this.http.get(`${this.apiUrl}/contents/menu/${id}`, { headers: this.configHeaders() });
+    }
+
+    downloadFile(id: number): Observable<any> {
+        return this.http.get(`${this.apiUrl}files/${id}/download`, { headers: this.configHeaders()})
     }
 
 }

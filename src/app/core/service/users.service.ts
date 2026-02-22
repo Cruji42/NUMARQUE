@@ -65,7 +65,7 @@ export class UsersService {
 
     getUser(){
         let user_data: any = this.decodeToken()
-        console.log( user_data)
+        // console.log( user_data)
             return this.endPointUsersService.getUser(user_data.id).pipe(
             map((users: User) => {
                 return users;
