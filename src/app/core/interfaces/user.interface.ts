@@ -5,5 +5,5 @@ export interface User {
     company: string;
     email: string;
     password?: string;
-    profile_picture: string;
+    profile_picture_url: string;
 }

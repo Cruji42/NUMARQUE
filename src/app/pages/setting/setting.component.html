@@ -6,7 +6,7 @@
         <div class="container">
             <nz-card nzTitle="Infirmación basica">
                 <div class="media align-items-center">
-                    <nz-avatar [nzSize]="80" nzIcon="user" [nzSrc]="profile_picture"></nz-avatar>
+                    <nz-avatar [nzSize]="80" nzIcon="user" [nzSrc]="profile_picture_url"></nz-avatar>
                     <div class="m-l-20 m-r-20">
                         <h5 class="m-b-5 font-size-18">Foto de perfil</h5>
                         <p class="opacity-07 font-size-13 m-b-0">
@@ -14,8 +14,9 @@
                             120x120 tamaño maximo: 5MB
                         </p>
                     </div>
-                    <nz-upload nzName="avatar" [nzShowUploadList]="false" (nzChange)="handleChange($event)">
-                        <button nz-button nzType="primary" >
+                    <nz-upload nzName="profile_picture" [nzShowUploadList]="true" [nzBeforeUpload]="beforeUpload"
+                        [nzAccept]="'image/png,image/jpeg,image/jpg'" >
+                        <button nz-button nzType="primary">
                             <span>Cargar</span>
                         </button>
                     </nz-upload>
@@ -28,7 +29,7 @@
                             <nz-form-item>
                                 <nz-form-label nzFor="name">Nombre</nz-form-label>
                                 <nz-form-control>
-                                    <input nz-input formControlName="name" nz-input placeholder="Nombre" type="text" >
+                                    <input nz-input formControlName="name" nz-input placeholder="Nombre" type="text">
                                 </nz-form-control>
                             </nz-form-item>
                         </div>
@@ -36,22 +37,25 @@
                             <nz-form-item>
                                 <nz-form-label>Apellido</nz-form-label>
                                 <nz-form-control>
-                                    <input nz-input placeholder="Apellido" type="text" formControlName="last_name" nz-input >
+                                    <input nz-input placeholder="Apellido" type="text" formControlName="last_name"
+                                        nz-input>
                                 </nz-form-control>
                             </nz-form-item>
                         </div>
-                          <div class="col-md-12">
+                        <div class="col-md-12">
                             <nz-form-item>
                                 <nz-form-label>Compañia</nz-form-label>
                                 <nz-form-control>
-                                    <input nz-input placeholder="Compañia" type="text" formControlName="company" nz-input >
+                                    <input nz-input placeholder="Compañia" type="text" formControlName="company"
+                                        nz-input>
                                 </nz-form-control>
                             </nz-form-item>
                         </div>
-                         <div class="d-flex justify-content-end">
+                        <div class="d-flex justify-content-end">
                             <nz-form-item>
                                 <nz-form-control>
-                                    <button nz-button nzType="primary" [disabled]="form.invalid" [nzLoading]="isConfirmLoading">Editar</button>
+                                    <button nz-button nzType="primary" [disabled]="form.invalid"
+                                        [nzLoading]="isConfirmLoading">Editar</button>
                                 </nz-form-control>
                             </nz-form-item>
                         </div>
@@ -92,8 +96,8 @@
             </nz-card>
             <nz-card nzTitle="Marcas asignadas">
                 <div class="row">
-                        <nz-tag *ngFor="let b of brands_data">{{b.name}}</nz-tag>
-                    
+                    <nz-tag *ngFor="let b of brands_data">{{b.name}}</nz-tag>
+
                 </div>
             </nz-card>
             <!-- <nz-card nzTitle="Address Details">

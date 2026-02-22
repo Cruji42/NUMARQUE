@@ -25,12 +25,24 @@ export class EndPointUsersService {
         return headers;
     }
 
+      configHeadersFilea() {
+        const token = localStorage.getItem('token');
+        const headers = {
+            'Authorization': `Bearer ${token}`
+        };
+        return headers;
+    }
+
     createUser(userData: User): Observable<any> {
         return this.http.post<any>(`${this.apiUrl}/users`, userData, { observe: 'response' });
     }
 
-    updateUser(userData: User): Observable<any>{
-        return this.http.put<any>(`${this.apiUrl}/users/` + userData.user_id, userData, { headers: this.configHeaders() })
+    updateUser(userData: User, id: any): Observable<any>{
+        return this.http.put<any>(`${this.apiUrl}/users/` + id, userData, { headers: this.configHeadersFilea() })
+    }
+    
+    uploadPhoto(userData: any, id: number): Observable<any>{
+        return this.http.put<any>(`${this.apiUrl}/users/` + id, userData, { headers: this.configHeadersFilea() })
     }
 
 

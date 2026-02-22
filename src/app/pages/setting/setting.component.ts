@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NzUploadFile } from 'ng-zorro-antd/upload';
+import { NzUploadChangeParam, NzUploadFile } from 'ng-zorro-antd/upload';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzMessageService } from 'ng-zorro-antd/message';
@@ -21,9 +21,11 @@ export class SettingComponent {
     selectedCountry: any;
     selectedLanguage: any;
 
-    profile_picture: string;
+    profile_picture_url: string;
     isConfirmLoading = false;
     brands_data: any;
+
+    file!: File;
 
 
     networkList = [
@@ -169,7 +171,7 @@ export class SettingComponent {
                     ...user,
                     user_id: user.id
                 })
-                this.profile_picture = user.profile_picture
+                this.profile_picture_url = user.profile_picture_url
                 this.brands_data = user.brands
 
             },
@@ -200,11 +202,20 @@ export class SettingComponent {
         if (this.form.valid) {
             this.isConfirmLoading = true
 
-            this.service.updateUser(this.form.value).subscribe({
+                   const formData = new FormData();
+
+                   formData.append('user_id', this.form.value.user_id)
+                   formData.append('name', this.form.value.name)
+                   formData.append('last_name', this.form.value.last_name)
+                   formData.append('company', this.form.value.company)
+
+
+
+            this.service.updateUser(formData, this.form.value.user_id).subscribe({
                 next: (res) => {
                     console.log('User update successfully', res);
                     this.isConfirmLoading = false
-                    this.getUserData()
+                    // this.getUserData()
 
                 },
                 error: (err) => {
@@ -222,15 +233,86 @@ export class SettingComponent {
         // this.showConfirm();
     }
 
-    private getBase64(img: File, callback: (img: {}) => void): void {
-        const reader = new FileReader();
-        reader.addEventListener('load', () => callback(reader.result));
-        reader.readAsDataURL(img);
-    }
+    // private getBase64(img: File, callback: (img: {}) => void): void {
+    //     const reader = new FileReader();
+    //     reader.addEventListener('load', () => callback(reader.result));
+    //     reader.readAsDataURL(img);
+    // }
 
-    handleChange(info: { file: NzUploadFile }): void {
-        this.getBase64(info.file.originFileObj, (img: string) => {
-            this.avatarUrl = img;
+    convertToBase64(file: File): Promise<string> {
+        return new Promise((resolve, reject) => {
+
+            const reader = new FileReader();
+
+            reader.readAsDataURL(file);
+
+            reader.onload = () => {
+                resolve(reader.result as string);
+            };
+
+            reader.onerror = error => reject(error);
         });
     }
+
+
+    // handleChange(info: NzUploadChangeParam): void {
+
+    //     console.log()
+
+    //     if (info.file.status === 'done') {
+
+    //         const fileObj = info.file.originFileObj as File;
+
+    //         if (!fileObj) {
+    //             console.error('Archivo no encontrado');
+    //             return;
+    //         }
+
+    //         console.log('Archivo real:', fileObj);
+
+    //         this.enviarArchivo();
+    //     }
+    // }
+
+
+
+
+    enviarArchivo(): void {
+
+        console.log(this.file)
+        if (!this.file) {
+            console.log('No hay archivo seleccionado');
+            return;
+        }
+
+        const formData = new FormData();
+
+        // Siempre enviar como string
+        // formData.append('user_id', String(this.form.value.user_id));
+
+        // Especificar nombre explícitamente
+        formData.append('profile_picture', this.file);
+
+        // console.log('Archivo que se enviará:', file);
+        // console.log('Tamaño:', file.size);
+
+        this.service.uploadPhoto(formData, this.form.value.user_id)
+            .subscribe({
+                next: (resp: any) => {
+                    console.log('Subido correctamente', resp);
+                    this.getUserData()
+                },
+                error: (error: any) => {
+                    console.error('Error al subir', error);
+                }
+            });
+    }
+
+
+    beforeUpload = (file: File): boolean => {
+        this.file = file;
+        // console.log(this.file)
+        this.enviarArchivo()
+        return false; // 👈 IMPORTANTE: evita el auto upload
+    };
 }    

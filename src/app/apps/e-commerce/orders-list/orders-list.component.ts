@@ -77,7 +77,7 @@ export class OrdersListComponent implements OnInit {
             compare: (a: DataItem, b: DataItem) =>
                 (a.name || '').localeCompare(b.name || '')
         },
-         {
+        {
             title: 'Correo',
             compare: (a: DataItem, b: DataItem) =>
                 (a.email || '').localeCompare(b.email || '')
@@ -211,7 +211,18 @@ export class OrdersListComponent implements OnInit {
     submitForm(): void {
         if (this.userForm.valid) {
             this.isConfirmLoading = true
-            this.service.updateUser(this.userForm.value).subscribe({
+            const formData = new FormData();
+
+            const formValue = this.userForm.value;
+
+            // Campos normales
+            formData.append('user_id', String(formValue.user_id));
+            formData.append('account_status', formValue.account_status);
+            formData.append('role_id', String(formValue.role_id));
+
+            // Array brand_ids
+         formData.append('brand_ids', formValue.brand_ids);
+            this.service.updateUser(formData, formValue.user_id).subscribe({
                 next: (res) => {
                     this.modalRef.destroy()
                     this.isConfirmLoading = false

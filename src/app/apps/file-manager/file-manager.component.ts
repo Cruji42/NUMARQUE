@@ -4,6 +4,7 @@ import { AppsService } from '../../shared/services/apps.service';
 import { NzContextMenuService, NzDropdownMenuComponent } from 'ng-zorro-antd/dropdown'
 
 import { Files } from '../../shared/interfaces/file-manager.type';
+import { FilesService } from 'src/app/core/service/files.service';
 
 @Component({
     templateUrl: './file-manager.component.html',
@@ -32,13 +33,19 @@ export class FileManagerComponent  {
     constructor(
         private colorConfig : ThemeConstantService,
         private fileManagerSvc: AppsService,
-        private nzContextMenuService: NzContextMenuService ) {
+        private nzContextMenuService: NzContextMenuService,
+        private service: FilesService
+     ) {
     }
 
     ngOnInit(): void {
         this.fileManagerSvc.getFileManagerJson().subscribe(data => {
             this.files = data;
         });
+
+        this.service.getRoot().subscribe(( data: any) => {
+            console.log(data)
+        })
     }
 
     changeView() {

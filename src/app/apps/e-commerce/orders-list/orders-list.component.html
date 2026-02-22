@@ -39,7 +39,7 @@
                 <td>#{{item.id}}</td>
                 <td>
                     <div class="d-flex align-items-center">
-                        <nz-avatar [nzSize]="30" nzIcon="user" [nzSrc]="item.profile_picture"></nz-avatar>
+                        <nz-avatar [nzSize]="30" nzIcon="user" [nzSrc]="item.profile_picture_url"></nz-avatar>
                         <h6 class="m-l-10 m-b-0">{{item.name}}</h6>
                     </div>
                 </td>
@@ -144,7 +144,7 @@
 
                 <div class="avatar-col d-block w-100 text-center mb-2">
                     <nz-avatar class="text-center" [nzSize]="80" nzIcon="user"
-                        [nzSrc]="data.item.profile_picture || null"></nz-avatar>
+                        [nzSrc]="data.item.profile_picture_url || null"></nz-avatar>
                 </div>
 
                 <div nz-col nzSpan="24">

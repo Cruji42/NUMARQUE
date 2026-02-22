@@ -43,7 +43,7 @@ export const ROUTES: SideNavInterface[] = [
         //     },
         // ]
     },
-    
+
     {
         path: '/apps/e-commerce/orders-list',
         title: 'Usuarios',
@@ -66,6 +66,14 @@ export const ROUTES: SideNavInterface[] = [
         iconType: 'nzIcon',
         icon: 'user',
         iconTheme: 'outline',
+        submenu: []
+    },
+    {
+        path: '/apps/file-manager',
+        title: 'File Manager',
+        iconType: 'nzIcon',
+        icon: 'file',
+        iconTheme: '',
         submenu: []
     },
     {

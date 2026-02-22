@@ -41,8 +41,19 @@ export class UsersService {
     }
 
 
-        updateUser(userData: User): Observable<any> {
-        return this.endPointUsersService.updateUser(userData).pipe(
+        updateUser(userData: any, id: number): Observable<any> {
+        return this.endPointUsersService.updateUser(userData, id).pipe(
+            map((response: any) => {
+                return response;
+            }),
+            catchError((error) => {
+                return throwError(() => error);
+            })
+        );
+    }
+
+        uploadPhoto(userData: any, id: number): Observable<any> {
+        return this.endPointUsersService.uploadPhoto(userData, id).pipe(
             map((response: any) => {
                 return response;
             }),
