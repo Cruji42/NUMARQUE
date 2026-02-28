@@ -50,6 +50,10 @@ export class EndPointUsersService {
         return this.http.get<User[]>(`${this.apiUrl}/users`, { headers: this.configHeaders() });
     }
 
+    getUserById(userId: number): Observable<User> {
+        return this.http.get<User>(`${this.apiUrl}/users/${userId}`, { headers: this.configHeaders() });
+    }
+
     getUser(id: number): Observable<User>{
         console.log(id)
         return this.http.get<User>(`${this.apiUrl}/users/` + id,{ headers: this.configHeaders()} )

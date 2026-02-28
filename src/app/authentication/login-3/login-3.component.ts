@@ -64,11 +64,26 @@ export class Login3Component implements AfterViewInit {
     this.authService.loginWithGoogle(idToken).subscribe(
       {
         next: (res) => {
-          // console.log('Google login successful:', res);
-          this.router.navigateByUrl('/dashboard/default');
-          // this.ngZone.run(() => {
-          //   this.router.navigateByUrl('/dashboard/default');
-          // });
+          console.log('DEBUG: Google login successful, checking status...');
+          // Check user validation status before redirecting
+          this.authService.validateUserStatus().subscribe({
+            next: (isActive) => {
+              console.log('DEBUG: validateUserStatus result:', isActive);
+              if (isActive) {
+                console.log('DEBUG: User is active, navigating to dashboard');
+                this.router.navigateByUrl('/dashboard/default');
+              } else {
+                console.log('DEBUG: User is NOT active, navigating to waiting page');
+                // Redirect to waiting validation page
+                this.router.navigate(['/authentication/waiting-validation']);
+              }
+            },
+            error: (err) => {
+              console.error('DEBUG: Error checking user status:', err);
+              // Default to dashboard on error
+              this.router.navigateByUrl('/dashboard/default');
+            }
+          });
         },
         error: (err) => {
           console.error('Google login failed:', err);
@@ -107,11 +122,30 @@ export class Login3Component implements AfterViewInit {
 
       console.log('HttpClient instance:', this.authService);
 
-      this.authService.login(email, password).subscribe({
-        next: (response) => {
-          // Handle successful login, e.g., navigate to dashboard
-          console.log('Login successful:', response);
-          this.router.navigate(['/dashboard/default']);
+            this.authService.login(email, password).subscribe({
+                next: (response) => {
+                    // Handle successful login, e.g., navigate to dashboard
+                    console.log('DEBUG: Login successful:', response);
+                    
+                    // Check user validation status before redirecting
+                    this.authService.validateUserStatus().subscribe({
+                        next: (isActive) => {
+                            console.log('DEBUG: validateUserStatus result:', isActive);
+                            if (isActive) {
+                                console.log('DEBUG: User is active, navigating to dashboard');
+                                this.router.navigate(['/dashboard/default']);
+                            } else {
+                                console.log('DEBUG: User is NOT active, navigating to waiting page');
+                                // Redirect to waiting validation page
+                                this.router.navigate(['/authentication/waiting-validation']);
+                            }
+                        },
+                        error: (err) => {
+                            console.error('DEBUG: Error checking user status:', err);
+                            // Default to dashboard on error
+                            this.router.navigate(['/dashboard/default']);
+                        }
+                    });
 
         },
         error: (err) => {
@@ -119,20 +153,13 @@ export class Login3Component implements AfterViewInit {
         }
       });
 
-    } else {
-      for (const i in this.loginForm.controls) {
-        this.loginForm.controls[i].markAsDirty();
-        this.loginForm.controls[i].updateValueAndValidity();
+        } else {
+            for ( const i in this.loginForm.controls ) {
+                this.loginForm.controls[ i ].markAsDirty();
+                this.loginForm.controls[ i ].updateValueAndValidity();
+            }
+        }
+
       }
-    }
-
-  }
-
-  error(): void {
-    this.modal.error({
-      nzTitle: 'This is an error message',
-      nzContent: 'some messages...some messages...'
-    });
-  }
-
-}    
+    
+}

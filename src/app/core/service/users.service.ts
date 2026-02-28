@@ -1,4 +1,4 @@
-import { Observable, catchError, map, of, throwError} from 'rxjs';
+import { Observable, catchError, map, of, throwError } from 'rxjs';
 import { EndPointUsersService } from '../apis/end-point-users.service';
 import { computed, Injectable, signal } from '@angular/core';
 import { User } from '../interfaces';
@@ -6,14 +6,14 @@ import { jwtDecode, JwtDecodeOptions } from 'jwt-decode';
 
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class UsersService {
     constructor(private endPointUsersService: EndPointUsersService) { }
 
-    decodeToken(){
+    decodeToken() {
         let token = localStorage.getItem('token');
-        let  data =  jwtDecode(token)
+        let data = jwtDecode(token)
         // console.log(data)
         return data
     }
@@ -40,8 +40,17 @@ export class UsersService {
         );
     }
 
-
-        updateUser(userData: any, id: number): Observable<any> {
+    getUserById(userId: number): Observable<User> {
+        return this.endPointUsersService.getUserById(userId).pipe(
+            map((user: User) => {
+                return user;
+            }),
+            catchError((error) => {
+                return throwError(() => error);
+            })
+        );
+    }
+    updateUser(userData: any, id: number): Observable<any> {
         return this.endPointUsersService.updateUser(userData, id).pipe(
             map((response: any) => {
                 return response;
@@ -52,7 +61,7 @@ export class UsersService {
         );
     }
 
-        uploadPhoto(userData: any, id: number): Observable<any> {
+    uploadPhoto(userData: any, id: number): Observable<any> {
         return this.endPointUsersService.uploadPhoto(userData, id).pipe(
             map((response: any) => {
                 return response;
@@ -63,10 +72,10 @@ export class UsersService {
         );
     }
 
-    getUser(){
+    getUser() {
         let user_data: any = this.decodeToken()
         // console.log( user_data)
-            return this.endPointUsersService.getUser(user_data.id).pipe(
+        return this.endPointUsersService.getUser(user_data.id).pipe(
             map((users: User) => {
                 return users;
             }),
@@ -74,6 +83,6 @@ export class UsersService {
                 return throwError(() => error);
             })
         );
-  
+
     }
 }

@@ -5,5 +5,7 @@ export interface User {
     company: string;
     email: string;
     password?: string;
+    is_active?: boolean;
+    account_status?: string;
     profile_picture_url: string;
 }
