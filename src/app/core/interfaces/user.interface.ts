@@ -8,4 +8,5 @@ export interface User {
     is_active?: boolean;
     account_status?: string;
     profile_picture_url: string;
+    
 }
