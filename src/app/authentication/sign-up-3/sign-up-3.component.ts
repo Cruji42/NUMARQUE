@@ -1,5 +1,5 @@
 import { Component } from '@angular/core'
-import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup,  Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { UsersService } from '../../core/service/users.service';
 
 
@@ -33,27 +33,62 @@ export class SignUp3Component {
         }
     }
 
+
+    // Mínimo 8 caracteres
+    minLengthValidator(control: UntypedFormControl) {
+        if (!control.value) return null;
+        return control.value.length >= 8 ? null : { minLength: true };
+    }
+
+    // Al menos una mayúscula
+    uppercaseValidator(control: UntypedFormControl) {
+        if (!control.value) return null;
+        return /[A-Z]/.test(control.value) ? null : { uppercase: true };
+    }
+
+    // Al menos una minúscula
+    lowercaseValidator(control: UntypedFormControl) {
+        if (!control.value) return null;
+        return /[a-z]/.test(control.value) ? null : { lowercase: true };
+    }
+
+    // Al menos un número
+    numberValidator(control: UntypedFormControl) {
+        if (!control.value) return null;
+        return /\d/.test(control.value) ? null : { number: true };
+    }
+
+    // Al menos un carácter especial
+    specialCharValidator(control: UntypedFormControl) {
+        if (!control.value) return null;
+        return /[@$!%*?&._-]/.test(control.value) ? null : { specialChar: true };
+    }
+
     constructor(private fb: UntypedFormBuilder, private usersService: UsersService) {
     }
 
     ngOnInit(): void {
         this.signUpForm = this.fb.group({
-            name         : [ null, [ Validators.required ] ],
-            last_name         : [ null, [ Validators.required ] ],
-            company         : [ null, [ Validators.required ] ],
-            email            : [ null, [ Validators.required, Validators.email ] ],
-            password         : [ null, [ Validators.required, Validators.pattern(this.patternPassword) ] ],
-            checkPassword    : [ null, [ Validators.required, this.confirmationValidator ] ],
-            agree            : [ false, [Validators.requiredTrue ] ]
+            name: [null, [Validators.required]],
+            last_name: [null, [Validators.required]],
+            company: [null, [Validators.required]],
+            email: [null, [Validators.required, Validators.email]],
+            password: [null, [Validators.required, this.minLengthValidator,
+            this.uppercaseValidator,
+            this.lowercaseValidator,
+            this.numberValidator,
+            this.specialCharValidator]],
+            checkPassword: [null, [Validators.required, this.confirmationValidator]],
+            agree: [false, [Validators.requiredTrue]]
         });
     }
 
 
     submitForm(): void {
-        if( this.signUpForm.valid ){
+        if (this.signUpForm.valid) {
             this.usersService.createUser(this.signUpForm.value).subscribe({
                 next: (res) => {
-                    console.log('User created successfully', res); 
+                    console.log('User created successfully', res);
                 },
                 error: (err) => {
                     console.error('Error creating user', err);
@@ -61,8 +96,8 @@ export class SignUp3Component {
             });
         } else {
             for (const i in this.signUpForm.controls) {
-                this.signUpForm.controls[ i ].markAsDirty();
-                this.signUpForm.controls[ i ].updateValueAndValidity();
+                this.signUpForm.controls[i].markAsDirty();
+                this.signUpForm.controls[i].updateValueAndValidity();
             }
         }
     }

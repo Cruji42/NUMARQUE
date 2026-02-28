@@ -1,40 +1,46 @@
-import { AfterViewChecked, AfterViewInit, Component } from '@angular/core'
-import { UntypedFormBuilder, UntypedFormGroup,  Validators } from '@angular/forms';
+import { AfterViewChecked, AfterViewInit, Component, NgZone } from '@angular/core'
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../../core/service/auth-service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { environment } from '../../../environments/environment';
-import { NgZone } from '@angular/core';
+import { NzModalService } from 'ng-zorro-antd/modal';
 
 declare const google: any;
 
 
 @Component({
-    templateUrl: './login-3.component.html',
-    standalone: false
+  templateUrl: './login-3.component.html',
+  standalone: false
 })
 
 export class Login3Component implements AfterViewInit {
-    loginForm: UntypedFormGroup;
-    private googleInitialized = false;
+  loginForm: UntypedFormGroup;
+  private googleInitialized = false;
 
-    // submitForm(): void {
-    //     for (const i in this.loginForm.controls) {
-    //         this.loginForm.controls[ i ].markAsDirty();
-    //         this.loginForm.controls[ i ].updateValueAndValidity();
-    //     }
-    // }
+  // submitForm(): void {
+  //     for (const i in this.loginForm.controls) {
+  //         this.loginForm.controls[ i ].markAsDirty();
+  //         this.loginForm.controls[ i ].updateValueAndValidity();
+  //     }
+  // }
 
-    constructor(private fb: UntypedFormBuilder, private authService: AuthService, public router: Router, private ngZone: NgZone) {
-    }
+  constructor(
+    private fb: UntypedFormBuilder,
+    private authService: AuthService,
+    public router: Router,
+    private ngZone: NgZone,
+    private modal: NzModalService
+  ) {
+  }
 
-    ngOnInit(): void {
-        this.loginForm = this.fb.group({
-            email: [ null, [ Validators.required, Validators.email ] ],
-            password: [ null, [ Validators.required ] ]
-        });
-    }
+  ngOnInit(): void {
+    this.loginForm = this.fb.group({
+      email: [null, [Validators.required, Validators.email]],
+      password: [null, [Validators.required]]
+    });
+  }
 
- ngAfterViewInit(): void {
+  ngAfterViewInit(): void {
     google.accounts.id.initialize({
       client_id: environment.GOOGLE_CLIENT_ID,
       callback: (response: any) => {
@@ -71,54 +77,62 @@ export class Login3Component implements AfterViewInit {
     );
   }
 
-    // initGoogle() {
-    //     if (this.googleInitialized) return;
+  // initGoogle() {
+  //     if (this.googleInitialized) return;
 
-    //     google.accounts.id.initialize({
-    //     client_id: environment.GOOGLE_CLIENT_ID,
-    //     callback: (response: any) => {
-    //         this.authService.loginWithGoogle(response.credential).subscribe();
-    //     },
-    //      use_fedcm_for_prompt: true // IMPORTANTE
-    //     });
+  //     google.accounts.id.initialize({
+  //     client_id: environment.GOOGLE_CLIENT_ID,
+  //     callback: (response: any) => {
+  //         this.authService.loginWithGoogle(response.credential).subscribe();
+  //     },
+  //      use_fedcm_for_prompt: true // IMPORTANTE
+  //     });
 
-    //     this.googleInitialized = true;
-    // }
+  //     this.googleInitialized = true;
+  // }
 
-    // loginWithGoogle() {
-    //     this.initGoogle();
+  // loginWithGoogle() {
+  //     this.initGoogle();
 
-    //     google.accounts.id.prompt((notification: any) => {
-    //     if (notification.isNotDisplayed()) {
-    //         console.warn('Google prompt no mostrado');
-    //     }
-    //     });
-    // }
+  //     google.accounts.id.prompt((notification: any) => {
+  //     if (notification.isNotDisplayed()) {
+  //         console.warn('Google prompt no mostrado');
+  //     }
+  //     });
+  // }
 
-      submitForm(): void {
-        if ( this.loginForm.valid ) {
-            const { email, password } = this.loginForm.value;
+  submitForm(): void {
+    if (this.loginForm.valid) {
+      const { email, password } = this.loginForm.value;
 
-            this.authService.login(email, password).subscribe({
-                next: (response) => {
-                    // Handle successful login, e.g., navigate to dashboard
-                    console.log('Login successful:', response);
-                    this.router.navigate(['/dashboard/default']);
+      console.log('HttpClient instance:', this.authService);
 
-                },
-                error: (error) => {
-                    // Handle login error, e.g., show error message
-                    console.error('Login failed:', error);
-                }
-            });
+      this.authService.login(email, password).subscribe({
+        next: (response) => {
+          // Handle successful login, e.g., navigate to dashboard
+          console.log('Login successful:', response);
+          this.router.navigate(['/dashboard/default']);
 
-        } else {
-            for ( const i in this.loginForm.controls ) {
-                this.loginForm.controls[ i ].markAsDirty();
-                this.loginForm.controls[ i ].updateValueAndValidity();
-            }
+        },
+        error: (err) => {
+          console.log('Error en componente:', err);
         }
+      });
 
+    } else {
+      for (const i in this.loginForm.controls) {
+        this.loginForm.controls[i].markAsDirty();
+        this.loginForm.controls[i].updateValueAndValidity();
       }
-    
+    }
+
+  }
+
+  error(): void {
+    this.modal.error({
+      nzTitle: 'This is an error message',
+      nzContent: 'some messages...some messages...'
+    });
+  }
+
 }    

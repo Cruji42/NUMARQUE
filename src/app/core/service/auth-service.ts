@@ -1,13 +1,13 @@
-import { Observable, catchError, map, of, throwError} from 'rxjs';
+import { Observable, catchError, map, of, throwError } from 'rxjs';
 import { EndPointAuthService } from '../apis/end-point-auth.service';
 import { computed, Injectable, signal } from '@angular/core';
 
 import { AuthStatus, JwtPayload } from '../interfaces/index';
-import {jwtDecode} from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class AuthService {
     constructor(private endPointAuthService: EndPointAuthService) { }
@@ -67,12 +67,11 @@ export class AuthService {
             map(response => {
                 // Handle successful login, e.g., store token
                 this.setToken(response.access_token);
-                
+
                 this.isAuthenticated()
                 return response;
             }),
-            catchError(error => {
-                // Handle login error
+           catchError(error => {
                 return throwError(() => error);
             })
         );
@@ -107,12 +106,12 @@ export class AuthService {
         }
     }
 
-     private isTokenExpired(token: string): boolean {
+    private isTokenExpired(token: string): boolean {
         try {
-        const decoded = jwtDecode<JwtPayload>(token);
-        return Date.now() >= decoded.exp * 1000;
+            const decoded = jwtDecode<JwtPayload>(token);
+            return Date.now() >= decoded.exp * 1000;
         } catch {
-        return true;
+            return true;
         }
     }
 }

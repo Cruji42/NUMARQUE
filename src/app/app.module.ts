@@ -17,6 +17,9 @@ import { FullLayoutComponent } from './layouts/full-layout/full-layout.component
 
 import { ThemeConstantService } from './shared/services/theme-constant.service';
 import { NgChartsModule } from 'ng2-charts';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { MessageErrorInterceptor } from './core/utils/message-error.interceptor';
+import { HttpClientModule } from '@angular/common/http';
 // import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
 
 registerLocaleData(en);
@@ -34,7 +37,8 @@ registerLocaleData(en);
         NzBreadCrumbModule,
         TemplateModule,
         SharedModule,
-        NgChartsModule
+        NgChartsModule,
+        HttpClientModule
     ],
     providers: [
         // provideCharts(withDefaultRegisterables()),
@@ -46,9 +50,19 @@ registerLocaleData(en);
             provide: LocationStrategy,
             useClass: PathLocationStrategy
         },
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: MessageErrorInterceptor,
+            multi: true
+        },
         ThemeConstantService
     ],
     bootstrap: [AppComponent],
     // schemas: [NO_ERRORS_SCHEMA]
 })
-export class AppModule { }
+export class AppModule { 
+
+      constructor() {
+    console.log('✅ AppModule cargado');
+  }
+}

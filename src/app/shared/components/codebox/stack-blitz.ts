@@ -85,7 +85,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientJsonpModule, HttpClientModule } from '@angular/common/http';
+
 import en from '@angular/common/locales/en';
 
 import { NZ_ICONS } from 'ng-zorro-antd/icon';
@@ -107,8 +107,7 @@ const icons: IconDefinition[] = Object.keys(antDesignIcons).map(key => antDesign
 @NgModule({
   imports:      [
                   BrowserModule,FormsModule,
-                  HttpClientModule,
-                  HttpClientJsonpModule,
+         
                   ReactiveFormsModule,
                   DemoNgZorroAntdModule,
                   BrowserAnimationsModule,

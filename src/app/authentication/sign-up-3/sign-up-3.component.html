@@ -12,7 +12,7 @@
 
                         <!-- Error messages -->
 
-                          <ng-template #emailError let-control>
+                        <ng-template #emailError let-control>
                             <ng-container *ngIf="control.hasError('required')">
                                 ¡Favor de ingresar su correo!
                             </ng-container>
@@ -22,22 +22,31 @@
                             </ng-container>
                         </ng-template>
 
-                           <ng-template #passwordError let-control>
-                            <ng-container *ngIf="control.hasError('required')">
+                        <ng-template #passwordError let-control>
+                            <ng-container *ngIf="control.hasError('required')" >
                                 ¡Favor de ingresar una contraseña!
                             </ng-container>
-
-                            <ng-container *ngIf="control.hasError('pattern')">
-                                <p>La contraseña debe ser de minimo 8 caracteres y contener:</p>
-                                <p>Al menos una mayuscula</p>
-                                <p>Al menos una minuscula</p>
-                                <p>Al menos un número</p>
-                                <p>Al menos un caracter especial</p>
-
+                            
+                            <ng-container *ngIf="control.hasError('minLength')">
+                                Debe contener mínimo 8 caracteres <br>
                             </ng-container>
+
+                            <ng-container *ngIf="control.hasError('uppercase')">
+                                Debe contener al menos una mayúscula <br>
+                            </ng-container>
+                            <ng-container *ngIf="control.hasError('lowercase')">
+                                Debe contener al menos una minúscula <br>
+                            </ng-container>
+                            <ng-container *ngIf="control.hasError('number')">
+                                Debe contener al menos un número <br>
+                            </ng-container>
+                            <ng-container *ngIf="control.hasError('specialChar')">
+                                Debe contener al menos un carácter especial <br>
+                            </ng-container>
+                           
                         </ng-template>
 
-                         <ng-template #passwordConfirmError let-control>
+                        <ng-template #passwordConfirmError let-control>
                             <ng-container *ngIf="control.hasError('required')">
                                 ¡Favor de ingresar la confirmación de la contraseña!
                             </ng-container>
@@ -48,7 +57,8 @@
                             </ng-container>
                         </ng-template>
 
-                        <form nz-form [formGroup]="signUpForm" class="login-form" nzLayout="vertical" (ngSubmit)="submitForm()">
+                        <form nz-form [formGroup]="signUpForm" class="login-form" nzLayout="vertical"
+                            (ngSubmit)="submitForm()">
                             <nz-form-item>
                                 <nz-form-label nzRequired nzFor="name">Nombre</nz-form-label>
                                 <nz-form-control nzErrorTip="¡Favor de ingresar tu nombre!">
@@ -58,48 +68,56 @@
                             <nz-form-item>
                                 <nz-form-label nzRequired nzFor="last_name">Apellido</nz-form-label>
                                 <nz-form-control nzErrorTip="¡Favor de ingresar tu apellido!">
-                                    <input type="text" nz-input formControlName="last_name" placeholder="Apellido" id="last_name">
+                                    <input type="text" nz-input formControlName="last_name" placeholder="Apellido"
+                                        id="last_name">
                                 </nz-form-control>
                             </nz-form-item>
-                              <nz-form-item>
+                            <nz-form-item>
                                 <nz-form-label nzRequired nzFor="company">Empresa</nz-form-label>
                                 <nz-form-control nzErrorTip="¡Favor de ingresar tu empresa!">
-                                    <input type="text" nz-input formControlName="company" placeholder="Empresa" id="company">
+                                    <input type="text" nz-input formControlName="company" placeholder="Empresa"
+                                        id="company">
                                 </nz-form-control>
                             </nz-form-item>
                             <nz-form-item>
                                 <nz-form-label nzRequired nzFor="email">Correo electrónico</nz-form-label>
                                 <nz-form-control [nzErrorTip]="emailError">
-                                    <input type="text" nz-input formControlName="email" placeholder="Correo electrónico" id="email">
+                                    <input type="text" nz-input formControlName="email" placeholder="Correo electrónico"
+                                        id="email">
                                 </nz-form-control>
                             </nz-form-item>
                             <nz-form-item>
                                 <nz-form-label nzRequired nzFor="password">Contraseña</nz-form-label>
                                 <nz-form-control [nzErrorTip]="passwordError">
-                                    <input type="password" nz-input formControlName="password" placeholder="Contraseña" id="password">
+                                    <input type="password" nz-input formControlName="password" placeholder="Contraseña"
+                                        id="password">
                                 </nz-form-control>
                             </nz-form-item>
                             <nz-form-item>
                                 <nz-form-label nzFor="checkPassword" nzRequired>Confirma tu contraseña</nz-form-label>
                                 <nz-form-control [nzErrorTip]="passwordConfirmError">
-                                    <input nz-input type="password" formControlName="checkPassword"  placeholder="Confirmar contraseña" id="checkPassword">
+                                    <input nz-input type="password" formControlName="checkPassword"
+                                        placeholder="Confirmar contraseña" id="checkPassword">
                                 </nz-form-control>
                             </nz-form-item>
-                            <div class="d-flex align-items-center justify-content-center align-items-center flex-column">
+                            <div
+                                class="d-flex align-items-center justify-content-center align-items-center flex-column">
                                 <nz-form-item>
                                     <nz-form-control>
                                         <label nz-checkbox formControlName="agree">
-                                            <span>Al hacer clic aquí, declaro que he leído y entendido los <a>términos y condiciones</a></span>
+                                            <span>Al hacer clic aquí, declaro que he leído y entendido los <a>términos y
+                                                    condiciones</a></span>
                                         </label>
                                     </nz-form-control>
                                 </nz-form-item>
                                 <nz-form-item>
                                     <nz-form-control>
-                                        <div >
-                                            <button nz-button class="login-form-button" [nzType]="'primary'" [disabled]="signUpForm.invalid">Sign Up</button>
+                                        <div>
+                                            <button nz-button class="login-form-button" [nzType]="'primary'"
+                                                [disabled]="signUpForm.invalid">Sign Up</button>
                                         </div>
                                     </nz-form-control>
-                                </nz-form-item>   
+                                </nz-form-item>
                             </div>
                         </form>
                     </nz-card>
