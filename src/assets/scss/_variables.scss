@@ -10,13 +10,14 @@ $red:                       #de4436 !default;
 $orange:                    #fa8c16 !default;
 $gold:                      #ffc107 !default;
 $green:                     #52c41a !default;
-$blue:                      #3f87f5 !default; 
+$blue:                      #1B5EA5 !default; 
 $cyan:                      #00c9a7 !default;
 $purple:                    #886cff  !default; 
 $magenta:                   #eb2f96 !default;
 $volcano:                   #fa541c !default;
 $lime:                      #a0d911 !default;
-$geekblue:                  #2f54eb !default;
+$geekblue:                  #212844 !default;
+
 
 
 // Create grayscale
@@ -77,7 +78,7 @@ $tone-loop: (
 
 // State Colors
 $brand-primary:             $blue !default;
-$brand-secondary:           $purple !default;
+$brand-secondary:           $geekblue !default;
 $brand-success:             $cyan !default;
 $brand-info:                $blue !default;
 $brand-warning:             $gold !default;
