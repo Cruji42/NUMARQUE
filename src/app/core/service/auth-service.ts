@@ -149,4 +149,26 @@ export class AuthService {
             return of(false);
         }
     }
+
+    forgotPassword(email: string): Observable<any> {
+        return this.endPointAuthService.forgotPassword({ email }).pipe(
+            map(response => {
+                return response;
+            }),
+            catchError(error => {
+                return throwError(() => error);
+            })
+        );
+    }
+
+    resetPassword(token: string, newPassword: string): Observable<any> {
+        return this.endPointAuthService.resetPassword({ token, newPassword }).pipe(
+            map(response => {
+                return response;
+            }),
+            catchError(error => {
+                return throwError(() => error);
+            })
+        );
+    }
 }

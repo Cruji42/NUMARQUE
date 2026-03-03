@@ -10,6 +10,7 @@ import { SignUp3Component } from './sign-up-3/sign-up-3.component';
 import { Error1Component } from './error-1/error-1.component';
 import { Error2Component } from './error-2/error-2.component';
 import { WaitingValidationComponent } from './waiting-validation/waiting-validation.component';
+import { ResetPassword1Component } from './reset-password-1/reset-password-1.component';
 
 const routes: Routes = [
     {
@@ -73,6 +74,13 @@ const routes: Routes = [
         component: WaitingValidationComponent,
         data: {
             title: 'Waiting Validation'
+        }
+    },
+    {
+        path: 'reset-password-1',
+        component: ResetPassword1Component,
+        data: {
+            title: 'Reset Password'
         }
     }
 ];

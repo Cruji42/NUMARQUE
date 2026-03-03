@@ -26,6 +26,14 @@ export class EndPointAuthService {
         return this.http.post<any>(`${this.apiUrl}/auth/google-login`, token);
     }
 
+    forgotPassword(email: { email: string }): Observable<any> {
+        return this.http.post<any>(`${this.apiUrl}/auth/forgot-password`, email);
+    }
+
+    resetPassword(data: { token: string; newPassword: string }): Observable<any> {
+        return this.http.post<any>(`${this.apiUrl}/auth/reset-password`, data);
+    }
+
 
     // checkExpiredToken( token: string): Observable<any> {
 

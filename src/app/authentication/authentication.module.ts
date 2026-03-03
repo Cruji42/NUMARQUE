@@ -20,6 +20,7 @@ import { SignUp3Component } from './sign-up-3/sign-up-3.component';
 import { Error1Component } from './error-1/error-1.component';
 import { Error2Component } from './error-2/error-2.component';
 import { WaitingValidationComponent } from './waiting-validation/waiting-validation.component';
+import { ResetPassword1Component } from './reset-password-1/reset-password-1.component';
 import { AuthService } from '../core/service/auth-service';
 import { UsersService } from '../core/service/users.service';
 import { NzModalModule } from 'ng-zorro-antd/modal';
@@ -31,7 +32,6 @@ const antdModule= [
     NzCardModule,
     NzCheckboxModule,
     NzSpinModule,
-    NzCheckboxModule,
     NzModalModule
 ]
 
@@ -53,7 +53,8 @@ const antdModule= [
         SignUp3Component,
         Error1Component,
         Error2Component,
-        WaitingValidationComponent
+        WaitingValidationComponent,
+        ResetPassword1Component
     ],
     schemas: [NO_ERRORS_SCHEMA],
     providers: [AuthService],
