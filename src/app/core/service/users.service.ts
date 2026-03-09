@@ -14,7 +14,7 @@ export class UsersService {
     decodeToken() {
         let token = localStorage.getItem('token');
         let data = jwtDecode(token)
-        // console.log(data)
+        console.log(data)
         return data
     }
 

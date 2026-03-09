@@ -23,10 +23,10 @@
                         </ng-template>
 
                         <ng-template #passwordError let-control>
-                            <ng-container *ngIf="control.hasError('required')" >
+                            <ng-container *ngIf="control.hasError('required')">
                                 ¡Favor de ingresar una contraseña!
                             </ng-container>
-                            
+
                             <ng-container *ngIf="control.hasError('minLength')">
                                 Debe contener mínimo 8 caracteres <br>
                             </ng-container>
@@ -43,7 +43,7 @@
                             <ng-container *ngIf="control.hasError('specialChar')">
                                 Debe contener al menos un carácter especial <br>
                             </ng-container>
-                           
+
                         </ng-template>
 
                         <ng-template #passwordConfirmError let-control>
@@ -70,6 +70,15 @@
                                 <nz-form-control nzErrorTip="¡Favor de ingresar tu apellido!">
                                     <input type="text" nz-input formControlName="last_name" placeholder="Apellido"
                                         id="last_name">
+                                </nz-form-control>
+                            </nz-form-item>
+                            <nz-form-item>
+                                <nz-form-label>País</nz-form-label>
+                                <nz-form-control>
+                                    <nz-select formControlName="country_id">
+                                        <nz-option nzLabel="México" [nzValue]="1"></nz-option>
+                                        <nz-option nzLabel="Estados Unidos" [nzValue]="2"></nz-option>
+                                    </nz-select>
                                 </nz-form-control>
                             </nz-form-item>
                             <nz-form-item>

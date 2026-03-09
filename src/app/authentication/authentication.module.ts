@@ -24,6 +24,7 @@ import { ResetPassword1Component } from './reset-password-1/reset-password-1.com
 import { AuthService } from '../core/service/auth-service';
 import { UsersService } from '../core/service/users.service';
 import { NzModalModule } from 'ng-zorro-antd/modal';
+import { NzSelectModule } from 'ng-zorro-antd/select';
 
 const antdModule= [
     NzFormModule,
@@ -32,6 +33,9 @@ const antdModule= [
     NzCardModule,
     NzCheckboxModule,
     NzSpinModule,
+    NzCheckboxModule,
+    NzModalModule,
+    NzSelectModule,
     NzModalModule
 ]
 

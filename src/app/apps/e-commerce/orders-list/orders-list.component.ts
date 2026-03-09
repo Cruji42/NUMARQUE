@@ -120,6 +120,47 @@ export class OrdersListComponent implements OnInit {
     ngOnInit(): void {
         this.getUsersData();
         this.getBrandData()
+
+        const statusControl = this.userForm.get('account_status');
+        const roleControl = this.userForm.get('role_id');
+        const brandControl = this.userForm.get('brand_ids');
+
+        statusControl?.valueChanges.subscribe(status => {
+
+            if (status === 'Active') {
+                roleControl?.setValidators([Validators.required]);
+            } else {
+                roleControl?.clearValidators();
+                roleControl?.setValue(null);
+
+                brandControl?.clearValidators();
+                brandControl?.setValue([]);
+            }
+
+            roleControl?.updateValueAndValidity();
+        });
+
+        // 👇 Cuando cambia el rol
+        roleControl?.valueChanges.subscribe(role => {
+
+            if (role === 1) {
+                // 🔹 ADMIN
+                brandControl?.clearValidators();
+                brandControl?.setValue([]);
+
+            } else if (role === 2) {
+                // 🔹 HEAD COMERCIAL
+                brandControl?.setValidators([Validators.required]);
+                // this.loadAllBrands(); // 👈 TODAS las marcas
+
+            } else if (role === 3) {
+                // 🔹 PROVEEDOR
+                brandControl?.setValidators([Validators.required]);
+                // this.loadBrandsByCountry(); // 👈 Solo por país
+            }
+
+            brandControl?.updateValueAndValidity();
+        });
     }
 
 
@@ -221,7 +262,7 @@ export class OrdersListComponent implements OnInit {
             formData.append('role_id', String(formValue.role_id));
 
             // Array brand_ids
-         formData.append('brand_ids', formValue.brand_ids);
+            formData.append('brand_ids', formValue.brand_ids);
             this.service.updateUser(formData, formValue.user_id).subscribe({
                 next: (res) => {
                     this.modalRef.destroy()

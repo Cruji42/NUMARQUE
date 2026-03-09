@@ -11,8 +11,9 @@
                         <i nz-icon nzType="search" class="opacity-05"></i>
                     </ng-template>
                 </div>
-                <div class="m-b-10 m-r-20 d-flex align-items-center" >
-                    <nz-select style="min-width: 220px;" class="w-100" nzPlaceHolder="Status" [(ngModel)]="searchSelect"  (ngModelChange)="applyFilters()">
+                <div class="m-b-10 m-r-20 d-flex align-items-center">
+                    <nz-select style="min-width: 220px;" class="w-100" nzPlaceHolder="Status" [(ngModel)]="searchSelect"
+                        (ngModelChange)="applyFilters()">
                         <nz-option nzLabel="All" nzValue="all"></nz-option>
                         <nz-option nzLabel="Active" nzValue="active"></nz-option>
                         <nz-option nzLabel="Pending" nzValue="pending"></nz-option>
@@ -87,53 +88,6 @@
     <span>Editar usuario</span>
 </ng-template>
 
-<!-- CONTENT (AQUÍ sí existe nzData) -->
-<!-- <ng-template #tplContent let-data>
-  <div *ngIf="data?.item">
-    <!- - <pre>{{data.item | json}}</pre> - ->
-    <nz-card nzBordered="false">
-      <div nz-row nzGutter="16" class="user-card">
-
-        <div class="avatar-col d-block w-100 text-center mb-2">
-            <nz-avatar class="text-center"  [nzSize]="80" nzIcon="user" [nzSrc]="data.item.profile_picture || null"></nz-avatar>
-        </div>
-        <!  -- FOTO - ->
-        <!- - <div nz-col nzSpan="24" class="avatar-col text-center">
-          <nz-avatar
-            nzSize="200"
-            nzIcon="user"
-            [nzSrc]="'https://picsum.photos/200'">
-          </nz-avatar>
-        </div> - ->
-
-        <!- - INFO - ->
-        <div nz-col nzSpan="24">
-          <h4 class="m-b-10 text-center">
-            {{ data.item.name }} {{ data.item.last_name }}
-          </h4>
-
-          <p class="info-line text-center">
-            <i nz-icon nzType="bank"></i>
-            {{ data.item.company }}
-          </p>
-
-          <p class="info-line text-center">
-            <i nz-icon nzType="mail"></i>
-            {{ data.item.email }}
-          </p>
-
-          <p class="info-line text-center">
-            <i nz-icon nzType="calendar"></i>
-            {{ data.item.created_at | date: 'dd/MM/yyyy' }}
-          </p>
-        </div>
-
-        <hr>
-
-      </div>
-    </nz-card>
-  </div>
-</ng-template> -->
 
 <ng-template #tplContent let-data>
     <div *ngIf="data?.item">
@@ -152,7 +106,7 @@
                         {{ data.item.name }} {{ data.item.last_name }}
                     </h3>
 
-                    <h4 class="info-line text-center" [nzSize]="80" >
+                    <h4 class="info-line text-center" [nzSize]="80">
                         <i nz-icon nzType="bank"></i>
                         {{ data.item.company }}
                     </h4>
@@ -170,38 +124,13 @@
             </div>
         </nz-card>
 
-        <!-- PERFIL -->
-        <!-- <nz-card nzBordered="false" class="profile-card">
-      <nz-avatar
-        nzSize="200"
-        [nzSrc]="data.item.avatar || null">
-      </nz-avatar>
 
-      <h3 class="m-t-10">
-        {{ data.item.name }} {{ data.item.last_name }}
-      </h3>
-
-      <p>{{ data.item.email }}</p>
-      <p>{{ data.item.company }}</p>
-    </nz-card> -->
 
         <nz-divider></nz-divider>
 
         <!-- FORMULARIO -->
         <form nz-form [formGroup]="userForm" nzLayout="vertical">
 
-            <!-- MARCAS -->
-            <nz-form-item>
-                <nz-form-label>Marcas</nz-form-label>
-                <nz-form-control>
-                    <nz-select nzMode="multiple" nzPlaceHolder="Selecciona marcas" formControlName="brand_ids">
-                        <nz-option *ngFor="let brand of catBrands" [nzLabel]="brand.name" [nzValue]="brand.id">
-                        </nz-option>
-                    </nz-select>
-                </nz-form-control>
-            </nz-form-item>
-
-            <!-- ESTATUS -->
             <nz-form-item>
                 <nz-form-label>Estatus de la cuenta</nz-form-label>
                 <nz-form-control>
@@ -212,8 +141,39 @@
                 </nz-form-control>
             </nz-form-item>
 
-            <!-- ROL -->
-            <nz-form-item>
+            <nz-form-item *ngIf="userForm.get('account_status')?.value === 'Active'">
+                <nz-form-label nzRequired>Rol</nz-form-label>
+                <nz-form-control>
+                    <nz-select formControlName="role_id">
+                        <nz-option nzLabel="Administrador" [nzValue]="1"></nz-option>
+                        <nz-option nzLabel="Head Comercial" [nzValue]="2"></nz-option>
+                        <nz-option nzLabel="Proveedor" [nzValue]="3"></nz-option>
+                    </nz-select>
+                </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item *ngIf="
+    userForm.get('account_status')?.value === 'Active' &&
+    (userForm.get('role_id')?.value === 2 || 
+     userForm.get('role_id')?.value === 3)
+  ">
+
+                <nz-form-label nzRequired>
+                    Marcas
+                </nz-form-label>
+
+                <nz-form-control nzErrorTip="Debe seleccionar al menos una marca">
+                    <nz-select nzMode="multiple" nzPlaceHolder="Selecciona marcas" formControlName="brand_ids">
+
+                        <nz-option *ngFor="let brand of catBrands" [nzLabel]="brand.name" [nzValue]="brand.id">
+                        </nz-option>
+
+                    </nz-select>
+                </nz-form-control>
+
+            </nz-form-item>
+
+            <!-- <nz-form-item>
                 <nz-form-label>Rol</nz-form-label>
                 <nz-form-control>
                     <nz-select formControlName="role_id">
@@ -221,7 +181,40 @@
                         <nz-option nzLabel="Administrador" [nzValue]="1"></nz-option>
                     </nz-select>
                 </nz-form-control>
-            </nz-form-item>
+            </nz-form-item> -->
+
+            <!-- MARCAS -->
+            <!-- <nz-form-item>
+                <nz-form-label>Marcas</nz-form-label>
+                <nz-form-control>
+                    <nz-select nzMode="multiple" nzPlaceHolder="Selecciona marcas" formControlName="brand_ids">
+                        <nz-option *ngFor="let brand of catBrands" [nzLabel]="brand.name" [nzValue]="brand.id">
+                        </nz-option>
+                    </nz-select>
+                </nz-form-control>
+            </nz-form-item> -->
+
+            <!-- ESTATUS -->
+            <!-- <nz-form-item>
+                <nz-form-label>Estatus de la cuenta</nz-form-label>
+                <nz-form-control>
+                    <nz-radio-group formControlName="account_status">
+                        <label nz-radio nzValue="Active">Activo</label>
+                        <label nz-radio nzValue="Rejected">Rechazado</label>
+                    </nz-radio-group>
+                </nz-form-control>
+            </nz-form-item> -->
+
+            <!-- ROL -->
+            <!-- <nz-form-item>
+                <nz-form-label>Rol</nz-form-label>
+                <nz-form-control>
+                    <nz-select formControlName="role_id">
+                        <nz-option nzLabel="Usuario" [nzValue]="2"></nz-option>
+                        <nz-option nzLabel="Administrador" [nzValue]="1"></nz-option>
+                    </nz-select>
+                </nz-form-control>
+            </nz-form-item> -->
 
         </form>
     </div>

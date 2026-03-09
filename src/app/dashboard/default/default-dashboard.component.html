@@ -11,10 +11,10 @@
     <div class="col-md-6 col-lg-3">
         <nz-card>
             <div class="media align-items-center">
-                <nz-avatar [nzSize]="60" nzIcon="dollar" class="ant-avatar-blue"  ></nz-avatar>
+                <nz-avatar [nzSize]="50" nzIcon="download" class="ant-avatar-blue"  ></nz-avatar>
                 <div class="m-l-15">
-                    <h2 class="m-b-0">$23,523</h2>
-                    <p class="m-b-0 text-muted">Profit</p>
+                    <h2 class="m-b-0">23,523</h2>
+                    <p class="m-b-0 text-muted">Material descargado</p>
                 </div>
             </div>
         </nz-card>
@@ -22,10 +22,10 @@
     <div class="col-md-6 col-lg-3">
         <nz-card>
             <div class="media align-items-center">
-                <nz-avatar [nzSize]="50" nzIcon="line-chart" class="ant-avatar-cyan"  ></nz-avatar>
+                <nz-avatar [nzSize]="50" nzIcon="user" class="ant-avatar-cyan"  ></nz-avatar>
                 <div class="m-l-15">
-                    <h2 class="m-b-0">+ 17.21%</h2>
-                    <p class="m-b-0 text-muted">Growth</p>
+                    <h2 class="m-b-0">+ 17</h2>
+                    <p class="m-b-0 text-muted">Usuarios activos</p>
                 </div>
             </div>
         </nz-card>
@@ -33,10 +33,10 @@
     <div class="col-md-6 col-lg-3">
         <nz-card>
             <div class="media align-items-center">
-                <nz-avatar [nzSize]="50" nzIcon="profile" class="ant-avatar-gold"  ></nz-avatar>
+                <nz-avatar [nzSize]="50" nzIcon="upload" class="ant-avatar-gold"  ></nz-avatar>
                 <div class="m-l-15">
                     <h2 class="m-b-0">3,685</h2>
-                    <p class="m-b-0 text-muted">Orders</p>
+                    <p class="m-b-0 text-muted">Material subido</p>
                 </div>
             </div>
         </nz-card>
@@ -44,10 +44,10 @@
     <div class="col-md-6 col-lg-3">
         <nz-card>
             <div class="media align-items-center">
-                <nz-avatar [nzSize]="50" nzIcon="user" class="ant-avatar-purple"  ></nz-avatar>
+                <nz-avatar [nzSize]="50" nzIcon="share-alt" class="ant-avatar-purple"  ></nz-avatar>
                 <div class="m-l-15">
                     <h2 class="m-b-0">1,832</h2>
-                    <p class="m-b-0 text-muted">Customers</p>
+                    <p class="m-b-0 text-muted">Materiales compartidos</p>
                 </div>
             </div>
         </nz-card>
@@ -57,7 +57,7 @@
     <div class="col-md-12 col-lg-8">
         <nz-card>
             <div class="d-flex justify-content-between align-items-center">
-                <h5>Total Revenue</h5>
+                <h5>Total compartidos</h5>
                 <div>
                     <nz-radio-group [(ngModel)]="revenueChartFormat">
                         <label nz-radio-button nzValue="revenueMonth">Month</label>
@@ -66,26 +66,26 @@
                 </div>
             </div>
             <div class="m-t-50" style="height: 330px">
-                <!-- <canvas baseChart
+                <canvas baseChart
                     [data]="revenueChartDataObj"
                     [options]="revenueChartOptions"
                     [type]="revenueChartType">
-                </canvas> -->
-                <canvas
+                </canvas>
+                <!-- <canvas
   baseChart
   [type]="'line'"
   [data]="{
     labels: ['A','B','C'],
     datasets: [{ data: [10,20,30], label: 'OK' }]
   }">
-</canvas>
+</canvas> -->
             </div>
             
         </nz-card>
     </div>
     <div class="col-md-12 col-lg-4">
         <nz-card>
-            <h5 class="m-b-0">Customers</h5>
+            <h5 class="m-b-0">Descargas por marca</h5>
             <div class="m-v-60 text-center" style="height: 200px">
                 <canvas baseChart
                     [data]="customersChartDataObj"
@@ -100,7 +100,7 @@
                             <nz-badge nzStatus="default" [nzColor]="cyan"></nz-badge>
                             <div class="m-l-5">
                                 <h4 class="m-b-0">350</h4>
-                                <p class="m-b-0 muted">New</p>
+                                <p class="m-b-0 muted">Nupec</p>
                             </div>    
                         </div>
                     </div>
@@ -111,7 +111,7 @@
                             <nz-badge nzStatus="default" [nzColor]="purple"></nz-badge>
                             <div class="m-l-5">
                                 <h4 class="m-b-0">450</h4>
-                                <p class="m-b-0 muted">Returning</p>
+                                <p class="m-b-0 muted">Nucan</p>
                             </div>    
                         </div>
                     </div>
@@ -119,10 +119,10 @@
                 <div class="col-4">
                     <div class="d-flex justify-content-center">
                         <div class="media align-items-center">
-                            <nz-badge nzStatus="default" [nzColor]="gold"></nz-badge>
+                            <nz-badge nzStatus="default" [nzColor]="black"></nz-badge>
                             <div class="m-l-5">
                                 <h4 class="m-b-0">100</h4>
-                                <p class="m-b-0 muted">Others</p>
+                                <p class="m-b-0 muted">Galope</p>
                             </div>    
                         </div>
                     </div>
@@ -136,11 +136,11 @@
         <nz-card>
             <div class="d-flex justify-content-between align-items-center">
                 <div>
-                    <h2 class="m-b-0">$17,267</h2>
-                    <p class="m-b-0 text-muted">Avg.Profit</p>
+                    <h5 class="m-b-0">Material por mes</h5>
+                    <!-- <p class="m-b-0 text-muted">Avg.Profit</p> -->
                 </div>
                 <div>
-                    <nz-tag [nzColor]="'cyan'">+ 5.7%</nz-tag>
+                    <!-- <nz-tag [nzColor]="'cyan'">+ 5.7%</nz-tag> -->
                 </div>
             </div>
             <div class="m-t-50" style="height: 360px">
@@ -155,7 +155,7 @@
     <div class="col-md-12 col-lg-8">
         <nz-card>
             <div class="d-flex justify-content-between align-items-center">
-                <h5>Top Product</h5>
+                <h5>Top materiales descargados</h5>
                 <div>
                     <a nz-button nzType="default" nzSize="small">View All</a>
                 </div>
@@ -164,22 +164,22 @@
                 <nz-table #productTable [nzData]="productsList" [nzShowPagination]="false" class="no-border-last">
                     <thead>
                         <tr>
-                            <th>Product</th>
-                            <th>Sales</th>
-                            <th>Earning</th>
-                            <th>Stock Left</th>
+                            <th>Nombre</th>
+                            <th>Tipo</th>
+                            <th>Marca</th>
+                            <th>Descargas</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr *ngFor="let item of productTable.data">
                             <td>
                                 <div class="d-flex align-items-center">
-                                    <nz-avatar nzShape="square"  nzIcon="picture" [nzSrc]="item.avatar"></nz-avatar>
+                                <nz-avatar [nzSize]="60" [nzIcon]="item.avatar"></nz-avatar>
                                     <span class="m-l-10">{{item.name}}</span>
                                 </div>
                             </td>
                             <td>{{item.sales}}</td>
-                            <td>${{item.earn | number:'3.2-5'}}</td>
+                            <td>{{item.earn }}</td>
                             <td>
                                 <div class="d-flex align-items-center">
                                     <div class="w-90 p-r-10">
@@ -201,7 +201,7 @@
     <div class="col-md-12 col-lg-4">
         <nz-card>
             <div class="d-flex justify-content-between align-items-center">
-                <h5 class="m-b-0">Latest Upload</h5>
+                <h5 class="m-b-0">Último subido</h5>
                 <div>
                     <a nz-button nzType="default" nzSize="small">View All</a>
                 </div>
@@ -226,16 +226,16 @@
                                 <ul nz-menu>
                                     <li nz-menu-item>
                                         <i nz-icon nzType="eye" theme="outline"></i>
-                                        <span class="m-l-5">View</span>
+                                        <span class="m-l-5">Ver en carpeta</span>
                                     </li>
                                     <li nz-menu-item>
                                         <i nz-icon nzType="download" theme="outline"></i>
-                                        <span class="m-l-5">Download</span>
+                                        <span class="m-l-5">Descargar</span>
                                     </li>
-                                    <li nz-menu-item>
+                                    <!-- <li nz-menu-item>
                                         <i nz-icon nzType="delete" theme="outline"></i>
                                         <span class="m-l-5">Remove</span>
-                                    </li>
+                                    </li> -->
                                 </ul>
                             </nz-dropdown-menu>
                         </div>
@@ -247,7 +247,7 @@
     <div class="col-md-12 col-lg-4">
         <nz-card>
             <div class="d-flex justify-content-between align-items-center">
-                <h5 class="m-b-0">Activity</h5>
+                <h5 class="m-b-0">Actividad</h5>
                 <div>
                     <a nz-button nzType="default" nzSize="small">View All</a>
                 </div>
@@ -261,7 +261,7 @@
                                     <h5 class="m-b-5">{{item.name}}</h5>
                                     <p class="m-b-0">
                                         <span class="font-weight-semibold">{{item.action}} </span> 
-                                        <span class="m-l-5"> {{item.target}}</span>
+                                        <!-- <span class="m-l-5"> {{item.target}}</span> -->
                                     </p>
                                     <span class="text-muted font-size-13">
                                         <i nz-icon nzType="clock-circle" theme="outline"></i>

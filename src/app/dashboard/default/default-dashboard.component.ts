@@ -17,6 +17,7 @@ export class DefaultDashboardComponent {
     purple = this.themeColors.purple;
     purpleLight = this.themeColors.purpleLight;
     red = this.themeColors.red;
+    black = this.themeColors.black;
 
     taskListIndex: number = 0;
 
@@ -103,10 +104,10 @@ export class DefaultDashboardComponent {
     revenueChartType = 'line';
 
     customersChartDataObj: any = {
-        labels: ['New', 'Returning', 'Others'],
+        labels: ['Nupec', 'Nucan', 'Galope'],
         datasets: [{
             data: [350, 450, 100],
-            backgroundColor: [this.cyan, this.purple, this.gold]
+            backgroundColor: [this.cyan, this.purple, this.black]
         }]
     };
     customersChartOptions: any = {
@@ -161,7 +162,7 @@ export class DefaultDashboardComponent {
         datasets: [
             {
                 data: [38, 38, 30, 19, 56, 55, 31],
-                label: 'Series A',
+                label: 'Descargas',
                 categoryPercentage: 0.35,
                 barPercentage: 0.3,
                 backgroundColor: this.blue,
@@ -169,7 +170,7 @@ export class DefaultDashboardComponent {
             },
             {
                 data: [55, 69, 90, 81, 86, 27, 77],
-                label: 'Series B',
+                label: 'Subidos',
                 categoryPercentage: 0.35,
                 barPercentage: 0.3,
                 backgroundColor: this.blueLight,
@@ -182,38 +183,38 @@ export class DefaultDashboardComponent {
 
     productsList = [
         {
-            name: 'Gray Sofa',
-            avatar: 'assets/images/others/thumb-9.jpg',
-            earn: 1912,
-            sales: 81,
+            name: 'Logo Nupec',
+            avatar: 'file-pdf',
+            earn: 'Nupec',
+            sales: 'PDF',
             stock: 82,
         },
         {
-            name: 'Beat Headphone',
-            avatar: 'assets/images/others/thumb-10.jpg',
-            earn: 1377,
-            sales: 26,
+            name: 'Banner Nucan',
+            avatar: 'file-image',
+            earn: 'Nucan',
+            sales: 'PNG',
             stock: 61
         },
         {
-            name: 'Wooden Rhino',
-            avatar: 'assets/images/others/thumb-11.jpg',
-            earn: 9212,
-            sales: 71,
+            name: 'Video Galope',
+            avatar: 'video-camera',
+            earn: 'Galope',
+            sales: 'MP4',
             stock: 23,
         },
         {
-            name: 'Red Chair',
-            avatar: 'assets/images/others/thumb-12.jpg',
-            earn: 1298,
-            sales: 79,
+            name: 'Anuncio Pecuario',
+            avatar: 'video-camera',
+            earn: 'Pecuario',
+            sales: 'MP4',
             stock: 54,
         },
         {
-            name: 'Wristband',
-            avatar: 'assets/images/others/thumb-13.jpg',
-            earn: 7376,
-            sales: 60,
+            name: 'Mockup Galope',
+            avatar: 'file-pdf',
+            earn: 'Galope',
+            sales: 'PDF',
             stock: 76,
         }
     ]    
@@ -221,37 +222,37 @@ export class DefaultDashboardComponent {
     fileList = [
         {
             icon: "file-word",
-            name: "Documentation.doc",
+            name: "Documentación.doc",
             color: this.blue,
             size: "1.2MB"
         },
         {
             icon: "file-excel",
-            name: "Expensess.xls",
+            name: "Documentación.xls",
             color: this.cyan,
             size: "518KB"
         },
         {
             icon: "file-text",
-            name: "Receipt.txt",
+            name: "Lista.txt",
             color: this.purple,
             size: "355KB"
         },
         {
             icon: "file-word",
-            name: "Project Requirement.doc",
+            name: "Proyecto.doc",
             color: this.blue,
             size: "1.6MB"
         },
         {
             icon: "file-pdf",
-            name: "App Flow.pdf",
+            name: "Documento.pdf",
             color: this.red,
             size: "19.8MB"
         },
         {
             icon: "file-ppt",
-            name: "Presentation.ppt",
+            name: "Presentación.ppt",
             color: this.gold,
             size: "2.7MB"
         },
@@ -262,15 +263,15 @@ export class DefaultDashboardComponent {
             name: "Virgil Gonzales",
             avatar: this.blue,
             date: "10:44 PM",
-            action: "Complete task",
-            target: "Prototype Design",
+            action: "Subida de material",
+            // target: "Prototype Design",
             actionType: "completed"
         },
         {
             name: "Lilian Stone",
             avatar: this.cyan,
             date: "8:34 PM",
-            action: "Attached file",
+            action: "Descarga de material",
             target: "Mockup Zip",
             actionType: "upload"
         },
@@ -278,15 +279,15 @@ export class DefaultDashboardComponent {
             name: "Erin Gonzales",
             avatar: this.gold,
             date: "8:34 PM",
-            action: "Commented",
-            target: "'This is not our work!'",
+            action: "Compartió material",
+            // target: "'This is not our work!'",
             actionType: "comment"
         },
         {
             name: "Riley Newman",
             avatar: this.blue,
             date: "8:34 PM",
-            action: "Commented",
+            action: "Eliminación de usuario",
             target: "'Hi, please done this before tommorow'",
             actionType: "comment"
         },
@@ -294,7 +295,7 @@ export class DefaultDashboardComponent {
             name: "Pamela Wanda",
             avatar: this.red,
             date: "8:34 PM",
-            action: "Removed",
+            action: "Compartió material",
             target: "a file",
             actionType: "removed"
         },
@@ -302,7 +303,7 @@ export class DefaultDashboardComponent {
             name: "Marshall Nichols",
             avatar: this.purple,
             date: "5:21 PM",
-            action: "Create",
+            action: "Subida de material",
             target: "this project",
             actionType: "created"
         }
