@@ -1,5 +1,5 @@
 {
-  "name": "enlink",
+  "name": "numarque",
   "version": "8.0.0",
   "scripts": {
     "ng": "ng",
@@ -11,7 +11,7 @@
     "e2e": "ng e2e",
     "build-prod": "node --max_old_space_size=8000 ./node_modules/@angular/cli/bin/ng build --configuration production",
     "build-prod-state": "node --max_old_space_size=8000 ./node_modules/@angular/cli/bin/ng build --configuration production --stats-json",
-    "bundle-report": "webpack-bundle-analyzer dist/enlink/stats.json"
+    "bundle-report": "webpack-bundle-analyzer dist/numarque/stats.json"
   },
   "private": true,
   "dependencies": {

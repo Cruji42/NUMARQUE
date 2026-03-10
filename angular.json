@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "enlink": {
+    "numarque": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -14,7 +14,7 @@
           "builder": "@angular-devkit/build-angular:application",
           "options": {
             "outputPath": {
-              "base": "dist/enlink"
+              "base": "dist/numarque"
             },
             "index": "src/index.html",
             "polyfills": [
@@ -75,18 +75,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "buildTarget": "enlink:build"
+            "buildTarget": "numarque:build"
           },
           "configurations": {
             "production": {
-              "buildTarget": "enlink:build:production"
+              "buildTarget": "numarque:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "buildTarget": "enlink:build"
+            "buildTarget": "numarque:build"
           }
         },
         "test": {
@@ -109,13 +109,13 @@
         "e2e": {
           "builder": "@cypress/schematic:cypress",
           "options": {
-            "devServerTarget": "enlink:serve",
+            "devServerTarget": "numarque:serve",
             "watch": true,
             "headless": false
           },
           "configurations": {
             "production": {
-              "devServerTarget": "enlink:serve:production"
+              "devServerTarget": "numarque:serve:production"
             }
           }
         }

@@ -23,10 +23,10 @@ jobs:
         run: npm ci
 
       - name: Build producción
-        run: npx ng build enlink --configuration production --base-href /NUMARQUE/
+        run: npx ng build numarque --configuration production --base-href /NUMARQUE/
 
       - name: Deploy a GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist/enlink/browser/
+          publish_dir: ./dist/numarque/browser/
