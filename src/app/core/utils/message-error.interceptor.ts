@@ -14,16 +14,16 @@ import { ErrorHandlingService } from './error-handling.service';
 export class MessageErrorInterceptor implements HttpInterceptor {
 
   constructor(private errorService: ErrorHandlingService) {
-     console.log('🔥 INTERCEPTOR INSTANCIADO');
+    //  console.log('🔥 INTERCEPTOR INSTANCIADO');
   }
 
   intercept(
     req: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
-     console.log('➡️ Interceptando request:', req);
+    //  console.log('➡️ Interceptando request:', req);
 
-     console.log('Interceptor ejecutándose'); // 👈 agrega esto
+    //  console.log('Interceptor ejecutándose'); // 👈 agrega esto
 
     return next.handle(req).pipe(
       catchError((error: HttpErrorResponse) => {

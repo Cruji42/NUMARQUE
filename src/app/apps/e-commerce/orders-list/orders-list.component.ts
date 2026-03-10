@@ -49,6 +49,10 @@ export class OrdersListComponent implements OnInit {
     @ViewChild('tplContent', { static: true }) tplContent!: TemplateRef<any>;
     @ViewChild('tplFooter', { static: true }) tplFooter!: TemplateRef<any>;
 
+    constructor(private tableSvc: TableService, private service: UsersService, private brandService: BrandsService, private modal: NzModalService, private viewContainerRef: ViewContainerRef, public fb: FormBuilder) {
+
+    }
+
     roleList = [
         { text: 'Administrador', value: '1' },
         { text: 'Vendedor', value: '2' },
@@ -163,16 +167,11 @@ export class OrdersListComponent implements OnInit {
         });
     }
 
-
-    constructor(private tableSvc: TableService, private service: UsersService, private brandService: BrandsService, private modal: NzModalService, private viewContainerRef: ViewContainerRef, public fb: FormBuilder) {
-
-    }
-
     getUsersData() {
         // Use the UsersService to fetch user data
         this.service.getUsers().subscribe({
             next: (users) => {
-                console.log('Fetched users:', users);
+                // console.log('Fetched users:', users);
                 this.displayData = users;
                 this.userData = users;
 
@@ -187,7 +186,7 @@ export class OrdersListComponent implements OnInit {
         // Use the UsersService to fetch user data
         this.brandService.getBrands().subscribe({
             next: (brands) => {
-                console.log('Fetched users:', brands);
+                // console.log('Fetched users:', brands);
                 this.catBrands = brands
 
             },

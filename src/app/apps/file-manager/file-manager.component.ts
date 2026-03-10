@@ -1,4 +1,4 @@
-import { Component, TemplateRef } from '@angular/core';
+import { Component, TemplateRef, ViewChild } from '@angular/core';
 import { ThemeConstantService } from '../../shared/services/theme-constant.service';
 import { AppsService } from '../../shared/services/apps.service';
 import { NzContextMenuService, NzDropdownMenuComponent } from 'ng-zorro-antd/dropdown'
@@ -7,6 +7,12 @@ import { FileNode } from '../../shared/interfaces/files.interfaces';
 import { FilesService } from '../../core/service/files.service';
 import { UsersService } from '../../core/service/users.service';
 import { error } from 'protractor';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { BrandsService } from 'src/app/core/service/brands.service';
+import { NzModalRef } from 'ng-zorro-antd/modal';
+
+
 
 @Component({
     templateUrl: './file-manager.component.html',
@@ -18,6 +24,12 @@ export class FileManagerComponent {
 
     // files : Files[];
     // user: any;
+
+    uploadForm!: FormGroup;
+    file!: File;
+    catBrands: any[] = [];
+
+    modalRef!: NzModalRef;
 
 
     rootTree: FileNode[] = [];        // Todo el árbol
@@ -37,6 +49,11 @@ export class FileManagerComponent {
     colorGold = this.themeColors.gold;
     colorVolcano = this.themeColors.volcano;
     colorPurple = this.themeColors.purple;
+    // file!: File;
+
+    @ViewChild('tplTitle') tplTitle!: TemplateRef<any>;
+    @ViewChild('tplContent') tplContent!: TemplateRef<any>;
+    @ViewChild('tplFooter') tplFooter!: TemplateRef<any>
 
 
 
@@ -45,21 +62,43 @@ export class FileManagerComponent {
         private fileManagerSvc: AppsService,
         private nzContextMenuService: NzContextMenuService,
         private service: FilesService,
-        private serviceUser: UsersService
+        private serviceUser: UsersService,
+        private fb: FormBuilder,
+        private modal: NzModalService,
+        private brandService: BrandsService
     ) {
     }
 
     ngOnInit(): void {
         this.getDirs()
+        this.getBrandData();
+
+        this.uploadForm = this.fb.group({
+
+            title: [''],
+            description: [''],
+            tags: [[]],
+            path: ['/'],
+            brand_id: [],
+            category_id: [1]
+
+        });
 
     }
 
-    getDirs() {
+    getDirs(restorePath: boolean = false) {
+
         this.service.getDirMenu().subscribe({
             next: (data) => {
+
                 this.rootTree = this.decorateNodes(data[0].sublevel);
-                this.currentNodes = this.rootTree;
-                console.log(this.currentNodes)
+
+                if (restorePath) {
+                    this.restoreNavigation();
+                } else {
+                    this.currentNodes = this.rootTree;
+                }
+
             },
             error: (err) => {
                 console.log(err)
@@ -130,27 +169,27 @@ export class FileManagerComponent {
         }));
     }
 
-    downloadFile(){
+    downloadFile() {
         console.log(this.selectedItem)
-        this.service.downloadFile(this.selectedItem.id).subscribe( {
-            next: (url:any) =>{
+        this.service.downloadFile(this.selectedItem.id).subscribe({
+            next: (url: any) => {
                 console.log(url)
             }, error: (err: any) => {
                 console.log(err)
             }
         })
-       
+
     }
     changeView() {
         this.listView = !this.listView;
     }
 
-        contextMenu(event: MouseEvent, menu: NzDropdownMenuComponent, item: any): void {
+    contextMenu(event: MouseEvent, menu: NzDropdownMenuComponent, item: any): void {
         event.preventDefault();
 
         this.selectedItem = item;   // 🔥 guardamos TODO el objeto
         this.nzContextMenuService.create(event, menu);
-        }
+    }
 
     selectFile(selected: string) {
         this.selectedFile = selected;
@@ -171,5 +210,138 @@ export class FileManagerComponent {
 
     navToggler() {
         this.isNavOpen = !this.isNavOpen;
+    }
+
+    beforeUpload = (file: File): boolean => {
+
+        this.file = file;
+
+        // opcional: autocompletar título si está vacío
+        if (!this.uploadForm.value.title) {
+            this.uploadForm.patchValue({
+                title: file.name
+            });
+        }
+
+        return false;
+    };
+    enviarArchivo(): void {
+
+        if (!this.file) {
+            console.log('No hay archivo seleccionado');
+            return;
+        }
+
+        const formData = new FormData();
+
+        console.log('Archivo seleccionado:', this.file);
+        console.log('Datos del formulario:', this.uploadForm.value);
+
+        formData.append('file', this.file);
+        formData.append('title', this.uploadForm.value.title);
+        formData.append('description', this.uploadForm.value.description);
+        formData.append('tags', this.uploadForm.value.tags);
+        formData.append('path', this.uploadForm.value.path);
+        formData.append('category_id', this.uploadForm.value.category_id);
+        formData.append('brand_id', this.uploadForm.value.brand_id);
+
+        console.log('Datos enviados:', formData);
+
+        this.service.uploadFile(formData)
+            .subscribe({
+                next: (resp: any) => {
+
+                    console.log('Archivo subido', resp);
+
+                    this.modalRef.close();   // cerrar modal
+
+                    this.getDirs(true);      // recargar árbol y mantener ruta
+
+                },
+                error: (error: any) => {
+                    console.error('Error', error);
+                }
+            });
+
+    }
+
+
+
+    openUploadModal(): void {
+
+
+        const path = this.buildCurrentPath();
+
+        this.uploadForm.patchValue({
+            path: path
+        });
+
+        this.modalRef = this.modal.create({
+            nzTitle: this.tplTitle,
+            nzContent: this.tplContent,
+            nzFooter: this.tplFooter,
+            nzWidth: 600,
+            nzMaskClosable: false
+        });
+
+
+    }
+
+    preventOpen(open: boolean): void {
+        if (open) {
+            setTimeout(() => {
+                const dropdown = document.querySelector('.ant-select-dropdown') as HTMLElement;
+                if (dropdown) {
+                    dropdown.style.display = 'none';
+                }
+            });
+        }
+    }
+
+    getBrandData() {
+        // Use the UsersService to fetch user data
+        this.brandService.getBrands().subscribe({
+            next: (brands) => {
+                // console.log('Fetched users:', brands);
+                this.catBrands = brands
+
+            },
+            error: (error) => {
+                console.error('Error fetching users:', error);
+            }
+        })
+    }
+
+
+    buildCurrentPath(): string {
+
+        if (this.breadcrumb.length === 0) {
+            return '/';
+        }
+
+        return this.breadcrumb
+            .map(folder => folder.name)
+            .join('/');
+    }
+
+    restoreNavigation(): void {
+
+        if (this.breadcrumb.length === 0) {
+            this.currentNodes = this.rootTree;
+            return;
+        }
+
+        let nodes = this.rootTree;
+
+        for (const folder of this.breadcrumb) {
+
+            const found = nodes.find(n => n.name === folder.name);
+
+            if (found) {
+                nodes = found.sublevel as FileNode[];
+            }
+        }
+
+        this.currentNodes = nodes;
     }
 }

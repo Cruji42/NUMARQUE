@@ -26,14 +26,26 @@ export class EndPointFilesService {
         return headers;
     }
 
-    
+    configHeadersFilea() {
+        const token = localStorage.getItem('token');
+        const headers = {
+            'Authorization': `Bearer ${token}`
+        };
+        return headers;
+    }
 
-   getDirMenu(id: number): Observable<any> {
+
+
+    getDirMenu(id: number): Observable<any> {
         return this.http.get(`${this.apiUrl}/contents/menu/${id}`, { headers: this.configHeaders() });
     }
 
     downloadFile(id: number): Observable<any> {
-        return this.http.get(`${this.apiUrl}files/${id}/download`, { headers: this.configHeaders()})
+        return this.http.get(`${this.apiUrl}/files/${id}/download`, { headers: this.configHeaders() })
+    }
+
+    uploadFile(formData: FormData): Observable<any> {
+        return this.http.post(`${this.apiUrl}/files/upload`, formData, { headers: this.configHeadersFilea() })
     }
 
 }

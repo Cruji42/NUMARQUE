@@ -5,17 +5,19 @@
                 <ul nz-menu [nzMode]="'inline'">
                     <li nz-menu-item>
                         <i class="text-primary" nz-icon nzType="folder-open" theme="outline"></i>
-                        <span>My Files</span>
+                        <span>Mis carpetas</span>
                     </li>
                     <!-- <li nz-menu-item>
                         <i class="text-primary" nz-icon nzType="clock-circle" theme="outline"></i>
                         <span>Recent</span>
-                    </li> -->
-                  <!--   <li nz-menu-item>
+                    </li> 
+                   <li nz-menu-item>
+                  <li nz-menu-item>
                         <i class="text-primary" nz-icon nzType="share-alt" theme="outline"></i>
                         <span>Shared with me</span>
-                    </li> -->
-                    <!-- <li nz-menu-item>
+                    </li> 
+                    </li> 
+                    <li nz-menu-item>
                         <i class="text-primary" nz-icon nzType="star" theme="outline"></i>
                         <span>Favorite</span>
                     </li> -->
@@ -24,8 +26,9 @@
                         <span>Trash</span>
                     </li> -->
                 </ul>
-            </div>
-<!--             <div class="m-b-30 m-h-25">
+            </div> 
+            <!-- <div class="m-b-30 m-h-25">
+            <div class="m-b-30 m-h-25">
                 <div class="d-flex justify-content-between">
                     <span class="text-gray">Free Space</span>
                     <span class="text-gray">30%</span>
@@ -37,6 +40,7 @@
                         <span class="m-l-5">Upgrade</span>
                     </button>
                 </div>
+            </div> 
             </div> -->
         </div>
     </div>
@@ -53,11 +57,17 @@
             <div class="file-manager-tools">
                 <ul class="list-inline m-b-0">
                     <li class="list-inline-item">
-                        <nz-upload nzAction="https://jsonplaceholder.typicode.com/posts/">
-                            <a class="text-dark" nz-tooltip nzTooltipPlacement="bottom" nzTooltipTitle="Add Files">
+           
+                            <a class="text-dark" nz-tooltip nzTooltipPlacement="bottom" nzTooltipTitle="Agregar archivo"
+                                (click)="openUploadModal()">
                                 <i nz-icon nzType="file-add" theme="outline"></i>
                             </a>
-                        </nz-upload>
+                 
+                        <!-- <nz-upload nzName="file" [nzShowUploadList]="true" [nzBeforeUpload]="beforeUpload">
+                            <a class="text-dark" nz-tooltip nzTooltipPlacement="bottom" nzTooltipTitle="Agregar archivo">
+                                <i nz-icon nzType="file-add" theme="outline"></i>
+                            </a>
+                        </nz-upload> -->
                     </li>
                     <li class="list-inline-item">
                         <a *ngIf="!listView" class="text-dark" nz-tooltip nzTooltipPlacement="bottom"
@@ -69,11 +79,11 @@
                             <i nz-icon nzType="appstore" theme="outline"></i>
                         </a>
                     </li>
-                    <li class="list-inline-item">
+                    <!-- <li class="list-inline-item">
                         <a class="text-dark" nz-tooltip nzTooltipPlacement="bottom" nzTooltipTitle="Setting">
                             <i nz-icon nzType="setting" theme="outline"></i>
                         </a>
-                    </li>
+                    </li> -->
                 </ul>
             </div>
         </div>
@@ -311,3 +321,125 @@
         </div>
     </div>
 </div>
+
+
+<ng-template #tplTitle>
+    <span>Subir archivo</span>
+</ng-template>
+
+
+<ng-template #tplContent>
+
+    <form nz-form nzLayout="vertical" [formGroup]="uploadForm">
+
+        <!-- ARCHIVO -->
+        <nz-form-item>
+            <nz-form-label nzRequired>Archivo</nz-form-label>
+
+            <nz-form-control>
+
+                <nz-upload nzName="file" nzListType="text" [nzBeforeUpload]="beforeUpload" [nzShowUploadList]="true">
+
+                    <button nz-button>
+                        <span nz-icon nzType="upload"></span>
+                        Seleccionar archivo
+                    </button>
+
+                </nz-upload>
+
+            </nz-form-control>
+        </nz-form-item>
+
+
+        <!-- TITULO -->
+        <nz-form-item>
+            <nz-form-label nzRequired>Título</nz-form-label>
+            <nz-form-control>
+                <input nz-input formControlName="title" placeholder="Título del archivo">
+            </nz-form-control>
+        </nz-form-item>
+
+
+        <!-- DESCRIPCIÓN -->
+        <nz-form-item>
+            <nz-form-label>Descripción</nz-form-label>
+            <nz-form-control>
+                <textarea nz-input rows="3" formControlName="description" placeholder="Descripción del archivo">
+                </textarea>
+            </nz-form-control>
+        </nz-form-item>
+
+
+        <!-- TAGS -->
+        <nz-form-item>
+            <nz-form-label>Tags</nz-form-label>
+
+            <nz-form-control>
+                <nz-select nzMode="tags" [nzTokenSeparators]="[',']" [nzNotFoundContent]="null"
+                    [nzAutoClearSearchValue]="true" (nzOpenChange)="preventOpen($event)" formControlName="tags">
+                </nz-select>
+            </nz-form-control>
+        </nz-form-item>
+
+
+        <!-- PATH -->
+        <nz-form-item>
+            <nz-form-label>Path</nz-form-label>
+            <nz-form-control>
+                <input nz-input formControlName="path">
+            </nz-form-control>
+        </nz-form-item>
+
+
+        <!-- CATEGORY -->
+        <!-- <nz-form-item>
+            <nz-form-label>Categoría</nz-form-label>
+            <nz-form-control>
+
+                <nz-select formControlName="category_id">
+
+                    <nz-option nzLabel="General" [nzValue]="1"></nz-option>
+                    <nz-option nzLabel="Documentos" [nzValue]="2"></nz-option>
+
+                </nz-select>
+
+            </nz-form-control>
+        </nz-form-item> -->
+
+
+        <!-- BRAND -->
+        <nz-form-item>
+
+            <nz-form-label nzRequired>
+                Marcas
+            </nz-form-label>
+
+            <nz-form-control nzErrorTip="Debe seleccionar  una marca">
+                <nz-select  nzPlaceHolder="Selecciona marcas" formControlName="brand_id">
+
+                    <nz-option *ngFor="let brand of catBrands" [nzLabel]="brand.name" [nzValue]="brand.id">
+                    </nz-option>
+
+                </nz-select>
+            </nz-form-control>
+
+        </nz-form-item>
+
+    </form>
+
+</ng-template>
+
+
+
+<ng-template #tplFooter>
+
+    <button nz-button (click)="closeModal()">
+        Cancelar
+    </button>
+
+    <button nz-button nzType="primary" [disabled]="!uploadForm.valid" (click)="enviarArchivo()" [nzLoading]="isConfirmLoading">
+
+        Subir archivo
+    </button>
+
+</ng-template>

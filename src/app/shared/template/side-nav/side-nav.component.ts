@@ -42,7 +42,7 @@ export class SideNavComponent {
 
         this.usersService.getUser().subscribe({
             next: (user: any) => {
-                console.log('Fetched users:', user);
+                // console.log('Fetched users:', user);
                 // this.form.patchValue({
                 //     ...user,
                 //     user_id: user.id
