@@ -7,7 +7,7 @@ export const guestGuard: CanActivateFn = () => {
   const router = inject(Router);
 
   if (auth.isAuthenticated()) {
-    return router.parseUrl('/dashboard/default');
+    //return auth.user().role_id == 1 ? router.parseUrl('/dashboard/default'): router.parseUrl('/apps/filemanager') 
   }
 
   return true;

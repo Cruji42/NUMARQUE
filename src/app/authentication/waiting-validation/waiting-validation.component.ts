@@ -23,7 +23,7 @@ import { AuthService } from '../../core/service/auth-service';
                                         Por favor espera a que un administrador active tu cuenta.
                                     </p>
                                     <div class="d-flex justify-content-center">
-                                        <nz-spin nzSize="large" [nzTip]="'Verificando estado...'"></nz-spin>
+                                        <nz-spin nzSize="large"></nz-spin>
                                     </div>
                                     <div class="mt-3">
                                         <small class="text-muted">
