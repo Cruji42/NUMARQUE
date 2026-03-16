@@ -1,12 +1,15 @@
 import { Component } from '@angular/core'
 import { ThemeConstantService } from '../../shared/services/theme-constant.service';
+import { UsersService } from 'src/app/core/service/users.service';
 
 @Component({
     templateUrl: './default-dashboard.component.html',
-    standalone: false
+    standalone: false,
+    styles: ['default-dashboard.component.scss']
 })
 
 export class DefaultDashboardComponent {
+
 
     themeColors = this.colorConfig.get().colors;
     blue = this.themeColors.blue;
@@ -21,19 +24,52 @@ export class DefaultDashboardComponent {
 
     taskListIndex: number = 0;
 
-    constructor( private colorConfig:ThemeConstantService ) {}
+    user: any;
+    today: Date = new Date();
+
+    constructor(private colorConfig: ThemeConstantService, private userService: UsersService) {
+        // this.user = this.userService.decodeToken();
+        // console.log(this.user)
+    }
+
+    ngOnInit() {
+        this.getUserData()
+        console.log(this.user);
+    }
+
+
+    getUserData() {
+
+        this.userService.getUser().subscribe({
+            next: (user: any) => {
+                // console.log('Fetched users:', user);
+                // this.form.patchValue({
+                //     ...user,
+                //     user_id: user.id
+                // })
+                // this.profile_picture_url = user.profile_picture_url
+                this.user = user
+                console.log(this.user)
+                // this.brands_data = user.brands
+
+            },
+            error: (error) => {
+                console.error('Error fetching users:', error);
+            }
+        })
+    }
 
     revenueChartFormat: string = 'revenueMonth';
 
     testData = {
-  labels: ['A', 'B', 'C'],
-  datasets: [
-    {
-      data: [10, 20, 30],
-      label: 'Test'
-    }
-  ]
-};
+        labels: ['A', 'B', 'C'],
+        datasets: [
+            {
+                data: [10, 20, 30],
+                label: 'Test'
+            }
+        ]
+    };
 
 
     revenueChartDataObj: any = {
@@ -92,7 +128,7 @@ export class DefaultDashboardComponent {
         }
     };
     revenueChartColors: Array<any> = [
-        { 
+        {
             backgroundColor: this.themeColors.transparent,
             borderColor: this.blue,
             pointBackgroundColor: this.blue,
@@ -217,7 +253,7 @@ export class DefaultDashboardComponent {
             sales: 'PDF',
             stock: 76,
         }
-    ]    
+    ]
 
     fileList = [
         {
@@ -307,7 +343,7 @@ export class DefaultDashboardComponent {
             target: "this project",
             actionType: "created"
         }
-    ]    
+    ]
 
     taskListToday = [
         {
@@ -336,7 +372,7 @@ export class DefaultDashboardComponent {
             checked: false
         }
     ];
-    
+
     taskListWeek = [
         {
             title: "Verify connectivity",

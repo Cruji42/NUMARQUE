@@ -5,13 +5,44 @@
     [data]="testData">
   </canvas>
 </div> -->
+<div class="justify-content-start my-3 ">
+    <h1> <b>Dashboard</b></h1>
+    <h5 class="text-mutted">Bienvenido, {{user?.name}} - {{today | date:'EEEE d \'de\' MMMM y':'':'es-MX'}}</h5>
+</div>
 
 
 <div class="row">
+    <div class="col-12">
+        <nz-card class="bg-news">
+            <div class="d-flex justify-content-between align-items-center">
+
+                <div>
+                    <h6 class="bl">Novedades de la semana</h6>
+                    <div class="m-l-15">
+                        <h2 class="m-b-0 text-white"><b>Kit de Campaña Q2 2026 de Nupec disponible</b></h2>
+                        <p class="m-b-0 bl-mutted">Banners, piezas ATL, Materiales BTL actualizados</p>
+                    </div>
+                </div>
+
+                <div>
+                    <button class="btn-news">
+                        Ver material →
+                    </button>
+                </div>
+
+            </div>
+        </nz-card>
+    </div>
+</div>
+
+
+
+<div class="row">
+
     <div class="col-md-6 col-lg-3">
         <nz-card>
             <div class="media align-items-center">
-                <nz-avatar [nzSize]="50" nzIcon="download" class="ant-avatar-blue"  ></nz-avatar>
+                <nz-avatar [nzSize]="50" nzIcon="download" class="ant-avatar-blue"></nz-avatar>
                 <div class="m-l-15">
                     <h2 class="m-b-0">23,523</h2>
                     <p class="m-b-0 text-muted">Material descargado</p>
@@ -22,7 +53,7 @@
     <div class="col-md-6 col-lg-3">
         <nz-card>
             <div class="media align-items-center">
-                <nz-avatar [nzSize]="50" nzIcon="user" class="ant-avatar-cyan"  ></nz-avatar>
+                <nz-avatar [nzSize]="50" nzIcon="user" class="ant-avatar-cyan"></nz-avatar>
                 <div class="m-l-15">
                     <h2 class="m-b-0">+ 17</h2>
                     <p class="m-b-0 text-muted">Usuarios activos</p>
@@ -33,7 +64,7 @@
     <div class="col-md-6 col-lg-3">
         <nz-card>
             <div class="media align-items-center">
-                <nz-avatar [nzSize]="50" nzIcon="upload" class="ant-avatar-gold"  ></nz-avatar>
+                <nz-avatar [nzSize]="50" nzIcon="upload" class="ant-avatar-gold"></nz-avatar>
                 <div class="m-l-15">
                     <h2 class="m-b-0">3,685</h2>
                     <p class="m-b-0 text-muted">Material subido</p>
@@ -44,7 +75,7 @@
     <div class="col-md-6 col-lg-3">
         <nz-card>
             <div class="media align-items-center">
-                <nz-avatar [nzSize]="50" nzIcon="share-alt" class="ant-avatar-purple"  ></nz-avatar>
+                <nz-avatar [nzSize]="50" nzIcon="share-alt" class="ant-avatar-purple"></nz-avatar>
                 <div class="m-l-15">
                     <h2 class="m-b-0">1,832</h2>
                     <p class="m-b-0 text-muted">Materiales compartidos</p>
@@ -66,9 +97,7 @@
                 </div>
             </div>
             <div class="m-t-50" style="height: 330px">
-                <canvas baseChart
-                    [data]="revenueChartDataObj"
-                    [options]="revenueChartOptions"
+                <canvas baseChart [data]="revenueChartDataObj" [options]="revenueChartOptions"
                     [type]="revenueChartType">
                 </canvas>
                 <!-- <canvas
@@ -80,16 +109,14 @@
   }">
 </canvas> -->
             </div>
-            
+
         </nz-card>
     </div>
     <div class="col-md-12 col-lg-4">
         <nz-card>
             <h5 class="m-b-0">Descargas por marca</h5>
             <div class="m-v-60 text-center" style="height: 200px">
-                <canvas baseChart
-                    [data]="customersChartDataObj"
-                    [options]="customersChartOptions"
+                <canvas baseChart [data]="customersChartDataObj" [options]="customersChartOptions"
                     [type]="customersChartType">
                 </canvas>
             </div>
@@ -101,7 +128,7 @@
                             <div class="m-l-5">
                                 <h4 class="m-b-0">350</h4>
                                 <p class="m-b-0 muted">Nupec</p>
-                            </div>    
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -112,7 +139,7 @@
                             <div class="m-l-5">
                                 <h4 class="m-b-0">450</h4>
                                 <p class="m-b-0 muted">Nucan</p>
-                            </div>    
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -123,7 +150,7 @@
                             <div class="m-l-5">
                                 <h4 class="m-b-0">100</h4>
                                 <p class="m-b-0 muted">Galope</p>
-                            </div>    
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -144,9 +171,7 @@
                 </div>
             </div>
             <div class="m-t-50" style="height: 360px">
-                <canvas baseChart
-                    [data]="avgProfitChartDataObj"
-                    [options]="avgProfitChartOptions"
+                <canvas baseChart [data]="avgProfitChartDataObj" [options]="avgProfitChartOptions"
                     [type]="avgProfitChartType">
                 </canvas>
             </div>
@@ -174,7 +199,7 @@
                         <tr *ngFor="let item of productTable.data">
                             <td>
                                 <div class="d-flex align-items-center">
-                                <nz-avatar [nzSize]="60" [nzIcon]="item.avatar"></nz-avatar>
+                                    <nz-avatar [nzSize]="60" [nzIcon]="item.avatar"></nz-avatar>
                                     <span class="m-l-10">{{item.name}}</span>
                                 </div>
                             </td>
@@ -183,9 +208,12 @@
                             <td>
                                 <div class="d-flex align-items-center">
                                     <div class="w-90 p-r-10">
-                                        <nz-progress *ngIf="item.stock > 60" [nzStrokeColor]="cyan" [nzPercent]="item.stock" nzSize="small" [nzShowInfo]="false"></nz-progress>
-                                        <nz-progress *ngIf="item.stock > 40 && item.stock < 60" [nzStrokeColor]="gold" [nzPercent]="item.stock" nzSize="small" [nzShowInfo]="false"></nz-progress>
-                                        <nz-progress *ngIf="item.stock < 40" [nzStrokeColor]="red" [nzPercent]="item.stock" nzSize="small" [nzShowInfo]="false"></nz-progress>
+                                        <nz-progress *ngIf="item.stock > 60" [nzStrokeColor]="cyan"
+                                            [nzPercent]="item.stock" nzSize="small" [nzShowInfo]="false"></nz-progress>
+                                        <nz-progress *ngIf="item.stock > 40 && item.stock < 60" [nzStrokeColor]="gold"
+                                            [nzPercent]="item.stock" nzSize="small" [nzShowInfo]="false"></nz-progress>
+                                        <nz-progress *ngIf="item.stock < 40" [nzStrokeColor]="red"
+                                            [nzPercent]="item.stock" nzSize="small" [nzShowInfo]="false"></nz-progress>
                                     </div>
                                     <span>{{item.stock}}</span>
                                 </div>
@@ -219,7 +247,8 @@
                             </div>
                         </div>
                         <div>
-                            <a class="text-dark font-size-20" nz-dropdown [nzTrigger]="'click'" [nzPlacement]="'bottomRight'" [nzDropdownMenu]="latestUploadDropDown">
+                            <a class="text-dark font-size-20" nz-dropdown [nzTrigger]="'click'"
+                                [nzPlacement]="'bottomRight'" [nzDropdownMenu]="latestUploadDropDown">
                                 <i nz-icon nzType="ellipsis" theme="outline"></i>
                             </a>
                             <nz-dropdown-menu #latestUploadDropDown="nzDropdownMenu">
@@ -242,7 +271,7 @@
                     </div>
                 </div>
             </div>
-        </nz-card>      
+        </nz-card>
     </div>
     <div class="col-md-12 col-lg-4">
         <nz-card>
@@ -260,7 +289,7 @@
                                 <div class="m-l-20">
                                     <h5 class="m-b-5">{{item.name}}</h5>
                                     <p class="m-b-0">
-                                        <span class="font-weight-semibold">{{item.action}} </span> 
+                                        <span class="font-weight-semibold">{{item.action}} </span>
                                         <!-- <span class="m-l-5"> {{item.target}}</span> -->
                                     </p>
                                     <span class="text-muted font-size-13">
@@ -269,16 +298,17 @@
                                     </span>
                                 </div>
                                 <ng-template #dotTemplate>
-                                    <nz-avatar nzSize="small" [style.background-color]="item.avatar" nzText="{{item.name | slice:0:1}}"></nz-avatar>
+                                    <nz-avatar nzSize="small" [style.background-color]="item.avatar"
+                                        nzText="{{item.name | slice:0:1}}"></nz-avatar>
                                 </ng-template>
                             </nz-timeline-item>
                         </nz-timeline>
                     </div>
                 </div>
             </div>
-        </nz-card>    
+        </nz-card>
     </div>
-<!--     <div class="col-md-12 col-lg-4">
+    <!--     <div class="col-md-12 col-lg-4">
         <nz-card [nzTitle]="tasksHeader">
            <ng-template #tasksHeader>
                 <div class="d-flex justify-content-between align-items-center m-t-10">

@@ -13,7 +13,7 @@
   --b400: #3B82F6;
   --b300: #93C5FD;
   --b100: #DBEAFE;
-  --b50:  #EFF6FF;
+  --b50: #EFF6FF;
   --g400: #F0B429;
   --g300: #FCD34D;
   --gr900: #0F172A;
@@ -21,7 +21,7 @@
   --gr400: #94A3B8;
   --gr200: #E2E8F0;
   --gr100: #F1F5F9;
-  --gr50:  #F8FAFC;
+  --gr50: #F8FAFC;
   --w: #FFFFFF;
 }
 
@@ -318,4 +318,36 @@
     flex-direction: column;
     gap: 6px;
   }
+}
+
+//New styles can be added here
+.ant-card {
+  border-radius: 1.5rem !important;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.bg-news {
+  background: linear-gradient(135deg, #1B3A7A 0%, #0D1B3E 100%);
+  color: #FFFFFF !important;
+}
+.bl{
+  color: #FCD34D;
+}
+
+.bl-mutted {
+  color: rgba(215, 215, 215, 0.616);
+}
+
+.btn-news{
+    background: white;
+    color: #1e3566;
+    border: none;
+    padding: 10px 22px;
+    border-radius: 999px;
+    font-weight: 600;
+    transition: all .2s ease;
+}
+
+.btn-news:hover{
+    background: #f3f4f6;
 }
