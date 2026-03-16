@@ -83,6 +83,10 @@ export class DefaultDashboardComponent {
     revenueChartOptions: any = {
         maintainAspectRatio: false,
         responsive: true,
+        animation: {
+            duration: 1000, // 2 segundos
+            easing: 'easeOutQuart'
+        },
         hover: {
             mode: 'nearest',
             intersect: true
@@ -148,7 +152,11 @@ export class DefaultDashboardComponent {
     };
     customersChartOptions: any = {
         cutoutPercentage: 75,
-        maintainAspectRatio: false
+        maintainAspectRatio: false,
+        animation: {
+            duration: 1000, // 2 segundos
+            easing: 'easeOutQuart'
+        }
     }
     customersChartType = 'doughnut';
 
@@ -157,6 +165,10 @@ export class DefaultDashboardComponent {
         scaleShowVerticalLines: false,
         responsive: true,
         maintainAspectRatio: false,
+        animation: {
+            duration: 1000, // 2 segundos
+            easing: 'easeOutQuart'
+        },
         scales: {
             x: {
                 display: true,

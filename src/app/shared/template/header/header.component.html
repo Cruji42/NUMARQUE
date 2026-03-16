@@ -24,13 +24,15 @@
                     <i nz-icon [nzType]="isExpand? 'menu-fold': 'menu-unfold'" theme="outline"></i>
                 </a>
             </li>
-            <li>
-                <a (click)="searchToggle()">
+            <li class="header-search-item">
+                <div class="header-search">
                     <i nz-icon nzType="search" theme="outline"></i>
-                </a>
-                <nz-drawer [nzWidth]="380" nzTitle="Search" [nzVisible]="searchVisible" nzPlacement="left" (nzOnClose)="searchToggle()">
-                    <app-search></app-search>
-                </nz-drawer>
+                    <input
+                        type="text"
+                        placeholder="Buscar materiales, marcas, campañas..."
+                        aria-label="Buscar"
+                    />
+                </div>
             </li>
         </ul>
         <ul class="nav-right">
