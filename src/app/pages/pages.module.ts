@@ -35,6 +35,7 @@ import { BlogGridComponent } from './blog/blog-grid/blog-grid.component';
 import { BlogListComponent } from './blog/blog-list/blog-list.component';
 import { BlogPostComponent } from './blog/blog-post/blog-post.component';
 
+
 const antdModule = [
     NzCardModule,
     NzSkeletonModule,
@@ -72,7 +73,7 @@ const antdModule = [
         MembersComponent,
         PricingComponent,
         SettingComponent,
-        BlogGridComponent,
+BlogGridComponent,
         BlogListComponent,
         BlogPostComponent
     ],

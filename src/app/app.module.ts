@@ -6,6 +6,7 @@ import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb';
 
 import { registerLocaleData, PathLocationStrategy, LocationStrategy } from '@angular/common';
 import en from '@angular/common/locales/en';
+import es from '@angular/common/locales/es';
 
 import { AppRoutingModule } from './app-routing.module';
 import { TemplateModule } from './shared/template/template.module';
@@ -14,6 +15,7 @@ import { SharedModule } from './shared/shared.module';
 import { AppComponent } from './app.component';
 import { CommonLayoutComponent } from './layouts/common-layout/common-layout.component';
 import { FullLayoutComponent } from './layouts/full-layout/full-layout.component';
+import { WelcomeComponent } from './pages/welcome/welcome.component';
 
 import { ThemeConstantService } from './shared/services/theme-constant.service';
 import { NgChartsModule } from 'ng2-charts';
@@ -24,12 +26,14 @@ import { NzModalModule } from 'ng-zorro-antd/modal';
 // import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
 
 registerLocaleData(en);
+registerLocaleData(es);
 
 @NgModule({
     declarations: [
         AppComponent,
         CommonLayoutComponent,
-        FullLayoutComponent
+        FullLayoutComponent,
+        WelcomeComponent
     ],
     imports: [
         BrowserModule,

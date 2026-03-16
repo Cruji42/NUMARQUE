@@ -8,34 +8,39 @@ import { FullLayout_ROUTES } from "./shared/routes/full-layout.routes";
 import { CommonLayout_ROUTES } from "./shared/routes/common-layout.routes";
 import { authGuard } from './core/guards/auth.guard';
 import { guestGuard } from './core/guards/guest.guard';
+import { WelcomeComponent } from './pages/welcome/welcome.component';
 
 const appRoutes: Routes = [
     {
         path: '',
-        redirectTo: '/authentication/login',
+        redirectTo: '/welcome',
         pathMatch: 'full',
     },
-    { 
-        path: '', 
-        component: FullLayoutComponent, 
+    {
+        path: '',
+        component: FullLayoutComponent,
         children: FullLayout_ROUTES,
         canActivate: [guestGuard]
     },
-       { 
-        path: '', 
+    {
+        path: '',
         component: CommonLayoutComponent,
         children: CommonLayout_ROUTES,
         canActivate: [authGuard]
     },
-    
+    {
+        path: 'welcome',
+        component: WelcomeComponent,
+    }
+
 ];
 
 @NgModule({
     imports: [
-        RouterModule.forRoot(appRoutes, { 
+        RouterModule.forRoot(appRoutes, {
             preloadingStrategy: PreloadAllModules,
             anchorScrolling: 'enabled',
-            scrollPositionRestoration: 'enabled' 
+            scrollPositionRestoration: 'enabled'
         })
     ],
     exports: [

@@ -3,6 +3,30 @@
 @import url('../node_modules/@fortawesome/fontawesome-free/css/all.min.css');
 @import './assets/scss/app.scss';
 
+
+:root {
+  --b950: #060D1F;
+  --b900: #0D1B3E;
+  --b700: #1B3A7A;
+  --b600: #1E4FC2;
+  --b500: #2563EB;
+  --b400: #3B82F6;
+  --b300: #93C5FD;
+  --b100: #DBEAFE;
+  --b50:  #EFF6FF;
+  --g400: #F0B429;
+  --g300: #FCD34D;
+  --gr900: #0F172A;
+  --gr600: #475569;
+  --gr400: #94A3B8;
+  --gr200: #E2E8F0;
+  --gr100: #F1F5F9;
+  --gr50:  #F8FAFC;
+  --w: #FFFFFF;
+}
+
+
+
 /* Login-3 (NUMARQUE style based on templates/02_Login.html) */
 .login-page {
   font-family: 'Inter', sans-serif;
