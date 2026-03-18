@@ -14,22 +14,32 @@ export class WelcomeComponent {
   activeFilter: string = 'all';
 
   // ─── BRANDS DATA ──────────────────────────────────────────
-  brands = [
-    { icon: 'assets/images/logo/brands/logo-nupec.png', name: 'NUPEC',    desc: 'Alimento premium para mascotas de todas las etapas',  count: 248 },
-    { icon: 'assets/images/logo/brands/logo-nucan.png', name: 'NUCAN',    desc: 'Nutrición canina especializada y balanceada',          count: 132 },
-    { icon: 'assets/images/logo/brands/logo-nupec.png', name: 'GALOPE',   desc: 'Nutrición equina de alto rendimiento',                 count: 97  },
-    { icon: 'assets/images/logo/brands/logo-optimo-selecto.png', name: 'ÓPTIMO',   desc: 'Fórmulas avanzadas para rendimiento máximo',           count: 86  },
-    { icon: 'assets/images/logo/brands/logo-nupec.png', name: 'PECUARIO', desc: 'Soluciones para ganadería y producción animal',        count: 73  },
-  ];
+brands = [
+  { icon: 'assets/images/logo/brands/logo-nupec.png', name: 'NUPEC', desc: 'Alimento premium para mascotas de todas las etapas', count: 248 },
+  { icon: 'assets/images/logo/brands/logo-nucan.png', name: 'NUCAN', desc: 'Nutrición canina especializada y balanceada', count: 132 },
+  { icon: 'assets/images/logo/brands/logo-nucat.png', name: 'NUCAT', desc: 'Nutrición felina adaptada a cada etapa de vida', count: 97 },
+  { icon: 'assets/images/logo/brands/logo-nufit.png', name: 'NUFIT', desc: 'Nutrición de alto rendimiento para perros activos', count: 73 },
+  { icon: 'assets/images/logo/brands/logo-optimo-selecto.png', name: 'ÓPTIMO', desc: 'Alimento balanceado de calidad para tu mascota', count: 86 },
+  { icon: 'assets/images/logo/brands/logo-optimo-felino.png', name: 'ÓPTIMO FELINO', desc: 'Fórmula especializada en la nutrición del gato', count: 86 }
+];
+
+species = [
+  { icon: 'assets/images/logo/species/icono-aves.png', name: 'AVES', desc: 'Nutrición especializada para aves de producción', count: 248 },
+  { icon: 'assets/images/logo/species/icono-camaron.png', name: 'CAMARONES', desc: 'Soluciones nutricionales para acuicultura de camarón', count: 132 },
+  { icon: 'assets/images/logo/species/icono-cerdos.png', name: 'CERDOS', desc: 'Alimentación balanceada para porcicultura', count: 97 },
+  { icon: 'assets/images/logo/species/icono-equinos.png', name: 'EQUINOS', desc: 'Nutrición equina de alto rendimiento', count: 73 },
+  { icon: 'assets/images/logo/species/icono-gallos.png', name: 'GALLOS', desc: 'Fórmulas especializadas para gallos de combate y exhibición', count: 86 },
+  { icon: 'assets/images/logo/species/icono-peces.png', name: 'PECES', desc: 'Nutrición acuícola para el crecimiento óptimo de peces', count: 86 },
+  { icon: 'assets/images/logo/species/icono-rumiantes.png', name: 'RUMIANTES', desc: 'Soluciones para ganadería bovina, ovina y caprina', count: 86 },
+  { icon: 'assets/images/logo/species/icono-feed-solutions.png', name: 'FEED SOLUTIONS', desc: 'Soluciones integrales de nutrición animal a medida', count: 86 }
+];
 
   // ─── FILTERS ──────────────────────────────────────────────
   filters = [
-    { label: 'Todo',         value: 'all'     },
-    { label: 'NUPEC',    value: 'nupec'   },
-    { label: 'NUCAN',    value: 'nucan'   },
-    { label: 'GALOPE',   value: 'galope'  },
-    { label: 'ÓPTIMO',   value: 'optimo'  },
-    { label: 'PECUARIO', value: 'pecuario'},
+    { label: 'TODO', value: 'all' },
+    { label: 'PETFOOD', value: 'petfood' },
+    { label: 'PECUARIO', value: 'pecuario' },
+    { label: 'INSTITUCIONAL', value: 'institucional'}
   ];
 
   // ─── MASONRY ITEMS ────────────────────────────────────────
@@ -135,7 +145,7 @@ export class WelcomeComponent {
     },
   ];
 
-  constructor(private router: Router) {}
+  constructor(private router: Router) { }
 
   // ─── NAVIGATION ──────────────────────────────────────────
   goToLogin(): void {
