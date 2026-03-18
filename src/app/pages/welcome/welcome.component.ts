@@ -139,7 +139,7 @@ export class WelcomeComponent {
 
   // ─── NAVIGATION ──────────────────────────────────────────
   goToLogin(): void {
-    this.router.navigate(['/login']);
+    this.router.navigate(['/authentication/login']);
   }
 
   setFilter(value: string): void {

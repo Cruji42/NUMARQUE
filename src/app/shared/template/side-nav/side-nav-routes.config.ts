@@ -2,13 +2,33 @@ import { SideNavInterface } from '../../interfaces/side-nav.type';
 
 export const ROUTES: SideNavInterface[] = [
     {
-        path: '/dashboard/default',
-        title: 'Dashboard',
+
+        path: '',
+        title: 'General',
         iconType: 'nzIcon',
         iconTheme: 'outline',
-        icon: 'dashboard',
+        icon: '',
         canAccess: [1],
-        submenu: []
+        submenu: [
+            {
+                path: '/dashboard/default',
+                title: 'Dashboard',
+                iconType: 'nzIcon',
+                icon: 'dashboard',
+                iconTheme: '',
+                canAccess: [1],
+                submenu: []
+            },
+            {
+                path: '/apps/e-commerce/orders-list',
+                title: 'Usuarios',
+                iconType: 'nzIcon',
+                icon: 'ordered-list',
+                iconTheme: 'outline',
+                canAccess: [1],
+                submenu: []
+            },
+        ]
         // submenu: [
         //     {
         //         path: '/dashboard/default',
@@ -44,16 +64,98 @@ export const ROUTES: SideNavInterface[] = [
         //     },
         // ]
     },
-
     {
-        path: '/apps/e-commerce/orders-list',
-        title: 'Usuarios',
+        path: '',
+        title: 'PetFood',
         iconType: 'nzIcon',
-        icon: 'ordered-list',
         iconTheme: 'outline',
+        icon: '',
+        canAccess: [1],
+        submenu: [
+            {
+                path: '',
+                title: 'NUPEC',
+                iconType: 'nzIcon',
+                icon: '',
+                iconTheme: 'outline',
+                canAccess: [1],
+                submenu: [
+                    {
+                        path: '',
+                        title: 'ATL',
+                        iconType: 'nzIcon',
+                        icon: '',
+                        iconTheme: 'outline',
+                        canAccess: [1],
+                        submenu: []
+                    },
+                    {
+                        path: '',
+                        title: 'BTL',
+                        iconType: 'nzIcon',
+                        icon: '',
+                        iconTheme: 'outline',
+                        canAccess: [1],
+                        submenu: []
+                    },
+                    {
+                        path: '',
+                        title: 'Digital',
+                        iconType: 'nzIcon',
+                        icon: '',
+                        iconTheme: 'outline',
+                        canAccess: [1],
+                        submenu: []
+                    }
+
+
+                ]
+            },
+            {
+                path: '',
+                title: 'GALOPE',
+                iconType: 'nzIcon',
+                iconTheme: 'outline',
+                icon: '',
+                canAccess: [1],
+                submenu: []
+            },
+               {
+                path: '',
+                title: 'NUCAN',
+                iconType: 'nzIcon',
+                iconTheme: 'outline',
+                icon: '',
+                canAccess: [1],
+                submenu: []
+            },
+             {
+                path: '',
+                title: 'ÓPTIMO',
+                iconType: 'nzIcon',
+                iconTheme: 'outline',
+                icon: '',
+                canAccess: [1],
+                submenu: []
+            },
+
+
+
+        ]
+
+    },
+     {
+        path: '',
+        title: 'Pecuario',
+        iconType: 'nzIcon',
+        iconTheme: 'outline',
+        icon: '',
         canAccess: [1],
         submenu: []
-    },
+     },
+
+
+
     // {
     //     path: '/apps/e-commerce/products-list',
     //     title: 'Products List',
