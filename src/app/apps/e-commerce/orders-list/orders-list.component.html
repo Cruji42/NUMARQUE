@@ -1,4 +1,4 @@
-<nz-card>
+<!-- <nz-card>
     <div class="row m-b-30">
         <div class="col-lg-8">
             <div class="d-md-flex">
@@ -48,10 +48,10 @@
                 <td>{{item.created_at | date: 'dd/MM/yyyy'}}</td>
                 <td>{{item.company}}</td>
                 <td>
-                    <!-- <nz-badge *ngIf="item.status == 'approved'" nzStatus="success"></nz-badge>
+                    <!- - <nz-badge *ngIf="item.status == 'approved'" nzStatus="success"></nz-badge>
                     <nz-badge *ngIf="item.status == 'rejected'" nzStatus="error"></nz-badge>
                     <nz-badge *ngIf="item.status == 'pending'"  nzStatus="processing"></nz-badge> 
-                    <span class="text-capitalize">{{item.status}}</span> -->
+                    <span class="text-capitalize">{{item.status}}</span> - ->
 
                     <div class="m-t-20">
                         <nz-tag *ngFor="let b of item.brands">{{b.name}}</nz-tag>
@@ -70,9 +70,9 @@
                         <i nz-icon nzType="edit"></i>
                     </a>
 
-                    <!-- <button nz-button nzType="default" nzShape="circle" nz-tooltip nzTooltipTitle="Delete">
+                    <!- - <button nz-button nzType="default" nzShape="circle" nz-tooltip nzTooltipTitle="Delete">
                         <i nz-icon nzType="delete" theme="outline"></i>
-                    </button> -->
+                    </button> - ->
                 </td>
             </tr>
         </tbody>
@@ -80,10 +80,10 @@
 </nz-card>
 
 
-<!-- Modal -->
+<!-- Modal - ->
 
 
-<!-- TITLE (sin nzData) -->
+<!-- TITLE (sin nzData) - ->
 <ng-template #tplTitle>
     <span>Editar usuario</span>
 </ng-template>
@@ -128,7 +128,7 @@
 
         <nz-divider></nz-divider>
 
-        <!-- FORMULARIO -->
+        <!-- FORMULARIO  -- >
         <form nz-form [formGroup]="userForm" nzLayout="vertical">
 
             <nz-form-item>
@@ -181,9 +181,9 @@
                         <nz-option nzLabel="Administrador" [nzValue]="1"></nz-option>
                     </nz-select>
                 </nz-form-control>
-            </nz-form-item> -->
+            </nz-form-item> - ->
 
-            <!-- MARCAS -->
+            <!-- MARCAS -- >
             <!-- <nz-form-item>
                 <nz-form-label>Marcas</nz-form-label>
                 <nz-form-control>
@@ -194,8 +194,8 @@
                 </nz-form-control>
             </nz-form-item> -->
 
-            <!-- ESTATUS -->
-            <!-- <nz-form-item>
+<!-- ESTATUS -->
+<!-- <nz-form-item>
                 <nz-form-label>Estatus de la cuenta</nz-form-label>
                 <nz-form-control>
                     <nz-radio-group formControlName="account_status">
@@ -205,7 +205,7 @@
                 </nz-form-control>
             </nz-form-item> -->
 
-            <!-- ROL -->
+<!-- ROL -- >
             <!-- <nz-form-item>
                 <nz-form-label>Rol</nz-form-label>
                 <nz-form-control>
@@ -214,7 +214,7 @@
                         <nz-option nzLabel="Administrador" [nzValue]="1"></nz-option>
                     </nz-select>
                 </nz-form-control>
-            </nz-form-item> -->
+            </nz-form-item>  ->
 
         </form>
     </div>
@@ -222,10 +222,220 @@
 
 
 
-<!-- FOOTER -->
+<!-- FOOTER - ->
 <ng-template #tplFooter let-modal>
     <button nz-button (click)="closeModal()">Cancelar</button>
     <button nz-button nzType="primary" (click)="submitForm()" [nzLoading]="isConfirmLoading">
         Guardar
     </button>
+</ng-template> -->
+
+
+<div class="justify-content-start my-3 ">
+    <h1> <b>Gestión de usuarios</b></h1>
+    <h5 class="text-mutted">Administrar accesos, roles y marcas asignadas</h5>
+</div>
+
+<!-- Toolbar -->
+<div class="toolbar">
+    <div class="search-wrap">
+        <span class="search-icon">
+            <i nz-icon nzType="search"></i>
+        </span>
+        <input type="text" class="search-input" placeholder="Buscar usuario..." [(ngModel)]="searchInput"
+            (ngModelChange)="applyFilters()" />
+    </div>
+
+    <nz-select class="filter-select" nzPlaceHolder="Estado" [(ngModel)]="searchSelect" (ngModelChange)="applyFilters()"
+        [nzAllowClear]="true">
+        <nz-option nzLabel="Todos" nzValue="all"></nz-option>
+        <nz-option nzLabel="Activo" nzValue="active"></nz-option>
+        <nz-option nzLabel="Pendiente" nzValue="pending"></nz-option>
+        <nz-option nzLabel="Rechazado" nzValue="rejected"></nz-option>
+    </nz-select>
+
+    <nz-select class="filter-select" nzPlaceHolder="Rol" [(ngModel)]="filterRole" (ngModelChange)="applyFilters()"
+        [nzAllowClear]="true">
+        <nz-option nzLabel="Todos" nzValue="all"></nz-option>
+        <nz-option nzLabel="Administrador" [nzValue]="1"></nz-option>
+        <nz-option nzLabel="Head Comercial" [nzValue]="2"></nz-option>
+        <nz-option nzLabel="Proveedor" [nzValue]="3"></nz-option>
+    </nz-select>
+
+    <button class="btn-export" nz-button (click)="exportToExcel()">
+        <i nz-icon nzType="download"></i>
+        <span>Exportar</span>
+    </button>
+</div>
+
+<!-- Pending alert -->
+<div class="alert-pending" *ngIf="pendingCount > 0">
+    <span class="alert-icon">⏳</span>
+    <div class="alert-body">
+        <div class="alert-title">{{ pendingCount }} usuario{{ pendingCount > 1 ? 's' : '' }} pendiente{{ pendingCount >
+            1 ? 's' : '' }} de aprobación</div>
+        <div class="alert-sub">Requieren revisión antes de acceder al sistema</div>
+    </div>
+    <button class="alert-btn" (click)="filterPending()">Revisar →</button>
+</div>
+
+<!-- Table -->
+<div class="table-card">
+    <nz-table #ordersListTable [nzData]="displayData" [nzShowPagination]="true" [nzPageSize]="10" nzSize="middle"
+        [nzBordered]="false" [nzShowSizeChanger]="false">
+        <thead>
+            <tr>
+                <th *ngFor="let column of orderColumn" [nzSortFn]="column.compare">
+                    {{ column.title }}
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let item of ordersListTable.data; let i = index"
+                [class.pending-row]="item.account_status === 'Pending'">
+
+                <!-- ID -->
+                <td class="col-id">#{{ item.id }}</td>
+
+                <!-- Usuario -->
+                <td>
+                    <div class="user-cell">
+                        <nz-avatar [nzSize]="32" nzIcon="user" [nzSrc]="item.profile_picture_url"
+                            [style.background]="getAvatarColor(item.name)"></nz-avatar>
+                        <div class="user-info">
+                            <span class="user-name">{{ item.name }}</span>
+                            <span class="user-sub" *ngIf="item.account_status === 'Pending'"
+                                style="color:#F59E0B">Pendiente aprobación</span>
+                        </div>
+                    </div>
+                </td>
+
+                <!-- Correo -->
+                <td class="col-email">{{ item.email }}</td>
+
+                <!-- Fecha -->
+                <td class="col-date">{{ item.created_at | date: 'dd/MM/yyyy' }}</td>
+
+                <!-- Compañía -->
+                <td>{{ item.company }}</td>
+
+                <!-- Marcas -->
+                <td>
+                    <div class="brands-wrap">
+                        <span class="brand-tag" *ngFor="let b of item.brands" [style]="getBrandStyle(b.name)">{{ b.name
+                            }}</span>
+                    </div>
+                </td>
+
+                <!-- Rol -->
+                <td>
+                    <span class="role-badge" [ngClass]="getRoleClass(item.role_id)">
+                        {{ getRoleLabel(item.role_id) }}
+                    </span>
+                </td>
+
+                <!-- Estatus -->
+                <td>
+                    <span class="status-badge" [ngClass]="getStatusClass(item.account_status)">
+                        <span class="status-dot"></span>
+                        {{ getStatusLabel(item.account_status) }}
+                    </span>
+                </td>
+
+                <!-- Acciones -->
+                <td class="col-actions">
+                    <ng-container *ngIf="item.account_status === 'Pending'; else editOnly">
+                        <button class="action-btn approve" nz-tooltip nzTooltipTitle="Aprobar"
+                            (click)="approveUser(item)">
+                            <i nz-icon nzType="check"></i>
+                        </button>
+                        <button class="action-btn reject" nz-tooltip nzTooltipTitle="Rechazar"
+                            (click)="rejectUser(item)">
+                            <i nz-icon nzType="close"></i>
+                        </button>
+                    </ng-container>
+                    <ng-template #editOnly>
+                        <button class="action-btn edit" nz-tooltip nzTooltipTitle="Editar"
+                            (click)="openEditModal(item)">
+                            <i nz-icon nzType="edit"></i>
+                        </button>
+                    </ng-template>
+                </td>
+            </tr>
+        </tbody>
+    </nz-table>
+</div>
+
+
+<!-- ===================== MODAL ===================== -->
+
+<ng-template #tplContent let-data>
+    <div *ngIf="data?.item" class="modal-user-content">
+
+        <!-- User Card -->
+        <div class="modal-user-card">
+            <nz-avatar [nzSize]="72" nzIcon="user" [nzSrc]="data.item.profile_picture_url || null"
+                [style.background]="getAvatarColor(data.item.name)"></nz-avatar>
+            <div class="modal-user-name">{{ data.item.name }} {{ data.item.last_name }}</div>
+            <div class="modal-user-meta">
+                <span><i nz-icon nzType="bank"></i> {{ data.item.company }}</span>
+                <span><i nz-icon nzType="mail"></i> {{ data.item.email }}</span>
+                <span><i nz-icon nzType="calendar"></i> {{ data.item.created_at | date: 'dd/MM/yyyy' }}</span>
+            </div>
+        </div>
+
+        <nz-divider></nz-divider>
+
+        <!-- Form -->
+        <form nz-form [formGroup]="userForm" nzLayout="vertical" class="modal-form">
+
+            <nz-form-item>
+                <nz-form-label>Estatus de la cuenta</nz-form-label>
+                <nz-form-control>
+                    <nz-radio-group formControlName="account_status" class="status-radio-group">
+                        <label nz-radio nzValue="Active">
+                            <span class="radio-label active-label">Activo</span>
+                        </label>
+                        <label nz-radio nzValue="Rejected">
+                            <span class="radio-label rejected-label">Rechazado</span>
+                        </label>
+                    </nz-radio-group>
+                </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item *ngIf="userForm.get('account_status')?.value === 'Active'">
+                <nz-form-label nzRequired>Rol</nz-form-label>
+                <nz-form-control nzErrorTip="El rol es requerido">
+                    <nz-select formControlName="role_id" nzPlaceHolder="Selecciona un rol">
+                        <nz-option nzLabel="Administrador" [nzValue]="1"></nz-option>
+                        <nz-option nzLabel="Head Comercial" [nzValue]="2"></nz-option>
+                        <nz-option nzLabel="Proveedor" [nzValue]="3"></nz-option>
+                    </nz-select>
+                </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item *ngIf="
+        userForm.get('account_status')?.value === 'Active' &&
+        (userForm.get('role_id')?.value === 2 || userForm.get('role_id')?.value === 3)
+      ">
+                <nz-form-label nzRequired>Marcas</nz-form-label>
+                <nz-form-control nzErrorTip="Debe seleccionar al menos una marca">
+                    <nz-select nzMode="multiple" nzPlaceHolder="Selecciona marcas" formControlName="brand_ids">
+                        <nz-option *ngFor="let brand of catBrands" [nzLabel]="brand.name"
+                            [nzValue]="brand.id"></nz-option>
+                    </nz-select>
+                </nz-form-control>
+            </nz-form-item>
+
+        </form>
+    </div>
+</ng-template>
+
+<ng-template #tplFooter>
+    <div class="modal-footer">
+        <button nz-button class="btn-cancel" (click)="closeModal()">Cancelar</button>
+        <button nz-button nzType="primary" class="btn-save" (click)="submitForm()" [nzLoading]="isConfirmLoading">
+            Guardar cambios
+        </button>
+    </div>
 </ng-template>

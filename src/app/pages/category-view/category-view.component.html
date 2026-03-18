@@ -1,0 +1,203 @@
+<!-- ============================================================
+     TOOLBAR — breadcrumb + search (solo en modo files)
+     ============================================================ -->
+<div class="fm-toolbar">
+  <div class="breadcrumb">
+    <span
+      *ngFor="let crumb of breadcrumbs; let i = index; let last = last"
+      class="crumb-item"
+    >
+      <span
+        *ngIf="!last"
+        class="crumb-link"
+        (click)="navigateToBreadcrumb(crumb, i)"
+      >{{ crumb.label }}</span>
+      <span *ngIf="last" class="crumb-current">{{ crumb.label }}</span>
+      <span *ngIf="!last" class="crumb-sep">›</span>
+    </span>
+  </div>
+
+  <!-- Search y view toggle solo en modo file manager -->
+  <ng-container *ngIf="viewMode === 'files'">
+    <div class="fm-search-wrap">
+      <i nz-icon nzType="search" class="fm-search-icon"></i>
+      <input
+        class="fm-search"
+        placeholder="Buscar en esta carpeta..."
+        [(ngModel)]="searchQuery"
+        (ngModelChange)="applySearch()"
+      />
+    </div>
+
+    <div class="view-btns">
+      <button class="view-btn" [class.active]="fileViewMode === 'grid'"
+        nz-tooltip nzTooltipTitle="Vista cuadrícula" (click)="fileViewMode = 'grid'">
+        <i nz-icon nzType="appstore"></i>
+      </button>
+      <button class="view-btn" [class.active]="fileViewMode === 'list'"
+        nz-tooltip nzTooltipTitle="Vista lista" (click)="fileViewMode = 'list'">
+        <i nz-icon nzType="unordered-list"></i>
+      </button>
+    </div>
+  </ng-container>
+</div>
+
+<!-- ============================================================
+     MODO: CATEGORY CARDS
+     Muestra las secciones de la marca (ATL, Digital, etc.)
+     ============================================================ -->
+<div class="category-mode" *ngIf="viewMode === 'categories'">
+
+  <div class="category-header">
+    <div class="category-brand-title">{{ activeBrand }}</div>
+    <div class="category-brand-sub">Selecciona una categoría para explorar sus materiales</div>
+  </div>
+
+  <div class="category-grid">
+    <div
+      class="category-card"
+      *ngFor="let card of categoryCards"
+      (click)="openCategory(card)"
+      [style.--card-color]="card.color"
+      [style.--card-bg]="card.bgColor"
+    >
+      <div class="card-icon-wrap">
+        <span class="card-icon">{{ card.icon }}</span>
+      </div>
+      <div class="card-body">
+        <div class="card-title">{{ card.title }}</div>
+        <div class="card-desc">{{ card.description }}</div>
+      </div>
+      <div class="card-arrow">
+        <i nz-icon nzType="arrow-right"></i>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ============================================================
+     MODO: FILE MANAGER
+     Muestra carpetas y archivos dentro de la sección
+     ============================================================ -->
+<div class="fm-body" *ngIf="viewMode === 'files'">
+
+  <!-- Content area -->
+  <div class="fm-content">
+
+    <!-- Folders section -->
+    <div *ngIf="filteredFolders.length > 0">
+      <div class="sec-label">Carpetas</div>
+
+      <!-- Grid -->
+      <div class="folders-grid" *ngIf="fileViewMode === 'grid'">
+        <div class="folder-card" *ngFor="let folder of filteredFolders"
+          (click)="openFolder(folder)">
+          <button class="fav-btn" [class.starred]="folder.favorite"
+            nz-tooltip [nzTooltipTitle]="folder.favorite ? 'Quitar de favoritos' : 'Agregar a favoritos'"
+            (click)="$event.stopPropagation(); toggleFolderFav(folder)">
+            <i nz-icon nzType="star" [nzTheme]="folder.favorite ? 'fill' : 'outline'"></i>
+          </button>
+          <div class="folder-icon">📂</div>
+          <div class="folder-name">{{ folder.name }}</div>
+          <div class="folder-count">{{ folder.count }} archivos</div>
+        </div>
+      </div>
+
+      <!-- List -->
+      <div class="list-table" *ngIf="fileViewMode === 'list'">
+        <div class="list-row folder-row" *ngFor="let folder of filteredFolders"
+          (click)="openFolder(folder)">
+          <span class="list-icon">📂</span>
+          <span class="list-name">{{ folder.name }}</span>
+          <span class="list-meta">{{ folder.count }} archivos</span>
+          <button class="fav-btn-sm" (click)="$event.stopPropagation(); toggleFolderFav(folder)">
+            <i nz-icon nzType="star" [nzTheme]="folder.favorite ? 'fill' : 'outline'"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Files section -->
+    <div *ngIf="filteredFiles.length > 0">
+      <div class="sec-label">Archivos</div>
+
+      <!-- Grid -->
+      <div class="files-grid" *ngIf="fileViewMode === 'grid'">
+        <div class="file-card" *ngFor="let file of filteredFiles"
+          [class.selected]="selectedFile?.id === file.id"
+          (click)="selectFile(file)">
+          <div class="file-thumb">
+            <span class="file-thumb-icon">{{ getFileIcon(file.type) }}</span>
+          </div>
+          <div class="file-name">{{ file.name }}</div>
+          <div class="file-meta">{{ file.type | uppercase }} · {{ file.size }}</div>
+        </div>
+      </div>
+
+      <!-- List -->
+      <div class="list-table" *ngIf="fileViewMode === 'list'">
+        <div class="list-row" *ngFor="let file of filteredFiles"
+          [class.selected]="selectedFile?.id === file.id"
+          (click)="selectFile(file)">
+          <span class="list-icon">{{ getFileIcon(file.type) }}</span>
+          <span class="list-name">{{ file.name }}</span>
+          <span class="list-meta list-type">{{ file.type | uppercase }}</span>
+          <span class="list-meta">{{ file.size }}</span>
+          <span class="list-meta">{{ file.uploaded_at | date: 'dd/MM/yyyy' }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Empty state -->
+    <div class="empty-state"
+      *ngIf="filteredFolders.length === 0 && filteredFiles.length === 0">
+      <div class="empty-icon">📂</div>
+      <div class="empty-title">Esta carpeta está vacía</div>
+      <div class="empty-sub">No se encontraron archivos o carpetas</div>
+    </div>
+  </div>
+
+  <!-- Preview panel -->
+  <div class="preview-panel" *ngIf="selectedFile">
+    <div class="preview-thumb">
+      <span class="preview-thumb-icon">{{ getFileIcon(selectedFile.type) }}</span>
+    </div>
+    <div class="preview-header">
+      <div class="preview-name">{{ selectedFile.name }}</div>
+      <div class="preview-brand-wrap">
+        <span class="brand-tag" [style]="getBrandStyle(selectedFile.brand)">
+          {{ selectedFile.brand }}
+        </span>
+      </div>
+    </div>
+    <nz-divider class="preview-divider"></nz-divider>
+    <div class="preview-meta">
+      <div class="meta-row"><span class="meta-key">Tipo</span><span class="meta-val">{{ selectedFile.type | uppercase }}</span></div>
+      <div class="meta-row"><span class="meta-key">Tamaño</span><span class="meta-val">{{ selectedFile.size }}</span></div>
+      <div class="meta-row"><span class="meta-key">Subido</span><span class="meta-val">{{ selectedFile.uploaded_at | date: 'dd/MM/yyyy' }}</span></div>
+      <div class="meta-row"><span class="meta-key">Por</span><span class="meta-val">{{ selectedFile.uploaded_by }}</span></div>
+      <div class="meta-row"><span class="meta-key">Categoría</span><span class="meta-val">{{ selectedFile.category }}</span></div>
+      <div class="meta-row"><span class="meta-key">Descargas</span><span class="meta-val">{{ selectedFile.downloads }}</span></div>
+    </div>
+    <button class="btn-download" (click)="downloadFile(selectedFile)">
+      <i nz-icon nzType="download"></i> Descargar
+    </button>
+    <button class="btn-share" (click)="shareFile(selectedFile)">
+      <i nz-icon nzType="share-alt"></i> Compartir
+    </button>
+    <div class="fav-link" (click)="toggleFileFav(selectedFile)">
+      <i nz-icon nzType="star"
+        [nzTheme]="selectedFile.favorite ? 'fill' : 'outline'"
+        [style.color]="selectedFile.favorite ? '#F59E0B' : '#94A3B8'"></i>
+      {{ selectedFile.favorite ? 'En favoritos' : 'Agregar a favoritos' }}
+    </div>
+  </div>
+
+  <!-- No selection placeholder -->
+  <div class="preview-panel preview-empty" *ngIf="!selectedFile">
+    <div class="preview-empty-icon">👆</div>
+    <div class="preview-empty-text">Selecciona un archivo para ver su detalle</div>
+  </div>
+
+</div>

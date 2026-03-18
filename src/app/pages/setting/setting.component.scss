@@ -1,0 +1,404 @@
+// ============================================================
+// setting.component.scss
+// Design aligned with 06_Perfil.html
+// ============================================================
+
+// --- Page header ---
+.page-header {
+  margin-bottom: 24px;
+
+  .page-title {
+    font-family: 'Outfit', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: #0F172A;
+  }
+
+  .page-subtitle {
+    font-size: 13px;
+    color: #94A3B8;
+    margin-top: 2px;
+  }
+}
+
+// --- Two-column layout ---
+.profile-layout {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 20px;
+  align-items: start;
+}
+
+// ============================================================
+// LEFT SIDEBAR — Profile card
+// ============================================================
+.profile-sidebar {
+  position: sticky;
+  top: 24px;
+}
+
+.profile-card {
+  background: #fff;
+  border: 1px solid #E2E8F0;
+  border-radius: 14px;
+  padding: 28px 20px 20px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  text-align: center;
+}
+
+// Avatar
+.avatar-wrapper {
+  position: relative;
+  display: inline-block;
+  margin-bottom: 14px;
+
+  .profile-avatar {
+    display: block;
+  }
+
+  .avatar-edit-btn {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 26px;
+    height: 26px;
+    background: #fff;
+    border: 1.5px solid #CBD5E1;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    color: #475569;
+    cursor: pointer;
+    transition: all 0.18s;
+    padding: 0;
+
+    &:hover {
+      background: #EFF6FF;
+      border-color: #93C5FD;
+      color: #1E4FC2;
+    }
+  }
+}
+
+// Name & email
+.profile-name {
+  font-family: 'Outfit', sans-serif;
+  font-size: 17px;
+  font-weight: 700;
+  color: #0F172A;
+}
+
+.profile-email {
+  font-size: 13px;
+  color: #94A3B8;
+  margin-top: 3px;
+}
+
+// Role badge
+.role-badge-wrap {
+  margin-top: 8px;
+}
+
+.role-badge {
+  display: inline-flex;
+  padding: 4px 12px;
+  background: #EDE9FE;
+  color: #6D28D9;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+// Stats grid
+.profile-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid #F1F5F9;
+}
+
+.stat-item {
+  text-align: center;
+  padding: 10px 8px;
+  background: #F8FAFC;
+  border-radius: 10px;
+
+  .stat-number {
+    font-size: 20px;
+    font-weight: 700;
+    color: #0F172A;
+    font-family: 'Outfit', sans-serif;
+  }
+
+  .stat-label {
+    font-size: 11px;
+    color: #94A3B8;
+    margin-top: 2px;
+  }
+}
+
+// ============================================================
+// RIGHT CONTENT — Form cards
+// ============================================================
+.profile-content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.form-card {
+  background: #fff;
+  border: 1px solid #E2E8F0;
+  border-radius: 14px;
+  padding: 24px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+.form-card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: #1E293B;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #F1F5F9;
+}
+
+// Photo upload row
+.photo-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 4px;
+
+  .photo-info {
+    flex: 1;
+
+    .photo-label {
+      font-size: 14px;
+      font-weight: 600;
+      color: #1E293B;
+    }
+
+    .photo-hint {
+      font-size: 12px;
+      color: #94A3B8;
+      margin-top: 3px;
+    }
+  }
+}
+
+.card-divider {
+  margin: 16px 0 !important;
+}
+
+// Form grid
+.form-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 16px;
+
+  nz-form-item {
+    margin-bottom: 16px;
+  }
+
+  .span-2 {
+    grid-column: span 2;
+  }
+}
+
+// NzAnt overrides for inputs
+.ant-input,
+.ant-input-affix-wrapper {
+  // height: 44px;
+  border-radius: 10px !important;
+  border-color: #E2E8F0 !important;
+  background: #F8FAFC !important;
+  font-size: 14px;
+  color: #0F172A;
+
+  &:focus,
+  &-focused {
+    border-color: #1E4FC2 !important;
+    // box-shadow: 0 0 0 2px rgba(30, 79, 194, 0.08) !important;
+    // background: #fff !important;
+  }
+}
+
+.ant-form-item-label > label {
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  color: #334155 !important;
+  letter-spacing: 0.02em;
+}
+
+// Buttons
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.btn-cancel {
+  height: 40px;
+  padding: 0 20px;
+  background: transparent;
+  color: #475569;
+  border: 1px solid #E2E8F0;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  transition: all 0.18s;
+
+  &:hover {
+    border-color: #94A3B8;
+    color: #1E293B;
+  }
+}
+
+.btn-save {
+  height: 40px;
+  padding: 0 24px;
+  background: #1E4FC2 !important;
+  color: #fff !important;
+  border: none !important;
+  border-radius: 10px !important;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+
+  &:hover {
+    background: #1a3fa0 !important;
+  }
+
+  &[disabled] {
+    background: #93C5FD !important;
+    cursor: not-allowed;
+  }
+}
+
+.btn-outline {
+  height: 36px;
+  padding: 0 16px;
+  background: #fff;
+  color: #475569;
+  border: 1px solid #E2E8F0;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.18s;
+
+  i { font-size: 13px; }
+
+  &:hover {
+    border-color: #1E4FC2;
+    color: #1E4FC2;
+    background: #EFF6FF;
+  }
+}
+
+// ============================================================
+// Brands card
+// ============================================================
+.brands-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.brand-chip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  background: #F8FAFC;
+  border: 1.5px solid #E2E8F0;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #475569;
+  transition: all 0.18s;
+
+  &.active {
+    border-color: #3B82F6;
+    background: #EFF6FF;
+    color: #1E4FC2;
+  }
+
+  .brand-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+}
+
+.no-brands {
+  font-size: 13px;
+  color: #94A3B8;
+}
+
+.info-box {
+  padding: 12px 14px;
+  background: #F8FAFC;
+  border-radius: 10px;
+  font-size: 12px;
+  color: #475569;
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+
+  i {
+    color: #1E4FC2;
+    font-size: 14px;
+    margin-top: 1px;
+    flex-shrink: 0;
+  }
+}
+
+// ============================================================
+// Password toggle icon
+// ============================================================
+.pw-toggle {
+  cursor: pointer;
+  color: #94A3B8;
+  font-size: 14px;
+  transition: color 0.18s;
+
+  &:hover {
+    color: #1E4FC2;
+  }
+}
+
+// ============================================================
+// Responsive
+// ============================================================
+@media (max-width: 900px) {
+  .profile-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .profile-sidebar {
+    position: static;
+  }
+
+  .form-grid-2 {
+    grid-template-columns: 1fr;
+
+    .span-2 {
+      grid-column: span 1;
+    }
+  }
+}

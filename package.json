@@ -41,6 +41,7 @@
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "webpack-bundle-analyzer": "^4.3.0",
+    "xlsx": "^0.18.5",
     "zone.js": "~0.15.1"
   },
   "devDependencies": {
@@ -49,6 +50,7 @@
     "@angular/compiler-cli": "^20.3.16",
     "@types/jasmine": "~3.6.0",
     "@types/node": "^12.11.1",
+    "@types/xlsx": "^0.0.35",
     "codelyzer": "^6.0.0",
     "cypress": "^15.8.2",
     "jasmine-core": "~3.6.0",

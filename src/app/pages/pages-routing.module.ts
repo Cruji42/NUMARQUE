@@ -9,78 +9,49 @@ import { SettingComponent } from './setting/setting.component';
 import { BlogGridComponent } from './blog/blog-grid/blog-grid.component';
 import { BlogListComponent } from './blog/blog-list/blog-list.component';
 import { BlogPostComponent } from './blog/blog-post/blog-post.component';
+import { CategoryViewComponent } from './category-view/category-view.component';
 
 const routes: Routes = [
     {
         path: 'profile',
         component: ProfileComponent,
-        data: {
-            title: 'Profile'
-        }
+        data: { title: 'Profile' }
     },
     {
         path: 'invoice',
         component: InvoiceComponent,
-        data: {
-            title: 'Invoice'
-        }
+        data: { title: 'Invoice' }
     },
     {
         path: 'members',
         component: MembersComponent,
-        data: {
-            title: 'Members',
-            headerDisplay: "none"
-        }
+        data: { title: 'Members', headerDisplay: "none" }
     },
     {
         path: 'pricing',
         component: PricingComponent,
-        data: {
-            title: 'Pricing'
-        }
+        data: { title: 'Pricing' }
     },
     {
         path: 'setting',
         component: SettingComponent,
-        data: {
-            title: 'Setting',
-            headerDisplay: "none"
-        }
+        data: { title: 'Setting', headerDisplay: "none" }
+    },
+    {
+        path: 'category-view',
+        component: CategoryViewComponent,
+        runGuardsAndResolvers: 'paramsOrQueryParamsChange', // 👈 esto es todo lo que necesitas
+        data: { title: 'Category View', headerDisplay: "none" }
     },
     {
         path: 'blog',
-        data: {
-            title: 'Blog '
-        },
+        data: { title: 'Blog' },
         children: [
-            {
-                path: '',
-                redirectTo: '/dashboard',
-                pathMatch: 'full'
-            }, 
-            {
-                path: 'blog-grid',
-                component: BlogGridComponent,
-                data: {
-                    title: 'Blog Grid'
-                }
-            },
-            {
-                path: 'blog-list',
-                component: BlogListComponent,
-                data: {
-                    title: 'Blog List'
-                }
-            },
-            {
-                path: 'blog-post',
-                component: BlogPostComponent,
-                data: {
-                    title: 'Blog Post'
-                }
-            }
-        ]    
+            { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
+            { path: 'blog-grid', component: BlogGridComponent, data: { title: 'Blog Grid' } },
+            { path: 'blog-list', component: BlogListComponent, data: { title: 'Blog List' } },
+            { path: 'blog-post', component: BlogPostComponent, data: { title: 'Blog Post' } }
+        ]
     },
 ];
 

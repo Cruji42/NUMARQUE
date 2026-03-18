@@ -30,21 +30,53 @@
                     *ngFor="let subItem of item.submenu" 
                     [routerLinkActive]="subItem.submenu.length > 0 ? 'ant-menu-submenu-open' : 'ant-menu-item-selected'"
                     [routerLinkActiveOptions]="{exact: true}">
-                    <a href="javascript:void(0);" class="ant-menu-submenu-title p-l-50" *ngIf="subItem.submenu.length > 0">
+
+                    <!--
+                        Ítem de segundo nivel CON submenu Y CON path (ej: marca NUPEC):
+                        El logo/título navega a category-view y el desplegable sigue funcionando.
+                    -->
+                    <a
+                        *ngIf="subItem.submenu.length > 0 && subItem.path"
+                        class="ant-menu-submenu-title p-l-30"
+                        [routerLink]="subItem.path | navPath"
+                        [queryParams]="subItem.path | navQuery"
+                        (click)="closeMobileMenu()"
+                    >
                         <i *ngIf="subItem.iconType == 'nzIcon'" nz-icon [nzType]="subItem.icon" [theme]="subItem.iconTheme"></i>
                         <i *ngIf="subItem.iconType == 'fontawesome'" class="m-r-10" [ngClass]="[subItem.iconTheme , subItem.icon]"></i>
                         <img *ngIf="subItem.iconType == 'image'" [src]="subItem.icon" [class]="subItem.title ? 'menu-icon m-r-10' : 'menu-icon-centered'" alt="menu icon">
                         <span *ngIf="subItem.title">{{subItem.title}}</span>
                         <i class="ant-menu-submenu-arrow"></i>
                     </a>
-                    <a [routerLink]="subItem.path" (click)="closeMobileMenu()" [class]="subItem.title ? 'p-l-30' : 'p-l-30 icon-only-link'" *ngIf="subItem.submenu.length === 0">
+
+                    <!-- Ítem de segundo nivel CON submenu SIN path (solo desplegable, comportamiento original) -->
+                    <a
+                        *ngIf="subItem.submenu.length > 0 && !subItem.path"
+                        href="javascript:void(0);"
+                        class="ant-menu-submenu-title p-l-50"
+                    >
+                        <i *ngIf="subItem.iconType == 'nzIcon'" nz-icon [nzType]="subItem.icon" [theme]="subItem.iconTheme"></i>
+                        <i *ngIf="subItem.iconType == 'fontawesome'" class="m-r-10" [ngClass]="[subItem.iconTheme , subItem.icon]"></i>
+                        <img *ngIf="subItem.iconType == 'image'" [src]="subItem.icon" [class]="subItem.title ? 'menu-icon m-r-10' : 'menu-icon-centered'" alt="menu icon">
+                        <span *ngIf="subItem.title">{{subItem.title}}</span>
+                        <i class="ant-menu-submenu-arrow"></i>
+                    </a>
+
+                    <!-- Ítem de segundo nivel SIN submenu (hoja, comportamiento original) -->
+                    <a
+                        *ngIf="subItem.submenu.length === 0"
+                        [routerLink]="subItem.path | navPath"
+                        [queryParams]="subItem.path | navQuery"
+                        (click)="closeMobileMenu()"
+                        [class]="subItem.title ? 'p-l-30' : 'p-l-30 icon-only-link'"
+                    >
                         <i *ngIf="subItem.iconType == 'nzIcon'" nz-icon [nzType]="subItem.icon" [theme]="subItem.iconTheme"></i>
                         <i *ngIf="subItem.iconType == 'fontawesome'" class="m-r-10" [ngClass]="[subItem.iconTheme , subItem.icon]"></i>
                         <img *ngIf="subItem.iconType == 'image'" [src]="subItem.icon" [class]="subItem.title ? 'menu-icon m-r-10' : 'menu-icon-centered'" alt="menu icon">
                         <span *ngIf="subItem.title">{{subItem.title}}</span>
                     </a>
 
-                    <!-- Third Level -->
+                    <!-- Third Level (sin cambios) -->
                     <ul class="ant-menu ant-menu-inline ant-menu-sub dropdown-menu" *ngIf="subItem.submenu.length > 0">
                         <li [ngClass]="subItem.submenu.length > 0?'ant-menu-submenu ant-menu-submenu-inline':'ant-menu-item'" 
                             *ngFor="let subItem of subItem.submenu" routerLinkActive="ant-menu-item-selected" 
@@ -56,7 +88,13 @@
                                 <span *ngIf="subItem.title">{{subItem.title}}</span>
                                 <i class="ant-menu-submenu-arrow"></i>
                             </a>
-                            <a [routerLink]="subItem.path" (click)="closeMobileMenu()" [class]="subItem.title ? 'p-l-50' : 'p-l-50 icon-only-link'" *ngIf="subItem.submenu.length === 0">
+                            <a
+                                *ngIf="subItem.submenu.length === 0"
+                                [routerLink]="subItem.path | navPath"
+                                [queryParams]="subItem.path | navQuery"
+                                (click)="closeMobileMenu()"
+                                [class]="subItem.title ? 'p-l-50' : 'p-l-50 icon-only-link'"
+                            >
                                 <i *ngIf="subItem.iconType == 'nzIcon'" nz-icon [nzType]="subItem.icon" [theme]="subItem.iconTheme"></i>
                                 <i *ngIf="subItem.iconType == 'fontawesome'" class="m-r-10" [ngClass]="[subItem.iconTheme , subItem.icon]"></i>
                                 <img *ngIf="subItem.iconType == 'image'" [src]="subItem.icon" [class]="subItem.title ? 'menu-icon m-r-10' : 'menu-icon-centered'" alt="menu icon">

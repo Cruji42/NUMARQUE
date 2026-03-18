@@ -8,6 +8,8 @@ import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 
 import { ThemeConstantService } from './services/theme-constant.service';
 import { SearchPipe } from './pipes/search.pipe';
+import { NavQueryPipe } from './pipes/nav-query.pipe';
+import { NavPathPipe } from './pipes/nav-path.pipe';
 
 @NgModule({
     exports: [
@@ -15,7 +17,9 @@ import { SearchPipe } from './pipes/search.pipe';
         FormsModule,
 
         NzIconModule,
-        SearchPipe
+        SearchPipe,
+        NavPathPipe,
+        NavQueryPipe
     ],
     imports: [
         RouterModule,
@@ -24,7 +28,9 @@ import { SearchPipe } from './pipes/search.pipe';
         NzToolTipModule
     ],
     declarations: [
-        SearchPipe
+        SearchPipe,
+        NavPathPipe,
+        NavQueryPipe
     ],
     providers: [
         ThemeConstantService

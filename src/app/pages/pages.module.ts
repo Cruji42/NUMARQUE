@@ -34,6 +34,7 @@ import { SettingComponent } from './setting/setting.component';
 import { BlogGridComponent } from './blog/blog-grid/blog-grid.component';
 import { BlogListComponent } from './blog/blog-list/blog-list.component';
 import { BlogPostComponent } from './blog/blog-post/blog-post.component';
+import { CategoryViewComponent } from './category-view/category-view.component';
 
 
 const antdModule = [
@@ -73,13 +74,14 @@ const antdModule = [
         MembersComponent,
         PricingComponent,
         SettingComponent,
-BlogGridComponent,
+        BlogGridComponent,
         BlogListComponent,
-        BlogPostComponent
+        BlogPostComponent,
+        CategoryViewComponent
     ],
     providers: [
     ],
     schemas: [NO_ERRORS_SCHEMA]
 })
 
-export class PagesModule {}
+export class PagesModule { }

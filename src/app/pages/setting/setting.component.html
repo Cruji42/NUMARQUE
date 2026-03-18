@@ -1,4 +1,4 @@
-<div class="page-header has-tab">
+<!-- <div class="page-header has-tab">
     <h2 class="font-weight-normal">Perfil</h2>
 </div>
 <nz-tabset class="page-header-tab">
@@ -62,7 +62,7 @@
                     </div>
                 </form>
 
-                <!-- <div class="row">
+                <!- - <div class="row">
                     <div class="col-md-4">
                         <nz-form-item>
                             <nz-form-label>Phone Number</nz-form-label>
@@ -92,7 +92,7 @@
                             </nz-form-control>
                         </nz-form-item>
                     </div>
-                </div> -->
+                </div> -- >
             </nz-card>
             <nz-card nzTitle="Marcas asignadas">
                 <div class="row">
@@ -100,7 +100,7 @@
 
                 </div>
             </nz-card>
-            <!-- <nz-card nzTitle="Address Details">
+            <!- - <nz-card nzTitle="Address Details">
                 <div class="row">
                     <div class="col-md-12">
                         <nz-form-item>
@@ -134,10 +134,10 @@
                         </nz-form-item>
                     </div>
                 </div>
-            </nz-card> -->
+            </nz-card> - ->
         </div>
     </nz-tab>
-    <!-- <nz-tab nzTitle="Network">
+    <!- - <nz-tab nzTitle="Network">
         <div class="container">
             <div class="row">
                 <div class="col-md-8 mx-auto">
@@ -200,5 +200,193 @@
                 </div>
             </div>
         </div>
-    </nz-tab> -->
-</nz-tabset>
+    </nz-tab> - ->
+</nz-tabset> -->
+
+
+<!-- Page Header -->
+
+<div class="justify-content-start my-3 ">
+    <h1> <b>Mi perfil</b></h1>
+    <h5 class="text-mutted">Administra tu información</h5>
+</div>
+<!-- <div class="page-header">
+    <div class="page-title">Mi perfil</div>
+    <div class="page-subtitle">Administra tu información</div>
+</div> -->
+
+<!-- Two-column layout -->
+<div class="profile-layout">
+
+    <!-- LEFT: Profile card -->
+    <div class="profile-sidebar">
+        <div class="profile-card">
+
+            <!-- Avatar -->
+            <div class="avatar-wrapper">
+                <nz-avatar [nzSize]="80" nzIcon="user" [nzSrc]="profile_picture_url" [style.background]="avatarGradient"
+                    class="profile-avatar"></nz-avatar>
+                <nz-upload nzName="profile_picture" [nzShowUploadList]="false" [nzBeforeUpload]="beforeUpload"
+                    [nzAccept]="'image/png,image/jpeg,image/jpg'">
+                    <button class="avatar-edit-btn" nz-tooltip nzTooltipTitle="Cambiar foto">
+                        <i nz-icon nzType="edit"></i>
+                    </button>
+                </nz-upload>
+            </div>
+
+            <!-- Name & email -->
+            <div class="profile-name">{{ form.get('name')?.value }} {{ form.get('last_name')?.value }}</div>
+            <div class="profile-email">{{ userEmail }}</div>
+
+            <!-- Role badge -->
+            <div class="role-badge-wrap" *ngIf="userRole">
+                <span class="role-badge">{{ userRole }}</span>
+            </div>
+
+            <!-- Stats -->
+            <div class="profile-stats">
+                <div class="stat-item">
+                    <div class="stat-number">{{ brands_data?.length || 0 }}</div>
+                    <div class="stat-label">Marcas</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">—</div>
+                    <div class="stat-label">Descargas</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">—</div>
+                    <div class="stat-label">Compartidos</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">—</div>
+                    <div class="stat-label">Favoritos</div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- RIGHT: Forms -->
+    <div class="profile-content">
+
+        <!-- Card: Información básica -->
+        <div class="form-card">
+            <div class="form-card-title">Información básica</div>
+
+            <!-- Avatar upload row -->
+            <div class="photo-row">
+                <nz-avatar [nzSize]="52" nzIcon="user" [nzSrc]="profile_picture_url"
+                    [style.background]="avatarGradient"></nz-avatar>
+                <div class="photo-info">
+                    <div class="photo-label">Foto de perfil</div>
+                    <div class="photo-hint">PNG o JPG. Máximo 5MB · 120×120 recomendado</div>
+                </div>
+                <nz-upload nzName="profile_picture" [nzShowUploadList]="false" [nzBeforeUpload]="beforeUpload"
+                    [nzAccept]="'image/png,image/jpeg,image/jpg'">
+                    <button class="btn-outline">
+                        <i nz-icon nzType="upload"></i>
+                        Cargar foto
+                    </button>
+                </nz-upload>
+            </div>
+
+            <nz-divider class="card-divider"></nz-divider>
+
+            <form nz-form [formGroup]="form" (ngSubmit)="submitForm()" nzLayout="vertical">
+                <div class="form-grid-2">
+                    <nz-form-item>
+                        <nz-form-label nzRequired>Nombre</nz-form-label>
+                        <nz-form-control nzErrorTip="Campo requerido">
+                            <input nz-input formControlName="name" placeholder="Nombre" />
+                        </nz-form-control>
+                    </nz-form-item>
+
+                    <nz-form-item>
+                        <nz-form-label nzRequired>Apellido</nz-form-label>
+                        <nz-form-control nzErrorTip="Campo requerido">
+                            <input nz-input formControlName="last_name" placeholder="Apellido" />
+                        </nz-form-control>
+                    </nz-form-item>
+
+                    <nz-form-item class="span-2">
+                        <nz-form-label nzRequired>Compañía</nz-form-label>
+                        <nz-form-control nzErrorTip="Campo requerido">
+                            <input nz-input formControlName="company" placeholder="Compañía" />
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn-cancel" nz-button (click)="resetForm()">Cancelar</button>
+                    <button type="submit" class="btn-save" nz-button nzType="primary" [disabled]="form.invalid"
+                        [nzLoading]="isConfirmLoading">
+                        Guardar cambios
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Card: Marcas asignadas -->
+        <div class="form-card">
+            <div class="form-card-title">Marcas asignadas</div>
+            <div class="brands-grid">
+                <div class="brand-chip active" *ngFor="let b of brands_data">
+                    <span class="brand-dot" [style.background]="getBrandColor(b.name)"></span>
+                    {{ b.name }}
+                </div>
+                <div *ngIf="!brands_data || brands_data.length === 0" class="no-brands">
+                    Sin marcas asignadas
+                </div>
+            </div>
+            <div class="info-box">
+                <i nz-icon nzType="info-circle"></i>
+                Las marcas son asignadas por el Head Comercial. Contacta al administrador para solicitar acceso
+                adicional.
+            </div>
+        </div>
+
+        <!-- Card: Seguridad -->
+        <div class="form-card">
+            <div class="form-card-title">Seguridad</div>
+            <form nz-form [formGroup]="changePWForm" nzLayout="vertical">
+                <div class="form-grid-2">
+                    <nz-form-item>
+                        <nz-form-label nzRequired>Contraseña actual</nz-form-label>
+                        <nz-form-control>
+                            <nz-input-group [nzSuffix]="pwSuffix1">
+                                <input [type]="showOldPw ? 'text' : 'password'" nz-input formControlName="oldPassword"
+                                    placeholder="••••••••" />
+                            </nz-input-group>
+                            <ng-template #pwSuffix1>
+                                <i nz-icon [nzType]="showOldPw ? 'eye-invisible' : 'eye'" class="pw-toggle"
+                                    (click)="showOldPw = !showOldPw"></i>
+                            </ng-template>
+                        </nz-form-control>
+                    </nz-form-item>
+
+                    <nz-form-item>
+                        <nz-form-label nzRequired>Nueva contraseña</nz-form-label>
+                        <nz-form-control>
+                            <nz-input-group [nzSuffix]="pwSuffix2">
+                                <input [type]="showNewPw ? 'text' : 'password'" nz-input formControlName="newPassword"
+                                    placeholder="••••••••" />
+                            </nz-input-group>
+                            <ng-template #pwSuffix2>
+                                <i nz-icon [nzType]="showNewPw ? 'eye-invisible' : 'eye'" class="pw-toggle"
+                                    (click)="showNewPw = !showNewPw"></i>
+                            </ng-template>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn-save" nz-button nzType="primary" (click)="showConfirm()"
+                        [disabled]="changePWForm.invalid">
+                        Actualizar contraseña
+                    </button>
+                </div>
+            </form>
+        </div>
+
+    </div>
+</div>
