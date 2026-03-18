@@ -2,39 +2,109 @@
     position: fixed;
     top: $header-height;
     width: $side-nav-width;
-    background-color: $white;
-    border-right: 1px solid $border-color;
+    background-color: var(--navy2);
+    border-right: 1px solid var(--border);
     height: 100%;
     z-index: $zindex-navbar;
     overflow-y: auto;
-    @include transition(all 0.2s ease); 
+    @include transition(all 0.2s ease);
 
     @include screen-tablet {
         left: -$side-nav-width;
-    } 
+    }
 
     @include screen-laptop-only {
         width: $side-nav-width-laptop;
     }
 
+    // ── Dark menu base ──
     .side-nav-menu {
         margin-bottom: $header-height;
-        
+        background: var(--navy2) !important;
+        border-right: none !important;
+        color: var(--muted) !important;
+
+        // All menu items — dark style
+        .ant-menu-item,
+        .ant-menu-submenu-title {
+            color: var(--muted) !important;
+            transition: all 0.15s;
+
+            &:hover {
+                color: var(--text) !important;
+                background: rgba(59, 130, 246, 0.08) !important;
+            }
+
+            &:active {
+                background: rgba(59, 130, 246, 0.12) !important;
+            }
+
+            > a {
+                color: var(--muted) !important;
+
+                &:hover {
+                    color: var(--text) !important;
+                }
+            }
+
+            // Submenu arrow
+            .ant-menu-submenu-arrow {
+                &::after,
+                &::before {
+                    background: linear-gradient(to right, var(--muted), var(--muted)) !important;
+                }
+            }
+
+            &:hover .ant-menu-submenu-arrow {
+                &::after,
+                &::before {
+                    background: linear-gradient(to right, var(--text), var(--text)) !important;
+                }
+            }
+        }
+
+        // Selected item
+        .ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected {
+            background: rgba(59, 130, 246, 0.12) !important;
+            color: var(--blue2) !important;
+
+            a {
+                color: var(--blue2) !important;
+            }
+
+            &::after {
+                border-right: 3px solid var(--blue) !important;
+            }
+        }
+
+        // Active right-border indicator
+        .ant-menu-inline,
+        .ant-menu-vertical,
+        .ant-menu-vertical-left,
+        .ant-menu-vertical-right {
+            .ant-menu-item::after {
+                border-right: 3px solid var(--blue) !important;
+            }
+        }
+
+        // Sub-menus
+        .ant-menu-sub,
+        .ant-menu-inline.ant-menu-sub {
+            background: var(--navy3) !important;
+        }
+
         &:not(.ant-menu-inline-collapsed) {
             .dropdown-menu {
                 display: none;
             }
 
-            .ant-menu-submenu-open {
-
-                > .dropdown-menu {
-                    display: block !important;
-                }    
+            .ant-menu-submenu-open > .dropdown-menu {
+                display: block !important;
             }
         }
 
         &.ant-menu-inline-collapsed {
-           
+
             .ant-menu-submenu {
                 position: relative;
 
@@ -47,36 +117,31 @@
                     min-width: 200px;
                     margin-left: 4px;
                     border-radius: $border-radius;
+                    background: var(--navy2) !important;
+                    border: 1px solid var(--border) !important;
                     transition: all 0.2s ease-in-out;
                 }
 
-                &:hover {
-                    >.ant-menu {
-                        visibility: visible;
-                        opacity: 1;
-                    }
+                &:hover > .ant-menu {
+                    visibility: visible;
+                    opacity: 1;
                 }
 
-                &.ant-menu-submenu-inline {
+                &.ant-menu-submenu-inline > .ant-menu-submenu-title {
+                    .ant-menu-submenu-arrow {
+                        &:after {
+                            @include transform(rotate(-45deg) translateX(-2px));
+                        }
 
-                    > .ant-menu-submenu-title {
-
-                        .ant-menu-submenu-arrow {
-        
-                            &:after {
-                                @include transform(rotate(-45deg) translateX(-2px));
-                            }
-        
-                            &:before {
-                                @include transform(rotate(-130deg) translateX(2px));
-                            }
+                        &:before {
+                            @include transform(rotate(-130deg) translateX(2px));
                         }
                     }
                 }
             }
 
             .ant-menu-sub {
-                box-shadow: 0 2px 8px rgba(0,0,0,.15);
+                box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
             }
 
             .p-l-50 {
@@ -97,7 +162,7 @@
         .ant-menu-inline-collapsed {
             width: $side-nav-folded - 1px;
         }
-    }   
+    }
 
     perfect-scrollbar {
         overflow: visible;
@@ -110,79 +175,68 @@
         .ps__rail-x {
             display: none;
         }
-    }    
+    }
 }
 
 .is-expand {
     @include screen-tablet {
         .side-nav {
             left: 0px;
-        }   
+        }
     }
 }
 
+// Dark nav is always on — ignore the is-side-nav-dark toggle
 .is-side-nav-dark {
     .side-nav {
-        background-color: $menu-dark-bg;
+        background-color: var(--navy2);
     }
 }
 
+// Theme-color loop — keep dark sidebar, use blue accent
 @each $theme in $theme-color-loop {
     .#{nth($theme, 1)} {
+        .side-nav-menu {
+            .ant-menu:not(.ant-menu-horizontal) {
+                .ant-menu-item-selected {
+                    background: rgba(59, 130, 246, 0.12) !important;
 
-        &:not(.is-side-nav-dark) {
-
-            .side-nav-menu {
-                .ant-menu:not(.ant-menu-horizontal)  {
-
-                    .ant-menu-item-selected { 
-                        background: rgba(nth($theme, 2), 0.1);
-                        
-                        a {
-                            color: #{nth($theme, 2)};
-                        }
-                    }
-                }
-    
-                .ant-menu-inline,
-                .ant-menu-vertical,
-                .ant-menu-vertical-left,
-                .ant-menu-vertical-right {
-                    .ant-menu-item {
-                        &:after {
-                            border-right: 3px solid #{nth($theme, 2)};
-                        }
-                    }
-                }
-
-                .ant-menu-item, 
-                .ant-menu-submenu-title {
-
-                    &:active {
-                        background: rgba(nth($theme, 2), 0.1);
-                    }
-
-                    > a {
-
-                        &:hover {
-                            color: #{nth($theme, 2)};
-                        }
-                    }
-                }
-
-                .ant-menu-submenu-title {
-                    &:hover {
-                        color: #{nth($theme, 2)};
-
-                        .ant-menu-submenu-arrow{
-                            &:after,
-                            &:before {
-                                background: linear-gradient(to right, nth($theme, 2), nth($theme, 2))
-                            }
-                        }
+                    a {
+                        color: var(--blue2) !important;
                     }
                 }
             }
-        }    
+
+            .ant-menu-inline,
+            .ant-menu-vertical,
+            .ant-menu-vertical-left,
+            .ant-menu-vertical-right {
+                .ant-menu-item::after {
+                    border-right: 3px solid var(--blue) !important;
+                }
+            }
+
+            .ant-menu-item,
+            .ant-menu-submenu-title {
+                &:active {
+                    background: rgba(59, 130, 246, 0.1) !important;
+                }
+
+                > a:hover {
+                    color: var(--blue2) !important;
+                }
+            }
+
+            .ant-menu-submenu-title:hover {
+                color: var(--blue2) !important;
+
+                .ant-menu-submenu-arrow {
+                    &:after,
+                    &:before {
+                        background: linear-gradient(to right, var(--blue2), var(--blue2)) !important;
+                    }
+                }
+            }
+        }
     }
 }

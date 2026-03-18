@@ -1,12 +1,22 @@
 .footer {
     padding: 0px $layout-content-gutter;
     font-size: 90%;
-    
+    background-color: var(--navy2);
+    color: var(--muted);
+
+    a {
+        color: var(--muted);
+
+        &:hover {
+            color: var(--blue2);
+        }
+    }
 
     .footer-content {
         display: flex;
         height: $footer-height;
         align-items: center;
-        border-top: 1px solid $border-color;
+        border-top: 1px solid var(--border);
+        color: var(--muted);
     }
 }

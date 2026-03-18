@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap');
 @import url('./assets/lib/hljs/styles/atom-one-light.css');
 @import url('../node_modules/ng-zorro-antd/src/ng-zorro-antd.min.css');
 @import url('../node_modules/@fortawesome/fontawesome-free/css/all.min.css');
@@ -6,6 +7,19 @@
 
 :root {
   --b950: #060D1F;
+
+  /* ── NUMARQUE Dark Theme ── */
+  --navy:   #050d1a;
+  --navy2:  #0a1628;
+  --navy3:  #0f1f38;
+  --card:   #0d1b30;
+  --card2:  #112040;
+  --border: rgba(59, 130, 246, 0.15);
+  --blue:   #3B82F6;
+  --blue2:  #60a5fa;
+  --cyan:   #38bdf8;
+  --text:   #e8f0fe;
+  --muted:  #7a94b8;
   // --b900: rgb(33, 40, 68);
   // --b700: rgb(33, 40, 68);
   // --b500: #2563EB;
@@ -53,15 +67,20 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  background: linear-gradient(135deg, rgb(33, 40, 68) 0%, rgb(33, 40, 68) 50%, rgb(33, 40, 68) 100%);
+  //background: linear-gradient(135deg, #0d1b3e 0%, #1b3a7a 50%, #0d1b3e 100%);
+  // background: linear-gradient(135deg, rgb(33, 40, 68) 0%, rgb(33, 40, 68) 50%, rgb(33, 40, 68) 100%);
+  //background: linear-gradient(135deg, var(--nutec-color) 10%, var(--nutec-color) 50%, var(--nutec-color) 100%);
+  background-color: var(--nutec-color);
 }
 
 .login-page .left-pattern {
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(circle at 20% 30%, rgba(37, 99, 235, 0.25) 0%, transparent 50%),
-    radial-gradient(circle at 80% 70%, rgba(212, 160, 23, 0.15) 0%, transparent 45%);
+    radial-gradient(circle at 20% 30%, var(--nutec-color) 0%, transparent 50%),
+    radial-gradient(circle at 80% 70%, var(--nutec-secondary-color) 0%, transparent 45%);
+    // radial-gradient(circle at 20% 30%, rgba(37, 99, 235, 0.25) 0%, transparent 50%),
+    // radial-gradient(circle at 80% 70%, rgba(212, 160, 23, 0.15) 0%, transparent 45%);
 }
 
 .login-page .left-grid {
@@ -393,4 +412,529 @@
   width: 24px;
   height: 24px;
   margin: 0 auto;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   NUMARQUE DARK THEME — Global overrides
+   Matches the style of numarque_dashboard_dark.html,
+   auth (login-3) and welcome modules.
+   ═══════════════════════════════════════════════════════════ */
+
+/* ── Body & App Shell ── */
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--navy) !important;
+  color: var(--text);
+}
+
+.common-layout {
+  background: var(--navy);
+
+  .page-container {
+    background: var(--navy);
+
+    .main-content {
+      background: var(--navy);
+      color: var(--text);
+    }
+  }
+}
+
+/* ── Cards ── */
+.ant-card {
+  background: var(--card) !important;
+  border-color: var(--border) !important;
+  color: var(--text) !important;
+
+  .ant-card-head {
+    background: var(--card) !important;
+    border-color: var(--border) !important;
+    color: var(--text) !important;
+
+    .ant-card-head-title {
+      color: var(--text) !important;
+    }
+  }
+
+  .ant-card-body {
+    color: var(--text) !important;
+  }
+
+  .ant-card-meta-title {
+    color: var(--text) !important;
+  }
+
+  .ant-card-meta-description {
+    color: var(--muted) !important;
+  }
+}
+
+/* ── Tables ── */
+.ant-table {
+  background: var(--card) !important;
+  color: var(--text) !important;
+
+  .ant-table-thead > tr > th {
+    background: var(--navy2) !important;
+    color: var(--text) !important;
+    border-color: var(--border) !important;
+  }
+
+  .ant-table-tbody > tr > td {
+    background: var(--card) !important;
+    color: var(--text) !important;
+    border-color: var(--border) !important;
+  }
+
+  .ant-table-tbody > tr:hover > td {
+    background: var(--card2) !important;
+  }
+
+  .ant-table-placeholder {
+    background: var(--card) !important;
+    color: var(--muted) !important;
+  }
+
+  .ant-empty-description {
+    color: var(--muted) !important;
+  }
+}
+
+.ant-table-wrapper .ant-spin-nested-loading .ant-spin-container {
+  background: var(--card) !important;
+}
+
+/* ── Inputs & Forms ── */
+.ant-input {
+  background: var(--navy3) !important;
+  border-color: var(--border) !important;
+  color: var(--text) !important;
+
+  &::placeholder {
+    color: var(--muted) !important;
+  }
+
+  &:focus,
+  &:hover {
+    border-color: var(--blue) !important;
+  }
+}
+
+.ant-input-affix-wrapper {
+  background: var(--navy3) !important;
+  border-color: var(--border) !important;
+  color: var(--text) !important;
+
+  .ant-input {
+    background: transparent !important;
+  }
+
+  .anticon {
+    color: var(--muted) !important;
+  }
+
+  &:hover,
+  &:focus,
+  &.ant-input-affix-wrapper-focused {
+    border-color: var(--blue) !important;
+  }
+}
+
+.ant-form-item-label > label {
+  color: var(--text) !important;
+}
+
+.ant-form-item-explain-error {
+  color: #f87171 !important;
+}
+
+/* ── Select ── */
+.ant-select-selector {
+  background: var(--navy3) !important;
+  border-color: var(--border) !important;
+  color: var(--text) !important;
+}
+
+.ant-select-arrow {
+  color: var(--muted) !important;
+}
+
+.ant-select-dropdown {
+  background: var(--navy2) !important;
+  border: 1px solid var(--border) !important;
+
+  .ant-select-item {
+    color: var(--text) !important;
+
+    &:hover,
+    &.ant-select-item-option-active {
+      background: var(--navy3) !important;
+    }
+
+    &.ant-select-item-option-selected {
+      background: rgba(59, 130, 246, 0.15) !important;
+      color: var(--blue2) !important;
+    }
+  }
+}
+
+/* ── Dropdown menus ── */
+.ant-dropdown-menu {
+  background: var(--navy2) !important;
+  border: 1px solid var(--border) !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4) !important;
+
+  .ant-dropdown-menu-item {
+    color: var(--text) !important;
+
+    &:hover {
+      background: var(--navy3) !important;
+      color: var(--text) !important;
+    }
+
+    a {
+      color: var(--text) !important;
+    }
+  }
+
+  .ant-dropdown-menu-item-divider {
+    background: var(--border) !important;
+  }
+}
+
+/* ── Notification popup ── */
+.pop-notification {
+  background: var(--navy2) !important;
+  border: 1px solid var(--border) !important;
+
+  .border-bottom {
+    border-color: var(--border) !important;
+  }
+
+  .text-dark {
+    color: var(--text) !important;
+  }
+
+  p {
+    color: var(--text) !important;
+  }
+
+  small {
+    color: var(--muted) !important;
+  }
+}
+
+/* ── Lists ── */
+.ant-list {
+  background: transparent !important;
+
+  .ant-list-item {
+    border-color: var(--border) !important;
+    color: var(--text) !important;
+
+    a {
+      color: var(--text) !important;
+
+      &:hover {
+        color: var(--blue2) !important;
+      }
+    }
+  }
+}
+
+/* ── Modals ── */
+.ant-modal-content {
+  background: var(--navy2) !important;
+  color: var(--text) !important;
+  border: 1px solid var(--border) !important;
+
+  .ant-modal-header {
+    background: var(--navy2) !important;
+    border-color: var(--border) !important;
+
+    .ant-modal-title {
+      color: var(--text) !important;
+    }
+  }
+
+  .ant-modal-body {
+    color: var(--text) !important;
+  }
+
+  .ant-modal-footer {
+    border-color: var(--border) !important;
+  }
+
+  .ant-modal-close-x {
+    color: var(--muted) !important;
+  }
+}
+
+/* ── Tabs ── */
+.ant-tabs-nav {
+  background: transparent !important;
+
+  .ant-tabs-tab {
+    color: var(--muted) !important;
+
+    &.ant-tabs-tab-active .ant-tabs-tab-btn {
+      color: var(--blue2) !important;
+    }
+
+    &:hover {
+      color: var(--text) !important;
+    }
+  }
+
+  .ant-tabs-ink-bar {
+    background: var(--blue) !important;
+  }
+
+  &::before {
+    border-color: var(--border) !important;
+  }
+}
+
+.ant-tabs-content-holder {
+  color: var(--text) !important;
+}
+
+/* ── Collapse ── */
+.ant-collapse {
+  background: var(--card) !important;
+  border-color: var(--border) !important;
+
+  .ant-collapse-item {
+    border-color: var(--border) !important;
+  }
+
+  .ant-collapse-header {
+    color: var(--text) !important;
+  }
+
+  .ant-collapse-content {
+    background: var(--card2) !important;
+    border-color: var(--border) !important;
+    color: var(--text) !important;
+  }
+}
+
+/* ── Statistic ── */
+.ant-statistic-title {
+  color: var(--muted) !important;
+}
+
+.ant-statistic-content {
+  color: var(--text) !important;
+}
+
+/* ── Breadcrumb ── */
+.ant-breadcrumb {
+  color: var(--muted) !important;
+
+  a {
+    color: var(--muted) !important;
+
+    &:hover {
+      color: var(--blue2) !important;
+    }
+  }
+
+  .ant-breadcrumb-separator {
+    color: var(--muted) !important;
+  }
+}
+
+/* ── Page Header ── */
+.ant-page-header {
+  background: var(--navy2) !important;
+  color: var(--text) !important;
+
+  .ant-page-header-heading-title {
+    color: var(--text) !important;
+  }
+
+  .ant-page-header-heading-sub-title {
+    color: var(--muted) !important;
+  }
+}
+
+/* ── Drawer ── */
+.ant-drawer-content {
+  background: var(--navy2) !important;
+  color: var(--text) !important;
+}
+
+.ant-drawer-header {
+  background: var(--navy2) !important;
+  border-color: var(--border) !important;
+
+  .ant-drawer-title {
+    color: var(--text) !important;
+  }
+
+  .ant-drawer-close {
+    color: var(--muted) !important;
+  }
+}
+
+/* ── Badges & Avatars ── */
+.ant-badge-dot {
+  background: var(--blue) !important;
+}
+
+.ant-avatar:not([style*="background"]) {
+  background: linear-gradient(135deg, var(--blue) 0%, var(--cyan) 100%) !important;
+  color: #fff !important;
+}
+
+/* ── Spin / Loading ── */
+.ant-spin-dot-item {
+  background: var(--blue) !important;
+}
+
+/* ── Divider ── */
+.ant-divider {
+  border-color: var(--border) !important;
+  color: var(--muted) !important;
+}
+
+/* ── Typography helpers ── */
+.text-dark {
+  color: var(--text) !important;
+}
+
+.text-muted-dark {
+  color: var(--muted) !important;
+}
+
+.border-bottom {
+  border-color: var(--border) !important;
+}
+
+/* ── Syne font helper ── */
+.font-syne {
+  font-family: 'Syne', sans-serif !important;
+}
+
+/* ── Page title (dashboard style) ── */
+.nm-page-title {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 26px;
+  color: var(--text);
+  margin-bottom: 2px;
+}
+
+.nm-page-sub {
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 20px;
+}
+
+/* ── Stat card (dashboard style) ── */
+.nm-stat-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 16px;
+
+  .nm-stat-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: rgba(59, 130, 246, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+  }
+
+  .nm-stat-num {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 22px;
+    color: var(--text);
+  }
+
+  .nm-stat-label {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+}
+
+/* ── Chart card (dashboard style) ── */
+.nm-chart-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px 18px;
+
+  .nm-chart-title {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text);
+  }
+}
+
+/* ── Banner (dashboard style) ── */
+.nm-banner {
+  background: var(--card2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: var(--blue);
+  }
+
+  .nm-banner-tag {
+    font-size: 10px;
+    color: var(--blue2);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 4px;
+  }
+
+  .nm-banner-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    color: var(--text);
+  }
+
+  .nm-banner-sub {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+
+  .nm-banner-btn {
+    margin-left: auto;
+    background: transparent;
+    border: 1px solid var(--blue);
+    color: var(--blue2);
+    font-size: 12px;
+    padding: 7px 14px;
+    border-radius: 7px;
+    cursor: pointer;
+    white-space: nowrap;
+    font-family: 'DM Sans', sans-serif;
+    transition: background 0.15s;
+
+    &:hover {
+      background: rgba(59, 130, 246, 0.1);
+    }
+  }
 }

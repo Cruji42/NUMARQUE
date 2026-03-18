@@ -1,7 +1,7 @@
 .header {
-    background: $white;
+    background: var(--navy2);
     height: $header-height;
-    border-bottom: 1px solid $border-color;
+    border-bottom: 1px solid var(--border);
     position: fixed;
     top: 0px;
     width: 100%;
@@ -10,8 +10,8 @@
 
     .logo {
         width: $side-nav-width;
-        border-right: 1px solid $border-color;
-        @include transition(all 0.2s ease); 
+        border-right: 1px solid var(--border);
+        @include transition(all 0.2s ease);
 
         @include screen-laptop-only {
             width: $side-nav-width-laptop;
@@ -20,7 +20,7 @@
         @include screen-tablet {
             display: none;
         }
-        
+
         > a {
             display: block;
             text-align: center;
@@ -30,8 +30,13 @@
             display: none;
         }
 
-        &.logo-white {
+        // Always show the light logo on dark background
+        &.logo-dark {
             display: none;
+        }
+
+        &.logo-white {
+            display: block;
         }
     }
 
@@ -39,8 +44,6 @@
         flex: 1;
         display: flex;
         justify-content: space-between;
-
-
 
         .nav-left,
         .nav-right {
@@ -56,24 +59,24 @@
                 nz-dropdown > a {
                     padding: 5px 15px;
                     font-size: 18px;
-                    color: $body-color;
+                    color: var(--muted);
                     display: block;
-                    @include transition(background-color 0.3s); 
+                    @include transition(background-color 0.3s);
                     border-radius: $border-radius;
 
                     &:hover,
                     &:focus,
                     &:active {
-                        color: $brand-primary;
-                        background-color: rgba($brand-primary, 0.1);
+                        color: var(--text);
+                        background-color: rgba(59, 130, 246, 0.1);
 
                         .ant-badge {
-                            color: $brand-primary; 
-                        }    
+                            color: var(--text);
+                        }
                     }
 
                     .ant-badge {
-                        color: $body-color;
+                        color: var(--muted);
                         font-size: 18px;
                     }
                 }
@@ -93,15 +96,15 @@
                     height: 44px;
                     width: 100%;
                     border-radius: 999px;
-                    background: #f5f7fb;
-                    border: 1px solid #edf0f5;
+                    background: var(--navy3);
+                    border: 1px solid var(--border);
                     display: flex;
                     align-items: center;
                     padding: 0 16px;
                     gap: 10px;
 
                     .anticon {
-                        color: #7a8599;
+                        color: var(--muted);
                         font-size: 20px;
                     }
 
@@ -110,12 +113,12 @@
                         outline: none;
                         background: transparent;
                         width: 100%;
-                        color: #576074;
+                        color: var(--text);
                         font-size: 18px;
                         line-height: 1;
 
                         &::placeholder {
-                            color: #6f7890;
+                            color: var(--muted);
                             opacity: 1;
                         }
                     }
@@ -147,7 +150,7 @@
     }
 
     .ant-dropdown-link,
-    .ant-dropdown-trigger  {
+    .ant-dropdown-trigger {
         .anticon:not(.anticon-ellipsis) {
             font-size: 18px;
             transform: none;
@@ -155,7 +158,6 @@
     }
 
     &.header-folded {
-
         .logo {
             width: $side-nav-folded;
         }
@@ -169,7 +171,6 @@
 .is-folded {
     @include screen-tablet-above {
         .header {
-
             .logo {
                 width: $side-nav-folded;
 
@@ -181,10 +182,11 @@
                     display: block;
                 }
             }
-        }    
+        }
     }
 }
 
+// Theme-color overrides — keep header dark, only tint the border accent
 .is-primary,
 .is-secondary,
 .is-success,
@@ -192,10 +194,10 @@
 .is-custom {
 
     .header {
-        border-bottom: 0px;
+        border-bottom: 1px solid var(--border);
 
         .logo {
-            border-color: transparent;
+            border-color: var(--border);
 
             &.logo-dark {
                 display: none;
@@ -208,38 +210,36 @@
 
         .nav-left,
         .nav-right {
-
             li {
-
                 > a,
                 nz-dropdown > a {
-                    color: rgba($white, 0.8);
+                    color: var(--muted);
 
                     &:hover,
                     &:focus,
                     &:active {
-                        color: $white;
-                        background-color: rgba($white, 0.15);
+                        color: var(--text);
+                        background-color: rgba(59, 130, 246, 0.1);
 
                         .ant-badge {
-                            color: $white; 
-                        }    
+                            color: var(--text);
+                        }
                     }
 
                     .ant-badge {
-                        color: rgba($white, 0.8);
+                        color: var(--muted);
                     }
-                }    
+                }
             }
-        }        
+        }
     }
 }
 
 @each $theme in $theme-color-loop {
     .#{nth($theme, 1)} {
-
         .header {
-            background-color: #{nth($theme, 2)};
+            // Keep dark background; only apply a subtle left-border accent
+            background-color: var(--navy2);
         }
     }
 }
