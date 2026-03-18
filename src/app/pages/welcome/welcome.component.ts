@@ -15,21 +15,21 @@ export class WelcomeComponent {
 
   // ─── BRANDS DATA ──────────────────────────────────────────
   brands = [
-    { icon: '🐾', name: 'NUPEC',    desc: 'Alimento premium para mascotas de todas las etapas',  count: 248 },
-    { icon: '🌿', name: 'NUCAN',    desc: 'Nutrición canina especializada y balanceada',          count: 132 },
-    { icon: '🐎', name: 'GALOPE',   desc: 'Nutrición equina de alto rendimiento',                 count: 97  },
-    { icon: '⭐', name: 'ÓPTIMO',   desc: 'Fórmulas avanzadas para rendimiento máximo',           count: 86  },
-    { icon: '🐄', name: 'PECUARIO', desc: 'Soluciones para ganadería y producción animal',        count: 73  },
+    { icon: 'assets/images/logo/brands/logo-nupec.png', name: 'NUPEC',    desc: 'Alimento premium para mascotas de todas las etapas',  count: 248 },
+    { icon: 'assets/images/logo/brands/logo-nucan.png', name: 'NUCAN',    desc: 'Nutrición canina especializada y balanceada',          count: 132 },
+    { icon: 'assets/images/logo/brands/logo-nupec.png', name: 'GALOPE',   desc: 'Nutrición equina de alto rendimiento',                 count: 97  },
+    { icon: 'assets/images/logo/brands/logo-optimo-selecto.png', name: 'ÓPTIMO',   desc: 'Fórmulas avanzadas para rendimiento máximo',           count: 86  },
+    { icon: 'assets/images/logo/brands/logo-nupec.png', name: 'PECUARIO', desc: 'Soluciones para ganadería y producción animal',        count: 73  },
   ];
 
   // ─── FILTERS ──────────────────────────────────────────────
   filters = [
     { label: 'Todo',         value: 'all'     },
-    { label: '🐾 NUPEC',    value: 'nupec'   },
-    { label: '🌿 NUCAN',    value: 'nucan'   },
-    { label: '🐎 GALOPE',   value: 'galope'  },
-    { label: '⭐ ÓPTIMO',   value: 'optimo'  },
-    { label: '🐄 PECUARIO', value: 'pecuario'},
+    { label: 'NUPEC',    value: 'nupec'   },
+    { label: 'NUCAN',    value: 'nucan'   },
+    { label: 'GALOPE',   value: 'galope'  },
+    { label: 'ÓPTIMO',   value: 'optimo'  },
+    { label: 'PECUARIO', value: 'pecuario'},
   ];
 
   // ─── MASONRY ITEMS ────────────────────────────────────────
@@ -37,8 +37,8 @@ export class WelcomeComponent {
     {
       height: 180, icon: '🐾',
       bg: 'linear-gradient(135deg,#1E3A8A,#2563EB)',
-      brandBg: 'rgba(37,99,235,.15)', brandColor: '#93C5FD',
-      brandLabel: '🐾 NUPEC',
+      brandBg: 'rgba(37,99,235,.15)', brandColor: 'var(--nupec-color)',
+      brandLabel: 'NUPEC',
       name: 'Kit campaña Q2 2026 — Portada principal',
       type: 'PNG', category: 'ATL', downloads: 82
     },
@@ -46,15 +46,15 @@ export class WelcomeComponent {
       height: 220, icon: '🐎',
       bg: 'linear-gradient(135deg,#7C2D12,#F97316)',
       brandBg: 'rgba(249,115,22,.15)', brandColor: '#FDBA74',
-      brandLabel: '🐎 GALOPE',
+      brandLabel: 'GALOPE',
       name: 'Video spot TV 30s — Alto rendimiento',
       type: 'MP4', category: 'ATL', downloads: 76
     },
     {
       height: 160, icon: '🌿',
       bg: 'linear-gradient(135deg,#064E3B,#10B981)',
-      brandBg: 'rgba(16,185,129,.15)', brandColor: '#6EE7B7',
-      brandLabel: '🌿 NUCAN',
+      brandBg: 'rgba(16,185,129,.15)', brandColor: 'var(--nucan-color)',
+      brandLabel: 'NUCAN',
       name: 'Banner digital 728×90px',
       type: 'PNG', category: 'Digital', downloads: 61
     },
@@ -62,15 +62,15 @@ export class WelcomeComponent {
       height: 200, icon: '🐄',
       bg: 'linear-gradient(135deg,#831843,#EC4899)',
       brandBg: 'rgba(236,72,153,.15)', brandColor: '#F9A8D4',
-      brandLabel: '🐄 PECUARIO',
+      brandLabel: 'PECUARIO',
       name: 'Anuncio Pecuario — Ganadería extensiva',
       type: 'MP4', category: 'BTL', downloads: 54
     },
     {
       height: 140, icon: '📄',
       bg: 'linear-gradient(135deg,#1E3A8A,#60A5FA)',
-      brandBg: 'rgba(37,99,235,.15)', brandColor: '#93C5FD',
-      brandLabel: '🐾 NUPEC',
+      brandBg: 'rgba(37,99,235,.15)', brandColor: 'var(--nupec-color)',
+      brandLabel: 'NUPEC',
       name: 'Brief campaña Adulto Hero',
       type: 'PDF', category: 'ATL', downloads: 48
     },
@@ -78,15 +78,15 @@ export class WelcomeComponent {
       height: 240, icon: '⭐',
       bg: 'linear-gradient(135deg,#4C1D95,#8B5CF6)',
       brandBg: 'rgba(139,92,246,.15)', brandColor: '#C4B5FD',
-      brandLabel: '⭐ ÓPTIMO',
+      brandLabel: 'ÓPTIMO',
       name: 'Presentación Comercial v3 — Distribuidores',
       type: 'PDF', category: 'Com. técnica', downloads: 42
     },
     {
       height: 170, icon: '🖼',
-      bg: 'linear-gradient(135deg,#92400E,#FCD34D)',
+      bg: 'linear-gradient(135deg,#92400E,var(--nutec-secondary-color))',
       brandBg: 'rgba(249,115,22,.15)', brandColor: '#FDBA74',
-      brandLabel: '🐎 GALOPE',
+      brandLabel: 'GALOPE',
       name: 'Mockup Galope — Material POP',
       type: 'PDF', category: 'BTL', downloads: 38
     },
@@ -94,15 +94,15 @@ export class WelcomeComponent {
       height: 190, icon: '🌱',
       bg: 'linear-gradient(135deg,#064E3B,#34D399)',
       brandBg: 'rgba(16,185,129,.15)', brandColor: '#6EE7B7',
-      brandLabel: '🌿 NUCAN',
+      brandLabel: 'NUCAN',
       name: 'Logo NUCAN — versión vectorial',
       type: 'AI', category: 'Identidad', downloads: 35
     },
     {
       height: 155, icon: '🎬',
       bg: 'linear-gradient(135deg,#1E40AF,#818CF8)',
-      brandBg: 'rgba(37,99,235,.15)', brandColor: '#93C5FD',
-      brandLabel: '🐾 NUPEC',
+      brandBg: 'rgba(255, 0, 0, 0.15)', brandColor: 'var(--nupec-color)',
+      brandLabel: 'NUPEC',
       name: 'Reel Instagram — Cachorros',
       type: 'MP4', category: 'Digital', downloads: 29
     },
@@ -110,7 +110,7 @@ export class WelcomeComponent {
       height: 210, icon: '📊',
       bg: 'linear-gradient(135deg,#500724,#F43F5E)',
       brandBg: 'rgba(236,72,153,.15)', brandColor: '#F9A8D4',
-      brandLabel: '🐄 PECUARIO',
+      brandLabel: 'PECUARIO',
       name: 'Ficha técnica — Evento Expoagro',
       type: 'PDF', category: 'Eventos', downloads: 27
     },

@@ -79,7 +79,7 @@
   <p class="sec-sub">Cada marca tiene su propio espacio con materiales organizados por categoría y campaña.</p>
   <div class="brands-grid">
     <div class="brand-card" (click)="goToLogin()" *ngFor="let brand of brands">
-      <span class="brand-icon">{{ brand.icon }}</span>
+      <span class="brand-icon"><img src="{{brand.icon}}"alt="" class="logo-icon"></span>
       <div class="brand-name">{{ brand.name }}</div>
       <div class="brand-desc">{{ brand.desc }}</div>
       <div class="brand-count">📁 {{ brand.count }} archivos</div>

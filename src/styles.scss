@@ -6,23 +6,34 @@
 
 :root {
   --b950: #060D1F;
-  --b900: #0D1B3E;
-  --b700: #1B3A7A;
-  --b600: #1E4FC2;
-  --b500: #2563EB;
-  --b400: #3B82F6;
-  --b300: #93C5FD;
-  --b100: #DBEAFE;
-  --b50: #EFF6FF;
-  --g400: #F0B429;
-  --g300: #FCD34D;
-  --gr900: #0F172A;
-  --gr600: #475569;
-  --gr400: #94A3B8;
-  --gr200: #E2E8F0;
-  --gr100: #F1F5F9;
-  --gr50: #F8FAFC;
+  // --b900: rgb(33, 40, 68);
+  // --b700: rgb(33, 40, 68);
+  // --b500: #2563EB;
+  // --b400: #3B82F6;
+  // --b300: #93C5FD;
+  // --b100: #DBEAFE;
+  // --b50: #EFF6FF;
+  // --g400: #F0B429;
+  // --g300: #FCD34D;
+  // --gr900: #0F172A;
+  // --gr600: #475569;
+  // --gr400: #94A3B8;
+  // --gr200: #E2E8F0;
+  // --gr100: #F1F5F9;
+  // --gr50: #F8FAFC;
   --w: #FFFFFF;
+  --nupec-color: rgb(0, 133, 202);
+  --nucan-color: rgb(79, 22, 87);
+  --nufit-color: rgb(94, 60, 50);
+  --nucat-color: rgb(227, 28, 121);
+  --optimo-selecto-color: rgb(195, 36, 32);
+  --optimo-felino-color: rgb(127, 39, 126);
+  --incasara-color: rgb(236, 97, 119);
+  // Estos colores son los que van para la interfaz
+  --nutec-color: rgb(33, 40, 68);
+  --nutec-secondary-color: rgb(27,94,165);
+
+
 }
 
 
@@ -42,7 +53,7 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  background: linear-gradient(135deg, #0d1b3e 0%, #1b3a7a 50%, #0d1b3e 100%);
+  background: linear-gradient(135deg, rgb(33, 40, 68) 0%, rgb(33, 40, 68) 50%, rgb(33, 40, 68) 100%);
 }
 
 .login-page .left-pattern {
@@ -114,7 +125,7 @@
 
 .login-page h1 span {
   //color: #fcd34d;
-  color: #1e4fc2;
+  color: var(--nutec-secondary-color);
 }
 
 .login-page .desc {
@@ -219,7 +230,7 @@
 .login-page .btn {
   width: 100%;
   height: 46px;
-  background: #1e4fc2;
+  background: var(--nutec-secondary-color);
   color: #fff;
   border: none;
   border-radius: 10px;
@@ -327,11 +338,11 @@
 }
 
 .bg-news {
-  background: linear-gradient(135deg, #1B3A7A 0%, #0D1B3E 100%);
+  background: linear-gradient(135deg, rgb(33, 40, 68) 0%, rgb(33, 40, 68) 100%);
   color: #FFFFFF !important;
 }
 .bl{
-  color: #FCD34D;
+  color: var(--nutec-secondary-color);
 }
 
 .bl-mutted {
