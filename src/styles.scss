@@ -351,3 +351,35 @@
 .btn-news:hover{
     background: #f3f4f6;
 }
+
+/* Menu icon styling for image icons */
+.menu-icon {
+  width: 40px;
+  height: 40px;
+  vertical-align: middle;
+  object-fit: contain;
+}
+
+/* Centered menu icon for items without title */
+.menu-icon-centered {
+  width: 70px;
+  height: auto;
+  object-fit: contain;
+  display: block;
+  margin: 0 auto;
+}
+
+/* Link styling for icon-only menu items */
+.icon-only-link {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* When menu is collapsed, adjust icon size */
+.ant-menu-inline-collapsed .menu-icon,
+.ant-menu-inline-collapsed .menu-icon-centered {
+  width: 24px;
+  height: 24px;
+  margin: 0 auto;
+}
