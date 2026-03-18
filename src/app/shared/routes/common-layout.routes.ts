@@ -3,6 +3,12 @@ import { ComponentsComponent } from '../../components/components.component'
 
 export const CommonLayout_ROUTES: Routes = [
 
+    //Home
+    {
+        path: 'home',
+        loadChildren: () => import('../../pages/home/home.module').then(m => m.HomeModule),
+    },
+
     //Dashboard
     {
         path: 'dashboard',

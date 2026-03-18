@@ -61,6 +61,15 @@ export const ROUTES: SideNavInterface[] = [
         canAccess: [1],
         submenu: [
             {
+                path: '/home',
+                title: 'Home',
+                iconType: 'nzIcon',
+                icon: 'home',
+                iconTheme: '',
+                canAccess: [1, 2, 3],
+                submenu: []
+            },
+            {
                 path: '/dashboard/default',
                 title: 'Dashboard',
                 iconType: 'nzIcon',
@@ -86,16 +95,16 @@ export const ROUTES: SideNavInterface[] = [
                 iconTheme: 'outline',
                 canAccess: [1, 2, 3],
                 submenu: []
-            },
-            {
-                path: '/apps/file-manager',
-                title: 'File Manager',
-                iconType: 'nzIcon',
-                icon: 'file',
-                iconTheme: '',
-                canAccess: [1, 2, 3],
-                submenu: []
             }
+            // {
+            //     path: '/apps/file-manager',
+            //     title: 'File Manager',
+            //     iconType: 'nzIcon',
+            //     icon: 'file',
+            //     iconTheme: '',
+            //     canAccess: [1, 2, 3],
+            //     submenu: []
+            // }
         ]
     },
 

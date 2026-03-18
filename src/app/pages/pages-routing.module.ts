@@ -10,6 +10,7 @@ import { BlogGridComponent } from './blog/blog-grid/blog-grid.component';
 import { BlogListComponent } from './blog/blog-list/blog-list.component';
 import { BlogPostComponent } from './blog/blog-post/blog-post.component';
 import { CategoryViewComponent } from './category-view/category-view.component';
+// HomeComponent is now lazy-loaded at /home via HomeModule
 
 const routes: Routes = [
     {
@@ -40,7 +41,7 @@ const routes: Routes = [
     {
         path: 'category-view',
         component: CategoryViewComponent,
-        runGuardsAndResolvers: 'paramsOrQueryParamsChange', // 👈 esto es todo lo que necesitas
+        runGuardsAndResolvers: 'paramsOrQueryParamsChange',
         data: { title: 'Category View', headerDisplay: "none" }
     },
     {
