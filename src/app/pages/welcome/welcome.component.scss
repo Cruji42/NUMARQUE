@@ -5,7 +5,7 @@
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 :host {
-  font-family: 'Inter', sans-serif;
+  font-family: var(--font-primary);
   background: var(--b950);
   color: var(--w);
   display: block;
@@ -39,13 +39,13 @@ nav {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: 'Outfit', sans-serif;
+  font-family: var(--font-primary);
   font-weight: 800;
   font-size: 16px;
 }
 
 .logo-name {
-  font-family: 'Outfit', sans-serif;
+  font-family: var(--font-primary);
   font-weight: 700;
   font-size: 17px;
 }
@@ -181,7 +181,7 @@ nav {
 }
 
 h1 {
-  font-family: 'Outfit', sans-serif;
+  font-family: var(--font-primary);
   font-size: 66px;
   font-weight: 800;
   line-height: 1.08;
@@ -222,7 +222,7 @@ h1 {
   border-radius: 20px;
   font-size: 16px;
   color: var(--w);
-  font-family: 'Inter', sans-serif;
+  font-family: var(--font-primary);
   outline: none;
   backdrop-filter: blur(12px);
   cursor: pointer;
@@ -294,7 +294,7 @@ h1 {
 .stat { text-align: center; }
 
 .stat-n {
-  font-family: 'Outfit', sans-serif;
+  font-family: var(--font-primary);
   font-size: 44px;
   font-weight: 800;
 
@@ -325,7 +325,7 @@ h1 {
 
 .sec-title {
   text-align: center;
-  font-family: 'Outfit', sans-serif;
+  font-family: var(--font-primary);
   font-size: 38px;
   font-weight: 700;
   margin-bottom: 10px;
@@ -382,7 +382,7 @@ h1 {
 }
 
 .brand-name {
-  font-family: 'Outfit', sans-serif;
+  font-family: var(--font-primary);
   font-size: 16px;
   font-weight: 700;
   margin-bottom: 6px;
@@ -426,7 +426,7 @@ h1 {
   border: 1px solid rgba(255, 255, 255, 0.1);
   color: rgba(255, 255, 255, 0.6);
   background: transparent;
-  font-family: 'Inter', sans-serif;
+  font-family: var(--font-primary);
   cursor: pointer;
 
   &.active {
@@ -515,7 +515,7 @@ h1 {
 }
 
 .step-num {
-  font-family: 'Outfit', sans-serif;
+  font-family: var(--font-primary);
   font-size: 52px;
   font-weight: 800;
   color: var(--nutec-secondary-color);
@@ -530,7 +530,7 @@ h1 {
 }
 
 .step-title {
-  font-family: 'Outfit', sans-serif;
+  font-family: var(--font-primary);
   font-size: 18px;
   font-weight: 700;
   margin-bottom: 10px;
@@ -549,7 +549,7 @@ h1 {
   background: var(--b950);
 
   h2 {
-    font-family: 'Outfit', sans-serif;
+    font-family: var(--font-primary);
     font-size: 46px;
     font-weight: 800;
     margin-bottom: 16px;
@@ -580,7 +580,7 @@ h1 {
   font-size: 15px;
   font-weight: 600;
   cursor: pointer;
-  font-family: 'Inter', sans-serif;
+  font-family: var(--font-primary);
 
   &:hover { background: var(--b500); }
 }
@@ -594,7 +594,7 @@ h1 {
   font-size: 15px;
   font-weight: 500;
   cursor: pointer;
-  font-family: 'Inter', sans-serif;
+  font-family: var(--font-primary);
 
   &:hover { background: rgba(255, 255, 255, 0.1); }
 }

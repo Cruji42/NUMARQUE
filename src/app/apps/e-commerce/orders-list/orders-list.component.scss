@@ -8,7 +8,7 @@
   margin-bottom: 24px;
 
   .page-title {
-    font-family: 'Syne', sans-serif;
+    font-family: var(--font-primary);
     font-size: 22px;
     font-weight: 700;
     color: var(--text);
@@ -52,7 +52,7 @@
       color: var(--text);
       outline: none;
       width: 220px;
-      font-family: 'DM Sans', sans-serif;
+      font-family: var(--font-primary);
       transition: border-color 0.2s;
 
       &:focus {
@@ -103,7 +103,7 @@
     font-size: 13px;
     font-weight: 600;
     cursor: pointer;
-    font-family: 'DM Sans', sans-serif;
+    font-family: var(--font-primary);
     margin-left: auto;
     display: flex;
     align-items: center;
@@ -178,7 +178,7 @@
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
 
   .ant-table {
-    font-family: 'DM Sans', sans-serif;
+    font-family: var(--font-primary);
     font-size: 13px;
     background: var(--card);
     color: var(--text);
@@ -412,7 +412,7 @@
   padding: 16px 0 4px;
 
   .modal-user-name {
-    font-family: 'Syne', sans-serif;
+    font-family: var(--font-primary);
     font-size: 18px;
     font-weight: 700;
     color: var(--text);

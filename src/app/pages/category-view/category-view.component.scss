@@ -63,7 +63,7 @@
         border: 1.5px solid transparent;
         border-radius: 20px;
         font-size: 13px; outline: none;
-        font-family: 'DM Sans', sans-serif;
+        font-family: var(--font-primary);
         color: var(--text);
         transition: border-color 0.2s, background 0.2s;
 
@@ -100,7 +100,7 @@
     margin-bottom: 24px;
 
     .category-brand-title {
-        font-family: 'Syne', sans-serif;
+        font-family: var(--font-primary);
         font-size: 22px;
         font-weight: 700;
         color: var(--text);
@@ -164,7 +164,7 @@
     min-width: 0;
 
     .card-title {
-        font-family: 'Syne', sans-serif;
+        font-family: var(--font-primary);
         font-size: 15px;
         font-weight: 700;
         color: var(--text);

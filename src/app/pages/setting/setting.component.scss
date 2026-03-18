@@ -8,7 +8,7 @@
   margin-bottom: 24px;
 
   .page-title {
-    font-family: 'Syne', sans-serif;
+    font-family: var(--font-primary);
     font-size: 22px;
     font-weight: 700;
     color: var(--text);
@@ -84,7 +84,7 @@
 
 // Name & email
 .profile-name {
-  font-family: 'Syne', sans-serif;
+  font-family: var(--font-primary);
   font-size: 17px;
   font-weight: 700;
   color: var(--text);
@@ -131,7 +131,7 @@
     font-size: 20px;
     font-weight: 700;
     color: var(--text);
-    font-family: 'Syne', sans-serif;
+    font-family: var(--font-primary);
   }
 
   .stat-label {
@@ -251,7 +251,7 @@
   font-size: 13px;
   font-weight: 500;
   cursor: pointer;
-  font-family: 'DM Sans', sans-serif;
+  font-family: var(--font-primary);
   transition: all 0.18s;
 
   &:hover {
