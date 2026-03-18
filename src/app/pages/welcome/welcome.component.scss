@@ -343,7 +343,15 @@ h1 {
 
 .brands-grid {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.species-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
   gap: 16px;
   max-width: 1100px;
   margin: 0 auto;
@@ -364,7 +372,13 @@ h1 {
 .brand-icon {
   font-size: 40px;
   margin-bottom: 16px;
-  display: block;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.icon-white {
+  filter: brightness(0) invert(1);
 }
 
 .brand-name {
