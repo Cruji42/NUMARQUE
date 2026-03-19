@@ -24,14 +24,14 @@ brands = [
 ];
 
 species = [
-  { icon: 'assets/images/logo/species/icono-aves.png', name: 'AVES', desc: 'Nutrición especializada para aves de producción', count: 248 },
-  { icon: 'assets/images/logo/species/icono-camaron.png', name: 'CAMARONES', desc: 'Soluciones nutricionales para acuicultura de camarón', count: 132 },
-  { icon: 'assets/images/logo/species/icono-cerdos.png', name: 'CERDOS', desc: 'Alimentación balanceada para porcicultura', count: 97 },
-  { icon: 'assets/images/logo/species/icono-equinos.png', name: 'EQUINOS', desc: 'Nutrición equina de alto rendimiento', count: 73 },
-  { icon: 'assets/images/logo/species/icono-gallos.png', name: 'GALLOS', desc: 'Fórmulas especializadas para gallos de combate y exhibición', count: 86 },
-  { icon: 'assets/images/logo/species/icono-peces.png', name: 'PECES', desc: 'Nutrición acuícola para el crecimiento óptimo de peces', count: 86 },
-  { icon: 'assets/images/logo/species/icono-rumiantes.png', name: 'RUMIANTES', desc: 'Soluciones para ganadería bovina, ovina y caprina', count: 86 },
-  { icon: 'assets/images/logo/species/icono-feed-solutions.png', name: 'FEED SOLUTIONS', desc: 'Soluciones integrales de nutrición animal a medida', count: 86 }
+  { icon: 'assets/images/logo/species/icono-aves-dark.png', name: 'AVES', desc: 'Nutrición especializada para aves de producción', count: 248 },
+  { icon: 'assets/images/logo/species/icono-camaron-dark.png', name: 'CAMARONES', desc: 'Soluciones nutricionales para acuicultura de camarón', count: 132 },
+  { icon: 'assets/images/logo/species/icono-cerdos-dark.png', name: 'CERDOS', desc: 'Alimentación balanceada para porcicultura', count: 97 },
+  { icon: 'assets/images/logo/species/icono-equinos-dark.png', name: 'EQUINOS', desc: 'Nutrición equina de alto rendimiento', count: 73 },
+  { icon: 'assets/images/logo/species/icono-gallos-dark.png', name: 'GALLOS', desc: 'Fórmulas especializadas para gallos de combate y exhibición', count: 86 },
+  { icon: 'assets/images/logo/species/icono-peces-dark.png', name: 'PECES', desc: 'Nutrición acuícola para el crecimiento óptimo de peces', count: 86 },
+  { icon: 'assets/images/logo/species/icono-rumiantes-dark.png', name: 'RUMIANTES', desc: 'Soluciones para ganadería bovina, ovina y caprina', count: 86 },
+  { icon: 'assets/images/logo/species/icono-feed-solutions-dark.png', name: 'FEED SOLUTIONS', desc: 'Soluciones integrales de nutrición animal a medida', count: 86 }
 ];
 
   // ─── FILTERS ──────────────────────────────────────────────
