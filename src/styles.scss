@@ -722,6 +722,101 @@ body {
   }
 }
 
+/* ── Excepción: inputs blancos en el login ──────────────────────
+   Las reglas anteriores aplican navy3 globalmente con !important.
+   Este bloque los revierte SOLO dentro de .login-page.
+──────────────────────────────────────────────────────────────── */
+.login-page {
+  .ant-input-affix-wrapper {
+    background: #ffffff !important;
+    border-color: #d9d9d9 !important;
+    color: #262626 !important;
+
+    .ant-input {
+      background: transparent !important;
+      color: #262626 !important;
+
+      &::placeholder {
+        color: #bfbfbf !important;
+      }
+    }
+
+    .anticon {
+      color: #8c8c8c !important;
+    }
+
+    &:hover {
+      border-color: #40a9ff !important;
+    }
+
+    &.ant-input-affix-wrapper-focused,
+    &:focus-within {
+      border-color: #40a9ff !important;
+      box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2) !important;
+    }
+  }
+
+  .ant-form-item-label > label {
+    color: #374151 !important;
+  }
+
+  /* Input simple sin prefijo (sign-up) */
+  input.ant-input {
+    background: #ffffff !important;
+    border-color: #d9d9d9 !important;
+    color: #262626 !important;
+
+    &::placeholder {
+      color: #bfbfbf !important;
+    }
+
+    &:hover,
+    &:focus {
+      border-color: #40a9ff !important;
+      box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2) !important;
+    }
+  }
+
+  /* Select (nz-select / País) */
+  .ant-select-selector {
+    background: #ffffff !important;
+    border-color: #d9d9d9 !important;
+    color: #262626 !important;
+  }
+
+  .ant-select-arrow {
+    color: #8c8c8c !important;
+  }
+
+  .ant-select:not(.ant-select-disabled):hover .ant-select-selector {
+    border-color: #40a9ff !important;
+  }
+
+  .ant-select-focused .ant-select-selector {
+    border-color: #40a9ff !important;
+    box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2) !important;
+  }
+
+  /* Checkbox (términos y condiciones) */
+  .ant-checkbox-inner {
+    background: #ffffff !important;
+    border-color: #d9d9d9 !important;
+  }
+
+  .ant-checkbox-checked .ant-checkbox-inner {
+    background: #1b5ea5 !important;
+    border-color: #1b5ea5 !important;
+  }
+
+  .ant-checkbox + span {
+    color: #374151 !important;
+
+    a {
+      color: #2563eb !important;
+    }
+  }
+}
+
 .ant-form-item-label > label {
   color: var(--text) !important;
 }

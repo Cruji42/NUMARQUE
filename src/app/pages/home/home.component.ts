@@ -69,21 +69,21 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   // ── Category dropdown options ─────────────────────────────
   categories = [
-    { value: 'all',           label: 'Todas las categorías' },
-    { value: 'photos',        label: 'Fotos' },
-    { value: 'videos',        label: 'Videos' },
-    { value: 'documents',     label: 'Documentos' },
+    { value: 'all', label: 'Todas las categorías' },
+    { value: 'photos', label: 'Fotos' },
+    { value: 'videos', label: 'Videos' },
+    { value: 'documents', label: 'Documentos' },
     { value: 'presentations', label: 'Presentaciones' },
-    { value: 'audio',         label: 'Audio' },
+    { value: 'audio', label: 'Audio' },
   ];
 
   // ── Quick category pills ──────────────────────────────────
   quickCategories = [
-    { label: 'Fotos',           icon: '🖼️',  value: 'photos' },
-    { label: 'Videos',          icon: '🎬',  value: 'videos' },
-    { label: 'Documentos',      icon: '📄',  value: 'documents' },
-    { label: 'Presentaciones',  icon: '📊',  value: 'presentations' },
-    { label: 'Audio',           icon: '🎵',  value: 'audio' },
+    { label: 'Fotos', icon: '🖼️', value: 'photos' },
+    { label: 'Videos', icon: '🎬', value: 'videos' },
+    { label: 'Documentos', icon: '📄', value: 'documents' },
+    { label: 'Presentaciones', icon: '📊', value: 'presentations' },
+    { label: 'Audio', icon: '🎵', value: 'audio' },
   ];
 
   // ── Suggestion chips ──────────────────────────────────────
@@ -93,11 +93,11 @@ export class HomeComponent implements OnInit, OnDestroy {
   // ── Type filter chips ─────────────────────────────────────
   typeFilters = [
     { label: 'Todos', value: 'all' },
-    { label: 'PDF',   value: 'pdf' },
-    { label: 'PNG',   value: 'png' },
-    { label: 'MP4',   value: 'mp4' },
-    { label: 'PPT',   value: 'ppt' },
-    { label: 'DOC',   value: 'doc' },
+    { label: 'PDF', value: 'pdf' },
+    { label: 'PNG', value: 'png' },
+    { label: 'MP4', value: 'mp4' },
+    { label: 'PPT', value: 'ppt' },
+    { label: 'DOC', value: 'doc' },
   ];
 
   // ── Mock search results ───────────────────────────────────
@@ -196,24 +196,24 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   // ── Stats bar ─────────────────────────────────────────────
   stats: Stat[] = [
-    { icon: '⬇️', value: '12,847', label: 'Material descargado',   color: 'var(--blue)' },
-    { icon: '👥', value: '284',    label: 'Usuarios activos',       color: 'var(--cyan)' },
-    { icon: '⬆️', value: '3,621',  label: 'Material subido',        color: '#a78bfa' },
-    { icon: '🔗', value: '1,094',  label: 'Materiales compartidos', color: '#34d399' },
+    { icon: '⬇️', value: '12,847', label: 'Material descargado', color: 'var(--blue)' },
+    { icon: '👥', value: '284', label: 'Usuarios activos', color: 'var(--cyan)' },
+    { icon: '⬆️', value: '3,621', label: 'Material subido', color: '#a78bfa' },
+    { icon: '🔗', value: '1,094', label: 'Materiales compartidos', color: '#34d399' },
   ];
 
   // ── Browse categories ─────────────────────────────────────
   browseCategories: BrowseCategory[] = [
-    { id: 1,  name: 'Identidad Visual',  icon: '🎨', count: 342,  gradient: 'linear-gradient(135deg, var(--card) 0%, rgba(27,94,165,0.18) 100%)' },
-    { id: 2,  name: 'Fotografía',        icon: '📷', count: 1204, gradient: 'linear-gradient(135deg, var(--card) 0%, rgba(0,133,202,0.18) 100%)' },
-    { id: 3,  name: 'Video & Motion',    icon: '🎬', count: 567,  gradient: 'linear-gradient(135deg, var(--card) 0%, rgba(79,22,87,0.22) 100%)' },
-    { id: 4,  name: 'Documentos',        icon: '📄', count: 891,  gradient: 'linear-gradient(135deg, var(--card) 0%, rgba(33,40,68,0.40) 100%)' },
-    { id: 5,  name: 'Presentaciones',    icon: '📊', count: 423,  gradient: 'linear-gradient(135deg, var(--card) 0%, rgba(27,94,165,0.18) 100%)' },
-    { id: 6,  name: 'Material ATL',      icon: '📺', count: 218,  gradient: 'linear-gradient(135deg, var(--card) 0%, rgba(0,133,202,0.18) 100%)' },
-    { id: 7,  name: 'Redes Sociales',    icon: '📱', count: 756,  gradient: 'linear-gradient(135deg, var(--card) 0%, rgba(79,22,87,0.22) 100%)' },
-    { id: 8,  name: 'Audio',             icon: '🎵', count: 134,  gradient: 'linear-gradient(135deg, var(--card) 0%, rgba(33,40,68,0.40) 100%)' },
-    { id: 9,  name: 'Packaging',         icon: '📦', count: 289,  gradient: 'linear-gradient(135deg, var(--card) 0%, rgba(27,94,165,0.18) 100%)' },
-    { id: 10, name: 'Campañas',          icon: '🚀', count: 445,  gradient: 'linear-gradient(135deg, var(--card) 0%, rgba(0,133,202,0.18) 100%)' },
+    { id: 1, name: 'Identidad Visual', icon: '🎨', count: 342, gradient: 'linear-gradient(135deg, var(--card) 0%, rgba(27,94,165,0.18) 100%)' },
+    { id: 2, name: 'Fotografía', icon: '📷', count: 1204, gradient: 'linear-gradient(135deg, var(--card) 0%, rgba(0,133,202,0.18) 100%)' },
+    { id: 3, name: 'Video & Motion', icon: '🎬', count: 567, gradient: 'linear-gradient(135deg, var(--card) 0%, rgba(79,22,87,0.22) 100%)' },
+    { id: 4, name: 'Documentos', icon: '📄', count: 891, gradient: 'linear-gradient(135deg, var(--card) 0%, rgba(33,40,68,0.40) 100%)' },
+    { id: 5, name: 'Presentaciones', icon: '📊', count: 423, gradient: 'linear-gradient(135deg, var(--card) 0%, rgba(27,94,165,0.18) 100%)' },
+    { id: 6, name: 'Material ATL', icon: '📺', count: 218, gradient: 'linear-gradient(135deg, var(--card) 0%, rgba(0,133,202,0.18) 100%)' },
+    { id: 7, name: 'Redes Sociales', icon: '📱', count: 756, gradient: 'linear-gradient(135deg, var(--card) 0%, rgba(79,22,87,0.22) 100%)' },
+    { id: 8, name: 'Audio', icon: '🎵', count: 134, gradient: 'linear-gradient(135deg, var(--card) 0%, rgba(33,40,68,0.40) 100%)' },
+    { id: 9, name: 'Packaging', icon: '📦', count: 289, gradient: 'linear-gradient(135deg, var(--card) 0%, rgba(27,94,165,0.18) 100%)' },
+    { id: 10, name: 'Campañas', icon: '🚀', count: 445, gradient: 'linear-gradient(135deg, var(--card) 0%, rgba(0,133,202,0.18) 100%)' },
   ];
 
   // ── Weekly highlight ──────────────────────────────────────
@@ -226,24 +226,45 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   // ── Recent files ──────────────────────────────────────────
   recentFiles: RecentFile[] = [
-    { icon: '📄', ext: 'pdf',  name: 'Brief Campaña Nupec Q1.pdf',            size: '2.1 MB',  date: '15 ene 2025', brand: 'Nupec',   brandColor: 'rgb(0,133,202)' },
-    { icon: '📊', ext: 'ppt',  name: 'Presentación Estrategia Nucan.pptx',    size: '8.4 MB',  date: '14 ene 2025', brand: 'Nucan',   brandColor: 'rgb(79,22,87)' },
-    { icon: '🖼️', ext: 'png',  name: 'Logo Galope Horizontal.png',            size: '1.8 MB',  date: '13 ene 2025', brand: 'Galope',  brandColor: 'rgb(27,94,165)' },
-    { icon: '📹', ext: 'mp4',  name: 'Spot TV Pecuario 30s.mp4',              size: '245 MB',  date: '12 ene 2025', brand: 'Pecuario',brandColor: 'rgb(33,40,68)' },
-    { icon: '📝', ext: 'doc',  name: 'Manual de Marca Nupec 2025.docx',       size: '5.6 MB',  date: '11 ene 2025', brand: 'Nupec',   brandColor: 'rgb(0,133,202)' },
-    { icon: '📊', ext: 'xls',  name: 'Inventario Material Nucan.xlsx',        size: '0.9 MB',  date: '10 ene 2025', brand: 'Nucan',   brandColor: 'rgb(79,22,87)' },
+    { icon: '📄', ext: 'pdf', name: 'Brief Campaña Nupec Q1.pdf', size: '2.1 MB', date: '15 ene 2025', brand: 'Nupec', brandColor: 'rgb(0,133,202)' },
+    { icon: '📊', ext: 'ppt', name: 'Presentación Estrategia Nucan.pptx', size: '8.4 MB', date: '14 ene 2025', brand: 'Nucan', brandColor: 'rgb(79,22,87)' },
+    { icon: '🖼️', ext: 'png', name: 'Logo Galope Horizontal.png', size: '1.8 MB', date: '13 ene 2025', brand: 'Galope', brandColor: 'rgb(27,94,165)' },
+    { icon: '📹', ext: 'mp4', name: 'Spot TV Pecuario 30s.mp4', size: '245 MB', date: '12 ene 2025', brand: 'Pecuario', brandColor: 'rgb(33,40,68)' },
+    { icon: '📝', ext: 'doc', name: 'Manual de Marca Nupec 2025.docx', size: '5.6 MB', date: '11 ene 2025', brand: 'Nupec', brandColor: 'rgb(0,133,202)' },
+    { icon: '📊', ext: 'xls', name: 'Inventario Material Nucan.xlsx', size: '0.9 MB', date: '10 ene 2025', brand: 'Nucan', brandColor: 'rgb(79,22,87)' },
   ];
 
   // ── Private ───────────────────────────────────────────────
   private searchTimeout: any;
 
+
+  placeholders = [
+    'Quiero hacer un anuncio de NUPEC para Mercado Libre...',
+    'Necesito materiales de lanzamiento para NUCAN...',
+    'Busco videos institucionales de Grupo NUTEC...',
+    'Quiero imágenes de producto de NUFIT para redes sociales...',
+    'Necesito una presentación de ventas del sector pecuario...'
+  ];
+
+  currentPlaceholder = 0;
+  displayPlaceholder = this.placeholders[0];
+  isTyping = false;
+
+  private interval: any;
+
   // ── Lifecycle ─────────────────────────────────────────────
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.interval = setInterval(() => {
+      this.rotatePlaceholder();
+    }, 3000);
+  }
 
   ngOnDestroy(): void {
     if (this.searchTimeout) {
       clearTimeout(this.searchTimeout);
     }
+
+    clearInterval(this.interval);
   }
 
   // ── Search methods ────────────────────────────────────────
@@ -251,6 +272,22 @@ export class HomeComponent implements OnInit, OnDestroy {
   onSearchFocus(): void {
     this.searchFocused = true;
   }
+
+  rotatePlaceholder(): void {
+  const el = document.getElementById('ph-text');
+  el?.classList.add('ph-out');
+
+  setTimeout(() => {
+    this.currentPlaceholder =
+      (this.currentPlaceholder + 1) % this.placeholders.length;
+    this.displayPlaceholder =
+      this.placeholders[this.currentPlaceholder];
+
+    el?.classList.remove('ph-out');
+    el?.classList.add('ph-in');
+    setTimeout(() => el?.classList.remove('ph-in'), 300);
+  }, 300);
+}
 
   onSearchBlur(): void {
     // Small delay so chip clicks register before panel hides
@@ -347,20 +384,20 @@ export class HomeComponent implements OnInit, OnDestroy {
   /** Returns emoji icon for a given file extension */
   getFileIcon(ext: string): string {
     const icons: { [key: string]: string } = {
-      pdf:  '📄',
-      doc:  '📝',
+      pdf: '📄',
+      doc: '📝',
       docx: '📝',
-      xls:  '📊',
+      xls: '📊',
       xlsx: '📊',
-      ppt:  '📊',
+      ppt: '📊',
       pptx: '📊',
-      png:  '🖼️',
-      jpg:  '🖼️',
+      png: '🖼️',
+      jpg: '🖼️',
       jpeg: '🖼️',
-      mp4:  '📹',
-      mp3:  '🎵',
-      svg:  '🎨',
-      txt:  '📃',
+      mp4: '📹',
+      mp3: '🎵',
+      svg: '🎨',
+      txt: '📃',
     };
     return icons[ext.toLowerCase()] || '📁';
   }

@@ -24,10 +24,7 @@
 
           <!-- Category Dropdown -->
           <div class="search-category-wrap">
-            <select
-              class="search-category-select"
-              [(ngModel)]="selectedCategory"
-            >
+            <select class="search-category-select" [(ngModel)]="selectedCategory">
               <option *ngFor="let cat of categories" [value]="cat.value">{{ cat.label }}</option>
             </select>
             <i class="fas fa-chevron-down search-category-arrow"></i>
@@ -36,35 +33,25 @@
           <div class="search-bar-divider"></div>
 
           <!-- Text Input -->
-          <input
-            class="search-input"
-            type="text"
-            placeholder="Buscar materiales, marcas, campañas..."
-            [(ngModel)]="searchQuery"
-            (focus)="onSearchFocus()"
-            (blur)="onSearchBlur()"
-            (keyup.enter)="executeSearch()"
-          />
+          <input class="search-input" type="text" [(ngModel)]="searchQuery" (focus)="onSearchFocus()"
+            (blur)="onSearchBlur()" (keyup.enter)="executeSearch()" />
+
+          <!-- Placeholder animado -->
+          <div class="ph-overlay" *ngIf="!searchQuery && !searchFocused">
+            <span id="ph-text">{{ displayPlaceholder }}</span>
+          </div>
 
           <!-- Clear button (visible when there's a query) -->
-          <button
-            class="search-clear-btn"
-            *ngIf="searchQuery.length > 0"
-            (click)="clearSearch()"
-            title="Limpiar búsqueda"
-          >
+          <button class="search-clear-btn" *ngIf="searchQuery.length > 0" (click)="clearSearch()"
+            title="Limpiar búsqueda">
             <i class="fas fa-times"></i>
           </button>
 
           <!-- Search Button -->
-          <button
-            class="search-btn"
-            (click)="executeSearch()"
-            [class.is-loading]="isSearching"
-            title="Buscar"
-          >
+          <button class="search-btn" (click)="executeSearch()" [class.is-loading]="isSearching" title="Buscar">
             <span class="search-btn-inner" *ngIf="!isSearching">
-              <i class="fas fa-search"></i>
+              <!-- <i class="fas fa-search"></i> -->
+                  <img src="assets/images/others/search-ai.png" class="w-100" alt="">
             </span>
             <span class="search-spinner" *ngIf="isSearching"></span>
           </button>
@@ -78,11 +65,8 @@
               <i class="fas fa-history"></i> Búsquedas recientes
             </div>
             <div class="suggestions-chips">
-              <span
-                class="suggestion-chip"
-                *ngFor="let term of recentSearches"
-                (mousedown)="applySearch(term)"
-              >{{ term }}</span>
+              <span class="suggestion-chip" *ngFor="let term of recentSearches" (mousedown)="applySearch(term)">{{ term
+                }}</span>
             </div>
           </div>
           <div class="suggestions-divider"></div>
@@ -91,11 +75,8 @@
               <i class="fas fa-fire"></i> Populares ahora
             </div>
             <div class="suggestions-chips">
-              <span
-                class="suggestion-chip popular"
-                *ngFor="let term of popularSearches"
-                (mousedown)="applySearch(term)"
-              >{{ term }}</span>
+              <span class="suggestion-chip popular" *ngFor="let term of popularSearches"
+                (mousedown)="applySearch(term)">{{ term }}</span>
             </div>
           </div>
         </div><!-- /.suggestions-panel -->
@@ -104,11 +85,7 @@
 
       <!-- ── Quick Category Pills ── -->
       <div class="quick-pills">
-        <span
-          class="quick-pill"
-          *ngFor="let cat of quickCategories"
-          (click)="applySearch(cat.label)"
-        >
+        <span class="quick-pill" *ngFor="let cat of quickCategories" (click)="applySearch(cat.label)">
           {{ cat.icon }} {{ cat.label }}
         </span>
       </div>
@@ -149,20 +126,12 @@
 
         <!-- Grid / List Toggle -->
         <div class="view-toggle">
-          <button
-            class="view-toggle-btn"
-            [class.active]="viewMode === 'grid'"
-            (click)="viewMode = 'grid'"
-            title="Vista cuadrícula"
-          >
+          <button class="view-toggle-btn" [class.active]="viewMode === 'grid'" (click)="viewMode = 'grid'"
+            title="Vista cuadrícula">
             <i class="fas fa-th"></i>
           </button>
-          <button
-            class="view-toggle-btn"
-            [class.active]="viewMode === 'list'"
-            (click)="viewMode = 'list'"
-            title="Vista lista"
-          >
+          <button class="view-toggle-btn" [class.active]="viewMode === 'list'" (click)="viewMode = 'list'"
+            title="Vista lista">
             <i class="fas fa-list"></i>
           </button>
         </div>
@@ -171,12 +140,8 @@
 
     <!-- Type Filter Chips -->
     <div class="type-filters">
-      <span
-        class="type-chip"
-        *ngFor="let f of typeFilters"
-        [class.active]="activeTypeFilter === f.value"
-        (click)="setTypeFilter(f.value)"
-      >{{ f.label }}</span>
+      <span class="type-chip" *ngFor="let f of typeFilters" [class.active]="activeTypeFilter === f.value"
+        (click)="setTypeFilter(f.value)">{{ f.label }}</span>
     </div>
 
     <!-- ── Skeleton Loader (while isSearching) ── -->
@@ -306,18 +271,10 @@
 
     <!-- ── Browse Tabs ── -->
     <div class="browse-tabs-bar">
-      <button
-        class="browse-tab-btn"
-        [class.active]="browseTab === 'explore'"
-        (click)="browseTab = 'explore'"
-      >
+      <button class="browse-tab-btn" [class.active]="browseTab === 'explore'" (click)="browseTab = 'explore'">
         <i class="fas fa-compass"></i> Explorar
       </button>
-      <button
-        class="browse-tab-btn"
-        [class.active]="browseTab === 'workspaces'"
-        (click)="browseTab = 'workspaces'"
-      >
+      <button class="browse-tab-btn" [class.active]="browseTab === 'workspaces'" (click)="browseTab = 'workspaces'">
         <i class="fas fa-layer-group"></i> Mis Marcas
       </button>
     </div>
@@ -330,12 +287,8 @@
 
       <!-- Browse Categories Grid -->
       <div class="browse-grid">
-        <div
-          class="browse-card"
-          *ngFor="let cat of browseCategories"
-          [style.background]="cat.gradient"
-          (click)="browseCategory(cat.id)"
-        >
+        <div class="browse-card" *ngFor="let cat of browseCategories" [style.background]="cat.gradient"
+          (click)="browseCategory(cat.id)">
           <div class="browse-card-icon">{{ cat.icon }}</div>
           <div class="browse-card-name">{{ cat.name }}</div>
           <div class="browse-card-count">{{ cat.count }} archivos</div>
@@ -358,12 +311,8 @@
             </div>
           </div>
 
-          <span
-            class="recent-file-brand"
-            [style.background]="file.brandColor + '22'"
-            [style.color]="file.brandColor"
-            [style.border]="'1px solid ' + file.brandColor + '44'"
-          >{{ file.brand }}</span>
+          <span class="recent-file-brand" [style.background]="file.brandColor + '22'" [style.color]="file.brandColor"
+            [style.border]="'1px solid ' + file.brandColor + '44'">{{ file.brand }}</span>
 
           <div class="recent-file-actions">
             <button class="recent-action-btn" title="Descargar">
@@ -383,7 +332,8 @@
     <div class="workspaces-empty" *ngIf="browseTab === 'workspaces'">
       <div class="workspaces-empty-icon">🗂️</div>
       <div class="workspaces-empty-title">Tus workspaces aparecerán aquí</div>
-      <div class="workspaces-empty-sub">Crea o únete a un workspace para organizar tu material por proyecto o equipo.</div>
+      <div class="workspaces-empty-sub">Crea o únete a un workspace para organizar tu material por proyecto o equipo.
+      </div>
       <button class="workspace-create-btn">
         <i class="fas fa-plus"></i> Crear workspace
       </button>

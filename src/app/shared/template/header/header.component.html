@@ -1,13 +1,13 @@
 <div class="header">
-    <div class="logo logo-dark">
+    <!-- <div class="logo logo-dark ">
         <a href="">
             <img src="assets/images/logo/logo-numarquecenter-dark.png" alt="Logo">
             <img class="logo-fold" src="assets/images/logo/logo-fold-light.png" alt="Logo">
         </a>
-    </div>
-    <div class="logo logo-white">
+    </div> -->
+    <div class="logo logo-white d-flex align-items-center justify-content-center">
         <a href="">
-            <img src="assets/images/logo/logo-numarquecenter-light.png" alt="Logo">
+            <img src="assets/images/logo/logo-numarquecenter-light.png" alt="Logo" class="w-75">
             <img class="logo-fold" src="assets/images/logo/logo-fold-light.png" alt="Logo">
         </a>
     </div>
@@ -24,14 +24,14 @@
                 </a>
             </li>
             <li class="header-search-item">
-                <div class="header-search">
+                <!-- <div class="header-search">
                     <i nz-icon nzType="search" theme="outline"></i>
                     <input
                         type="text"
                         placeholder="Buscar materiales, marcas, campañas..."
                         aria-label="Buscar"
                     />
-                </div>
+                </div> -->
             </li>
         </ul>
         <ul class="nav-right">
@@ -128,9 +128,9 @@
                 </nz-dropdown-menu >
             </li>
             <li>
-                <a (click)="quickViewToggle()">
+                <!-- <a (click)="quickViewToggle()">
                     <i nz-icon nzType="appstore" theme="outline"></i>
-                </a>
+                </a> -->
                 <nz-drawer [nzWidth]="280" nzTitle="Theme Config" [nzClosable]="false" [nzVisible]="quickViewVisible" nzPlacement="right" (nzOnClose)="quickViewToggle()">
                     <ng-container *nzDrawerContent>
                         <app-quick-view></app-quick-view>
