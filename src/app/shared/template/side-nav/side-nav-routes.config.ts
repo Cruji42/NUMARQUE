@@ -57,14 +57,14 @@ export const ROUTES: SideNavInterface[] = [
         title: 'General',
         iconType: 'nzIcon',
         iconTheme: 'outline',
-        icon: '',
+        icon: 'home',
         canAccess: [1],
         submenu: [
             {
                 path: '/home',
-                title: 'Home',
+                title: 'Búsqueda',
                 iconType: 'nzIcon',
-                icon: 'home',
+                icon: 'search',
                 iconTheme: '',
                 canAccess: [1, 2, 3],
                 submenu: []
@@ -115,9 +115,9 @@ export const ROUTES: SideNavInterface[] = [
     {
         path: '',
         title: 'PetFood',
-        iconType: 'nzIcon',
-        iconTheme: 'outline',
-        icon: '',
+        iconType: 'image',
+        iconTheme: '',
+        icon: 'assets/images/others/pet-food.svg',
         canAccess: [1, 2, 3],
         submenu: [
             {
@@ -183,9 +183,9 @@ export const ROUTES: SideNavInterface[] = [
     {
         path: '',
         title: 'Pecuario',
-        iconType: 'nzIcon',
-        iconTheme: 'outline',
-        icon: '',
+        iconType: 'image',
+        iconTheme: '',
+        icon: 'assets/images/others/pecuario.svg',
         canAccess: [1, 2, 3],
         submenu: [
             {
@@ -271,7 +271,7 @@ export const ROUTES: SideNavInterface[] = [
         title: 'Institucional',
         iconType: 'nzIcon',
         iconTheme: 'outline',
-        icon: '',
+        icon: 'bank',
         canAccess: [1, 2, 3],
         submenu: [
             {
