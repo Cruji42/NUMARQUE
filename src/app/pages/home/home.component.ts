@@ -241,7 +241,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   placeholders = [
     'Quiero hacer un anuncio de NUPEC para Mercado Libre...',
     'Necesito materiales de lanzamiento para NUCAN...',
-    'Busco videos institucionales de Grupo NUTEC...',
+    'Busco videos institucionales de GRUPO NUTEC®...',
     'Quiero imágenes de producto de NUFIT para redes sociales...',
     'Necesito una presentación de ventas del sector pecuario...'
   ];

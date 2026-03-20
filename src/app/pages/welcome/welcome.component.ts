@@ -53,7 +53,7 @@ species = [
       type: 'PNG', category: 'ATL', downloads: 82
     },
     {
-      height: 220, icon: '🐎',
+      height: 180, icon: '🐎',
       bg: 'linear-gradient(135deg,#7C2D12,#F97316)',
       brandBg: 'rgba(249,115,22,.15)', brandColor: '#FDBA74',
       brandLabel: 'GALOPE',
@@ -61,7 +61,7 @@ species = [
       type: 'MP4', category: 'ATL', downloads: 76
     },
     {
-      height: 160, icon: '🌿',
+      height: 180, icon: '🌿',
       bg: 'linear-gradient(135deg,#064E3B,#10B981)',
       brandBg: 'rgba(16,185,129,.15)', brandColor: 'var(--nucan-color)',
       brandLabel: 'NUCAN',
@@ -69,7 +69,7 @@ species = [
       type: 'PNG', category: 'Digital', downloads: 61
     },
     {
-      height: 200, icon: '🐄',
+      height: 180, icon: '🐄',
       bg: 'linear-gradient(135deg,#831843,#EC4899)',
       brandBg: 'rgba(236,72,153,.15)', brandColor: '#F9A8D4',
       brandLabel: 'PECUARIO',
@@ -77,7 +77,7 @@ species = [
       type: 'MP4', category: 'BTL', downloads: 54
     },
     {
-      height: 140, icon: '📄',
+      height: 180, icon: '📄',
       bg: 'linear-gradient(135deg,#1E3A8A,#60A5FA)',
       brandBg: 'rgba(37,99,235,.15)', brandColor: 'var(--nupec-color)',
       brandLabel: 'NUPEC',
@@ -85,7 +85,7 @@ species = [
       type: 'PDF', category: 'ATL', downloads: 48
     },
     {
-      height: 240, icon: '⭐',
+      height: 180, icon: '⭐',
       bg: 'linear-gradient(135deg,#4C1D95,#8B5CF6)',
       brandBg: 'rgba(139,92,246,.15)', brandColor: '#C4B5FD',
       brandLabel: 'ÓPTIMO',
@@ -93,7 +93,7 @@ species = [
       type: 'PDF', category: 'Com. técnica', downloads: 42
     },
     {
-      height: 170, icon: '🖼',
+      height: 180, icon: '🖼',
       bg: 'linear-gradient(135deg,#92400E,var(--nutec-secondary-color))',
       brandBg: 'rgba(249,115,22,.15)', brandColor: '#FDBA74',
       brandLabel: 'GALOPE',
@@ -101,7 +101,7 @@ species = [
       type: 'PDF', category: 'BTL', downloads: 38
     },
     {
-      height: 190, icon: '🌱',
+      height: 180, icon: '🌱',
       bg: 'linear-gradient(135deg,#064E3B,#34D399)',
       brandBg: 'rgba(16,185,129,.15)', brandColor: '#6EE7B7',
       brandLabel: 'NUCAN',
@@ -109,7 +109,7 @@ species = [
       type: 'AI', category: 'Identidad', downloads: 35
     },
     {
-      height: 155, icon: '🎬',
+      height: 180, icon: '🎬',
       bg: 'linear-gradient(135deg,#1E40AF,#818CF8)',
       brandBg: 'rgba(255, 0, 0, 0.15)', brandColor: 'var(--nupec-color)',
       brandLabel: 'NUPEC',
@@ -117,7 +117,7 @@ species = [
       type: 'MP4', category: 'Digital', downloads: 29
     },
     {
-      height: 210, icon: '📊',
+      height: 180, icon: '📊',
       bg: 'linear-gradient(135deg,#500724,#F43F5E)',
       brandBg: 'rgba(236,72,153,.15)', brandColor: '#F9A8D4',
       brandLabel: 'PECUARIO',
@@ -140,8 +140,8 @@ species = [
     },
     {
       num: '03', icon: '⬇',
-      title: 'Descarga o comparte',
-      desc: 'Descarga en el formato original o comparte el enlace directo con tu equipo.'
+      title: 'Descarga',
+      desc: 'Descarga en el formato original'
     },
   ];
 
