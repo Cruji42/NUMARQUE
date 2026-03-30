@@ -13,7 +13,7 @@ import { WelcomeComponent } from './pages/welcome/welcome.component';
 const appRoutes: Routes = [
     {
         path: '',
-        redirectTo: '/welcome',
+        redirectTo: '/authentication/login',
         pathMatch: 'full',
     },
     {

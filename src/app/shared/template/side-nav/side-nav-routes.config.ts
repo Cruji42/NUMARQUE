@@ -60,6 +60,15 @@ export const ROUTES: SideNavInterface[] = [
         icon: 'home',
         canAccess: [1],
         submenu: [
+                        {
+                path: '/welcome',
+                title: 'Inicio',
+                iconType: 'nzIcon',
+                icon: 'home',
+                iconTheme: '',
+                canAccess: [1, 2, 3],
+                submenu: []
+            },
             {
                 path: '/home',
                 title: 'Búsqueda',

@@ -68,7 +68,6 @@ registerLocaleData(es);
 })
 export class AppModule { 
 
-      constructor() {
-    console.log('✅ AppModule cargado');
+      constructor() {    
   }
 }

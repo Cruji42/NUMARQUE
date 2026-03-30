@@ -58,8 +58,7 @@ export class NzDemoDrawerServiceComponent {
       console.log('Drawer(Component) open');
     });
 
-    drawerRef.afterClose.subscribe(data => {
-      console.log(data);
+    drawerRef.afterClose.subscribe(data => {      
       if (typeof data === 'string') {
         this.value = data;
       }

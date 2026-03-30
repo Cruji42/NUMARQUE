@@ -48,8 +48,7 @@ export class SideNavComponent {
                 //     user_id: user.id
                 // })
                 // this.profile_picture_url = user.profile_picture_url
-                this.userData = user
-                console.log(this.userData)
+                this.userData = user                
                 // this.brands_data = user.brands
 
             },

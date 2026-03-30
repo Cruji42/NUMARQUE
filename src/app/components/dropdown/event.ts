@@ -18,7 +18,6 @@ import { Component } from '@angular/core';
     standalone: false
 })
 export class NzDemoDropdownEventComponent {
-  log(data: string): void {
-    console.log(data);
+  log(data: string): void {    
   }
 }

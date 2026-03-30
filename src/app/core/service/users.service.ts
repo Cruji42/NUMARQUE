@@ -13,8 +13,7 @@ export class UsersService {
 
     decodeToken() {
         let token = localStorage.getItem('token');
-        let data = jwtDecode(token)
-        console.log(data)
+        let data = jwtDecode(token)        
         return data
     }
 
@@ -30,9 +29,9 @@ export class UsersService {
     }
 
     getUsers(): Observable<User[]> {
-        return this.endPointUsersService.getUsers().pipe(
-            map((users: User[]) => {
-                return users;
+        return this.endPointUsersService.getUsers().pipe(            
+            map((users: any) => {
+                return users.users;
             }),
             catchError((error) => {
                 return throwError(() => error);

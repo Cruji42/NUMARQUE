@@ -54,9 +54,10 @@ export class Login3Component implements AfterViewInit {
   private navigateByRole(user: any): void {
     const roleId = user?.role_id;
     if (roleId == 1) {
-      this.router.navigateByUrl('/dashboard/default');
+      //this.router.navigateByUrl('/dashboard/default');
+      this.router.navigateByUrl('/welcome');
     } else {
-      this.router.navigateByUrl('/apps/file-manager');
+      this.router.navigateByUrl('/welcome');
     }
   }
 

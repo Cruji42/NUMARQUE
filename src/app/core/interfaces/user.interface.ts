@@ -7,6 +7,5 @@ export interface User {
     password?: string;
     is_active?: boolean;
     account_status?: string;
-    profile_picture_url: string;
-    
+    profile_picture_url: string;    
 }
