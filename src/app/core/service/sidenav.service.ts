@@ -85,9 +85,12 @@ function buildPetFoodSubmenu(entities: ApiEntity[], subcategories: ApiSubcategor
 
 /**
  * Pecuario (dept 2)
- * Estructura: Departamento > Especie (con path a brand)
- *               > Sub-marcas [si existen] > Subcategoría
- *               > Subcategoría directa   [si no hay sub-marcas]
+ *
+ * Caso A — Especie CON sub-marcas (ej: Aves → NUPIO, PERFECT BROILER…):
+ *   Pecuario > Aves (solo despliega) > NUPIO (navega a category-view) → cards de subcategorías
+ *
+ * Caso B — Especie SIN sub-marcas (ej: Camarón, Cerdos…):
+ *   Pecuario > Camarón (navega a category-view) → cards de subcategorías
  */
 function buildPecuarioSubmenu(entities: ApiEntity[], subcategories: ApiSubcategory[]): any {
     const rootEntities  = entities.filter(e => e.parent_entity_id === null);
@@ -96,43 +99,33 @@ function buildPecuarioSubmenu(entities: ApiEntity[], subcategories: ApiSubcatego
     return rootEntities.map(entity => {
         const children = childEntities.filter(c => c.parent_entity_id === entity.id);
 
-        let submenu: any;
-
         if (children.length > 0) {
-            submenu = children.map(child => ({
-                path: cv(child.name),
-                title: child.name,
-                ...entityIcon(child.logo),
+            // Caso A: la especie solo despliega; cada sub-marca navega directo a category-view.
+            // Las subcategorías (EVENTOS, DIGITAL, FICHAS TÉCNICAS) se muestran como cards
+            // dentro de category-view, no como tercer nivel en el sidenav.
+            return {
+                path: '',   // especie: solo despliega
+                title: entity.name,
+                ...entityIcon(entity.logo),
                 canAccess: [1, 2, 3],
-                submenu: subcategories.map(sub => ({
-                    path: cv(child.name, sub.name),
-                    title: sub.name,
-                    iconType: 'nzIcon' as const,
-                    icon: '',
-                    iconTheme: 'outline',
+                submenu: children.map(child => ({
+                    path: cv(child.name),   // sub-marca: navega a category-view
+                    title: child.name,
+                    ...entityIcon(child.logo),
                     canAccess: [1, 2, 3],
-                    submenu: []
+                    submenu: []             // sin tercer nivel en el sidenav
                 }))
-            }));
+            };
         } else {
-            submenu = subcategories.map(sub => ({
-                path: cv(entity.name, sub.name),
-                title: sub.name,
-                iconType: 'nzIcon' as const,
-                icon: '',
-                iconTheme: 'outline',
+            // Caso B: la especie no tiene sub-marcas → navega directo a category-view.
+            return {
+                path: cv(entity.name),   // especie: navega a category-view
+                title: entity.name,
+                ...entityIcon(entity.logo),
                 canAccess: [1, 2, 3],
-                submenu: []
-            }));
+                submenu: []              // sin tercer nivel en el sidenav
+            };
         }
-
-        return {
-            path: cv(entity.name),
-            title: entity.name,
-            ...entityIcon(entity.logo),
-            canAccess: [1, 2, 3],
-            submenu
-        };
     });
 }
 
