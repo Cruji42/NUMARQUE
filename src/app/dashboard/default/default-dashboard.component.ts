@@ -1,6 +1,7 @@
 import { Component } from '@angular/core'
 import { ThemeConstantService } from '../../shared/services/theme-constant.service';
 import { UsersService } from 'src/app/core/service/users.service';
+import { forkJoin } from 'rxjs';
 
 @Component({
     templateUrl: './default-dashboard.component.html',
@@ -41,6 +42,10 @@ export class DefaultDashboardComponent {
     ngOnInit() {
         this.getUserData();
         this.getMetricsSummary();
+        this.getActivityList();
+        this.getTopFilesList();
+        this.getDownloadsByBrand();
+        this.getMaterialsByMonth();
         console.log(this.user);
     }
 
@@ -80,6 +85,194 @@ export class DefaultDashboardComponent {
                 console.error('Error fetching metrics summary:', error);
             }
         });
+    }
+
+    getActivityList() {
+        this.userService.getMetricsActivity(10).subscribe({
+            next: (response: any) => {
+                const activity = response?.activity ?? [];
+                this.activityList = activity.map((item: any) => ({
+                    name: item?.user_name ?? '',
+                    avatar: this.getAvatarColorByType(item?.type_log),
+                    date: this.formatActivityDate(item?.timestamp),
+                    action: item?.action ?? '',
+                    target: item?.content_title ?? '',
+                    actionType: item?.type_log ?? ''
+                }));
+            },
+            error: (error) => {
+                console.error('Error fetching activity list:', error);
+                this.activityList = [];
+            }
+        });
+    }
+
+    getAvatarColorByType(typeLog: string): string {
+        const type = (typeLog || '').toUpperCase();
+
+        if (type === 'DOWNLOADED') {
+            return this.cyan;
+        }
+        if (type === 'UPLOADED') {
+            return this.blue;
+        }
+        if (type === 'SHARED') {
+            return this.purple;
+        }
+        if (type === 'DELETED') {
+            return this.red;
+        }
+
+        return this.gold;
+    }
+
+    formatActivityDate(timestamp: string): string {
+        if (!timestamp) {
+            return '';
+        }
+
+        const normalized = timestamp.replace(' ', 'T');
+        const date = new Date(normalized);
+
+        if (isNaN(date.getTime())) {
+            return timestamp;
+        }
+
+        return date.toLocaleString('es-MX', {
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: true
+        });
+    }
+
+    getTopFilesList() {
+        this.userService.getMetricsTopFiles(5).subscribe({
+            next: (response: any) => {
+                const topFiles = response?.top_files ?? [];
+                this.downloadsList = topFiles.map((file: any) => {
+                    const fileName = file?.title ?? '';
+                    const extension = fileName.includes('.') ? (fileName.split('.').pop()?.toUpperCase() ?? 'FILE') : 'FILE';
+
+                    return {
+                        name: fileName,
+                        avatar: this.getFileIconByName(fileName),
+                        earn: file?.brand_name ?? '',
+                        sales: extension,
+                        stock: file?.bar_width ?? 0,
+                        download_count: file?.download_count ?? 0
+                    };
+                });
+            },
+            error: (error) => {
+                console.error('Error fetching top files:', error);
+                this.downloadsList = [];
+            }
+        });
+    }
+
+    getDownloadsByBrand() {
+        this.userService.getDownloadsByBrand().subscribe({
+            next: (response: any) => {
+                const brands = response?.downloads_by_brand ?? [];
+
+                const chartColors = [this.cyan, this.purple, this.black, this.blue, this.gold, this.red];
+
+                this.downloadsByBrand = brands.map((brand: any, index: number) => ({
+                    brand_name: brand?.brand_name ?? '',
+                    count: brand?.count ?? 0,
+                    percentage: brand?.percentage ?? 0,
+                    color: chartColors[index % chartColors.length]
+                }));
+
+                this.customersChartDataObj = {
+                    labels: this.downloadsByBrand.map((item: any) => item.brand_name),
+                    datasets: [{
+                        data: this.downloadsByBrand.map((item: any) => item.count),
+                        backgroundColor: this.downloadsByBrand.map((item: any) => item.color)
+                    }]
+                };
+            },
+            error: (error) => {
+                console.error('Error fetching downloads by brand:', error);
+                this.downloadsByBrand = [];
+            }
+        });
+    }
+
+    getMaterialsByMonth() {
+        forkJoin({
+            downloads: this.userService.getDownloadLogs(),
+            uploads: this.userService.getUploadLogs()
+        }).subscribe({
+            next: ({ downloads, uploads }) => {
+                const monthLabels = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
+                const currentYear = new Date().getFullYear();
+
+                const downloadCounts = new Array(12).fill(0);
+                const uploadCounts = new Array(12).fill(0);
+
+                const downloadsData = downloads?.data ?? [];
+                const uploadsData = uploads?.data ?? [];
+
+                downloadsData.forEach((item: any) => {
+                    const date = new Date(item?.created_at);
+                    if (!isNaN(date.getTime()) && date.getFullYear() === currentYear) {
+                        downloadCounts[date.getMonth()] += 1;
+                    }
+                });
+
+                uploadsData.forEach((item: any) => {
+                    const date = new Date(item?.created_at);
+                    if (!isNaN(date.getTime()) && date.getFullYear() === currentYear) {
+                        uploadCounts[date.getMonth()] += 1;
+                    }
+                });
+
+                this.avgProfitChartDataObj = {
+                    labels: monthLabels,
+                    datasets: [
+                        {
+                            data: downloadCounts,
+                            label: 'Descargas',
+                            categoryPercentage: 0.35,
+                            barPercentage: 0.3,
+                            backgroundColor: this.blue,
+                            borderWidth: 0
+                        },
+                        {
+                            data: uploadCounts,
+                            label: 'Subidos',
+                            categoryPercentage: 0.35,
+                            barPercentage: 0.3,
+                            backgroundColor: this.blueLight,
+                            borderWidth: 0
+                        }
+                    ]
+                };
+            },
+            error: (error) => {
+                console.error('Error fetching monthly materials data:', error);
+            }
+        });
+    }
+
+    getFileIconByName(fileName: string): string {
+        if (!fileName || fileName.indexOf('.') === -1) {
+            return 'file';
+        }
+
+        const extension = fileName.split('.').pop()?.toLowerCase() ?? '';
+
+        if (['pdf'].includes(extension)) return 'file-pdf';
+        if (['doc', 'docx'].includes(extension)) return 'file-word';
+        if (['xls', 'xlsx', 'csv'].includes(extension)) return 'file-excel';
+        if (['ppt', 'pptx'].includes(extension)) return 'file-ppt';
+        if (['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg'].includes(extension)) return 'file-image';
+        if (['mp4', 'mov', 'avi', 'mkv', 'webm'].includes(extension)) return 'video-camera';
+        if (['txt', 'md', 'json', 'xml'].includes(extension)) return 'file-text';
+        if (['zip', 'rar', '7z', 'tar', 'gz'].includes(extension)) return 'file-zip';
+
+        return 'file';
     }
 
     revenueChartFormat: string = 'revenueMonth';
@@ -252,43 +445,8 @@ export class DefaultDashboardComponent {
     avgProfitChartType = 'bar';
     avgProfitChartLegend = false;
 
-    productsList = [
-        {
-            name: 'Logo Nupec',
-            avatar: 'file-pdf',
-            earn: 'Nupec',
-            sales: 'PDF',
-            stock: 82,
-        },
-        {
-            name: 'Banner Nucan',
-            avatar: 'file-image',
-            earn: 'Nucan',
-            sales: 'PNG',
-            stock: 61
-        },
-        {
-            name: 'Video Galope',
-            avatar: 'video-camera',
-            earn: 'Galope',
-            sales: 'MP4',
-            stock: 23,
-        },
-        {
-            name: 'Anuncio Pecuario',
-            avatar: 'video-camera',
-            earn: 'Pecuario',
-            sales: 'MP4',
-            stock: 54,
-        },
-        {
-            name: 'Mockup Galope',
-            avatar: 'file-pdf',
-            earn: 'Galope',
-            sales: 'PDF',
-            stock: 76,
-        }
-    ]
+    downloadsList: any[] = []
+    downloadsByBrand: any[] = []
 
     fileList = [
         {
@@ -329,56 +487,7 @@ export class DefaultDashboardComponent {
         },
     ]
 
-    activityList = [
-        {
-            name: "Virgil Gonzales 2",
-            avatar: this.blue,
-            date: "10:44 PM",
-            action: "Subida de material",
-            // target: "Prototype Design",
-            actionType: "completed"
-        },
-        {
-            name: "Lilian Stone",
-            avatar: this.cyan,
-            date: "8:34 PM",
-            action: "Descarga de material",
-            target: "Mockup Zip",
-            actionType: "upload"
-        },
-        {
-            name: "Erin Gonzales",
-            avatar: this.gold,
-            date: "8:34 PM",
-            action: "Compartió material",
-            // target: "'This is not our work!'",
-            actionType: "comment"
-        },
-        {
-            name: "Riley Newman",
-            avatar: this.blue,
-            date: "8:34 PM",
-            action: "Eliminación de usuario",
-            target: "'Hi, please done this before tommorow'",
-            actionType: "comment"
-        },
-        {
-            name: "Pamela Wanda",
-            avatar: this.red,
-            date: "8:34 PM",
-            action: "Compartió material",
-            target: "a file",
-            actionType: "removed"
-        },
-        {
-            name: "Marshall Nichols",
-            avatar: this.purple,
-            date: "5:21 PM",
-            action: "Subida de material",
-            target: "this project",
-            actionType: "created"
-        }
-    ]
+    activityList: any[] = []
 
     taskListToday = [
         {

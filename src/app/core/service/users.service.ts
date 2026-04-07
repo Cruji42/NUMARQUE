@@ -95,4 +95,59 @@ export class UsersService {
             })
         );
     }
+
+    getMetricsActivity(limit: number = 10): Observable<any> {
+        return this.endPointUsersService.getMetricsActivity(limit).pipe(
+            map((activityResponse: any) => {
+                return activityResponse;
+            }),
+            catchError((error) => {
+                return throwError(() => error);
+            })
+        );
+    }
+
+    getMetricsTopFiles(limit: number = 5): Observable<any> {
+        return this.endPointUsersService.getMetricsTopFiles(limit).pipe(
+            map((topFilesResponse: any) => {
+                return topFilesResponse;
+            }),
+            catchError((error) => {
+                return throwError(() => error);
+            })
+        );
+    }
+
+    getDownloadsByBrand(): Observable<any> {
+        return this.endPointUsersService.getDownloadsByBrand().pipe(
+            map((downloadsByBrandResponse: any) => {
+                return downloadsByBrandResponse;
+            }),
+            catchError((error) => {
+                return throwError(() => error);
+            })
+        );
+    }
+
+    getDownloadLogs(): Observable<any> {
+        return this.endPointUsersService.getDownloadLogs().pipe(
+            map((response: any) => {
+                return response;
+            }),
+            catchError((error) => {
+                return throwError(() => error);
+            })
+        );
+    }
+
+    getUploadLogs(): Observable<any> {
+        return this.endPointUsersService.getUploadLogs().pipe(
+            map((response: any) => {
+                return response;
+            }),
+            catchError((error) => {
+                return throwError(() => error);
+            })
+        );
+    }
 }

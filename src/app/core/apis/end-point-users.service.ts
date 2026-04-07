@@ -62,8 +62,23 @@ export class EndPointUsersService {
         return this.http.get<any>(`${this.apiUrl}/metrics/summary`, { headers: this.configHeaders() });
     }
 
-    
-    
+    getMetricsActivity(limit: number = 10): Observable<any> {
+        return this.http.get<any>(`${this.apiUrl}/metrics/activity?limit=${limit}`, { headers: this.configHeaders() });
+    }
 
-    
+    getMetricsTopFiles(limit: number = 5): Observable<any> {
+        return this.http.get<any>(`${this.apiUrl}/metrics/top-files?limit=${limit}`, { headers: this.configHeaders() });
+    }
+
+    getDownloadsByBrand(): Observable<any> {
+        return this.http.get<any>(`${this.apiUrl}/metrics/downloads-by-brand`, { headers: this.configHeaders() });
+    }
+
+    getDownloadLogs(): Observable<any> {
+        return this.http.get<any>(`${this.apiUrl}/logs/downloads`, { headers: this.configHeaders() });
+    }
+
+    getUploadLogs(): Observable<any> {
+        return this.http.get<any>(`${this.apiUrl}/logs/uploads`, { headers: this.configHeaders() });
+    }
 }

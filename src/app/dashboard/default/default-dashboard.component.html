@@ -124,35 +124,13 @@
                 </canvas>
             </div>
             <div class="row border-top p-t-25">
-                <div class="col-4">
+                <div class="col-4" *ngFor="let item of downloadsByBrand">
                     <div class="d-flex justify-content-center">
                         <div class="media align-items-center">
-                            <nz-badge nzStatus="default" [nzColor]="cyan"></nz-badge>
+                            <nz-badge nzStatus="default" [nzColor]="item.color"></nz-badge>
                             <div class="m-l-5">
-                                <h4 class="m-b-0">350</h4>
-                                <p class="m-b-0 muted">Nupec</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-4">
-                    <div class="d-flex justify-content-center">
-                        <div class="media align-items-center">
-                            <nz-badge nzStatus="default" [nzColor]="purple"></nz-badge>
-                            <div class="m-l-5">
-                                <h4 class="m-b-0">450</h4>
-                                <p class="m-b-0 muted">Nucan</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-4">
-                    <div class="d-flex justify-content-center">
-                        <div class="media align-items-center">
-                            <nz-badge nzStatus="default" [nzColor]="black"></nz-badge>
-                            <div class="m-l-5">
-                                <h4 class="m-b-0">100</h4>
-                                <p class="m-b-0 muted">Galope</p>
+                                <h4 class="m-b-0">{{ item.count }}</h4>
+                                <p class="m-b-0 muted">{{ item.brand_name }}</p>
                             </div>
                         </div>
                     </div>
@@ -189,12 +167,13 @@
                 </div>
             </div>
             <div class="m-t-30">
-                <nz-table #productTable [nzData]="productsList" [nzShowPagination]="false" class="no-border-last">
+                <nz-table #productTable [nzData]="downloadsList" [nzShowPagination]="false" class="no-border-last">
                     <thead>
                         <tr>
                             <th>Nombre</th>
                             <th>Tipo</th>
                             <th>Marca</th>
+                            <th>%</th>
                             <th>Descargas</th>
                         </tr>
                     </thead>
@@ -221,6 +200,7 @@
                                     <span>{{item.stock}}</span>
                                 </div>
                             </td>
+                            <td>{{item.download_count}}</td>
                         </tr>
                     </tbody>
                 </nz-table>
