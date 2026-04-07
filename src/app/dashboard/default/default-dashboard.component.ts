@@ -26,6 +26,12 @@ export class DefaultDashboardComponent {
 
     user: any;
     today: Date = new Date();
+    metricsSummary = {
+        total_downloads: 0,
+        active_users: 0,
+        total_files: 0,
+        total_shared: 0
+    };
 
     constructor(private colorConfig: ThemeConstantService, private userService: UsersService) {
         // this.user = this.userService.decodeToken();
@@ -33,7 +39,8 @@ export class DefaultDashboardComponent {
     }
 
     ngOnInit() {
-        this.getUserData()
+        this.getUserData();
+        this.getMetricsSummary();
         console.log(this.user);
     }
 
@@ -57,6 +64,22 @@ export class DefaultDashboardComponent {
                 console.error('Error fetching users:', error);
             }
         })
+    }
+
+    getMetricsSummary() {
+        this.userService.getMetricsSummary().subscribe({
+            next: (summary: any) => {
+                this.metricsSummary = {
+                    total_downloads: summary?.total_downloads ?? 0,
+                    active_users: summary?.active_users ?? 0,
+                    total_files: summary?.total_files ?? 0,
+                    total_shared: summary?.total_shared ?? 0
+                };
+            },
+            error: (error) => {
+                console.error('Error fetching metrics summary:', error);
+            }
+        });
     }
 
     revenueChartFormat: string = 'revenueMonth';
@@ -308,7 +331,7 @@ export class DefaultDashboardComponent {
 
     activityList = [
         {
-            name: "Virgil Gonzales",
+            name: "Virgil Gonzales 2",
             avatar: this.blue,
             date: "10:44 PM",
             action: "Subida de material",

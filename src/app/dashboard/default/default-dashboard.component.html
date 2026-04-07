@@ -44,7 +44,7 @@
             <div class="media align-items-center">
                 <nz-avatar [nzSize]="50" nzIcon="download" class="ant-avatar-blue"></nz-avatar>
                 <div class="m-l-15">
-                    <h2 class="m-b-0">23,523</h2>
+                    <h2 class="m-b-0">{{ metricsSummary.total_downloads }}</h2>
                     <p class="m-b-0 text-muted">Material descargado</p>
                 </div>
             </div>
@@ -55,7 +55,7 @@
             <div class="media align-items-center">
                 <nz-avatar [nzSize]="50" nzIcon="user" class="ant-avatar-cyan"></nz-avatar>
                 <div class="m-l-15">
-                    <h2 class="m-b-0">+ 17</h2>
+                    <h2 class="m-b-0">{{ metricsSummary.active_users }}</h2>
                     <p class="m-b-0 text-muted">Usuarios activos</p>
                 </div>
             </div>
@@ -66,7 +66,7 @@
             <div class="media align-items-center">
                 <nz-avatar [nzSize]="50" nzIcon="upload" class="ant-avatar-gold"></nz-avatar>
                 <div class="m-l-15">
-                    <h2 class="m-b-0">3,685</h2>
+                    <h2 class="m-b-0">{{ metricsSummary.total_files }}</h2>
                     <p class="m-b-0 text-muted">Material subido</p>
                 </div>
             </div>
@@ -77,13 +77,16 @@
             <div class="media align-items-center">
                 <nz-avatar [nzSize]="50" nzIcon="share-alt" class="ant-avatar-purple"></nz-avatar>
                 <div class="m-l-15">
-                    <h2 class="m-b-0">1,832</h2>
+                    <h2 class="m-b-0">{{ metricsSummary.total_shared }}</h2>
                     <p class="m-b-0 text-muted">Materiales compartidos</p>
                 </div>
             </div>
         </nz-card>
     </div>
 </div>
+
+
+
 <div class="row">
     <div class="col-md-12 col-lg-8">
         <nz-card>

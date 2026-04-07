@@ -84,4 +84,15 @@ export class UsersService {
         );
 
     }
+
+    getMetricsSummary(): Observable<any> {
+        return this.endPointUsersService.getMetricsSummary().pipe(
+            map((summary: any) => {
+                return summary;
+            }),
+            catchError((error) => {
+                return throwError(() => error);
+            })
+        );
+    }
 }

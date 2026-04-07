@@ -58,6 +58,10 @@ export class EndPointUsersService {
         return this.http.get<User>(`${this.apiUrl}/users/` + id,{ headers: this.configHeaders()} )
     }
 
+    getMetricsSummary(): Observable<any> {
+        return this.http.get<any>(`${this.apiUrl}/metrics/summary`, { headers: this.configHeaders() });
+    }
+
     
     
 
