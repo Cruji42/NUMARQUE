@@ -161,4 +161,26 @@ export class UsersService {
             })
         );
     }
+
+    searchSemantic(query: string, limit: number = 20): Observable<any> {
+        return this.endPointUsersService.searchSemantic({ query, limit }).pipe(
+            map((response: any) => {
+                return response;
+            }),
+            catchError((error) => {
+                return throwError(() => error);
+            })
+        );
+    }
+
+    getContentPreviewUrl(contentId: number): Observable<any> {
+        return this.endPointUsersService.getContentPreviewUrl(contentId).pipe(
+            map((response: any) => {
+                return response;
+            }),
+            catchError((error) => {
+                return throwError(() => error);
+            })
+        );
+    }
 }

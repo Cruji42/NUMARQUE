@@ -1,4 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { UsersService } from 'src/app/core/service/users.service';
+import { forkJoin, of } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
 
 // ── Interfaces ──────────────────────────────────────────────
 export interface SearchResult {
@@ -9,6 +12,8 @@ export interface SearchResult {
   size: string;
   relevance: number;
   previewBg: string;
+  previewUrl?: string;
+  fileTypeRaw?: string;
 }
 
 export interface RecentFile {
@@ -51,6 +56,8 @@ export interface WeeklyHighlight {
   standalone: false
 })
 export class HomeComponent implements OnInit, OnDestroy {
+
+  constructor(private usersService: UsersService) { }
 
   // ── Search state ──────────────────────────────────────────
   searchQuery: string = '';
@@ -100,99 +107,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     { label: 'DOC', value: 'doc' },
   ];
 
-  // ── Mock search results ───────────────────────────────────
-  private mockResults: SearchResult[] = [
-    {
-      id: 1,
-      name: 'Logo Nupec Principal',
-      type: 'PNG',
-      brand: 'Nupec',
-      size: '2.4 MB',
-      relevance: 98,
-      previewBg: 'linear-gradient(135deg, #0a1628 0%, rgba(0,133,202,0.18) 100%)'
-    },
-    {
-      id: 2,
-      name: 'Manual de Marca Nupec',
-      type: 'PDF',
-      brand: 'Nupec',
-      size: '18.7 MB',
-      relevance: 94,
-      previewBg: 'linear-gradient(135deg, #0a1628 0%, rgba(0,133,202,0.12) 100%)'
-    },
-    {
-      id: 3,
-      name: 'Banner Digital Nucan',
-      type: 'PNG',
-      brand: 'Nucan',
-      size: '4.1 MB',
-      relevance: 91,
-      previewBg: 'linear-gradient(135deg, #0a1628 0%, rgba(79,22,87,0.22) 100%)'
-    },
-    {
-      id: 4,
-      name: 'Video Campaña Galope',
-      type: 'MP4',
-      brand: 'Galope',
-      size: '156 MB',
-      relevance: 88,
-      previewBg: 'linear-gradient(135deg, #0a1628 0%, rgba(27,94,165,0.22) 100%)'
-    },
-    {
-      id: 5,
-      name: 'Presentación Pecuario Q4',
-      type: 'PPT',
-      brand: 'Pecuario',
-      size: '8.3 MB',
-      relevance: 85,
-      previewBg: 'linear-gradient(135deg, #0a1628 0%, rgba(33,40,68,0.35) 100%)'
-    },
-    {
-      id: 6,
-      name: 'Isotipo Nucan Vectorial',
-      type: 'SVG',
-      brand: 'Nucan',
-      size: '0.8 MB',
-      relevance: 82,
-      previewBg: 'linear-gradient(135deg, #0a1628 0%, rgba(79,22,87,0.18) 100%)'
-    },
-    {
-      id: 7,
-      name: 'Spot Radio Galope',
-      type: 'MP3',
-      brand: 'Galope',
-      size: '3.2 MB',
-      relevance: 79,
-      previewBg: 'linear-gradient(135deg, #0a1628 0%, rgba(27,94,165,0.18) 100%)'
-    },
-    {
-      id: 8,
-      name: 'Ficha Técnica Nupec',
-      type: 'PDF',
-      brand: 'Nupec',
-      size: '1.1 MB',
-      relevance: 76,
-      previewBg: 'linear-gradient(135deg, #0a1628 0%, rgba(0,133,202,0.14) 100%)'
-    },
-    {
-      id: 9,
-      name: 'Mockup Empaque Pecuario',
-      type: 'PNG',
-      brand: 'Pecuario',
-      size: '6.7 MB',
-      relevance: 73,
-      previewBg: 'linear-gradient(135deg, #0a1628 0%, rgba(33,40,68,0.30) 100%)'
-    },
-    {
-      id: 10,
-      name: 'Guía de Redes Sociales Nucan',
-      type: 'PDF',
-      brand: 'Nucan',
-      size: '5.4 MB',
-      relevance: 70,
-      previewBg: 'linear-gradient(135deg, #0a1628 0%, rgba(79,22,87,0.15) 100%)'
-    },
-  ];
 
   // ── Stats bar ─────────────────────────────────────────────
   stats: Stat[] = [
@@ -303,9 +217,11 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.executeSearch();
   }
 
-  /** Main search execution — simulates async with 1200ms delay */
+  /** Main search execution with semantic API */
   executeSearch(): void {
-    if (!this.searchQuery.trim()) {
+    const trimmedQuery = this.searchQuery.trim();
+
+    if (!trimmedQuery) {
       this.searchActive = false;
       this.searchResults = [];
       this.totalResults = 0;
@@ -320,36 +236,87 @@ export class HomeComponent implements OnInit, OnDestroy {
       clearTimeout(this.searchTimeout);
     }
 
-    this.searchTimeout = setTimeout(() => {
-      const query = this.searchQuery.toLowerCase();
-      let results = this.mockResults.filter(r => {
-        const matchesQuery =
-          r.name.toLowerCase().includes(query) ||
-          r.brand.toLowerCase().includes(query) ||
-          r.type.toLowerCase().includes(query);
-        const matchesType =
-          this.activeTypeFilter === 'all' ||
-          r.type.toLowerCase() === this.activeTypeFilter.toLowerCase();
-        return matchesQuery || matchesType;
-      });
+    this.usersService.searchSemantic(trimmedQuery, 20).subscribe({
+      
+      next: (response: any) => {
+        console.log(response);
+        const rawResults = response?.results ?? response?.data ?? [];
 
-      // If no specific match, return all (demo behaviour)
-      if (results.length === 0) {
-        results = [...this.mockResults];
-      }
 
-      // Apply type filter
-      if (this.activeTypeFilter !== 'all') {
-        results = results.filter(r => r.type.toLowerCase() === this.activeTypeFilter.toLowerCase());
-        if (results.length === 0) {
-          results = [...this.mockResults];
+        const mappedResults: SearchResult[] = rawResults.map((item: any, index: number) => {
+          const file = item?.file ?? item ?? {};
+
+          const fileName =
+            file?.title ??
+            file?.name ??
+            file?.file_name ??
+            'Sin título';
+
+          const extension = this.extractExtension(fileName, file?.file_type);
+          const brand = this.extractBrandFromS3Key(file?.s3_key) ?? item?.detected_brand_name ?? 'Sin marca';
+          const size = file?.file_size_bytes ?? file?.size ?? file?.file_size ?? '-';
+          const relevance = item?.score ?? file?.score ?? item?.relevance ?? 0;
+
+          return {
+            id: file?.id ?? item?.id ?? index + 1,
+            name: fileName,
+            type: extension.toUpperCase(),
+            brand,
+            size: this.formatBytes(size),
+            relevance: Number(relevance) || 0,
+            previewBg: this.getPreviewGradientByBrand(brand),
+            previewUrl: '',
+            fileTypeRaw: file?.file_type ?? ''
+          };
+        });
+
+        const previewRequests = mappedResults.map((result) =>
+          this.usersService.getContentPreviewUrl(result.id).pipe(
+            map((previewRes: any) => ({
+              ...result,
+              previewUrl: previewRes?.preview_url ?? previewRes?.url ?? ''
+            })),
+            catchError(() => of(result))
+          )
+        );
+
+        if (previewRequests.length === 0) {
+          this.searchResults = [];
+          this.totalResults = 0;
+          this.isSearching = false;
+          return;
         }
-      }
 
-      this.searchResults = results;
-      this.totalResults = results.length;
-      this.isSearching = false;
-    }, 1200);
+        forkJoin(previewRequests).subscribe({
+          next: (resultsWithPreview: SearchResult[]) => {
+            let finalResults = resultsWithPreview;
+            if (this.activeTypeFilter !== 'all') {
+              finalResults = finalResults.filter(r => r.type.toLowerCase() === this.activeTypeFilter.toLowerCase());
+            }
+
+            this.searchResults = finalResults;
+            this.totalResults = finalResults.length;
+            this.isSearching = false;
+          },
+          error: () => {
+            let fallbackResults = mappedResults;
+            if (this.activeTypeFilter !== 'all') {
+              fallbackResults = fallbackResults.filter(r => r.type.toLowerCase() === this.activeTypeFilter.toLowerCase());
+            }
+
+            this.searchResults = fallbackResults;
+            this.totalResults = fallbackResults.length;
+            this.isSearching = false;
+          }
+        });
+      },
+      error: (error) => {
+        console.error('Error semantic search:', error);
+        this.searchResults = [];
+        this.totalResults = 0;
+        this.isSearching = false;
+      }
+    });
   }
 
   /** Clear search and return to explore view */
@@ -379,6 +346,45 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.searchQuery = cat.name;
       this.executeSearch();
     }
+  }
+
+  private extractExtension(fileName: string, fallbackType?: string): string {
+    if (fallbackType) {
+      return String(fallbackType).replace('.', '').toLowerCase();
+    }
+    const cleanName = String(fileName || '');
+    if (!cleanName.includes('.')) return 'file';
+    return cleanName.split('.').pop()?.toLowerCase() || 'file';
+  }
+
+  private extractBrandFromS3Key(s3Key?: string): string | null {
+    if (!s3Key) return null;
+    const parts = s3Key.split('/').filter(Boolean);
+    // expected path style: user/depto/subcategory/brand/...
+    if (parts.length >= 4) {
+      return parts[3];
+    }
+    return null;
+  }
+
+  private formatBytes(value: any): string {
+    const bytes = Number(value);
+    if (!Number.isFinite(bytes) || bytes < 0) return '-';
+    if (bytes < 1024) return `${bytes} B`;
+    const kb = bytes / 1024;
+    if (kb < 1024) return `${kb.toFixed(1)} KB`;
+    const mb = kb / 1024;
+    if (mb < 1024) return `${mb.toFixed(1)} MB`;
+    const gb = mb / 1024;
+    return `${gb.toFixed(1)} GB`;
+  }
+
+  private getPreviewGradientByBrand(brand: string): string {
+    const key = (brand || '').toLowerCase();
+    if (key.includes('nupec')) return 'linear-gradient(135deg, #0a1628 0%, rgba(0,133,202,0.18) 100%)';
+    if (key.includes('nucan')) return 'linear-gradient(135deg, #0a1628 0%, rgba(79,22,87,0.22) 100%)';
+    if (key.includes('galope')) return 'linear-gradient(135deg, #0a1628 0%, rgba(27,94,165,0.22) 100%)';
+    return 'linear-gradient(135deg, #0a1628 0%, rgba(33,40,68,0.35) 100%)';
   }
 
   /** Returns emoji icon for a given file extension */
