@@ -93,7 +93,7 @@
             <div class="d-flex justify-content-between align-items-center">
                 <h5>Total compartidos</h5>
                 <div>
-                    <nz-radio-group [(ngModel)]="revenueChartFormat">
+                    <nz-radio-group [(ngModel)]="revenueChartFormat" (ngModelChange)="onRevenueChartFormatChange()">
                         <label nz-radio-button class="bg-primary text-white" nzValue="revenueMonth">Month</label>
                         <label nz-radio-button nzValue="revenueYear" class="bg-primary text-white">Year</label>
                     </nz-radio-group>

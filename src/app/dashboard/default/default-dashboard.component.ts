@@ -46,6 +46,7 @@ export class DefaultDashboardComponent {
         this.getTopFilesList();
         this.getDownloadsByBrand();
         this.getMaterialsByMonth();
+        this.getSharedByMonth();
         console.log(this.user);
     }
 
@@ -254,6 +255,68 @@ export class DefaultDashboardComponent {
                 console.error('Error fetching monthly materials data:', error);
             }
         });
+    }
+
+    sharedDataByYear: { [year: number]: number[] } = {};
+    availableSharedYears: number[] = [];
+    selectedSharedYear: number = new Date().getFullYear();
+
+    getSharedByMonth() {
+        this.userService.getSharedLogs().subscribe({
+            next: (response: any) => {
+                const sharedData = response?.data ?? [];
+                const groupedByYear: { [year: number]: number[] } = {};
+
+                sharedData.forEach((item: any) => {
+                    const date = new Date(item?.created_at);
+                    if (isNaN(date.getTime())) return;
+
+                    const year = date.getFullYear();
+                    const month = date.getMonth();
+
+                    if (!groupedByYear[year]) {
+                        groupedByYear[year] = new Array(12).fill(0);
+                    }
+
+                    groupedByYear[year][month] += 1;
+                });
+
+                this.sharedDataByYear = groupedByYear;
+                this.availableSharedYears = Object.keys(groupedByYear)
+                    .map(Number)
+                    .sort((a, b) => b - a);
+
+                const currentYear = new Date().getFullYear();
+                this.selectedSharedYear = this.availableSharedYears.includes(currentYear)
+                    ? currentYear
+                    : (this.availableSharedYears[0] ?? currentYear);
+
+                this.updateSharedChartBySelectedYear();
+            },
+            error: (error) => {
+                console.error('Error fetching shared logs:', error);
+            }
+        });
+    }
+
+    updateSharedChartBySelectedYear() {
+        const monthLabels = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
+        const sharedCounts = this.sharedDataByYear[this.selectedSharedYear] ?? new Array(12).fill(0);
+
+        this.revenueChartDataObj = {
+            labels: monthLabels,
+            datasets: [{
+                data: sharedCounts,
+                label: `Compartidos ${this.selectedSharedYear}`
+            }]
+        };
+    }
+
+    onRevenueChartFormatChange() {
+        if (this.revenueChartFormat === 'revenueYear' && this.availableSharedYears.length > 0) {
+            this.selectedSharedYear = this.availableSharedYears[0];
+        }
+        this.updateSharedChartBySelectedYear();
     }
 
     getFileIconByName(fileName: string): string {

@@ -81,4 +81,8 @@ export class EndPointUsersService {
     getUploadLogs(): Observable<any> {
         return this.http.get<any>(`${this.apiUrl}/logs/uploads`, { headers: this.configHeaders() });
     }
+
+    getSharedLogs(): Observable<any> {
+        return this.http.get<any>(`${this.apiUrl}/logs/SHARED`, { headers: this.configHeaders() });
+    }
 }

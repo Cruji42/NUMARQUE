@@ -150,4 +150,15 @@ export class UsersService {
             })
         );
     }
+
+    getSharedLogs(): Observable<any> {
+        return this.endPointUsersService.getSharedLogs().pipe(
+            map((response: any) => {
+                return response;
+            }),
+            catchError((error) => {
+                return throwError(() => error);
+            })
+        );
+    }
 }
