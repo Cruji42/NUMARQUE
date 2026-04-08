@@ -33,7 +33,7 @@ registerLocaleData(es);
         AppComponent,
         CommonLayoutComponent,
         FullLayoutComponent,
-        WelcomeComponent
+        // WelcomeComponent
     ],
     imports: [
         BrowserModule,

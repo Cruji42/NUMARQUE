@@ -28,10 +28,10 @@ const appRoutes: Routes = [
         children: CommonLayout_ROUTES,
         canActivate: [authGuard]
     },
-    {
-        path: 'welcome',
-        component: WelcomeComponent,
-    }
+    // {
+    //     path: 'welcome',
+    //     component: WelcomeComponent,
+    // }
 
 ];
 

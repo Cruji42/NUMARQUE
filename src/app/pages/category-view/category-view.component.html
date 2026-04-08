@@ -49,8 +49,13 @@
 <div class="category-mode" *ngIf="viewMode === 'categories'">
 
   <div class="category-header">
-    <div class="category-brand-title">{{ activeBrand }}</div>
-    <div class="category-brand-sub">Selecciona una categoría para explorar sus materiales</div>
+    <div class="category-brand-title">{{ getBrandDisplayName() }}</div>
+    <div class="category-brand-sub" *ngIf="getBrandDisplayDescription(); else defaultBrandSub">
+      {{ getBrandDisplayDescription() }}
+    </div>
+    <ng-template #defaultBrandSub>
+      <div class="category-brand-sub">Selecciona una categoría para explorar sus materiales</div>
+    </ng-template>
   </div>
 
   <div class="category-grid">

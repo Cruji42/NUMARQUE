@@ -32,8 +32,9 @@
             <ul class="ant-menu ant-menu-inline ant-menu-sub dropdown-menu" *ngIf="item.submenu.length > 0">
                 <li [ngClass]="subItem.submenu.length > 0 ? 'ant-menu-submenu ant-menu-submenu-inline' : 'ant-menu-item'"
                     *ngFor="let subItem of item.submenu"
-                    [routerLinkActive]="subItem.submenu.length > 0 ? 'ant-menu-submenu-open' : 'ant-menu-item-selected'"
-                    [routerLinkActiveOptions]="{exact: true}">
+                    [routerLinkActive]="!isCategoryViewLink(subItem.path) ? (subItem.submenu.length > 0 ? 'ant-menu-submenu-open' : 'ant-menu-item-selected') : ''"
+                    [routerLinkActiveOptions]="{exact: true}"
+                    [class.ant-menu-item-selected]="isCategoryViewActive(subItem.path)">
 
                     <!-- Segundo nivel CON submenu Y CON path (ej: marca NUPEC, especie Aves):
                          el logo/título navega a category-view y el desplegable sigue funcionando -->
@@ -82,8 +83,9 @@
                     <ul class="ant-menu ant-menu-inline ant-menu-sub dropdown-menu" *ngIf="subItem.submenu.length > 0">
                         <li [ngClass]="thirdItem.submenu.length > 0 ? 'ant-menu-submenu ant-menu-submenu-inline' : 'ant-menu-item'"
                             *ngFor="let thirdItem of subItem.submenu"
-                            routerLinkActive="ant-menu-item-selected"
-                            [routerLinkActiveOptions]="{exact: true}">
+                            [routerLinkActive]="!isCategoryViewLink(thirdItem.path) ? 'ant-menu-item-selected' : ''"
+                            [routerLinkActiveOptions]="{exact: true}"
+                            [class.ant-menu-item-selected]="isCategoryViewActive(thirdItem.path)">
 
                             <!-- Tercer nivel CON submenu (caso excepcional, solo desplegable) -->
                             <a href="javascript:void(0);" class="ant-menu-submenu-title p-l-50" *ngIf="thirdItem.submenu.length > 0">

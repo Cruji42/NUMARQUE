@@ -27,6 +27,7 @@ import { EcommerceDashboardComponent } from './e-commerce/e-commerce-dashboard.c
 import { ProjectsDashboardComponent } from './projects/projects-dashboard.component';
 import { CrmDashboardComponent } from './crm/crm-dashboard.component';
 import { BaseChartDirective, NgChartsModule } from 'ng2-charts';
+import { WelcomeComponent } from '../pages/welcome/welcome.component';
 
 const antdModule = [
     NzButtonModule,
@@ -60,7 +61,8 @@ const antdModule = [
         DefaultDashboardComponent,
         EcommerceDashboardComponent,
         ProjectsDashboardComponent,
-        CrmDashboardComponent
+        CrmDashboardComponent,
+        WelcomeComponent
     ],
     providers: [
         ThemeConstantService

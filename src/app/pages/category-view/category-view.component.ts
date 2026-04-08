@@ -17,6 +17,7 @@ export interface CategoryCard {
     color: string;
     bgColor: string;
     nodeId?: number;
+    id?: number;
 }
 
 export interface FolderItem {
@@ -71,6 +72,17 @@ interface SubcategoriesApiResponse {
     data: SubcategoryItem[];
 }
 
+interface BrandInfoItem {
+    id?: number;
+    name?: string;
+    brand_name?: string;
+    title?: string;
+    logo?: string | null;
+    logo_url?: string | null;
+    description?: string;
+    [key: string]: any;
+}
+
 // ----------------------------------------------------------------
 // Component
 // ----------------------------------------------------------------
@@ -88,13 +100,17 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
     fileViewMode: 'grid' | 'list' = 'grid';
 
     activeBrand = '';
+    activeBrandId: number | null = null;
     activeSection = '';
     activeSubcategory = '';
+    activeSectionId: number | null = null;
+    activeSubcategoryId: number | null = null;
 
     categoryCards: CategoryCard[] = [];
     departmentEntities: DepartmentEntityItem[] = [];
     currentEntityId: number | null = null;
     currentDepartmentSubcategories: SubcategoryItem[] = [];
+    brandInfo: BrandInfoItem | null = null;
 
     // Departamentos cargados desde el API del menú (se usan para resolver brand → department_id)
     private menuDepartments: ApiDepartment[] = [];
@@ -129,10 +145,29 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
         .subscribe({
             next: ([departments, params]) => {
                 this.menuDepartments   = departments;
+                this.activeBrandId = this.parseNumberParam(params.get('brandId'));
+                this.activeSectionId = this.parseNumberParam(params.get('sectionId'));
+                this.activeSubcategoryId = this.parseNumberParam(params.get('subcategoryId'));
                 this.activeBrand       = params.get('brand')       || '';
                 this.activeSection     = params.get('section')     || '';
                 this.activeSubcategory = params.get('subcategory') || '';
-                this.enterCategoryMode();
+
+                if (this.activeBrandId) {
+                    this.loadBrandInfo(this.activeBrandId, () => {
+                        if (this.activeSubcategoryId) {
+                            this.enterFileManager();
+                        } else {
+                            this.enterCategoryMode();
+                        }
+                    });
+                } else {
+                    this.brandInfo = null;
+                    if (this.activeSubcategoryId) {
+                        this.enterFileManager();
+                    } else {
+                        this.enterCategoryMode();
+                    }
+                }
             },
             error: () => {
                 this.message.warning('No se pudo cargar la estructura del menú.');
@@ -160,7 +195,7 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
     }
 
     private loadCategoriesFromDepartmentHierarchy(): void {
-        const departmentId = this.getDepartmentIdByBrand(this.activeBrand);
+        const departmentId = this.getCurrentDepartmentId();
 
         if (!departmentId) {
             this.categoryCards = [];
@@ -188,8 +223,8 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
                 const subcategories: SubcategoryItem[] = Array.isArray(resp?.data) ? resp.data : [];
                 this.currentDepartmentSubcategories = subcategories;
 
-                // Sin section ni subcategory → mostrar cards de subcategorías directamente
-                if (!this.activeSection && !this.activeSubcategory) {
+                // Sin section/subcategory (ni ids) → mostrar cards de subcategorías directamente
+                if (!this.activeSection && !this.activeSubcategory && !this.activeSectionId && !this.activeSubcategoryId) {
                     this.categoryCards = this.mapSubcategoriesToCards(subcategories);
                     return;
                 }
@@ -205,9 +240,9 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
                 this.currentEntityId = brandEntity.id;
 
                 // Deep-link: brand=Aves&section=NUPIO → mostrar subcategorías de esa sub-entidad
-                const sectionEntity = this.activeSection
-                    ? this.findEntityByName(entities, this.activeSection)
-                    : null;
+                const sectionEntity = this.activeSectionId
+                    ? entities.find(e => e.id === this.activeSectionId) || null
+                    : (this.activeSection ? this.findEntityByName(entities, this.activeSection) : null);
 
                 if (sectionEntity) {
                     this.currentEntityId = sectionEntity.id;
@@ -240,6 +275,11 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
         );
 
         return found ? found.department_id : null;
+    }
+
+    private getCurrentDepartmentId(): number | null {
+        if (this.activeBrandId) return this.activeBrandId;
+        return this.getDepartmentIdByBrand(this.activeBrand);
     }
 
     // ----------------------------------------------------------------
@@ -299,7 +339,8 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
                     description: item?.description || `Materiales de ${name}.`,
                     icon:        style.icon,
                     color:       style.color,
-                    bgColor:     style.bgColor
+                    bgColor:     style.bgColor,
+                    id:          item?.id
                 } as CategoryCard;
             })
             .filter((v): v is CategoryCard => !!v);
@@ -326,9 +367,9 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
         this.router.navigate([], {
             relativeTo: this.route,
             queryParams: {
-                brand:       this.activeBrand,
-                section:     this.activeSection || card.title,
-                subcategory: card.key
+                brandId: this.activeBrandId || this.getDepartmentIdByBrand(this.activeBrand),
+                sectionId: card.nodeId || this.activeSectionId || null,
+                subcategoryId: card.id || null
             },
         });
     }
@@ -341,15 +382,26 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
         this.currentFolderId = null;
         this.searchQuery = '';
         this.selectedFile = null;
+
+        const brandLabel = this.getBrandDisplayName() || this.activeBrand || 'Brand';
+        const sectionLabel = this.activeSection || (this.activeSectionId ? `Categoría ${this.activeSectionId}` : '');
+        const subcategoryLabel = this.activeSubcategory || (this.activeSubcategoryId ? `Subcategoría ${this.activeSubcategoryId}` : '');
+
         this.breadcrumbs = [
-            { label: this.activeBrand, folderId: null },
-            ...(this.activeSection    ? [{ label: this.activeSection,    folderId: null }] : []),
-            ...(this.activeSubcategory ? [{ label: this.activeSubcategory, folderId: null }] : []),
+            { label: brandLabel, folderId: null },
+            ...(sectionLabel ? [{ label: sectionLabel, folderId: null }] : []),
+            ...(subcategoryLabel ? [{ label: subcategoryLabel, folderId: null }] : []),
         ];
-        this.loadCurrentLevel();
+
+        this.loadFilesBySubcategory();
     }
 
     loadCurrentLevel(): void {
+        // Si estamos en contexto de subcategoría seleccionada, no recalcular desde allFolders/allFiles.
+        if (this.activeSubcategoryId) {
+            return;
+        }
+
         this.selectedFile = null;
 
         let folders = this.allFolders.filter(f => f.parentId === this.currentFolderId);
@@ -380,7 +432,7 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
         if (index === 0) {
             this.router.navigate([], {
                 relativeTo: this.route,
-                queryParams: { brand: this.activeBrand },
+                queryParams: { brandId: this.activeBrandId || this.getDepartmentIdByBrand(this.activeBrand) },
             });
             return;
         }
@@ -388,7 +440,10 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
             if (index === 1) {
                 this.router.navigate([], {
                     relativeTo: this.route,
-                    queryParams: { brand: this.activeBrand, section: this.activeSection },
+                    queryParams: {
+                        brandId: this.activeBrandId || this.getDepartmentIdByBrand(this.activeBrand),
+                        sectionId: this.activeSectionId
+                    },
                 });
                 return;
             }
@@ -478,6 +533,72 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
         return (value || '').toUpperCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim();
     }
 
+    private parseNumberParam(value: string | null): number | null {
+        if (!value) return null;
+        const parsed = Number(value);
+        return Number.isFinite(parsed) ? parsed : null;
+    }
+
+    private loadBrandInfo(brandId: number, done: () => void): void {
+        this.endPointFilesService.getBrandById(brandId).subscribe({
+            next: (resp: any) => {
+                const data = this.extractBrandData(resp);
+                this.brandInfo = data;
+
+                const resolvedName = this.resolveBrandName(data);
+                if (resolvedName) {
+                    this.activeBrand = resolvedName;
+                }
+
+                done();
+            },
+            error: () => {
+                this.brandInfo = null;
+                done();
+            }
+        });
+    }
+
+    private extractBrandData(resp: any): BrandInfoItem | null {
+        if (!resp) return null;
+
+        if (resp.data && typeof resp.data === 'object') {
+            if (Array.isArray(resp.data)) return resp.data[0] || null;
+            return resp.data;
+        }
+
+        if (Array.isArray(resp)) return resp[0] || null;
+        if (typeof resp === 'object') return resp;
+
+        return null;
+    }
+
+    private resolveBrandName(brand: BrandInfoItem | null): string {
+        if (!brand) return '';
+        return (
+            brand.name ||
+            brand.brand_name ||
+            brand.title ||
+            ''
+        ).toString().trim();
+    }
+
+    getBrandDisplayName(): string {
+        return this.resolveBrandName(this.brandInfo) || this.activeBrand;
+    }
+
+    getBrandDisplayDescription(): string {
+        return (this.brandInfo?.description || '').toString().trim();
+    }
+
+    getBrandDisplayLogo(): string {
+        return (
+            this.brandInfo?.logo ||
+            this.brandInfo?.logo_url ||
+            ''
+        ).toString().trim();
+    }
+
     getFileIcon(type: string): string {
         const map: Record<string, string> = {
             png: '🖼️', jpg: '🖼️', jpeg: '🖼️', svg: '🖼️', gif: '🖼️', webp: '🖼️',
@@ -487,6 +608,67 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
             xlsx: '📊', xls: '📊', docx: '📝', doc: '📝', pptx: '📽️',
         };
         return map[type?.toLowerCase()] || '📎';
+    }
+
+    private loadFilesBySubcategory(): void {
+        const brandId = this.activeBrandId || this.getDepartmentIdByBrand(this.activeBrand);
+        const subcategoryId = this.activeSubcategoryId;
+
+        if (!brandId || !subcategoryId) {
+            this.filteredFolders = [];
+            this.filteredFiles = [];
+            this.allFolders = [];
+            this.allFiles = [];
+            return;
+        }
+
+        this.endPointFilesService.getContentBySubcategory(brandId, subcategoryId).subscribe({
+            next: (resp: any) => {
+                const files = this.extractFilesFromContentResponse(resp).map((item: any) => this.toFileItem(item));
+                this.allFolders = [];
+                this.filteredFolders = [];
+                this.allFiles = files;
+                this.filteredFiles = files;
+                this.selectedFile = null;
+            },
+            error: () => {
+                this.allFolders = [];
+                this.filteredFolders = [];
+                this.allFiles = [];
+                this.filteredFiles = [];
+                this.selectedFile = null;
+                this.message.warning('No se pudo cargar el contenido de la subcategoría.');
+            }
+        });
+    }
+
+    private extractFilesFromContentResponse(resp: any): any[] {
+        if (!resp) return [];
+        if (Array.isArray(resp?.data)) return resp.data;
+        if (Array.isArray(resp)) return resp;
+        if (Array.isArray(resp?.items)) return resp.items;
+        if (Array.isArray(resp?.files)) return resp.files;
+        return [];
+    }
+
+    private toFileItem(item: any): FileItem {
+        const rawType = (item?.type || item?.extension || '').toString().trim();
+        const type = rawType ? rawType.replace('.', '').toLowerCase() : 'file';
+
+        return {
+            id: Number(item?.id) || Math.floor(Math.random() * 1000000000),
+            name: (item?.name || item?.file_name || item?.title || 'Archivo').toString(),
+            type,
+            size: (item?.size || item?.file_size || '—').toString(),
+            uploaded_at: (item?.uploaded_at || item?.created_at || new Date().toISOString()).toString(),
+            uploaded_by: (item?.uploaded_by || item?.user_name || item?.owner || 'N/A').toString(),
+            brand: (item?.brand || this.getBrandDisplayName() || this.activeBrand || 'N/A').toString(),
+            category: (item?.category || this.activeSubcategory || `Subcategoría ${this.activeSubcategoryId || ''}`).toString(),
+            downloads: Number(item?.downloads || item?.download_count || 0),
+            favorite: !!item?.favorite,
+            folderId: item?.folder_id ?? null,
+            url: (item?.url || item?.file_url || item?.download_url || '').toString() || undefined
+        };
     }
 
     getBrandStyle(brand: string): string {

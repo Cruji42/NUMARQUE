@@ -13,12 +13,12 @@ import { ThemeConstantService } from '../../shared/services/theme-constant.servi
 
 export class CommonLayoutComponent  {
 
-    breadcrumbs$: Observable<IBreadcrumb[]>;
-    contentHeaderDisplay: string;
-    isFolded : boolean ;
-    isSideNavDark : boolean;
-    isExpand: boolean;
-    selectedHeaderColor: string;
+    breadcrumbs$ !: Observable<IBreadcrumb[]>;
+    contentHeaderDisplay!: string;
+    isFolded! : boolean ;
+    isSideNavDark !: boolean;
+    isExpand!: boolean;
+    selectedHeaderColor!: string;
 
     constructor(private router: Router,  private activatedRoute: ActivatedRoute, private themeService: ThemeConstantService) {
         this.router.events.pipe(

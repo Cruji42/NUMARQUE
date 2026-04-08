@@ -44,6 +44,15 @@ export class EndPointFilesService {
         return this.http.get(`${this.apiUrl}/departments/`, { headers: this.configHeaders() });
     }
 
+    getBrandById(id: number): Observable<any> {
+        return this.http.get(`${this.apiUrl}/brands/${id}`, { headers: this.configHeaders() });
+    }
+
+    getContentBySubcategory(brandId: number, subCategoryId: number): Observable<any> {
+        return this.http.get(`${this.apiUrl}/files/contents?entity_id=${brandId}&subcategory_id=${subCategoryId}`, { headers: this.configHeaders() });
+    }
+
+
     getSubcategoriesMenu(id: number): Observable<any> {
         return this.http.get(`${this.apiUrl}/subcategories/menu/${id}`, { headers: this.configHeaders() });
     }
