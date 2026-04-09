@@ -47,6 +47,7 @@ export class DefaultDashboardComponent {
         this.getDownloadsByBrand();
         this.getMaterialsByMonth();
         this.getSharedByMonth();
+        this.getLatestUploadedContent();
         console.log(this.user);
     }
 
@@ -319,6 +320,76 @@ export class DefaultDashboardComponent {
         this.updateSharedChartBySelectedYear();
     }
 
+    getLatestUploadedContent() {
+        this.userService.getUploadedLogs().subscribe({
+            next: (response: any) => {
+                const uploaded = response?.data ?? response?.logs ?? response ?? [];
+                const list = Array.isArray(uploaded) ? uploaded : [];
+
+                this.fileList = list.slice(0, 6).map((item: any) => {
+                    const fileName = item?.content_title ?? item?.title ?? item?.file_name ?? 'Archivo sin título';
+                    const extension = fileName.includes('.') ? (fileName.split('.').pop()?.toLowerCase() ?? '') : '';
+
+                    return {
+                        icon: this.getFileIconByExtension(extension),
+                        name: fileName,
+                        color: this.getBrandColor(item?.brand_name ?? this.extractBrandFromS3Key(item?.s3_key) ?? ''),
+                        size: this.formatBytes(item?.file_size_bytes ?? item?.size_bytes ?? item?.file_size ?? null)
+                    };
+                });
+            },
+            error: (error) => {
+                console.error('Error fetching latest uploaded content:', error);
+                this.fileList = [];
+            }
+        });
+    }
+
+    getFileIconByExtension(extension: string): string {
+        const ext = (extension || '').toLowerCase();
+
+        if (['pdf'].includes(ext)) return 'file-pdf';
+        if (['doc', 'docx'].includes(ext)) return 'file-word';
+        if (['xls', 'xlsx', 'csv'].includes(ext)) return 'file-excel';
+        if (['ppt', 'pptx'].includes(ext)) return 'file-ppt';
+        if (['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg'].includes(ext)) return 'file-image';
+        if (['mp4', 'mov', 'avi', 'mkv', 'webm'].includes(ext)) return 'video-camera';
+        if (['txt', 'md', 'json', 'xml'].includes(ext)) return 'file-text';
+        if (['zip', 'rar', '7z', 'tar', 'gz'].includes(ext)) return 'file-zip';
+
+        return 'file';
+    }
+
+    private extractBrandFromS3Key(s3Key?: string): string | null {
+        if (!s3Key) return null;
+        const parts = s3Key.split('/').filter(Boolean);
+        if (parts.length >= 4) {
+            return parts[3];
+        }
+        return null;
+    }
+
+    private getBrandColor(brand: string): string {
+        const key = (brand || '').toLowerCase();
+        if (key.includes('nupec')) return this.blue;
+        if (key.includes('nucan')) return this.purple;
+        if (key.includes('galope')) return this.cyan;
+        if (key.includes('pecuario')) return this.black;
+        return this.gold;
+    }
+
+    private formatBytes(value: any): string {
+        const bytes = Number(value);
+        if (!Number.isFinite(bytes) || bytes < 0) return '-';
+        if (bytes < 1024) return `${bytes} B`;
+        const kb = bytes / 1024;
+        if (kb < 1024) return `${kb.toFixed(1)} KB`;
+        const mb = kb / 1024;
+        if (mb < 1024) return `${mb.toFixed(1)} MB`;
+        const gb = mb / 1024;
+        return `${gb.toFixed(1)} GB`;
+    }
+
     getFileIconByName(fileName: string): string {
         if (!fileName || fileName.indexOf('.') === -1) {
             return 'file';
@@ -511,44 +582,7 @@ export class DefaultDashboardComponent {
     downloadsList: any[] = []
     downloadsByBrand: any[] = []
 
-    fileList = [
-        {
-            icon: "file-word",
-            name: "Documentación.doc",
-            color: this.blue,
-            size: "1.2MB"
-        },
-        {
-            icon: "file-excel",
-            name: "Documentación.xls",
-            color: this.cyan,
-            size: "518KB"
-        },
-        {
-            icon: "file-text",
-            name: "Lista.txt",
-            color: this.purple,
-            size: "355KB"
-        },
-        {
-            icon: "file-word",
-            name: "Proyecto.doc",
-            color: this.blue,
-            size: "1.6MB"
-        },
-        {
-            icon: "file-pdf",
-            name: "Documento.pdf",
-            color: this.red,
-            size: "19.8MB"
-        },
-        {
-            icon: "file-ppt",
-            name: "Presentación.ppt",
-            color: this.gold,
-            size: "2.7MB"
-        },
-    ]
+    fileList: any[] = []
 
     activityList: any[] = []
 

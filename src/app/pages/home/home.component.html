@@ -278,9 +278,6 @@
       <button class="browse-tab-btn" [class.active]="browseTab === 'explore'" (click)="browseTab = 'explore'">
         <i class="fas fa-compass"></i> Explorar
       </button>
-      <button class="browse-tab-btn" [class.active]="browseTab === 'workspaces'" (click)="browseTab = 'workspaces'">
-        <i class="fas fa-layer-group"></i> Mis Marcas
-      </button>
     </div>
 
     <!-- ── TAB: Explorar ── -->
@@ -295,7 +292,7 @@
           (click)="browseCategory(cat.id)">
           <div class="browse-card-icon">{{ cat.icon }}</div>
           <div class="browse-card-name">{{ cat.name }}</div>
-          <div class="browse-card-count">{{ cat.count }} archivos</div>
+           <!--<div class="browse-card-count">{{ cat.count }} archivos</div>-->
         </div>
       </div>
 

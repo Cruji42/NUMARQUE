@@ -86,6 +86,10 @@ export class EndPointUsersService {
         return this.http.get<any>(`${this.apiUrl}/logs/SHARED`, { headers: this.configHeaders() });
     }
 
+    getUploadedLogs(): Observable<any> {
+        return this.http.get<any>(`${this.apiUrl}/logs/UPLOADED`, { headers: this.configHeaders() });
+    }
+
     searchSemantic(payload: { query: string; limit: number }): Observable<any> {
         return this.http.post<any>(`${this.apiUrl}/search/semantic`, payload, { headers: this.configHeaders() });
     }

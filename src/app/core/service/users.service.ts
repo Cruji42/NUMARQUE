@@ -162,6 +162,17 @@ export class UsersService {
         );
     }
 
+    getUploadedLogs(): Observable<any> {
+        return this.endPointUsersService.getUploadedLogs().pipe(
+            map((response: any) => {
+                return response;
+            }),
+            catchError((error) => {
+                return throwError(() => error);
+            })
+        );
+    }
+
     searchSemantic(query: string, limit: number = 20): Observable<any> {
         return this.endPointUsersService.searchSemantic({ query, limit }).pipe(
             map((response: any) => {

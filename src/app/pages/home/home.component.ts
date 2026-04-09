@@ -94,7 +94,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   ];
 
   // ── Suggestion chips ──────────────────────────────────────
-  recentSearches: string[] = ['Logo Nupec', 'Banner Galope', 'Video campaña', 'Mockup Nucan'];
+  recentSearches: string[] = [];
   popularSearches: string[] = ['Identidad visual', 'Campaña verano', 'Material ATL', 'Redes sociales'];
 
   // ── Type filter chips ─────────────────────────────────────
@@ -110,11 +110,18 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   // ── Stats bar ─────────────────────────────────────────────
   stats: Stat[] = [
-    { icon: '⬇️', value: '12,847', label: 'Material descargado', color: 'var(--blue)' },
-    { icon: '👥', value: '284', label: 'Usuarios activos', color: 'var(--cyan)' },
-    { icon: '⬆️', value: '3,621', label: 'Material subido', color: '#a78bfa' },
-    { icon: '🔗', value: '1,094', label: 'Materiales compartidos', color: '#34d399' },
+    { icon: '⬇️', value: '0', label: 'Material descargado', color: 'var(--blue)' },
+    { icon: '👥', value: '0', label: 'Usuarios activos', color: 'var(--cyan)' },
+    { icon: '⬆️', value: '0', label: 'Material subido', color: '#a78bfa' },
+    { icon: '🔗', value: '0', label: 'Materiales compartidos', color: '#34d399' },
   ];
+
+  metricsSummary = {
+    total_downloads: 0,
+    active_users: 0,
+    total_files: 0,
+    total_shared: 0
+  };
 
   // ── Browse categories ─────────────────────────────────────
   browseCategories: BrowseCategory[] = [
@@ -139,14 +146,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   };
 
   // ── Recent files ──────────────────────────────────────────
-  recentFiles: RecentFile[] = [
-    { icon: '📄', ext: 'pdf', name: 'Brief Campaña Nupec Q1.pdf', size: '2.1 MB', date: '15 ene 2025', brand: 'Nupec', brandColor: 'rgb(0,133,202)' },
-    { icon: '📊', ext: 'ppt', name: 'Presentación Estrategia Nucan.pptx', size: '8.4 MB', date: '14 ene 2025', brand: 'Nucan', brandColor: 'rgb(79,22,87)' },
-    { icon: '🖼️', ext: 'png', name: 'Logo Galope Horizontal.png', size: '1.8 MB', date: '13 ene 2025', brand: 'Galope', brandColor: 'rgb(27,94,165)' },
-    { icon: '📹', ext: 'mp4', name: 'Spot TV Pecuario 30s.mp4', size: '245 MB', date: '12 ene 2025', brand: 'Pecuario', brandColor: 'rgb(33,40,68)' },
-    { icon: '📝', ext: 'doc', name: 'Manual de Marca Nupec 2025.docx', size: '5.6 MB', date: '11 ene 2025', brand: 'Nupec', brandColor: 'rgb(0,133,202)' },
-    { icon: '📊', ext: 'xls', name: 'Inventario Material Nucan.xlsx', size: '0.9 MB', date: '10 ene 2025', brand: 'Nucan', brandColor: 'rgb(79,22,87)' },
-  ];
+  recentFiles: RecentFile[] = [];
 
   // ── Private ───────────────────────────────────────────────
   private searchTimeout: any;
@@ -168,6 +168,9 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   // ── Lifecycle ─────────────────────────────────────────────
   ngOnInit(): void {
+    this.loadRecentSearches();
+    this.getMetricsSummary();
+    this.getLatestUploadedContent();
     this.interval = setInterval(() => {
       this.rotatePlaceholder();
     }, 3000);
@@ -217,6 +220,128 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.executeSearch();
   }
 
+  getMetricsSummary(): void {
+    this.usersService.getMetricsSummary().subscribe({
+      next: (summary: any) => {
+        this.metricsSummary = {
+          total_downloads: Number(summary?.total_downloads) || 0,
+          active_users: Number(summary?.active_users) || 0,
+          total_files: Number(summary?.total_files) || 0,
+          total_shared: Number(summary?.total_shared) || 0
+        };
+
+        this.stats = [
+          { icon: '⬇️', value: this.metricsSummary.total_downloads.toLocaleString('es-MX'), label: 'Material descargado', color: 'var(--blue)' },
+          { icon: '👥', value: this.metricsSummary.active_users.toLocaleString('es-MX'), label: 'Usuarios activos', color: 'var(--cyan)' },
+          { icon: '⬆️', value: this.metricsSummary.total_files.toLocaleString('es-MX'), label: 'Material subido', color: '#a78bfa' },
+          { icon: '🔗', value: this.metricsSummary.total_shared.toLocaleString('es-MX'), label: 'Materiales compartidos', color: '#34d399' }
+        ];
+      },
+      error: (error) => {
+        console.error('Error fetching metrics summary:', error);
+      }
+    });
+  }
+
+  private getUserCacheKey(): string {
+    try {
+      const userData: any = this.usersService.decodeToken?.() ?? {};
+      const userId = userData?.id ?? userData?.user_id ?? userData?.sub ?? 'anonymous';
+      return `numarque_recent_searches_${userId}`;
+    } catch {
+      return 'numarque_recent_searches_anonymous';
+    }
+  }
+
+  private loadRecentSearches(): void {
+    const key = this.getUserCacheKey();
+    const raw = localStorage.getItem(key);
+
+    if (!raw) {
+      this.recentSearches = [];
+      return;
+    }
+
+    try {
+      const parsed = JSON.parse(raw);
+      this.recentSearches = Array.isArray(parsed)
+        ? parsed.filter((v: any) => typeof v === 'string').slice(0, 8)
+        : [];
+    } catch {
+      this.recentSearches = [];
+    }
+  }
+
+  private saveRecentSearches(): void {
+    const key = this.getUserCacheKey();
+    localStorage.setItem(key, JSON.stringify(this.recentSearches.slice(0, 8)));
+  }
+
+  private addRecentSearch(term: string): void {
+    const normalized = (term || '').trim();
+    if (!normalized) return;
+
+    const withoutDup = this.recentSearches.filter(
+      (t) => t.toLowerCase() !== normalized.toLowerCase()
+    );
+
+    this.recentSearches = [normalized, ...withoutDup].slice(0, 8);
+    this.saveRecentSearches();
+  }
+
+  getLatestUploadedContent(): void {
+    this.usersService.getUploadedLogs().subscribe({
+      next: (response: any) => {
+        const uploaded = response?.data ?? response?.logs ?? response ?? [];
+        const list = Array.isArray(uploaded) ? uploaded : [];
+
+        this.recentFiles = list.slice(0, 6).map((item: any) => {
+          const fileName = item?.content_title ?? item?.title ?? item?.file_name ?? 'Archivo sin título';
+          const ext = this.extractExtension(fileName, item?.file_type);
+          const bytes = item?.file_size_bytes ?? item?.size_bytes ?? item?.file_size ?? null;
+          const brand = item?.brand_name ?? this.extractBrandFromS3Key(item?.s3_key) ?? 'General';
+          const createdAt = item?.created_at ?? item?.timestamp ?? item?.date ?? '';
+
+          return {
+            icon: this.getFileIcon(ext),
+            ext: ext,
+            name: fileName,
+            size: this.formatBytes(bytes),
+            date: this.formatLogDate(createdAt),
+            brand: brand,
+            brandColor: this.getBrandColor(brand)
+          };
+        });
+      },
+      error: (error) => {
+        console.error('Error fetching latest uploaded content:', error);
+        this.recentFiles = [];
+      }
+    });
+  }
+
+  private formatLogDate(value: string): string {
+    if (!value) return '-';
+    const normalized = String(value).replace(' ', 'T');
+    const date = new Date(normalized);
+    if (isNaN(date.getTime())) return String(value);
+
+    return date.toLocaleDateString('es-MX', {
+      day: '2-digit',
+      month: 'short',
+      year: 'numeric'
+    });
+  }
+
+  private getBrandColor(brand: string): string {
+    const key = (brand || '').toLowerCase();
+    if (key.includes('nupec')) return 'rgb(0,133,202)';
+    if (key.includes('nucan')) return 'rgb(79,22,87)';
+    if (key.includes('galope')) return 'rgb(27,94,165)';
+    if (key.includes('pecuario')) return 'rgb(33,40,68)';
+    return 'rgb(100,116,139)';
+  }
+
   /** Main search execution with semantic API */
   executeSearch(): void {
     const trimmedQuery = this.searchQuery.trim();
@@ -227,6 +352,8 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.totalResults = 0;
       return;
     }
+
+    this.addRecentSearch(trimmedQuery);
 
     this.isSearching = true;
     this.searchActive = true;
