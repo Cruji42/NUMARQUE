@@ -194,4 +194,48 @@ export class UsersService {
             })
         );
     }
+
+    getNotifications(page: number = 1, perPage: number = 20): Observable<any> {
+        return this.endPointUsersService.getNotifications(page, perPage).pipe(
+            map((response: any) => {
+                return response;
+            }),
+            catchError((error) => {
+                return throwError(() => error);
+            })
+        );
+    }
+
+    getUnreadNotificationsCount(): Observable<any> {
+        return this.endPointUsersService.getUnreadNotificationsCount().pipe(
+            map((response: any) => {
+                return response;
+            }),
+            catchError((error) => {
+                return throwError(() => error);
+            })
+        );
+    }
+
+    markNotificationAsRead(id: number): Observable<any> {
+        return this.endPointUsersService.markNotificationAsRead(id).pipe(
+            map((response: any) => {
+                return response;
+            }),
+            catchError((error) => {
+                return throwError(() => error);
+            })
+        );
+    }
+
+    markAllNotificationsAsRead(): Observable<any> {
+        return this.endPointUsersService.markAllNotificationsAsRead().pipe(
+            map((response: any) => {
+                return response;
+            }),
+            catchError((error) => {
+                return throwError(() => error);
+            })
+        );
+    }
 }

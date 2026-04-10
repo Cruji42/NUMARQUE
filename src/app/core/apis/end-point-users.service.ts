@@ -97,4 +97,20 @@ export class EndPointUsersService {
     getContentPreviewUrl(contentId: number): Observable<any> {
         return this.http.get<any>(`${this.apiUrl}/files/contents/${contentId}/preview-url`, { headers: this.configHeaders() });
     }
+
+    getNotifications(page: number = 1, perPage: number = 20): Observable<any> {
+        return this.http.get<any>(`${this.apiUrl}/notifications/?page=${page}&per_page=${perPage}`, { headers: this.configHeaders() });
+    }
+
+    getUnreadNotificationsCount(): Observable<any> {
+        return this.http.get<any>(`${this.apiUrl}/notifications/unread-count`, { headers: this.configHeaders() });
+    }
+
+    markNotificationAsRead(id: number): Observable<any> {
+        return this.http.patch<any>(`${this.apiUrl}/notifications/${id}/read`, {}, { headers: this.configHeaders() });
+    }
+
+    markAllNotificationsAsRead(): Observable<any> {
+        return this.http.patch<any>(`${this.apiUrl}/notifications/read-all`, {}, { headers: this.configHeaders() });
+    }
 }
