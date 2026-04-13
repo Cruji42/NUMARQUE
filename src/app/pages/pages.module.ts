@@ -24,6 +24,7 @@ import { NzUploadModule } from 'ng-zorro-antd/upload';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzInputModule } from 'ng-zorro-antd/input';
+import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 
 import { ProfileComponent } from './profile/profile.component';
 import { InvoiceComponent } from './invoice/invoice.component';
@@ -56,7 +57,8 @@ const antdModule = [
     NzUploadModule,
     NzToolTipModule,
     NzModalModule,
-    NzInputModule
+    NzInputModule,
+    NzDropDownModule
 ];
 
 @NgModule({

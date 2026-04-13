@@ -400,3 +400,132 @@
     .preview-empty-icon { font-size: 36px; margin-bottom: 10px; opacity: 0.4; }
     .preview-empty-text { font-size: 13px; color: var(--muted); max-width: 160px; line-height: 1.5; }
 }
+
+/* ============================================================
+   Modal: Agregar nuevo material
+   ============================================================ */
+:host ::ng-deep .ant-modal-body {
+    padding: 20px 24px 10px;
+}
+
+:host ::ng-deep .ant-modal-footer {
+    padding: 14px 24px 18px;
+}
+
+.modal-content {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.modal-field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.modal-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+}
+
+:host ::ng-deep .modal-field .ant-input,
+:host ::ng-deep .modal-field .ant-input-affix-wrapper,
+:host ::ng-deep .modal-field .ant-input-number,
+:host ::ng-deep .modal-field .ant-select-selector,
+:host ::ng-deep .modal-field textarea.ant-input {
+    width: 100%;
+    border-radius: 8px;
+    background: var(--navy2);
+    border: 1px solid var(--border);
+    color: var(--text);
+}
+
+:host ::ng-deep .modal-field textarea.ant-input {
+    min-height: 92px;
+    resize: vertical;
+    line-height: 1.4;
+}
+
+:host ::ng-deep .modal-field .ant-input::placeholder,
+:host ::ng-deep .modal-field textarea.ant-input::placeholder {
+    color: var(--muted);
+}
+
+:host ::ng-deep .modal-field .ant-input:focus,
+:host ::ng-deep .modal-field textarea.ant-input:focus {
+    border-color: var(--blue);
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.18);
+}
+
+.chip-input-wrap {
+    width: 100%;
+}
+
+.chip-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.chip-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: rgba(59, 130, 246, 0.15);
+    color: #bfdbfe;
+    font-size: 12px;
+    border: 1px solid rgba(59, 130, 246, 0.35);
+}
+
+.chip-remove {
+    cursor: pointer;
+    font-size: 10px;
+    color: #dbeafe;
+}
+
+.chip-help {
+    font-size: 12px;
+    color: var(--muted);
+}
+
+.selected-file {
+    margin-top: 8px;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 10px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--navy2);
+    color: var(--text);
+    font-size: 12px;
+
+    a {
+        color: var(--blue2);
+        cursor: pointer;
+        text-decoration: underline;
+    }
+}
+
+.btn-files{
+    background: var(--nutec-color) !important;
+    color: var(--w);
+    border: none;
+    padding: 10px 22px;
+    // border-radius: 999px;
+    font-weight: 600;
+    transition: all .2s ease;
+}
+
+
+::ng-deep .ant-upload-list-item {
+  color: #1890ff;
+}
+
+::ng-deep .ant-upload-list-item:hover {
+  background: #f0f5ff;
+}

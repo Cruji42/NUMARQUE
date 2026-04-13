@@ -41,11 +41,11 @@ const DEPARTMENT_ICONS: Record<string, { iconType: string; icon: string; iconThe
 
 // ── Helper: construye el path hacia category-view ─────────────────────────────
 
-const cv = (brand: string, section?: string): string => {
-    if (section) {
-        return `/pages/category-view?brand=${encodeURIComponent(brand)}&section=${encodeURIComponent(section)}`;
+const cv = (brandId: number, subcategoryId?: number): string => {
+    if (subcategoryId) {
+        return `/pages/category-view?brandId=${encodeURIComponent(String(brandId))}&subcategoryId=${encodeURIComponent(String(subcategoryId))}`;
     }
-    return `/pages/category-view?brand=${encodeURIComponent(brand)}`;
+    return `/pages/category-view?brandId=${encodeURIComponent(String(brandId))}`;
 };
 
 // ── Helper: convierte un logo del API al formato que espera el template ───────
@@ -67,12 +67,12 @@ function buildPetFoodSubmenu(entities: ApiEntity[], subcategories: ApiSubcategor
     const rootEntities = entities.filter(e => e.parent_entity_id === null);
 
     return rootEntities.map(entity => ({
-        path: cv(entity.name),         // ✅ fix: era entity.department_name (no existe en ApiEntity)
+        path: cv(entity.id),
         title: entity.name,            // ✅ fix: era entity.department_name (no existe en ApiEntity)
         ...entityIcon(entity.logo),
         canAccess: [1, 2, 3],
         submenu: subcategories.map(sub => ({
-            path: cv(entity.name, sub.name),
+            path: cv(entity.id, sub.id),
             title: sub.name,
             iconType: 'nzIcon' as const,
             icon: '',
@@ -109,7 +109,7 @@ function buildPecuarioSubmenu(entities: ApiEntity[], subcategories: ApiSubcatego
                 ...entityIcon(entity.logo),
                 canAccess: [1, 2, 3],
                 submenu: children.map(child => ({
-                    path: cv(child.name),   // sub-marca: navega a category-view
+                    path: cv(child.id),   // sub-marca: navega a category-view
                     title: child.name,
                     ...entityIcon(child.logo),
                     canAccess: [1, 2, 3],
@@ -119,7 +119,7 @@ function buildPecuarioSubmenu(entities: ApiEntity[], subcategories: ApiSubcatego
         } else {
             // Caso B: la especie no tiene sub-marcas → navega directo a category-view.
             return {
-                path: cv(entity.name),   // especie: navega a category-view
+                path: cv(entity.id),   // especie: navega a category-view
                 title: entity.name,
                 ...entityIcon(entity.logo),
                 canAccess: [1, 2, 3],
@@ -137,7 +137,7 @@ function buildInstitucionalSubmenu(entities: ApiEntity[]): any {
     return entities
         .filter(e => e.parent_entity_id === null)
         .map(entity => ({
-            path: cv(entity.name),
+            path: cv(entity.id),
             title: entity.name,
             ...entityIcon(entity.logo),
             canAccess: [1, 2, 3],
@@ -171,7 +171,7 @@ function mapDepartmentToNavItem(dept: ApiDepartment): any {
             submenu = dept.entities
                 .filter(e => e.parent_entity_id === null)
                 .map(entity => ({
-                    path: cv(entity.name),
+                    path: cv(entity.id),
                     title: entity.name,
                     ...entityIcon(entity.logo),
                     canAccess: [1, 2, 3],

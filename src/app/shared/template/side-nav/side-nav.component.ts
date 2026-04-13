@@ -79,25 +79,141 @@ export class SideNavComponent implements OnInit {
     isCategoryViewActive(path?: string): boolean {
         if (!this.isCategoryViewLink(path)) return false;
 
-        const [targetPathRaw, targetQueryRaw = ''] = (path || '').split('?');
+        const [targetPathRaw] = (path || '').split('?');
         const currentUrl = this.router.url || '';
         const [currentPathRaw, currentQueryRaw = ''] = currentUrl.split('?');
 
         if (targetPathRaw !== currentPathRaw) return false;
 
-        const targetParams = this.parseQuery(targetQueryRaw);
+        const targetParams = this.parseCategoryViewParams(path || '');
         const currentParams = this.parseQuery(currentQueryRaw);
 
-        // Solo comparar params relevantes para selección en category-view
-        const keys = ['brandId', 'sectionId', 'subcategoryId'];
+        // Match jerárquico estricto para evitar multi-selección:
+        // - Si target tiene subcategoryId, exige brandId + sectionId + subcategoryId
+        // - Si target tiene sectionId, exige brandId + sectionId
+        // - Si target solo tiene brandId, exige solo brandId
+        const targetBrandId = targetParams['brandId'] || '';
+        const targetSectionId = targetParams['sectionId'] || '';
+        const targetSubcategoryId = targetParams['subcategoryId'] || '';
 
-        for (const key of keys) {
-            const targetValue = targetParams[key] || '';
-            const currentValue = currentParams[key] || '';
-            if (targetValue !== currentValue) return false;
+        const currentBrandId = currentParams['brandId'] || '';
+        const currentSectionId = currentParams['sectionId'] || '';
+        const currentSubcategoryId = currentParams['subcategoryId'] || '';
+
+        if (!targetBrandId || targetBrandId !== currentBrandId) return false;
+
+        if (targetSubcategoryId) {
+            return targetSectionId === currentSectionId && targetSubcategoryId === currentSubcategoryId;
         }
 
-        return true;
+        if (targetSectionId) {
+            return targetSectionId === currentSectionId && !currentSubcategoryId;
+        }
+
+        return !currentSectionId && !currentSubcategoryId;
+    }
+
+    private parseCategoryViewParams(pathWithQuery: string): Record<string, string> {
+        const out: Record<string, string> = {};
+        if (!pathWithQuery || !pathWithQuery.includes('?')) return out;
+
+        const [, queryString] = pathWithQuery.split('?');
+        if (!queryString) return out;
+
+        queryString.split('&').forEach(pair => {
+            const [k, v] = pair.split('=');
+            if (k) out[decodeURIComponent(k)] = decodeURIComponent(v || '');
+        });
+
+        // Pecuario: si brand es agrupador y section trae marca real, usar section como brand final
+        if (!out.brandId && out.brand && out.section) {
+            const maybeContainer = this.normalizeText(out.brand);
+            const maybeRealBrand = (out.section || '').trim();
+            if (this.isPecuarioContainer(maybeContainer) && maybeRealBrand) {
+                out.brand = maybeRealBrand;
+            }
+        }
+
+        // Misma normalización base de category-view usada en navQuery
+        if (out.brand && !out.brandId) {
+            const brandRaw = (out.brand || '').trim();
+            if (/^\d+$/.test(brandRaw)) {
+                out.brandId = brandRaw;
+            } else {
+                const mapped = this.mapBrandToDepartmentId(brandRaw);
+                if (mapped) out.brandId = String(mapped);
+            }
+            delete out.brand;
+        }
+
+        if (out.section && !out.sectionId) {
+            const sectionRaw = (out.section || '').trim();
+            if (/^\d+$/.test(sectionRaw)) {
+                out.sectionId = sectionRaw;
+            } else {
+                const mapped = this.mapCategoryNameToId(sectionRaw);
+                if (mapped) out.sectionId = String(mapped);
+            }
+            delete out.section;
+        }
+
+        if (out.subcategory && !out.subcategoryId) {
+            const subRaw = (out.subcategory || '').trim();
+            if (/^\d+$/.test(subRaw)) {
+                out.subcategoryId = subRaw;
+            } else {
+                const mapped = this.mapCategoryNameToId(subRaw);
+                if (mapped) out.subcategoryId = String(mapped);
+            }
+            delete out.subcategory;
+        }
+
+        return out;
+    }
+
+    private mapBrandToDepartmentId(brand: string): number | null {
+        const normalized = this.normalizeText(brand);
+        const map: Record<string, number> = {
+            NUPEC: 1,
+            NUCAN: 2,
+            GALOPE: 3,
+            OPTIMO: 4
+        };
+        return map[normalized] || null;
+    }
+
+    private mapCategoryNameToId(category: string): number | null {
+        const normalized = this.normalizeText(category);
+        const map: Record<string, number> = {
+            ATL: 101,
+            DIGITAL: 102,
+            TRADE: 103,
+            TRAINING: 104,
+            'EVENTOS Y BTL': 105,
+            TECNICO: 106
+        };
+        return map[normalized] || null;
+    }
+
+    private isPecuarioContainer(value: string): boolean {
+        const containers = new Set([
+            'AVES',
+            'PORCINO',
+            'BOVINO',
+            'RUMIANTES',
+            'ACUICOLA',
+            'EQUINO',
+            'PECUARIO'
+        ]);
+        return containers.has(this.normalizeText(value));
+    }
+
+    private normalizeText(value: string): string {
+        return (value || '')
+            .toUpperCase()
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '')
+            .trim();
     }
 
     private parseQuery(query: string): Record<string, string> {

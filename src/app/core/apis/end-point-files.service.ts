@@ -48,8 +48,17 @@ export class EndPointFilesService {
         return this.http.get(`${this.apiUrl}/brands/${id}`, { headers: this.configHeaders() });
     }
 
-    getContentBySubcategory(brandId: number, subCategoryId: number): Observable<any> {
-        return this.http.get(`${this.apiUrl}/files/contents?entity_id=${brandId}&subcategory_id=${subCategoryId}`, { headers: this.configHeaders() });
+    getContentBySubcategory(brandId: number, subCategoryId: number, folderId?: number | null): Observable<any> {
+        const params = new URLSearchParams({
+            entity_id: String(brandId),
+            subcategory_id: String(subCategoryId)
+        });
+
+        if (folderId !== null && folderId !== undefined) {
+            params.set('folder_id', String(folderId));
+        }
+
+        return this.http.get(`${this.apiUrl}/files/contents?${params.toString()}`, { headers: this.configHeaders() });
     }
 
 
@@ -62,11 +71,20 @@ export class EndPointFilesService {
     }
 
     downloadFile(id: number): Observable<any> {
-        return this.http.get(`${this.apiUrl}/files/${id}/download`, { headers: this.configHeaders() })
+        return this.http.get(`${this.apiUrl}/files/contents/${id}/download-url`, { headers: this.configHeaders() })
     }
 
     uploadFile(formData: FormData): Observable<any> {
         return this.http.post(`${this.apiUrl}/files/upload`, formData, { headers: this.configHeadersFilea() })
     }
+
+    createFolder(data: any): Observable<any> {
+        return this.http.post(`${this.apiUrl}/files/new-folder`, data, { headers: this.configHeaders() });
+    }
+
+    deleteContent(id: number): Observable<any> {
+        return this.http.delete(`${this.apiUrl}/files/contents/delete/${id}`, { headers: this.configHeaders() });
+    }
+
 
 }

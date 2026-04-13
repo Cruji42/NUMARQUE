@@ -352,7 +352,7 @@ export class OrdersListComponent implements OnInit {
                 : '',
             'Compañía': item.company,
             'Marcas': Array.isArray(item.brands)
-                ? item.brands.map(b => b.name).join(', ')
+                ? item.brands.map( (b: any) => b.name).join(', ')
                 : '',
             'Rol': this.getRoleLabel(item.role_id),
             'Estatus': this.getStatusLabel(item.account_status),

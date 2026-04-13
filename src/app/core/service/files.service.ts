@@ -49,5 +49,27 @@ export class FilesService {
         )
     }
 
+    createFolder(data: any): Observable<any> {
+        return this.endPointFilesService.createFolder(data).pipe(
+            map((res: any) => {
+                return res;
+            }),
+            catchError((error) => {
+                return throwError(() => error);
+            })
+        )
+    }
+
+    deleteContent(id: number): Observable<any> {
+        return this.endPointFilesService.deleteContent(id).pipe(
+            map((res: any) => {
+                return res;
+            }),
+            catchError((error) => {
+                return throwError(() => error);
+            })
+        )
+    }
+
 
 }

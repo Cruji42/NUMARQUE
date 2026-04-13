@@ -25,16 +25,31 @@ export class NavQueryPipe implements PipeTransform {
         // Normalización específica para category-view:
         // no enviar nombres legacy, sino IDs.
         if (path?.includes('/pages/category-view')) {
-            // brand -> brandId
+            // Pecuario: si viene "brand" como agrupador (Aves/Porcino/etc.) y existe "section" con marca real,
+            // se usa section como brand final para category-view.
+            if (!params.brandId && params.brand && params.section) {
+                const maybeContainer = this.normalizeText(params.brand);
+                const maybeRealBrand = (params.section || '').trim();
+                if (this.isPecuarioContainer(maybeContainer) && maybeRealBrand) {
+                    params.brand = maybeRealBrand;
+                }
+            }
+
+            // brand -> brandId (marca final)
             if (params.brand && !params.brandId) {
-                const brandId = this.mapBrandToDepartmentId(params.brand);
-                if (brandId) {
-                    params.brandId = String(brandId);
+                const brandRaw = (params.brand || '').trim();
+                if (/^\d+$/.test(brandRaw)) {
+                    params.brandId = brandRaw;
+                } else {
+                    const brandId = this.mapBrandToDepartmentId(brandRaw);
+                    if (brandId) {
+                        params.brandId = String(brandId);
+                    }
                 }
                 delete params.brand;
             }
 
-            // section (legacy name) -> sectionId
+            // Si venía section legacy y ya se usó para resolver brand (caso Pecuario), evitar contaminar sectionId
             if (params.section && !params.sectionId) {
                 const sectionRaw = (params.section || '').trim();
                 if (/^\d+$/.test(sectionRaw)) {
@@ -45,6 +60,10 @@ export class NavQueryPipe implements PipeTransform {
                         params.sectionId = String(maybeId);
                     }
                 }
+            }
+
+            // section legacy no debe viajar en category-view
+            if (params.section) {
                 delete params.section;
             }
 
@@ -53,6 +72,11 @@ export class NavQueryPipe implements PipeTransform {
                 const subcategoryRaw = (params.subcategory || '').trim();
                 if (/^\d+$/.test(subcategoryRaw)) {
                     params.subcategoryId = subcategoryRaw;
+                } else {
+                    const maybeId = this.mapCategoryNameToId(subcategoryRaw);
+                    if (maybeId) {
+                        params.subcategoryId = String(maybeId);
+                    }
                 }
                 delete params.subcategory;
             }
@@ -84,10 +108,26 @@ export class NavQueryPipe implements PipeTransform {
         const map: Record<string, number> = {
             ATL: 101,
             DIGITAL: 102,
-            TRADE: 103
+            TRADE: 103,
+            TRAINING: 104,
+            'EVENTOS Y BTL': 105,
+            TECNICO: 106
         };
 
         return map[normalized] || null;
+    }
+
+    private isPecuarioContainer(value: string): boolean {
+        const containers = new Set([
+            'AVES',
+            'PORCINO',
+            'BOVINO',
+            'RUMIANTES',
+            'ACUICOLA',
+            'EQUINO',
+            'PECUARIO'
+        ]);
+        return containers.has(this.normalizeText(value));
     }
 
     private normalizeText(value: string): string {
