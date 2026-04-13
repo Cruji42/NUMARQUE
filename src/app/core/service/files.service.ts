@@ -71,5 +71,16 @@ export class FilesService {
         )
     }
 
+    renameContent(id: number, title : string): Observable<any> {
+        return this.endPointFilesService.renameContent(id, title).pipe(
+            map((res: any) => {
+                return res;
+            }),
+            catchError((error) => {
+                return throwError(() => error);
+            })
+        )
+    }
+
 
 }

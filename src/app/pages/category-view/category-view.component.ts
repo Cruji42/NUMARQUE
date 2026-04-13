@@ -1,4 +1,5 @@
 import { Component, OnInit, OnDestroy, ViewChild, TemplateRef, ViewContainerRef, ElementRef } from '@angular/core';
+import { DomSanitizer, SafeResourceUrl, SafeUrl } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { combineLatest, Subject } from 'rxjs';
@@ -9,6 +10,7 @@ import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { FilesService } from 'src/app/core/service/files.service';
 import { NzContextMenuService, NzDropdownMenuComponent } from 'ng-zorro-antd/dropdown';
+import { EndPointUsersService } from '../../core/apis/end-point-users.service';
 
 // ----------------------------------------------------------------
 // Interfaces
@@ -47,6 +49,7 @@ export interface FileItem {
     favorite: boolean;
     folderId: number | null;
     url?: string;
+    s3Key?: string;
 }
 
 export interface BreadcrumbItem {
@@ -153,10 +156,17 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
     file!: File;
     selectedContextItem: FileItem | FolderItem | null = null;
     selectedContextType: 'file' | 'folder' | null = null;
+    renamingFileId: number | null = null;
+    renamingFileName = '';
+    previewModalUrl: SafeResourceUrl | null = null;
+    previewModalVideoUrl: SafeUrl | null = null;
+    previewModalType: 'pdf' | 'video' | 'image' | null = null;
+    previewModalImageUrl: SafeUrl | null = null;
 
     @ViewChild('tplContent', { static: true }) tplContent!: TemplateRef<any>;
     @ViewChild('tplFooter', { static: true }) tplFooter!: TemplateRef<any>;
     @ViewChild('fileInputRef') fileInputRef?: ElementRef<HTMLInputElement>;
+    @ViewChild('previewModalTpl', { static: true }) previewModalTpl!: TemplateRef<any>;
 
     constructor(
         private message: NzMessageService,
@@ -169,6 +179,8 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
         private fb: FormBuilder,
         private service: FilesService,
         private nzContextMenuService: NzContextMenuService,
+        private endPointUsersService: EndPointUsersService,
+        private sanitizer: DomSanitizer,
     ) { }
 
     ngOnInit(): void {
@@ -220,7 +232,7 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
             type: ['file'], // valor por defecto
             title: ['', Validators.required],
             description: ['',],
-            tags: [[], ]
+            tags: [[],]
         });
     }
 
@@ -474,6 +486,7 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
 
         this.filteredFolders = folders;
         this.filteredFiles = files;
+        this.loadImagePreviews(this.filteredFiles);
     }
 
     openFolder(folder: FolderItem): void {
@@ -592,6 +605,7 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
             this.filteredFolders = [];
             this.allFiles = [];
             this.filteredFiles = [];
+
             return;
         }
 
@@ -623,6 +637,8 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
         this.allFiles = [...node.files];
         this.filteredFiles = [...node.files];
         this.selectedFile = null;
+        this.loadImagePreviews(this.filteredFiles);
+
 
         this.fileManagerFolderTrail = this.currentTreePath.map((segment, idx) => ({
             label: segment,
@@ -637,7 +653,18 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
     // ----------------------------------------------------------------
     selectFile(file: FileItem): void {
         this.selectedFile = this.selectedFile?.id === file.id ? null : file;
-        console.log('Archivo seleccionado:', this.selectedFile);
+
+        if (this.selectedFile?.id) {
+            this.endPointUsersService.getContentPreviewUrl(this.selectedFile.id).subscribe({
+                next: (resp: any) => {
+                    const previewUrl = (resp?.preview_url || resp?.url || '').toString().trim();
+                    if (previewUrl && this.selectedFile) {
+                        this.selectedFile = { ...this.selectedFile, url: previewUrl };
+                    }
+                },
+                error: () => { }
+            });
+        }
     }
 
     toggleFolderFav(folder: FolderItem): void {
@@ -661,7 +688,58 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
     // }
 
     shareFile(file: FileItem): void {
-        this.message.info(`Enlace de "${file.name}" copiado al portapapeles`);
+        // this.openFilePreview(file);
+    }
+
+    openFilePreview(file: FileItem): void {
+        if (!file?.id) return;
+
+        const openWithUrl = (previewUrl: string) => {
+            if (!previewUrl) {
+                this.message.warning('No se encontró URL de preview.');
+                return;
+            }
+
+            const isPdf = this.isPdfType(file.type);
+            const isVideo = this.isVideoType(file.type);
+            const isImage = this.isImageType(file.type);
+
+            if (!isPdf && !isVideo && !isImage) {
+                this.message.info('La previsualización no está disponible para este tipo de archivo.');
+                return;
+            }
+
+            this.previewModalType = isPdf ? 'pdf' : isVideo ? 'video' : 'image';
+            this.previewModalUrl = isPdf ? this.sanitizer.bypassSecurityTrustResourceUrl(previewUrl) : null;
+            this.previewModalVideoUrl = isVideo ? this.sanitizer.bypassSecurityTrustUrl(previewUrl) : null;
+            this.previewModalImageUrl = isImage ? this.sanitizer.bypassSecurityTrustUrl(previewUrl) : null;
+
+            this.modal.create({
+                nzTitle: file.name || 'Previsualización',
+                nzContent: this.previewModalTpl,
+                nzFooter: null,
+                nzWidth: 980,
+                nzMaskClosable: true
+            });
+        };
+
+        if (file.url) {
+            openWithUrl(file.url);
+            return;
+        }
+
+        this.endPointUsersService.getContentPreviewUrl(file.id).subscribe({
+            next: (resp: any) => {
+                const previewUrl = (resp?.preview_url || resp?.url || '').toString().trim();
+                if (previewUrl) {
+                    file.url = previewUrl;
+                }
+                openWithUrl(previewUrl);
+            },
+            error: () => {
+                this.message.error('No se pudo obtener la previsualización.');
+            }
+        });
     }
 
     contextMenu(event: MouseEvent, menu: NzDropdownMenuComponent, item: FileItem | FolderItem, type: 'file' | 'folder'): void {
@@ -688,14 +766,64 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
     }
 
     contextRename(): void {
-        if (!this.selectedContextItem) {
+        if (this.selectedContextType !== 'file' || !this.selectedContextItem) {
+            this.message.info('Solo se pueden renombrar archivos.');
             this.closeContextMenu();
             return;
         }
 
-        const name = (this.selectedContextItem as any)?.name || 'ítem';
-        this.message.info(`Renombrar "${name}" (pendiente integración API).`);
+        const file = this.selectedContextItem as FileItem;
+        this.renamingFileId = file.id;
+        this.renamingFileName = file.name || '';
         this.closeContextMenu();
+    }
+
+    cancelRename(): void {
+        this.renamingFileId = null;
+        this.renamingFileName = '';
+    }
+
+    onRenameKeydown(event: KeyboardEvent, file: FileItem): void {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            this.confirmRename(file);
+            return;
+        }
+
+        if (event.key === 'Escape') {
+            event.preventDefault();
+            this.cancelRename();
+        }
+    }
+
+    confirmRename(file: FileItem): void {
+        const newTitle = (this.renamingFileName || '').trim();
+
+        if (!newTitle) {
+            this.cancelRename();
+            return;
+        }
+
+        if (!file?.id) {
+            this.message.warning('No se pudo identificar el archivo a renombrar.');
+            this.cancelRename();
+            return;
+        }
+
+        this.service.renameContent(file.id, newTitle).subscribe({
+            next: () => {
+                file.name = newTitle;
+                if (this.selectedFile?.id === file.id) {
+                    this.selectedFile = { ...this.selectedFile, name: newTitle };
+                }
+                this.message.success('Archivo renombrado correctamente.');
+                this.cancelRename();
+            },
+            error: () => {
+                this.message.error('No se pudo renombrar el archivo.');
+                this.cancelRename();
+            }
+        });
     }
 
     contextMove(): void {
@@ -828,6 +956,20 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
         ).toString().trim();
     }
 
+    isImageType(type: string): boolean {
+        const t = (type || '').toLowerCase();
+        return ['png', 'jpg', 'jpeg', 'gif', 'webp', 'svg', 'bmp'].includes(t);
+    }
+
+    isVideoType(type: string): boolean {
+        const t = (type || '').toLowerCase();
+        return ['mp4', 'mov', 'avi', 'webm', 'mkv'].includes(t);
+    }
+
+    isPdfType(type: string): boolean {
+        return (type || '').toLowerCase() === 'pdf';
+    }
+
     getFileIcon(type: string): string {
         const map: Record<string, string> = {
             png: '🖼️', jpg: '🖼️', jpeg: '🖼️', svg: '🖼️', gif: '🖼️', webp: '🖼️',
@@ -937,7 +1079,7 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
         const childrenCount = Number(item?.children_count ?? item?.items_count ?? item?.count ?? 0);
         return {
             id: Number(item?.id) || Math.floor(Math.random() * 1000000000),
-            name: (item?.name || item?.folder_name || item?.title || item?.hidden_file || 'Carpeta').toString(),
+            name: (item?.title || item?.name || item?.folder_name || item?.hidden_file || 'Carpeta').toString(),
             count: Number.isFinite(childrenCount) ? childrenCount : 0,
             favorite: !!item?.favorite,
             parentId: item?.parent_id ?? this.currentFolderId ?? null,
@@ -960,7 +1102,7 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
 
         return {
             id: Number(item?.id) || Math.floor(Math.random() * 1000000000),
-            name: (item?.name || item?.file_name || item?.title || nameFromKey || item?.hidden_file || 'Archivo').toString(),
+            name: (item?.title || item?.name || item?.file_name || nameFromKey || item?.hidden_file || 'Archivo').toString(),
             description: (item?.description || '').toString(),
             type,
             size: size_to_mb,
@@ -971,7 +1113,8 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
             downloads: Number(item?.downloads || item?.download_count || 0),
             favorite: !!item?.favorite,
             folderId: item?.folder_id ?? null,
-            url: (item?.url || item?.file_url || item?.download_url || '').toString() || undefined
+            url: (item?.url || item?.file_url || item?.download_url || '').toString() || undefined,
+            s3Key: (item?.s3_key || item?.key || '').toString() || undefined
         };
     }
 
@@ -1412,7 +1555,7 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
                 console.log(url)
                 const link = document.createElement('a');
                 link.href = url;
-                link.download = file.name; // opcional (el backend define el nombre)
+                link.download = (file?.name || 'archivo').toString();
                 // link.target = '_blank'; // opcional
                 link.click();
 
@@ -1421,5 +1564,22 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
             }
         })
 
+    }
+
+
+    private loadImagePreviews(files: FileItem[]): void {
+        files.forEach(file => {
+            if (this.isImageType(file.type) && !file.url) {
+                this.endPointUsersService.getContentPreviewUrl(file.id).subscribe({
+                    next: (resp: any) => {
+                        const previewUrl = (resp?.preview_url || resp?.url || '').toString().trim();
+                        if (previewUrl) {
+                            file.url = previewUrl;
+                        }
+                    },
+                    error: () => { }
+                });
+            }
+        });
     }
 }

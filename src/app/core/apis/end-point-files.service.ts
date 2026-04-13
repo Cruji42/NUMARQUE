@@ -2,6 +2,7 @@ import { Inject, Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { Observable } from "rxjs";
 import { environment } from "src/environments/environment";
+import { HttpParams, HttpUrlEncodingCodec } from '@angular/common/http';
 
 
 @Injectable({
@@ -87,4 +88,11 @@ export class EndPointFilesService {
     }
 
 
+    renameContent(id: number, title: string): Observable<any> {
+        return this.http.put(
+            `${this.apiUrl}/contents/${id}`,
+            { title },
+            { headers: this.configHeaders() }
+        );
+    }
 }
