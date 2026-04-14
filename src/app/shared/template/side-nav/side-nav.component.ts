@@ -88,10 +88,14 @@ export class SideNavComponent implements OnInit {
         const targetParams = this.parseCategoryViewParams(path || '');
         const currentParams = this.parseQuery(currentQueryRaw);
 
+        // Caso departmentId: el item del departamento se activa cuando la URL
+        // trae ese mismo departmentId (independientemente de brandId, etc.)
+        const targetDeptId = targetParams['departmentId'] || '';
+        if (targetDeptId) {
+            return targetDeptId === (currentParams['departmentId'] || '');
+        }
+
         // Match jerárquico estricto para evitar multi-selección:
-        // - Si target tiene subcategoryId, exige brandId + sectionId + subcategoryId
-        // - Si target tiene sectionId, exige brandId + sectionId
-        // - Si target solo tiene brandId, exige solo brandId
         const targetBrandId = targetParams['brandId'] || '';
         const targetSectionId = targetParams['sectionId'] || '';
         const targetSubcategoryId = targetParams['subcategoryId'] || '';

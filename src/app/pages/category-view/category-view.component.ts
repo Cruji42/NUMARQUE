@@ -121,7 +121,13 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
     activeSection = '';
     activeSubcategory = '';
     activeSectionId: number | null = null;
-    activeSubcategoryId: number | null = null;
+activeSubcategoryId: number | null = null;
+  departmentId: number | null = null;
+
+    // Trail de nombres de entity para construir el path de upload
+    // Ej: PetFood->NUCAN->Digital  =>  ['NUCAN']
+    // Ej: Pecuario->Aves->NUPIO->Digital  =>  ['Aves', 'NUPIO']
+    activeEntityTrail: string[] = [];
 
     categoryCards: CategoryCard[] = [];
     departmentEntities: DepartmentEntityItem[] = [];
@@ -197,26 +203,31 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
                     this.menuDepartments = departments;
                     this.activeBrandId = this.parseNumberParam(params.get('brandId'));
                     // this.activeSectionId = this.parseNumberParam(params.get('sectionId'));
+this.departmentId = this.parseNumberParam(params.get('departmentId'));
                     this.activeSubcategoryId = this.parseNumberParam(params.get('subcategoryId'));
                     this.activeBrand = params.get('brand') || '';
                     // this.activeSection     = params.get('section')     || '';
                     this.activeSubcategory = params.get('subcategory') || '';
+                    // Reset trail en cada navegación; se reconstruye en enterCategoryMode / enterFileManager
+                    this.activeEntityTrail = [];
 
-                    if (this.activeBrandId) {
-                        this.loadBrandInfo(this.activeBrandId, () => {
-                            if (this.activeSubcategoryId) {
-                                this.enterFileManager();
-                            } else {
-                                this.enterCategoryMode();
-                            }
-                        });
-                    } else {
-                        this.brandInfo = null;
+                    if (this.departmentId) {
+                      this.enterDepartmentMode();
+                    } else if (this.activeBrandId) {
+                      this.loadBrandInfo(this.activeBrandId, () => {
                         if (this.activeSubcategoryId) {
-                            this.enterFileManager();
+                          this.enterFileManager();
                         } else {
-                            this.enterCategoryMode();
+                          this.enterCategoryMode();
                         }
+                      });
+                    } else {
+                      this.brandInfo = null;
+                      if (this.activeSubcategoryId) {
+                        this.enterFileManager();
+                      } else {
+                        this.enterCategoryMode();
+                      }
                     }
 
                     this.ensureSubcategoryContextForBreadcrumb();
@@ -248,12 +259,15 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
         this.viewMode = 'categories';
         this.currentEntityId = null;
         const departmentLabel = this.getCurrentDepartmentName();
-        const skipDepartment = this.shouldSkipDepartment(departmentLabel);
+
+        // Construir el trail de entities para el breadcrumb visual y el path de upload.
+        // El trail parte desde la entity activa (activeBrandId) y sube por sus ancestros
+        // hasta la raíz, excluyendo siempre el departamento.
+        this.activeEntityTrail = this.buildEntityTrail(this.activeBrandId);
+
         this.breadcrumbs = [
-            ...(departmentLabel && !skipDepartment ? [{ label: departmentLabel, folderId: null }] : []),
-            { label: this.activeBrand, folderId: null },
-            ...(this.activeSection ? [{ label: this.activeSection, folderId: null }] : []),
-            ...(this.activeSubcategory ? [{ label: this.activeSubcategory, folderId: null }] : []),
+            ...(departmentLabel ? [{ label: departmentLabel, folderId: null }] : []),
+            ...this.activeEntityTrail.map(name => ({ label: name, folderId: null })),
         ];
         this.loadCategoriesFromDepartmentHierarchy();
     }
@@ -289,23 +303,33 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
                 const subcategories: SubcategoryItem[] = Array.isArray(resp?.data) ? resp.data : [];
                 this.currentDepartmentSubcategories = subcategories;
 
-                // Sin section/subcategory (ni ids) → mostrar cards de subcategorías directamente
+                // Buscar la entity por brandId (id directo) o por nombre
+                const brandEntity = this.activeBrandId
+                    ? entities.find(e => e.id === this.activeBrandId) || null
+                    : this.findEntityByName(entities, this.activeBrand);
+
+                // Sin section/subcategory: decidir qué mostrar según si la entity tiene hijos
                 if (!this.activeSection && !this.activeSubcategory && !this.activeSectionId && !this.activeSubcategoryId) {
-                    this.categoryCards = this.mapSubcategoriesToCards(subcategories);
+                    if (brandEntity) {
+                        // Entity encontrada: mostrar sus hijos si los tiene, si no → subcategorías
+                        this.currentEntityId = brandEntity.id;
+                        this.categoryCards = this.buildCardsForEntityLevel(brandEntity.id, entities, subcategories);
+                    } else {
+                        // No es una entity conocida (PetFood brands sin parent) → subcategorías directamente
+                        this.categoryCards = this.mapSubcategoriesToCards(subcategories);
+                    }
                     return;
                 }
 
-                const brandEntity = this.findEntityByName(entities, this.activeBrand);
-
                 if (!brandEntity) {
-                    // brand no es una entity (ej: NUPEC en PetFood) → mostrar subcategorías
+                    // brand no es una entity → mostrar subcategorías
                     this.categoryCards = this.mapSubcategoriesToCards(subcategories);
                     return;
                 }
 
                 this.currentEntityId = brandEntity.id;
 
-                // Deep-link: brand=Aves&section=NUPIO → mostrar subcategorías de esa sub-entidad
+                // Deep-link: brandId=Aves + sectionId=NUPIO → mostrar subcategorías de esa sub-entidad
                 const sectionEntity = this.activeSectionId
                     ? entities.find(e => e.id === this.activeSectionId) || null
                     : (this.activeSection ? this.findEntityByName(entities, this.activeSection) : null);
@@ -423,9 +447,32 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
     }
 
     openCategory(card: CategoryCard): void {
+        // ── Modo departamento: venimos de ?departmentId=X ──────────────────
+        if (this.departmentId && card.nodeId) {
+            const children = this.departmentEntities.filter(e => e.parent_entity_id === card.nodeId);
+
+            if (children.length > 0) {
+                // Hay sub-entities: mostrarlas como cards, actualizar trail y breadcrumb
+                this.currentEntityId = card.nodeId;
+                this.activeEntityTrail = [...this.activeEntityTrail, card.title];
+                this.breadcrumbs = [...this.breadcrumbs, { label: card.title, folderId: null }];
+                this.categoryCards = children.map((child, index) => this.toEntityCard(child, index));
+                return;
+            }
+
+            // Sin sub-entities: navegar a la entity como brand (mostrará sus sub-entities o subcategorías)
+            this.router.navigate([], {
+                relativeTo: this.route,
+                queryParams: { brandId: card.nodeId },
+            });
+            return;
+        }
+
+        // ── Modo brand normal: card.nodeId = sub-entity, card.id = subcategory ──
         if (this.viewMode === 'categories' && card.nodeId) {
             const children = this.departmentEntities.filter(e => e.parent_entity_id === card.nodeId);
-            this.currentEntityId = card.nodeId!;
+            this.currentEntityId = card.nodeId;
+            this.activeEntityTrail = [...this.activeEntityTrail, card.title];
             this.breadcrumbs = [...this.breadcrumbs, { label: card.title, folderId: null }];
 
             if (children.length > 0) {
@@ -433,6 +480,7 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
                 return;
             }
 
+            // Sin hijos: mostrar subcategorías
             const subcategoryCards = this.mapSubcategoriesToCards(this.currentDepartmentSubcategories);
             if (subcategoryCards.length > 0) {
                 this.categoryCards = subcategoryCards;
@@ -440,11 +488,12 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
             }
         }
 
+        // ── Navegar al file manager con la subcategoría seleccionada ──
+        // brandId = la entity hoja actual (currentEntityId o activeBrandId)
         this.router.navigate([], {
             relativeTo: this.route,
             queryParams: {
-                brandId: this.activeBrandId || this.getDepartmentIdByBrand(this.activeBrand),
-                sectionId: card.nodeId || this.activeSectionId || null,
+                brandId: this.currentEntityId || this.activeBrandId || this.getDepartmentIdByBrand(this.activeBrand),
                 subcategoryId: card.id || null
             },
         });
@@ -460,6 +509,23 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
         this.fileManagerFolderTrail = [];
         this.searchQuery = '';
         this.selectedFile = null;
+
+        // Asegurar que departmentEntities esté poblado para poder construir el trail
+        if (!this.departmentEntities.length && this.activeBrandId) {
+            const deptId = this.getCurrentDepartmentId();
+            const deptFromMenu = deptId ? this.menuDepartments.find(d => d.department_id === deptId) : null;
+            if (deptFromMenu) {
+                this.departmentEntities = deptFromMenu.entities.map(e => ({
+                    id: e.id,
+                    name: e.name,
+                    logo: e.logo,
+                    parent_entity_id: e.parent_entity_id
+                }));
+            }
+        }
+
+        // Construir el trail de entities (ej: ['Aves', 'NUPIO'] o ['NUCAN'])
+        this.activeEntityTrail = this.buildEntityTrail(this.activeBrandId);
 
         this.rebuildFileManagerBreadcrumb();
 
@@ -517,10 +583,17 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
         const baseCount = this.getBaseBreadcrumbCount();
 
         if (index === 0) {
-            this.router.navigate([], {
-                relativeTo: this.route,
-                queryParams: { brandId: this.activeBrandId || this.getDepartmentIdByBrand(this.activeBrand) },
-            });
+            if (this.departmentId) {
+                this.router.navigate([], {
+                    relativeTo: this.route,
+                    queryParams: { departmentId: this.departmentId },
+                });
+            } else {
+                this.router.navigate([], {
+                    relativeTo: this.route,
+                    queryParams: { brandId: this.activeBrandId || this.getDepartmentIdByBrand(this.activeBrand) },
+                });
+            }
             return;
         }
 
@@ -1235,16 +1308,15 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
 
     private getBaseBreadcrumbCount(): number {
         const departmentLabel = this.getCurrentDepartmentName();
-        const skipDepartment = this.shouldSkipDepartment(departmentLabel);
-        const brandLabel = this.getBrandDisplayName() || this.activeBrand || '';
-        const sectionLabel = this.activeSection || '';
         const subcategoryLabel = this.resolveSubcategoryDisplayName();
+        const entityCrumbs = this.activeEntityTrail.length > 0
+            ? this.activeEntityTrail
+            : (this.getBrandDisplayName() || this.activeBrand ? [this.getBrandDisplayName() || this.activeBrand] : []);
 
         return [
-            ...(departmentLabel && !skipDepartment ? [departmentLabel] : []),
-            brandLabel,
-            sectionLabel,
-            subcategoryLabel
+            ...(departmentLabel ? [departmentLabel] : []),
+            ...entityCrumbs,
+            ...(subcategoryLabel ? [subcategoryLabel] : [])
         ].filter(v => (v || '').trim().length > 0).length;
     }
 
@@ -1255,28 +1327,57 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
 private shouldSkipDepartment(deptName: string): boolean {
         if (!deptName) return false;
         const lower = deptName.toLowerCase();
-        return lower.includes('petfood') || lower.includes('pet foot') || lower.includes('petfoot');
+        return lower.includes('petfood') || lower.includes('pet foot') || lower.includes('petfoot') || lower.includes('pecuario');
+    }
+
+    private enterDepartmentMode(): void {
+        const dept = this.menuDepartments.find(d => d.department_id === this.departmentId);
+        if (!dept || !dept.entities.length) {
+            this.message.warning('No se encontraron entidades para este departamento.');
+            return;
+        }
+        const rootEntities = dept.entities.filter(e => e.parent_entity_id === null);
+        this.departmentEntities = dept.entities.map(e => ({
+            id: e.id, name: e.name, logo: e.logo, parent_entity_id: e.parent_entity_id
+        }));
+        this.categoryCards = rootEntities.map((entity, index) => this.toEntityCard(entity, index));
+        this.currentEntityId = null;
+        this.activeEntityTrail = [];   // en nivel departamento el trail está vacío
+        this.viewMode = 'categories';
+        this.breadcrumbs = [{ label: dept.department_name, folderId: null }];
+        this.brandInfo = null;
+
+        // Pre-cargar subcategorías para cuando se navegue a una entity hoja
+        this.endPointFilesService.getSubcategoriesByDepartment(dept.department_id).subscribe({
+            next: (resp: SubcategoriesApiResponse) => {
+                this.currentDepartmentSubcategories = Array.isArray(resp?.data) ? resp.data : [];
+            },
+            error: () => { this.currentDepartmentSubcategories = []; }
+        });
     }
 
     private rebuildFileManagerBreadcrumb(): void {
         const departmentLabel = this.getCurrentDepartmentName();
-        const skipDepartment = this.shouldSkipDepartment(departmentLabel);
-        const brandLabel = this.getBrandDisplayName() || this.activeBrand || '';
-        const sectionLabel = this.activeSection || '';
         const subcategoryLabel = this.resolveSubcategoryDisplayName();
 
+        // Breadcrumb visual: Departamento > [trail de entities] > Subcategoría > [carpetas]
+        const entityCrumbs = this.activeEntityTrail.length > 0
+            ? this.activeEntityTrail
+            : (this.getBrandDisplayName() || this.activeBrand ? [this.getBrandDisplayName() || this.activeBrand] : []);
+
         this.breadcrumbs = [
-            ...(departmentLabel && !skipDepartment ? [{ label: departmentLabel, folderId: null }] : []),
-            ...(brandLabel ? [{ label: brandLabel, folderId: null }] : []),
-            ...(sectionLabel ? [{ label: sectionLabel, folderId: null }] : []),
+            ...(departmentLabel ? [{ label: departmentLabel, folderId: null }] : []),
+            ...entityCrumbs.map(name => ({ label: name, folderId: null })),
             ...(subcategoryLabel ? [{ label: subcategoryLabel, folderId: null }] : []),
             ...this.fileManagerFolderTrail
         ];
 
+        // Upload path: NUNCA incluye el departamento, parte desde la primera entity
+        // PetFood -> NUCAN -> Digital  =>  nucan/digital
+        // Pecuario -> Aves -> NUPIO -> Digital  =>  aves/nupio/digital
+        const uploadEntityParts = entityCrumbs;
         this.currentBreadcrumbPath = this.buildBreadcrumbPathForUpload(
-            skipDepartment ? '' : departmentLabel,
-            brandLabel,
-            sectionLabel,
+            uploadEntityParts,
             subcategoryLabel,
             this.currentTreePath
         );
@@ -1315,6 +1416,31 @@ private shouldSkipDepartment(deptName: string): boolean {
         if (!departmentId) return '';
         const found = this.menuDepartments.find(d => d.department_id === departmentId);
         return (found?.department_name || '').toString().trim();
+    }
+
+    /**
+     * Construye el trail de nombres de entity desde entityId hasta la raíz,
+     * excluyendo el departamento. Orden: raíz → hoja.
+     * Ej: NUPIO (id=18, parent=Aves id=8) => ['Aves', 'NUPIO']
+     * Ej: NUCAN (id=2, parent=null)        => ['NUCAN']
+     */
+    private buildEntityTrail(entityId: number | null): string[] {
+        if (!entityId || !this.departmentEntities.length) {
+            // Fallback: usar activeBrand si existe
+            const name = this.getBrandDisplayName() || this.activeBrand;
+            return name ? [name] : [];
+        }
+
+        const trail: string[] = [];
+        let current: DepartmentEntityItem | undefined = this.departmentEntities.find(e => e.id === entityId);
+
+        while (current) {
+            trail.unshift(current.name);
+            const parentId = current.parent_entity_id;
+            current = parentId != null ? this.departmentEntities.find(e => e.id === parentId) : undefined;
+        }
+
+        return trail;
     }
 
     private slugifyPathPart(value: string): string {
@@ -1444,13 +1570,14 @@ private shouldSkipDepartment(deptName: string): boolean {
     }
 
     private buildBreadcrumbPathForUpload(
-        department: string,
-        brand: string,
-        section: string,
+        entityParts: string[],
         subcategory: string,
         folderTrail: string[] = []
     ): string {
-        const parts = [department, brand, section, subcategory]
+        // entityParts: trail de entity names (sin departamento)
+        // subcategory: nombre de la subcategoría activa
+        // folderTrail: carpetas abiertas dentro del file manager
+        const parts = [...entityParts, subcategory]
             .map(v => (v || '').trim())
             .filter(Boolean)
             .map(v => this.slugifyPathPart(v))

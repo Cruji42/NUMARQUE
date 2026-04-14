@@ -48,6 +48,10 @@ const cv = (brandId: number, subcategoryId?: number): string => {
     return `/pages/category-view?brandId=${encodeURIComponent(String(brandId))}`;
 };
 
+// Helper: navega al departamento → category-view mostrará sus entities como cards
+const cvDept = (departmentId: number): string =>
+    `/pages/category-view?departmentId=${encodeURIComponent(String(departmentId))}`;
+
 // ── Helper: convierte un logo del API al formato que espera el template ───────
 
 function entityIcon(logo: string | null): { iconType: string; icon: string; iconTheme: string } {
@@ -100,11 +104,11 @@ function buildPecuarioSubmenu(entities: ApiEntity[], subcategories: ApiSubcatego
         const children = childEntities.filter(c => c.parent_entity_id === entity.id);
 
         if (children.length > 0) {
-            // Caso A: la especie solo despliega; cada sub-marca navega directo a category-view.
-            // Las subcategorías (EVENTOS, DIGITAL, FICHAS TÉCNICAS) se muestran como cards
-            // dentro de category-view, no como tercer nivel en el sidenav.
+            // Caso A: la especie tiene sub-marcas.
+            // - El título de la especie navega a category-view y muestra las sub-marcas como cards.
+            // - El submenú sigue desplegándose para acceso directo a cada sub-marca.
             return {
-                path: '',   // especie: solo despliega
+                path: cv(entity.id),   // especie: navega a category-view mostrando sus sub-marcas
                 title: entity.name,
                 ...entityIcon(entity.logo),
                 canAccess: [1, 2, 3],
@@ -113,7 +117,7 @@ function buildPecuarioSubmenu(entities: ApiEntity[], subcategories: ApiSubcatego
                     title: child.name,
                     ...entityIcon(child.logo),
                     canAccess: [1, 2, 3],
-                    submenu: []             // sin tercer nivel en el sidenav
+                    submenu: []
                 }))
             };
         } else {
@@ -180,7 +184,7 @@ function mapDepartmentToNavItem(dept: ApiDepartment): any {
     }
 
     return {
-        path: '',
+        path: cvDept(dept.department_id),
         title: dept.department_name,          // ✅ fix: era dept.name (no existe en ApiDepartment)
         iconType: iconConfig.iconType as any,
         icon: iconConfig.icon,                // ✅ fix: era 'nzIcon' hardcodeado en lugar de iconConfig.icon

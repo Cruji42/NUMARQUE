@@ -152,6 +152,14 @@
     justify-content: center;
     flex-shrink: 0;
     transition: background 0.2s;
+    overflow: hidden;
+}
+
+.card-logo {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    border-radius: inherit;
 }
 
 .card-icon {

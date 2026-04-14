@@ -54,7 +54,8 @@
     <div class="category-card" *ngFor="let card of categoryCards" (click)="openCategory(card)"
       [style.--card-color]="card.color" [style.--card-bg]="card.bgColor">
       <div class="card-icon-wrap">
-        <span class="card-icon">{{ card.icon }}</span>
+        <img *ngIf="card.logo" [src]="card.logo" [alt]="card.title" class="card-logo" />
+        <span *ngIf="!card.logo" class="card-icon">{{ card.icon }}</span>
       </div>
       <div class="card-body">
         <div class="card-title">{{ card.title }}</div>
