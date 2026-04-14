@@ -922,7 +922,7 @@ body {
 /* ── Modals ── */
 .ant-modal-content {
   background: var(--navy2) !important;
-  color: var(--text) !important;
+  color: var(--w) !important;
   border: 1px solid var(--border) !important;
 
   .ant-modal-header {
@@ -930,12 +930,12 @@ body {
     border-color: var(--border) !important;
 
     .ant-modal-title {
-      color: var(--text) !important;
+      color: var(--w) !important;
     }
   }
 
   .ant-modal-body {
-    color: var(--text) !important;
+    color: var(--w) !important;
   }
 
   .ant-modal-footer {
@@ -945,6 +945,22 @@ body {
   .ant-modal-close-x {
     color: var(--muted) !important;
   }
+}
+
+/* Target the title and the content specifically */
+.white-text-modal .ant-modal-confirm-title,
+.white-text-modal .ant-modal-confirm-content {
+    color: white !important;
+}
+
+/* Optional: If you want the background to be dark so the white text is visible */
+.white-text-modal .ant-modal-content {
+    background-color: #1f1f1f;
+}
+
+/* Optional: Change the icon color if it clashes */
+.white-text-modal .ant-modal-confirm-body .anticon {
+    color: #ff4d4f; /* Keep it red for error, or change as needed */
 }
 
 /* ── Tabs ── */
