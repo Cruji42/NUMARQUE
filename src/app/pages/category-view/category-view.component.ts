@@ -19,6 +19,7 @@ export interface CategoryCard {
     key: string;
     title: string;
     description: string;
+    logo?: string | null;
     icon: string;
     color: string;
     bgColor: string;
@@ -396,12 +397,13 @@ this.departmentId = this.parseNumberParam(params.get('departmentId'));
             : this.mapSubcategoriesToCards(subcategories);
     }
 
-    private toEntityCard(entity: DepartmentEntityItem, index: number): CategoryCard {
+private toEntityCard(entity: DepartmentEntityItem, index: number): CategoryCard {
         const style = this.getPaletteStyle(index);
         return {
             key: entity.name.toUpperCase(),
             title: entity.name,
             description: `Explorar línea ${entity.name}.`,
+            logo: entity.logo || null,
             icon: style.icon,
             color: style.color,
             bgColor: style.bgColor,
