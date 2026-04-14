@@ -27,7 +27,7 @@ export class EndPointBrandService {
 
 
     getBrands(): Observable<Brand[]> {
-        return this.http.get<Brand[]>(`${this.apiUrl}/brands`, { headers: this.configHeaders() });
+        return this.http.get<Brand[]>(`${this.apiUrl}/brands/`, { headers: this.configHeaders() });
     }
 
 }
