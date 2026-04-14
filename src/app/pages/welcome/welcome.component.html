@@ -8,23 +8,23 @@
     </div>
   </div>
   <div class="nav-links">
-    <a class="active" (click)="goToLogin()">Inicio</a>
-    <a (click)="goToLogin()">Marcas</a>
-    <a (click)="goToLogin()">Categorías</a>
-    <a (click)="goToLogin()">Novedades</a>
-    <a (click)="goToLogin()">FAQs</a>
+    <a class="active" (click)="goToLogin('home')">Inicio</a>
+    <a (click)="goToLogin('home')">Marcas</a>
+    <a (click)="goToLogin('home')">Categorías</a>
+    <a (click)="goToLogin('home')">Novedades</a>
+    <a (click)="goToLogin('home')">FAQs</a>
   </div>
   <div class="nav-right">
-    <div class="notif-btn" (click)="goToLogin()">
+    <div class="notif-btn" (click)="goToLogin('home')">
       🔔
       <span class="notif-dot"></span>
     </div>
-    <div class="avatar" (click)="goToLogin()">EA</div>
+    <div class="avatar" (click)="goToLogin('home')">EA</div>
   </div>
 </nav> -->
 
 <!-- HERO -->
-<section class="hero" (click)="goToLogin()">
+<section class="hero" (click)="goToLogin('home')">
   <div class="hero-bg"></div>
   <div class="hero-grid"></div>
   <div class="hero-content">
@@ -36,18 +36,18 @@
       Organizado, siempre actualizado, listo para usar.
     </p>
     <div class="search-wrap" (click)="$event.stopPropagation()">
-      <input class="search-box" placeholder="¿Qué buscas hoy? Prueba &quot;Banner NUPEC&quot; o &quot;Kit BTL&quot;..." (focus)="goToLogin()" />
+      <input class="search-box" placeholder="¿Qué buscas hoy? Prueba Banner NUPEC o Kit BTL..." (focus)="goToLogin('home')" />
       <span class="search-icon">🔍</span>
-      <button class="search-btn" (click)="goToLogin()">→</button>
+      <button class="search-btn" (click)="goToLogin('home')">→</button>
     </div>
     <div class="chips">
-      <div class="chip" (click)="goToLogin()">📺 ATL</div>
-      <div class="chip" (click)="goToLogin()">📋 BTL</div>
-      <div class="chip" (click)="goToLogin()">💻 Digital</div>
-      <div class="chip" (click)="goToLogin()">📊 Comunicación técnica</div>
-      <div class="chip" (click)="goToLogin()">🎪 Eventos</div>
-      <div class="chip" (click)="goToLogin()">✨ Nuevo esta semana</div>
-      <div class="chip" (click)="goToLogin()">🔥 Tendencias</div>
+      <div class="chip" (click)="goToLogin('home')">📺 ATL</div>
+      <div class="chip" (click)="goToLogin('home')">📋 BTL</div>
+      <div class="chip" (click)="goToLogin('home')">💻 Digital</div>
+      <div class="chip" (click)="goToLogin('home')">📊 Comunicación técnica</div>
+      <div class="chip" (click)="goToLogin('home')">🎪 Eventos</div>
+      <div class="chip" (click)="goToLogin('home')">✨ Nuevo esta semana</div>
+      <div class="chip" (click)="goToLogin('home')">🔥 Tendencias</div>
     </div>
   </div>
 </section>
@@ -78,8 +78,8 @@
   <h2 class="sec-title text-white">Explora marcas Petfood</h2>
   <p class="sec-sub">Cada marca tiene su propio espacio con materiales organizados por categoría y campaña.</p>
   <div class="brands-grid">
-    <div class="brand-card" (click)="goToLogin()" *ngFor="let brand of brands">
-      <span class="brand-icon"><img src="{{brand.icon}}"alt="" class="logo-icon"></span>
+    <div class="brand-card" (click)="goToLogin('/pages/category-view?brandId=' + brand.id)" *ngFor="let brand of brands">
+      <span class="brand-icon"><img src="{{brand.icon}}" alt="" class="logo-icon"></span>
       <div class="brand-name">{{ brand.name }}</div>
       <div class="brand-desc">{{ brand.desc }}</div>
       <div class="brand-count">📁 {{ brand.count }} archivos</div>
@@ -93,47 +93,11 @@
   <h2 class="sec-title text-white">Busca por especie</h2>
   <p class="sec-sub">Cada especie tiene sus marcas con materiales técnicos y de comunicación.</p>
   <div class="species-grid">
-    <div class="brand-card" (click)="goToLogin()" *ngFor="let brand of species">
-      <span class="brand-icon"><img src="{{brand.icon}}"alt="" class="logo-icon icon-white"></span>
+    <div class="brand-card" (click)="goToLogin('/pages/category-view?brandId=' + brand.id)" *ngFor="let brand of species">
+      <span class="brand-icon"><img src="{{brand.icon}}" alt="" class="logo-icon icon-white"></span>
       <div class="brand-name">{{ brand.name }}</div>
       <div class="brand-desc">{{ brand.desc }}</div>
-      <div class="brand-count">📁 {{ brand.count }} archivos</div>
-    </div>
-  </div>
-</section>
-
-<!-- MASONRY -->
-<section class="masonry-sec">
-  <div class="sec-label">Materiales destacados</div>
-  <h2 class="sec-title text-white">Descubre contenido reciente</h2>
-  <p class="sec-sub">Los materiales más recientes y populares de todas las marcas.</p>
-
-  <div class="filters">
-    <button
-      *ngFor="let f of filters"
-      class="filter"
-      [class.active]="activeFilter === f.value"
-      (click)="setFilter(f.value)">
-      {{ f.label }}
-    </button>
-  </div>
-
-  <div class="masonry">
-    <div class="m-item h-100" *ngFor="let item of masonryItems" (click)="goToLogin()">
-      <div class="m-thumb" [ngStyle]="{ height: item.height + 'px', background: item.bg }">
-        {{ item.icon }}
-      </div>
-      <div class="m-body">
-        <div class="m-brand" [ngStyle]="{ background: item.brandBg, color: item.brandColor }">
-          {{ item.brandLabel }}
-        </div>
-        <div class="m-name">{{ item.name }}</div>
-        <div class="m-meta">
-          <span>{{ item.type }}</span><span>·</span>
-          <span>{{ item.category }}</span><span>·</span>
-          <span>{{ item.downloads }} ⬇</span>
-        </div>
-      </div>
+      <!-- <div class="brand-count">📁 {{ brand.count }} archivos</div> -->
     </div>
   </div>
 </section>
@@ -144,7 +108,7 @@
   <h2 class="sec-title text-white">Simple. Rápido. Siempre disponible.</h2>
   <p class="sec-sub">En tres pasos tienes el material que necesitas.</p>
   <div class="steps">
-    <div class="step" *ngFor="let step of steps" (click)="goToLogin()">
+    <div class="step" *ngFor="let step of steps" (click)="goToLogin('home')">
       <div class="step-num">{{ step.num }}</div>
       <span class="step-ico">{{ step.icon }}</span>
       <div class="step-title">{{ step.title }}</div>
@@ -158,8 +122,8 @@
   <h2 class="text-white">¿Listo para encontrar<br>lo que necesitas?</h2>
   <p>Todo el material de GRUPO NUTEC® está aquí, organizado y listo para tu próxima campaña.</p>
   <div class="cta-btns">
-    <button class="btn-p" (click)="goToLogin()">Explorar materiales →</button>
-    <button class="btn-g" (click)="goToLogin()">Ver novedades</button>
+    <button class="btn-p" (click)="goToLogin('home')">Explorar materiales →</button>
+    <button class="btn-g" (click)="goToLogin('home')">Ver novedades</button>
   </div>
 </section>
 
@@ -167,9 +131,9 @@
 <footer>
   <div>© 2026 NUMARQUE CENTER, GRUPO NUTEC®</div>
   <div>
-    <a (click)="goToLogin()">Términos</a>
-    <a (click)="goToLogin()">Privacidad</a>
-    <a (click)="goToLogin()">FAQs</a>
-    <a (click)="goToLogin()">Contacto</a>
+    <a (click)="goToLogin('home')">Términos</a>
+    <a (click)="goToLogin('home')">Privacidad</a>
+    <a (click)="goToLogin('home')">FAQs</a>
+    <a (click)="goToLogin('home')">Contacto</a>
   </div>
 </footer>
