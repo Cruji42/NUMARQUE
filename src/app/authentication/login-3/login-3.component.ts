@@ -14,6 +14,7 @@ declare const google: any;
 })
 
 export class Login3Component implements AfterViewInit {
+  isPasswordVisible = false;
   loginForm!: UntypedFormGroup;
   private googleInitialized = false;
 
@@ -49,6 +50,10 @@ export class Login3Component implements AfterViewInit {
         text: 'signin_with'
       }
     );
+  }
+
+  togglePasswordVisibility(): void {
+    this.isPasswordVisible = !this.isPasswordVisible;
   }
 
   private navigateByRole(user: any): void {

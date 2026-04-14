@@ -16,7 +16,8 @@ export class ErrorHandlingService {
         this.modal.error({
             nzTitle: errorMessage.title,
             nzContent: errorMessage.text,
-            nzOkText: 'Entendido'
+            nzOkText: 'Entendido',
+            nzClassName: 'white-text-modal',
         });
         
     }

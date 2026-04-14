@@ -15,23 +15,23 @@ export class WelcomeComponent {
 
   // ─── BRANDS DATA ──────────────────────────────────────────
 brands = [
-  { icon: 'assets/images/logo/brands/logo-nupec.png', name: 'NUPEC', desc: 'Alimento premium para mascotas de todas las etapas', count: 248 },
-  { icon: 'assets/images/logo/brands/logo-nucan.png', name: 'NUCAN', desc: 'Nutrición canina especializada y balanceada', count: 132 },
-  { icon: 'assets/images/logo/brands/logo-nucat.png', name: 'NUCAT', desc: 'Nutrición felina adaptada a cada etapa de vida', count: 97 },
-  { icon: 'assets/images/logo/brands/logo-nufit.png', name: 'NUFIT', desc: 'Nutrición de alto rendimiento para perros activos', count: 73 },
-  { icon: 'assets/images/logo/brands/logo-optimo-selecto.png', name: 'ÓPTIMO', desc: 'Alimento balanceado de calidad para tu mascota', count: 86 },
-  { icon: 'assets/images/logo/brands/logo-optimo-felino.png', name: 'ÓPTIMO FELINO', desc: 'Fórmula especializada en la nutrición del gato', count: 86 }
+  { id:1, icon: 'assets/images/logo/brands/logo-nupec.png', name: 'NUPEC', desc: 'Alimento premium para mascotas de todas las etapas', count: 248},
+  { id:2, icon: 'assets/images/logo/brands/logo-nucan.png', name: 'NUCAN', desc: 'Nutrición canina especializada y balanceada', count: 132 },
+  { id:3, icon: 'assets/images/logo/brands/logo-nucat.png', name: 'NUCAT', desc: 'Nutrición felina adaptada a cada etapa de vida', count: 97 },
+  { id:4, icon: 'assets/images/logo/brands/logo-nufit.png', name: 'NUFIT', desc: 'Nutrición de alto rendimiento para perros activos', count: 73 },
+  { id:6, icon: 'assets/images/logo/brands/logo-optimo-selecto.png', name: 'ÓPTIMO', desc: 'Alimento balanceado de calidad para tu mascota', count: 86 },
+  { id:7, icon: 'assets/images/logo/brands/logo-optimo-felino.png', name: 'ÓPTIMO FELINO', desc: 'Fórmula especializada en la nutrición del gato', count: 86 }
 ];
 
 species = [
-  { icon: 'assets/images/logo/species/icono-aves-dark.png', name: 'AVES', desc: 'Nutrición especializada para aves de producción', count: 248 },
-  { icon: 'assets/images/logo/species/icono-camaron-dark.png', name: 'CAMARONES', desc: 'Soluciones nutricionales para acuicultura de camarón', count: 132 },
-  { icon: 'assets/images/logo/species/icono-cerdos-dark.png', name: 'CERDOS', desc: 'Alimentación balanceada para porcicultura', count: 97 },
-  { icon: 'assets/images/logo/species/icono-equinos-dark.png', name: 'EQUINOS', desc: 'Nutrición equina de alto rendimiento', count: 73 },
-  { icon: 'assets/images/logo/species/icono-gallos-dark.png', name: 'GALLOS', desc: 'Fórmulas especializadas para gallos de combate y exhibición', count: 86 },
-  { icon: 'assets/images/logo/species/icono-peces-dark.png', name: 'PECES', desc: 'Nutrición acuícola para el crecimiento óptimo de peces', count: 86 },
-  { icon: 'assets/images/logo/species/icono-rumiantes-dark.png', name: 'RUMIANTES', desc: 'Soluciones para ganadería bovina, ovina y caprina', count: 86 },
-  { icon: 'assets/images/logo/species/icono-feed-solutions-dark.png', name: 'FEED SOLUTIONS', desc: 'Soluciones integrales de nutrición animal a medida', count: 86 }
+  { id:8, icon: 'assets/images/logo/species/icono-aves-dark.png', name: 'AVES', desc: 'Nutrición especializada para aves de producción', count: 248 },
+  { id:9, icon: 'assets/images/logo/species/icono-camaron-dark.png', name: 'CAMARONES', desc: 'Soluciones nutricionales para acuicultura de camarón', count: 132 },
+  { id:10, icon: 'assets/images/logo/species/icono-cerdos-dark.png', name: 'CERDOS', desc: 'Alimentación balanceada para porcicultura', count: 97 },
+  { id:11, icon: 'assets/images/logo/species/icono-equinos-dark.png', name: 'EQUINOS', desc: 'Nutrición equina de alto rendimiento', count: 73 },
+  { id:12, icon: 'assets/images/logo/species/icono-gallos-dark.png', name: 'GALLOS', desc: 'Fórmulas especializadas para gallos de combate y exhibición', count: 86 },
+  { id:13, icon: 'assets/images/logo/species/icono-peces-dark.png', name: 'PECES', desc: 'Nutrición acuícola para el crecimiento óptimo de peces', count: 86 },
+  { id:14, icon: 'assets/images/logo/species/icono-rumiantes-dark.png', name: 'RUMIANTES', desc: 'Soluciones para ganadería bovina, ovina y caprina', count: 86 },
+  { id:15, icon: 'assets/images/logo/species/icono-feed-solutions-dark.png', name: 'FEED SOLUTIONS', desc: 'Soluciones integrales de nutrición animal a medida', count: 86 }
 ];
 
   // ─── FILTERS ──────────────────────────────────────────────
@@ -148,12 +148,13 @@ species = [
   constructor(private router: Router) { }
 
   // ─── NAVIGATION ──────────────────────────────────────────
-  goToLogin(): void {
-    this.router.navigate(['/authentication/login']);
+  goToLogin(path: string): void {
+    this.router.navigateByUrl(path);
   }
 
   setFilter(value: string): void {
     this.activeFilter = value;
-    this.goToLogin();
+    this.goToLogin('/authentication/login-3');
   }
 }
+
