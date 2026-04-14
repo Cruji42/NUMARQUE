@@ -247,7 +247,10 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
     private enterCategoryMode(): void {
         this.viewMode = 'categories';
         this.currentEntityId = null;
+        const departmentLabel = this.getCurrentDepartmentName();
+        const skipDepartment = this.shouldSkipDepartment(departmentLabel);
         this.breadcrumbs = [
+            ...(departmentLabel && !skipDepartment ? [{ label: departmentLabel, folderId: null }] : []),
             { label: this.activeBrand, folderId: null },
             ...(this.activeSection ? [{ label: this.activeSection, folderId: null }] : []),
             ...(this.activeSubcategory ? [{ label: this.activeSubcategory, folderId: null }] : []),
@@ -1232,12 +1235,13 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
 
     private getBaseBreadcrumbCount(): number {
         const departmentLabel = this.getCurrentDepartmentName();
+        const skipDepartment = this.shouldSkipDepartment(departmentLabel);
         const brandLabel = this.getBrandDisplayName() || this.activeBrand || '';
         const sectionLabel = this.activeSection || '';
         const subcategoryLabel = this.resolveSubcategoryDisplayName();
 
         return [
-            departmentLabel,
+            ...(departmentLabel && !skipDepartment ? [departmentLabel] : []),
             brandLabel,
             sectionLabel,
             subcategoryLabel
@@ -1248,14 +1252,21 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
         this.rebuildFileManagerBreadcrumb();
     }
 
+private shouldSkipDepartment(deptName: string): boolean {
+        if (!deptName) return false;
+        const lower = deptName.toLowerCase();
+        return lower.includes('petfood') || lower.includes('pet foot') || lower.includes('petfoot');
+    }
+
     private rebuildFileManagerBreadcrumb(): void {
         const departmentLabel = this.getCurrentDepartmentName();
+        const skipDepartment = this.shouldSkipDepartment(departmentLabel);
         const brandLabel = this.getBrandDisplayName() || this.activeBrand || '';
         const sectionLabel = this.activeSection || '';
         const subcategoryLabel = this.resolveSubcategoryDisplayName();
 
         this.breadcrumbs = [
-            ...(departmentLabel ? [{ label: departmentLabel, folderId: null }] : []),
+            ...(departmentLabel && !skipDepartment ? [{ label: departmentLabel, folderId: null }] : []),
             ...(brandLabel ? [{ label: brandLabel, folderId: null }] : []),
             ...(sectionLabel ? [{ label: sectionLabel, folderId: null }] : []),
             ...(subcategoryLabel ? [{ label: subcategoryLabel, folderId: null }] : []),
@@ -1263,7 +1274,7 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
         ];
 
         this.currentBreadcrumbPath = this.buildBreadcrumbPathForUpload(
-            departmentLabel,
+            skipDepartment ? '' : departmentLabel,
             brandLabel,
             sectionLabel,
             subcategoryLabel,
