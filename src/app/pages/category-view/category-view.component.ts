@@ -56,6 +56,11 @@ export interface FileItem {
 export interface BreadcrumbItem {
     label: string;
     folderId: number | null;
+    // Navigation metadata — populated when building breadcrumbs
+    crumbType?: 'department' | 'entity' | 'subcategory' | 'folder';
+    entityId?: number | null;        // for entity crumbs
+    subcategoryId?: number | null;   // for subcategory crumbs
+    departmentId?: number | null;    // for department crumbs
 }
 
 interface DepartmentEntityItem {
@@ -260,15 +265,20 @@ this.departmentId = this.parseNumberParam(params.get('departmentId'));
         this.viewMode = 'categories';
         this.currentEntityId = null;
         const departmentLabel = this.getCurrentDepartmentName();
+        const departmentId = this.getCurrentDepartmentId();
 
         // Construir el trail de entities para el breadcrumb visual y el path de upload.
         // El trail parte desde la entity activa (activeBrandId) y sube por sus ancestros
         // hasta la raíz, excluyendo siempre el departamento.
         this.activeEntityTrail = this.buildEntityTrail(this.activeBrandId);
 
+        // Build entity crumbs with their entityId metadata so navigateToBreadcrumb
+        // can reconstruct the correct navigation state for each level.
+        const entityCrumbItems = this.buildEntityCrumbItems(this.activeBrandId);
+
         this.breadcrumbs = [
-            ...(departmentLabel ? [{ label: departmentLabel, folderId: null }] : []),
-            ...this.activeEntityTrail.map(name => ({ label: name, folderId: null })),
+            ...(departmentLabel ? [{ label: departmentLabel, folderId: null, crumbType: 'department' as const, departmentId }] : []),
+            ...entityCrumbItems,
         ];
         this.loadCategoriesFromDepartmentHierarchy();
     }
@@ -457,7 +467,10 @@ private toEntityCard(entity: DepartmentEntityItem, index: number): CategoryCard 
                 // Hay sub-entities: mostrarlas como cards, actualizar trail y breadcrumb
                 this.currentEntityId = card.nodeId;
                 this.activeEntityTrail = [...this.activeEntityTrail, card.title];
-                this.breadcrumbs = [...this.breadcrumbs, { label: card.title, folderId: null }];
+                this.breadcrumbs = [...this.breadcrumbs, {
+                    label: card.title, folderId: null,
+                    crumbType: 'entity', entityId: card.nodeId
+                }];
                 this.categoryCards = children.map((child, index) => this.toEntityCard(child, index));
                 return;
             }
@@ -475,7 +488,10 @@ private toEntityCard(entity: DepartmentEntityItem, index: number): CategoryCard 
             const children = this.departmentEntities.filter(e => e.parent_entity_id === card.nodeId);
             this.currentEntityId = card.nodeId;
             this.activeEntityTrail = [...this.activeEntityTrail, card.title];
-            this.breadcrumbs = [...this.breadcrumbs, { label: card.title, folderId: null }];
+            this.breadcrumbs = [...this.breadcrumbs, {
+                label: card.title, folderId: null,
+                crumbType: 'entity', entityId: card.nodeId
+            }];
 
             if (children.length > 0) {
                 this.categoryCards = children.map((child, index) => this.toEntityCard(child, index));
@@ -582,49 +598,56 @@ private toEntityCard(entity: DepartmentEntityItem, index: number): CategoryCard 
     }
 
     navigateToBreadcrumb(crumb: BreadcrumbItem, index: number): void {
-        const baseCount = this.getBaseBreadcrumbCount();
-
-        if (index === 0) {
-            if (this.departmentId) {
-                this.router.navigate([], {
-                    relativeTo: this.route,
-                    queryParams: { departmentId: this.departmentId },
-                });
-            } else {
-                this.router.navigate([], {
-                    relativeTo: this.route,
-                    queryParams: { brandId: this.activeBrandId || this.getDepartmentIdByBrand(this.activeBrand) },
-                });
-            }
+        // ── Department crumb ────────────────────────────────────────────────
+        // Always navigate via URL so the full page re-initializes cleanly.
+        if (crumb.crumbType === 'department' || index === 0 && this.departmentId) {
+            this.router.navigate([], {
+                relativeTo: this.route,
+                queryParams: { departmentId: crumb.departmentId ?? this.departmentId },
+            });
             return;
         }
 
-        if (this.viewMode === 'files' && !this.activeSubcategoryId) {
-            if (index === 1) {
-                this.router.navigate([], {
-                    relativeTo: this.route,
-                    queryParams: {
-                        brandId: this.activeBrandId || this.getDepartmentIdByBrand(this.activeBrand),
-                        sectionId: this.activeSectionId
-                    },
-                });
-                return;
-            }
-            if (index === 2) {
-                this.currentFolderId = null;
-                this.fileManagerFolderTrail = [];
-                this.searchQuery = '';
-                this.refreshBreadcrumbs();
-                this.loadCurrentLevel();
-                return;
-            }
-        }
+        // ── Entity crumb ────────────────────────────────────────────────────
+        // We need to go back to showing category cards for this entity level.
+        if (crumb.crumbType === 'entity' && crumb.entityId != null) {
+            const targetEntityId = crumb.entityId;
 
-        if (index < baseCount) {
+            // Trim breadcrumbs and trail back to this crumb (inclusive).
+            this.breadcrumbs = this.breadcrumbs.slice(0, index + 1);
+            this.activeEntityTrail = this.breadcrumbs
+                .filter(b => b.crumbType === 'entity')
+                .map(b => b.label);
+
+            // Reset file-manager state.
             this.fileManagerFolderTrail = [];
             this.currentFolderId = null;
             this.currentTreePath = [];
             this.searchQuery = '';
+            this.selectedFile = null;
+
+            // Switch to category view and show children of the target entity.
+            this.viewMode = 'categories';
+            this.currentEntityId = targetEntityId;
+
+            const children = this.departmentEntities.filter(e => e.parent_entity_id === targetEntityId);
+            if (children.length > 0) {
+                this.categoryCards = children.map((child, i) => this.toEntityCard(child, i));
+            } else {
+                // Leaf entity — show subcategories.
+                this.categoryCards = this.mapSubcategoriesToCards(this.currentDepartmentSubcategories);
+            }
+            return;
+        }
+
+        // ── Subcategory crumb ───────────────────────────────────────────────
+        // Go back to root of the file manager (no folder selected).
+        if (crumb.crumbType === 'subcategory') {
+            this.fileManagerFolderTrail = [];
+            this.currentFolderId = null;
+            this.currentTreePath = [];
+            this.searchQuery = '';
+            this.selectedFile = null;
             this.refreshBreadcrumbs();
 
             if (this.activeSubcategoryId && this.folderTreeRoot) {
@@ -637,21 +660,42 @@ private toEntityCard(entity: DepartmentEntityItem, index: number): CategoryCard 
             return;
         }
 
+        // ── Folder crumb ────────────────────────────────────────────────────
+        const baseCount = this.getBaseBreadcrumbCount();
         const folderTrailIndex = index - baseCount;
-        this.fileManagerFolderTrail = this.fileManagerFolderTrail.slice(0, folderTrailIndex + 1);
-        this.currentTreePath = this.fileManagerFolderTrail.map(b => b.label);
-        this.currentFolderId = this.fileManagerFolderTrail.length
-            ? this.fileManagerFolderTrail[this.fileManagerFolderTrail.length - 1].folderId
-            : null;
-        this.searchQuery = '';
-        this.refreshBreadcrumbs();
 
-        if (this.activeSubcategoryId && this.folderTreeRoot) {
-            this.renderCurrentTreeLevel();
-        } else if (this.activeSubcategoryId) {
-            this.loadFilesBySubcategory(this.currentFolderId);
-        } else {
-            this.loadCurrentLevel();
+        if (folderTrailIndex >= 0) {
+            this.fileManagerFolderTrail = this.fileManagerFolderTrail.slice(0, folderTrailIndex + 1);
+            this.currentTreePath = this.fileManagerFolderTrail.map(b => b.label);
+            this.currentFolderId = this.fileManagerFolderTrail.length
+                ? this.fileManagerFolderTrail[this.fileManagerFolderTrail.length - 1].folderId
+                : null;
+            this.searchQuery = '';
+            this.refreshBreadcrumbs();
+
+            if (this.activeSubcategoryId && this.folderTreeRoot) {
+                this.renderCurrentTreeLevel();
+            } else if (this.activeSubcategoryId) {
+                this.loadFilesBySubcategory(this.currentFolderId);
+            } else {
+                this.loadCurrentLevel();
+            }
+            return;
+        }
+
+        // ── Fallback: first crumb without metadata (legacy) ─────────────────
+        if (index === 0) {
+            if (this.departmentId) {
+                this.router.navigate([], {
+                    relativeTo: this.route,
+                    queryParams: { departmentId: this.departmentId },
+                });
+            } else {
+                this.router.navigate([], {
+                    relativeTo: this.route,
+                    queryParams: { brandId: this.activeBrandId || this.getDepartmentIdByBrand(this.activeBrand) },
+                });
+            }
         }
     }
 
@@ -1346,7 +1390,7 @@ private shouldSkipDepartment(deptName: string): boolean {
         this.currentEntityId = null;
         this.activeEntityTrail = [];   // en nivel departamento el trail está vacío
         this.viewMode = 'categories';
-        this.breadcrumbs = [{ label: dept.department_name, folderId: null }];
+        this.breadcrumbs = [{ label: dept.department_name, folderId: null, crumbType: 'department', departmentId: dept.department_id }];
         this.brandInfo = null;
 
         // Pre-cargar subcategorías para cuando se navegue a una entity hoja
@@ -1360,6 +1404,7 @@ private shouldSkipDepartment(deptName: string): boolean {
 
     private rebuildFileManagerBreadcrumb(): void {
         const departmentLabel = this.getCurrentDepartmentName();
+        const departmentId = this.getCurrentDepartmentId();
         const subcategoryLabel = this.resolveSubcategoryDisplayName();
 
         // Breadcrumb visual: Departamento > [trail de entities] > Subcategoría > [carpetas]
@@ -1367,11 +1412,14 @@ private shouldSkipDepartment(deptName: string): boolean {
             ? this.activeEntityTrail
             : (this.getBrandDisplayName() || this.activeBrand ? [this.getBrandDisplayName() || this.activeBrand] : []);
 
+        // Build entity crumb items with entityId metadata for correct back-navigation.
+        const entityCrumbItems = this.buildEntityCrumbItemsFromTrail(entityCrumbs);
+
         this.breadcrumbs = [
-            ...(departmentLabel ? [{ label: departmentLabel, folderId: null }] : []),
-            ...entityCrumbs.map(name => ({ label: name, folderId: null })),
-            ...(subcategoryLabel ? [{ label: subcategoryLabel, folderId: null }] : []),
-            ...this.fileManagerFolderTrail
+            ...(departmentLabel ? [{ label: departmentLabel, folderId: null, crumbType: 'department' as const, departmentId }] : []),
+            ...entityCrumbItems,
+            ...(subcategoryLabel ? [{ label: subcategoryLabel, folderId: null, crumbType: 'subcategory' as const, subcategoryId: this.activeSubcategoryId }] : []),
+            ...this.fileManagerFolderTrail.map(f => ({ ...f, crumbType: 'folder' as const }))
         ];
 
         // Upload path: NUNCA incluye el departamento, parte desde la primera entity
@@ -1418,6 +1466,48 @@ private shouldSkipDepartment(deptName: string): boolean {
         if (!departmentId) return '';
         const found = this.menuDepartments.find(d => d.department_id === departmentId);
         return (found?.department_name || '').toString().trim();
+    }
+
+    /**
+     * Builds BreadcrumbItem array for the entity trail starting from entityId,
+     * each crumb carrying its entityId so navigateToBreadcrumb can restore state.
+     * Order: root → leaf  (same as buildEntityTrail).
+     */
+    private buildEntityCrumbItems(entityId: number | null): BreadcrumbItem[] {
+        if (!entityId || !this.departmentEntities.length) {
+            const name = this.getBrandDisplayName() || this.activeBrand;
+            return name ? [{ label: name, folderId: null, crumbType: 'entity', entityId }] : [];
+        }
+
+        // Walk up the tree collecting ancestors, then reverse to root→leaf.
+        const items: BreadcrumbItem[] = [];
+        let current: DepartmentEntityItem | undefined = this.departmentEntities.find(e => e.id === entityId);
+
+        while (current) {
+            items.unshift({ label: current.name, folderId: null, crumbType: 'entity', entityId: current.id });
+            const parentId = current.parent_entity_id;
+            current = parentId != null ? this.departmentEntities.find(e => e.id === parentId) : undefined;
+        }
+
+        return items;
+    }
+
+    /**
+     * Maps an already-computed string trail to BreadcrumbItems with entityId metadata.
+     * Used when we only have the names (e.g. after entering file manager).
+     */
+    private buildEntityCrumbItemsFromTrail(trail: string[]): BreadcrumbItem[] {
+        return trail.map(name => {
+            const entity = this.departmentEntities.find(
+                e => this.normalizeText(e.name) === this.normalizeText(name)
+            );
+            return {
+                label: name,
+                folderId: null,
+                crumbType: 'entity' as const,
+                entityId: entity?.id ?? null
+            };
+        });
     }
 
     /**
