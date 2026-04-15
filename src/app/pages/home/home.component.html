@@ -253,16 +253,28 @@
   <section class="explore-section" *ngIf="!searchActive">
 
     <!-- ── Weekly Highlight Banner ── -->
-    <div class="nm-banner weekly-banner">
-      <div class="weekly-banner-body">
-        <div class="nm-banner-tag">{{ weeklyHighlight.tag }}</div>
-        <div class="nm-banner-title">{{ weeklyHighlight.title }}</div>
-        <div class="nm-banner-sub">{{ weeklyHighlight.description }}</div>
+    <nz-spin [nzSpinning]="isLoadingHomeWeeklyNews" nzSimple>
+      <div class="nm-banner weekly-banner" *ngIf="homeWeeklyNews">
+        <div class="weekly-banner-body">
+          <div class="nm-banner-tag">Novedades del mes</div>
+          <div class="nm-banner-title">{{ homeWeeklyNews.title }}</div>
+          <div class="nm-banner-sub">{{ homeWeeklyNews.description }}</div>
+        </div>
+        <button class="nm-banner-btn" (click)="applySearch('novedades')">
+          Ver material <i class="fas fa-arrow-right"></i>
+        </button>
       </div>
-      <button class="nm-banner-btn" (click)="applySearch('novedades')">
-        {{ weeklyHighlight.cta }} <i class="fas fa-arrow-right"></i>
-      </button>
-    </div>
+      <div class="nm-banner weekly-banner loading-banner" *ngIf="!homeWeeklyNews && !isLoadingHomeWeeklyNews">
+        <div class="weekly-banner-body">
+          <div class="nm-banner-tag">Novedades del mes</div>
+          <div class="nm-banner-title">No hay novedades este mes</div>
+          <div class="nm-banner-sub">Revisa más tarde para nuevo material reciente</div>
+        </div>
+        <button class="nm-banner-btn disabled" disabled>
+          Ver material <i class="fas fa-arrow-right"></i>
+        </button>
+      </div>
+    </nz-spin>
 
     <!-- ── Stats Bar ── -->
     <div class="stats-bar">

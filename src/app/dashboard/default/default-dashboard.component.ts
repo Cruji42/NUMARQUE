@@ -27,6 +27,8 @@ export class DefaultDashboardComponent {
 
     user: any;
     today: Date = new Date();
+    weeklyNews: any = null;
+    isLoadingWeeklyNews = false;
     metricsSummary = {
         total_downloads: 0,
         active_users: 0,
@@ -66,6 +68,21 @@ export class DefaultDashboardComponent {
                 console.log(this.user)
                 // this.brands_data = user.brands
 
+                // Fetch weekly news after user is loaded
+                if (this.user?.id) {
+                    this.isLoadingWeeklyNews = true;
+                    this.userService.getWeeklyNews(this.user.id).subscribe({
+                        next: (news: any) => {
+                            this.weeklyNews = news;
+                            this.isLoadingWeeklyNews = false;
+                        },
+                        error: (error) => {
+                            console.error('Error fetching weekly news:', error);
+                            this.weeklyNews = null;
+                            this.isLoadingWeeklyNews = false;
+                        }
+                    });
+                }
             },
             error: (error) => {
                 console.error('Error fetching users:', error);

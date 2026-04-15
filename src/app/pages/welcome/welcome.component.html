@@ -53,23 +53,30 @@
 </section>
 
 <!-- STATS -->
-<div class="stats">
+<div class="stats" *ngIf="stats">
   <div class="stat">
-    <div class="stat-n">3<span>,685</span></div>
+    <div class="stat-n">{{ formatNumber(stats.materials) }}</div>
     <div class="stat-l">Materiales disponibles</div>
   </div>
   <div class="stat">
-    <div class="stat-n">5</div>
+    <div class="stat-n">{{ stats.brands }}</div>
     <div class="stat-l">Marcas en la plataforma</div>
   </div>
   <div class="stat">
-    <div class="stat-n">23<span>K+</span></div>
+    <div class="stat-n">{{ formatNumber(stats.downloads) }}</div>
     <div class="stat-l">Descargas totales</div>
   </div>
   <div class="stat">
-    <div class="stat-n">17</div>
+    <div class="stat-n">{{ stats.users }}</div>
     <div class="stat-l">Usuarios activos</div>
   </div>
+</div>
+<div class="stats-placeholder" *ngIf="loadingStats">
+  <div class="stat">
+    <div class="stat-n-skeleton">---</div>
+    <div class="stat-l-skeleton">Materiales disponibles</div>
+  </div>
+  <!-- Repeat skeleton for others -->
 </div>
 
 <!-- BRANDS -->

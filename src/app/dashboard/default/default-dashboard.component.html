@@ -17,10 +17,13 @@
             <div class="d-flex justify-content-between align-items-center">
 
                 <div>
-                    <h6 class="bl">Novedades de la semana</h6>
+                    <h6 class="bl">Novedades del mes</h6>
                     <div class="m-l-15">
-                        <h2 class="m-b-0 text-white"><b>Kit de Campaña Q2 2026 de Nupec disponible</b></h2>
-                        <p class="m-b-0 bl-mutted">Banners, piezas ATL, Materiales BTL actualizados</p>
+                        <nz-spin [nzSpinning]="isLoadingWeeklyNews" nzSimple>
+                            <h2 *ngIf="weeklyNews" class="m-b-0 text-white"><b>{{weeklyNews.title}}</b></h2>
+                            <p *ngIf="weeklyNews" class="m-b-0 bl-mutted">{{weeklyNews.description}}</p>
+                            <p *ngIf="!weeklyNews && !isLoadingWeeklyNews" class="m-b-0 bl-mutted text-white-50">No hay novedades este mes</p>
+                        </nz-spin>
                     </div>
                 </div>
 

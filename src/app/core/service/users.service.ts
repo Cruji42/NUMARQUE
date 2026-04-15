@@ -238,4 +238,15 @@ export class UsersService {
             })
         );
     }
+
+    getWeeklyNews(userId: number): Observable<any> {
+        return this.endPointUsersService.getRandomRecentContent(userId).pipe(
+            map((response: any) => {
+                return response.data;
+            }),
+            catchError((error) => {
+                return throwError(() => error);
+            })
+        );
+    }
 }

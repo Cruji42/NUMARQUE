@@ -123,6 +123,9 @@ export class HomeComponent implements OnInit, OnDestroy {
     total_shared: 0
   };
 
+  homeWeeklyNews: any = null;
+  isLoadingHomeWeeklyNews = false;
+
   // ── Browse categories ─────────────────────────────────────
   browseCategories: BrowseCategory[] = [
     { id: 1, name: 'Identidad Visual', icon: '🎨', count: 342, gradient: 'linear-gradient(135deg, var(--card) 0%, rgba(27,94,165,0.18) 100%)' },
@@ -171,9 +174,46 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.loadRecentSearches();
     this.getMetricsSummary();
     this.getLatestUploadedContent();
+    this.loadWeeklyHighlight();
     this.interval = setInterval(() => {
       this.rotatePlaceholder();
     }, 3000);
+  }
+
+  loadWeeklyHighlight(): void {
+    this.usersService.getUser().subscribe({
+      next: (user: any) => {
+        if (user?.id) {
+          this.isLoadingHomeWeeklyNews = true;
+          this.usersService.getWeeklyNews(user.id).subscribe({
+            next: (data: any) => {
+              this.homeWeeklyNews = data;
+              this.updateWeeklyHighlight();
+              this.isLoadingHomeWeeklyNews = false;
+            },
+            error: (error) => {
+              console.error('Error loading weekly highlight:', error);
+              this.homeWeeklyNews = null;
+              this.isLoadingHomeWeeklyNews = false;
+            }
+          });
+        }
+      },
+      error: (error) => {
+        console.error('Error fetching user for weekly highlight:', error);
+      }
+    });
+  }
+
+  updateWeeklyHighlight(): void {
+    if (this.homeWeeklyNews) {
+      this.weeklyHighlight = {
+        tag: 'Novedades del mes',
+        title: this.homeWeeklyNews.title,
+        description: this.homeWeeklyNews.description,
+        cta: 'Ver material'
+      };
+    }
   }
 
   ngOnDestroy(): void {

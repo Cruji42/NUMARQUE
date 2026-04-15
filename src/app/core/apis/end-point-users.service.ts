@@ -113,4 +113,8 @@ export class EndPointUsersService {
     markAllNotificationsAsRead(): Observable<any> {
         return this.http.patch<any>(`${this.apiUrl}/notifications/read-all`, {}, { headers: this.configHeaders() });
     }
+
+    getRandomRecentContent(userId: number): Observable<any> {
+        return this.http.get<any>(`${this.apiUrl}/contents/random-recent/${userId}`, { headers: this.configHeaders() });
+    }
 }
