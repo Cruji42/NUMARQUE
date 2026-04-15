@@ -214,7 +214,7 @@ export class HeaderComponent {
             source.includes('ROLE') ||
             source.includes('STATUS')
         ) {
-            return 'apps/e-commerce/orders-list';
+return '/users';
         }
 
         if (

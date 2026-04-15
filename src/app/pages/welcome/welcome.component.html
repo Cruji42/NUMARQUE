@@ -8,23 +8,23 @@
     </div>
   </div>
   <div class="nav-links">
-    <a class="active" (click)="goToLogin('home')">Inicio</a>
-    <a (click)="goToLogin('home')">Marcas</a>
-    <a (click)="goToLogin('home')">Categorías</a>
-    <a (click)="goToLogin('home')">Novedades</a>
-    <a (click)="goToLogin('home')">FAQs</a>
+    <a class="active" (click)="goToLogin('busqueda')">Inicio</a>
+    <a (click)="goToLogin('busqueda')">Marcas</a>
+    <a (click)="goToLogin('busqueda')">Categorías</a>
+    <a (click)="goToLogin('busqueda')">Novedades</a>
+    <a (click)="goToLogin('busqueda')">FAQs</a>
   </div>
   <div class="nav-right">
-    <div class="notif-btn" (click)="goToLogin('home')">
+    <div class="notif-btn" (click)="goToLogin('busqueda')">
       🔔
       <span class="notif-dot"></span>
     </div>
-    <div class="avatar" (click)="goToLogin('home')">EA</div>
+    <div class="avatar" (click)="goToLogin('busqueda')">EA</div>
   </div>
 </nav> -->
 
 <!-- HERO -->
-<section class="hero" (click)="goToLogin('home')">
+<section class="hero" (click)="goToLogin('busqueda')">
   <div class="hero-bg"></div>
   <div class="hero-grid"></div>
   <div class="hero-content">
@@ -36,18 +36,18 @@
       Organizado, siempre actualizado, listo para usar.
     </p>
     <div class="search-wrap" (click)="$event.stopPropagation()">
-      <input class="search-box" placeholder="¿Qué buscas hoy? Prueba Banner NUPEC o Kit BTL..." (focus)="goToLogin('home')" />
+      <input class="search-box" placeholder="¿Qué buscas hoy? Prueba Banner NUPEC o Kit BTL..." (focus)="goToLogin('busqueda')" />
       <span class="search-icon">🔍</span>
-      <button class="search-btn" (click)="goToLogin('home')">→</button>
+      <button class="search-btn" (click)="goToLogin('busqueda')">→</button>
     </div>
     <div class="chips">
-      <div class="chip" (click)="goToLogin('home')">📺 ATL</div>
-      <div class="chip" (click)="goToLogin('home')">📋 BTL</div>
-      <div class="chip" (click)="goToLogin('home')">💻 Digital</div>
-      <div class="chip" (click)="goToLogin('home')">📊 Comunicación técnica</div>
-      <div class="chip" (click)="goToLogin('home')">🎪 Eventos</div>
-      <div class="chip" (click)="goToLogin('home')">✨ Nuevo esta semana</div>
-      <div class="chip" (click)="goToLogin('home')">🔥 Tendencias</div>
+      <div class="chip" (click)="goToLogin('busqueda')">📺 ATL</div>
+      <div class="chip" (click)="goToLogin('busqueda')">📋 BTL</div>
+      <div class="chip" (click)="goToLogin('busqueda')">💻 Digital</div>
+      <div class="chip" (click)="goToLogin('busqueda')">📊 Comunicación técnica</div>
+      <div class="chip" (click)="goToLogin('busqueda')">🎪 Eventos</div>
+      <div class="chip" (click)="goToLogin('busqueda')">✨ Nuevo esta semana</div>
+      <div class="chip" (click)="goToLogin('busqueda')">🔥 Tendencias</div>
     </div>
   </div>
 </section>
@@ -115,7 +115,7 @@
   <h2 class="sec-title text-white">Simple. Rápido. Siempre disponible.</h2>
   <p class="sec-sub">En tres pasos tienes el material que necesitas.</p>
   <div class="steps">
-    <div class="step" *ngFor="let step of steps" (click)="goToLogin('home')">
+    <div class="step" *ngFor="let step of steps" (click)="goToLogin('busqueda')">
       <div class="step-num">{{ step.num }}</div>
       <span class="step-ico">{{ step.icon }}</span>
       <div class="step-title">{{ step.title }}</div>
@@ -129,8 +129,8 @@
   <h2 class="text-white">¿Listo para encontrar<br>lo que necesitas?</h2>
   <p>Todo el material de GRUPO NUTEC® está aquí, organizado y listo para tu próxima campaña.</p>
   <div class="cta-btns">
-    <button class="btn-p" (click)="goToLogin('home')">Explorar materiales →</button>
-    <button class="btn-g" (click)="goToLogin('home')">Ver novedades</button>
+    <button class="btn-p" (click)="goToLogin('busqueda')">Explorar materiales →</button>
+    <button class="btn-g" (click)="goToLogin('busqueda')">Ver novedades</button>
   </div>
 </section>
 
@@ -138,9 +138,9 @@
 <footer>
   <div>© 2026 NUMARQUE CENTER, GRUPO NUTEC®</div>
   <div>
-    <a (click)="goToLogin('home')">Términos</a>
-    <a (click)="goToLogin('home')">Privacidad</a>
-    <a (click)="goToLogin('home')">FAQs</a>
-    <a (click)="goToLogin('home')">Contacto</a>
+    <a (click)="goToLogin('busqueda')">Términos</a>
+    <a (click)="goToLogin('busqueda')">Privacidad</a>
+    <a (click)="goToLogin('busqueda')">FAQs</a>
+    <a (click)="goToLogin('busqueda')">Contacto</a>
   </div>
 </footer>

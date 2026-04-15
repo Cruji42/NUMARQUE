@@ -47,7 +47,7 @@ export const ROUTES: SideNavInterface[] = [
                 submenu: []
             },
             {
-                path: '/apps/e-commerce/orders-list',
+                path: '/users',
                 title: 'Usuarios',
                 iconType: 'nzIcon',
                 icon: 'ordered-list',

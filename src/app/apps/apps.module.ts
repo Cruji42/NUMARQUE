@@ -85,7 +85,7 @@ const antdModule = [
         MailComponent,
         ProjectListComponent,
         ProjectDetailsComponent,
-        OrdersListComponent,
+        // OrdersListComponent,
         ProductsListComponent,
         ProductComponent
     ],

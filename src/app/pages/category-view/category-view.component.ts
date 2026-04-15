@@ -236,7 +236,7 @@ previewModalImageUrl: SafeUrl | null = null;
                     // Bloquear acceso si el usuario no tiene permiso sobre esta marca
                     if (!this.canAccessBrand(this.activeBrandId)) {
                         this.message.warning('No tienes acceso a esta marca.');
-                        this.router.navigate(['/dashboard/welcome']);
+                        this.router.navigate(['/welcome']);
                         return;
                     }
 

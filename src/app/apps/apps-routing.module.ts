@@ -56,6 +56,13 @@ const routes: Routes = [
             }
         ]
     },
+    // {
+    //     path: 'users',
+    //     component: OrdersListComponent,
+    //     data: {
+    //         title: 'Usuarios'
+    //     }
+    // },
     {
         path: 'e-commerce',
         data: {
@@ -67,13 +74,7 @@ const routes: Routes = [
                 redirectTo: '/dashboard',
                 pathMatch: 'full'
             },
-            {
-                path: 'orders-list',
-                component: OrdersListComponent,
-                data: {
-                    title: 'Orders List'
-                }
-            },
+
             {
                 path: 'product',
                 component: ProductComponent,
@@ -90,7 +91,14 @@ const routes: Routes = [
                 }
             }
         ]
-    }
+    },
+    // {
+    //     path: 'users',
+    //     component: OrdersListComponent,
+    //     data: {
+    //         title: 'Usuarios'
+    //     }
+    // }
 ];
 
 @NgModule({
@@ -98,3 +106,4 @@ const routes: Routes = [
     exports: [RouterModule],
 })
 export class AppsRoutingModule { }
+

@@ -59,9 +59,9 @@ export class Login3Component implements AfterViewInit {
     const roleId = user?.role_id;
     if (roleId == 1) {
       //this.router.navigateByUrl('/dashboard/default');
-      this.router.navigateByUrl('/dashboard/welcome');
+      this.router.navigateByUrl('/welcome');
     } else {
-      this.router.navigateByUrl('/dashboard/welcome');
+      this.router.navigateByUrl('/welcome');
     }
   }
 
