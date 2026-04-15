@@ -164,12 +164,11 @@
 
                 <nz-form-control nzErrorTip="Debe seleccionar al menos una marca">
                     <nz-select nzMode="multiple" nzPlaceHolder="Selecciona marcas" formControlName="brand_ids">
-
                         <nz-option *ngFor="let brand of catBrands" [nzLabel]="brand.name" [nzValue]="brand.id">
                         </nz-option>
-
                     </nz-select>
                 </nz-form-control>
+                <app-orders-list-modal-brands [data]="data"></app-orders-list-modal-brands>
 
             </nz-form-item>
 
@@ -263,9 +262,9 @@
     </nz-select>
 
     <button class="btn-new-user" nz-button nzType="primary" (click)="openCreateModal()">
-            <i nz-icon nzType="user-add"></i>
-            <span>Nuevo usuario</span>
-        </button>
+        <i nz-icon nzType="user-add"></i>
+        <span>Nuevo usuario</span>
+    </button>
 
     <button class="btn-export" nz-button (click)="exportToExcel()">
         <i nz-icon nzType="download"></i>
@@ -327,10 +326,19 @@
                 <!-- Marcas -->
                 <td>
                     <div class="brands-grid">
-                        <div class="brand-chip active" *ngFor="let b of item?.brands">
-                            <span class="brand-dot" [style.background]="getBrandColor(b.name)"></span>
-                            {{ b.name }}
-                        </div>
+                        <ng-container *ngIf="item?.brands?.length <= 2; else moreBrands">
+                            <div class="brand-chip active" *ngFor="let b of item?.brands | slice:0:2">
+                                <span class="brand-dot" [style.background]="getBrandColor(b.name)"></span>
+                                {{ b.name }}
+                            </div>
+                        </ng-container>
+                        <ng-template #moreBrands>
+                            <div class="brand-chip active" *ngFor="let b of item?.brands | slice:0:2">
+                                <span class="brand-dot" [style.background]="getBrandColor(b.name)"></span>
+                                {{ b.name }}
+                            </div>
+                            <div class="brand-chip more-brands">+{{ item?.brands?.length - 2 }}</div>
+                        </ng-template>
                         <div *ngIf="!item?.brands || item?.brands?.length === 0" class="no-brands">
                             Sin marcas asignadas
                         </div>
@@ -405,11 +413,15 @@
 
                 <ng-template #passwordError let-control>
                     <ng-container *ngIf="control.hasError('required')">¡Favor de ingresar una contraseña!</ng-container>
-                    <ng-container *ngIf="control.hasError('minLength')">Debe contener mínimo 8 caracteres<br></ng-container>
-                    <ng-container *ngIf="control.hasError('uppercase')">Debe contener al menos una mayúscula<br></ng-container>
-                    <ng-container *ngIf="control.hasError('lowercase')">Debe contener al menos una minúscula<br></ng-container>
+                    <ng-container *ngIf="control.hasError('minLength')">Debe contener mínimo 8
+                        caracteres<br></ng-container>
+                    <ng-container *ngIf="control.hasError('uppercase')">Debe contener al menos una
+                        mayúscula<br></ng-container>
+                    <ng-container *ngIf="control.hasError('lowercase')">Debe contener al menos una
+                        minúscula<br></ng-container>
                     <ng-container *ngIf="control.hasError('number')">Debe contener al menos un número<br></ng-container>
-                    <ng-container *ngIf="control.hasError('specialChar')">Debe contener al menos un carácter especial<br></ng-container>
+                    <ng-container *ngIf="control.hasError('specialChar')">Debe contener al menos un carácter
+                        especial<br></ng-container>
                 </ng-template>
 
                 <ng-template #passwordConfirmError let-control>
@@ -500,9 +512,9 @@
                 <nz-form-label nzRequired>Rol</nz-form-label>
                 <nz-form-control nzErrorTip="El rol es requerido">
                     <nz-select formControlName="role_id" nzPlaceHolder="Selecciona un rol">
-                        <nz-option nzLabel="Administrador"  [nzValue]="1"></nz-option>
+                        <nz-option nzLabel="Administrador" [nzValue]="1"></nz-option>
                         <nz-option nzLabel="Head Comercial" [nzValue]="2"></nz-option>
-                        <nz-option nzLabel="Proveedor"      [nzValue]="3"></nz-option>
+                        <nz-option nzLabel="Proveedor" [nzValue]="3"></nz-option>
                     </nz-select>
                 </nz-form-control>
             </nz-form-item>
