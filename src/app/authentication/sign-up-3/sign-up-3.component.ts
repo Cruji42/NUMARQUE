@@ -11,7 +11,7 @@ import { Router } from '@angular/router';
 
 export class SignUp3Component {
 
-    signUpForm: UntypedFormGroup;
+    signUpForm!: UntypedFormGroup;
     
     patternPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&._-])[A-Za-z\d@$!%*?&._-]{8,}$/
 
@@ -26,13 +26,15 @@ export class SignUp3Component {
         Promise.resolve().then(() => this.signUpForm.controls.checkPassword.updateValueAndValidity());
     }
 
-    confirmationValidator = (control: UntypedFormControl): { [s: string]: boolean } => {
-        if (!control.value) {
-            return { required: true };
-        } else if (control.value !== this.signUpForm.controls.password.value) {
-            return { confirm: true, error: true };
-        }
+  confirmationValidator = (control: UntypedFormControl): { [s: string]: boolean } | null => {
+    if (!control.value) {
+        return { required: true };
+    } else if (control.value !== this.signUpForm.controls.password.value) {
+        return { confirm: true, error: true };
     }
+
+    return null; // 👈 importante
+}
 
 
     // Mínimo 8 caracteres

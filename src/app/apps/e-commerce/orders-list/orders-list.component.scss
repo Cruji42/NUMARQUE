@@ -169,6 +169,41 @@
   }
 }
 
+.brand-chip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 8px;
+  background: var(--navy3);
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--muted);
+  transition: all 0.18s;
+
+  &.active {
+    border-color: var(--blue);
+    background: rgba(59, 130, 246, 0.12);
+    color: var(--blue2);
+  }
+
+  .brand-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+}
+
+.brands-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+
 // --- Table card ---
 .table-card {
   background: var(--card);

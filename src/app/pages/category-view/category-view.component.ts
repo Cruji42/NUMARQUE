@@ -826,6 +826,26 @@ previewModalImageUrl: SafeUrl | null = null;
 
     shareFile(file: FileItem): void {
         // this.openFilePreview(file);
+
+           this.endPointUsersService.getContentPreviewUrl(file.id).subscribe({
+            next: (resp: any) => {
+                const previewUrl = (resp?.preview_url || resp?.url || '').toString().trim();
+                if (previewUrl) {
+                    file.url = previewUrl;
+                     navigator.clipboard.writeText(previewUrl)
+                     .then(() => {
+                         this.message.success('URL copiada al portapapeles.');
+                     })
+                     .catch(() => {
+                         this.message.error('No se pudo copiar la URL al portapapeles.');
+                     });
+                }
+                
+            },
+            error: () => {
+                this.message.error('No se pudo obtener la previsualización.');
+            }
+        });
     }
 
     openFilePreview(file: FileItem): void {

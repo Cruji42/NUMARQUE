@@ -17,10 +17,10 @@ export class UsersService {
         return data
     }
 
-    createUser(userData: User): Observable<any> {
+    createUser(userData: any): Observable<any> {
         return this.endPointUsersService.createUser(userData).pipe(
             map((response: any) => {
-                return response;
+                return response.body;
             }),
             catchError((error) => {
                 return throwError(() => error);

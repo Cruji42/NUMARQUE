@@ -1,7 +1,7 @@
 import { Component, OnInit, TemplateRef, ViewContainerRef, ViewChild } from '@angular/core';
 import { TableService } from '../../../shared/services/table.service';
 import { UsersService } from '../../../core/service/users.service';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
 import { BrandsService } from 'src/app/core/service/brands.service';
 import * as XLSX from 'xlsx';
@@ -35,9 +35,47 @@ export class OrdersListComponent implements OnInit {
     userForm!: FormGroup;
     modalRef!: NzModalRef;
     isConfirmLoading = false;
+    modalMode: 'edit' | 'create' = 'edit';
 
     @ViewChild('tplContent', { static: true }) tplContent!: TemplateRef<any>;
     @ViewChild('tplFooter', { static: true }) tplFooter!: TemplateRef<any>;
+
+    // ----------------------------------------------------------------
+    // Password validators (igual que sign-up-3)
+    // ----------------------------------------------------------------
+    confirmationValidator = (control: FormControl): { [s: string]: boolean } => {
+        if (!control.value) {
+            return { required: true };
+        } else if (control.value !== this.userForm?.get('password')?.value) {
+            return { confirm: true, error: true };
+        }
+        return {};
+    }
+
+    updateConfirmValidator(): void {
+        Promise.resolve().then(() => this.userForm?.get('checkPassword')?.updateValueAndValidity());
+    }
+
+    minLengthValidator(control: FormControl) {
+        if (!control.value) return null;
+        return control.value.length >= 8 ? null : { minLength: true };
+    }
+    uppercaseValidator(control: FormControl) {
+        if (!control.value) return null;
+        return /[A-Z]/.test(control.value) ? null : { uppercase: true };
+    }
+    lowercaseValidator(control: FormControl) {
+        if (!control.value) return null;
+        return /[a-z]/.test(control.value) ? null : { lowercase: true };
+    }
+    numberValidator(control: FormControl) {
+        if (!control.value) return null;
+        return /\d/.test(control.value) ? null : { number: true };
+    }
+    specialCharValidator(control: FormControl) {
+        if (!control.value) return null;
+        return /[@$!%*?&._-]/.test(control.value) ? null : { specialChar: true };
+    }
 
     constructor(
         private tableSvc: TableService,
@@ -189,6 +227,8 @@ export class OrdersListComponent implements OnInit {
     // Edit modal
     // ----------------------------------------------------------------
     openEditModal(item: DataItem): void {
+        this.modalMode = 'edit';
+
         this.userForm = this.fb.group({
             user_id: [item.id],
             brand_ids: [item.brands?.map((b: any) => b.id) || []],
@@ -228,11 +268,18 @@ export class OrdersListComponent implements OnInit {
         });
 
         roleControl?.valueChanges.subscribe(role => {
-            if (role === 1) {
+            if (role === 1 || role === 2) {
+                // Admin y Head Comercial → todas las marcas automáticamente ✅
+                const allBrandIds = this.catBrands.map(b => b.id);
+                brandControl?.clearValidators();
+                brandControl?.setValue(allBrandIds);
+            } else if (role === 3) {
+                // Proveedor → selección manual
+                brandControl?.setValidators([Validators.required]);
+                brandControl?.setValue([]);
+            } else {
                 brandControl?.clearValidators();
                 brandControl?.setValue([]);
-            } else if (role === 2 || role === 3) {
-                brandControl?.setValidators([Validators.required]);
             }
             brandControl?.updateValueAndValidity();
         });
@@ -245,31 +292,113 @@ export class OrdersListComponent implements OnInit {
     submitForm(): void {
         if (this.userForm.valid) {
             this.isConfirmLoading = true;
-            const formData = new FormData();
             const v = this.userForm.value;
 
-            formData.append('user_id', String(v.user_id));
-            formData.append('account_status', v.account_status);
-            formData.append('role_id', String(v.role_id));
-            formData.append('brand_ids', v.brand_ids);
+            if (this.modalMode === 'create') {
+                // ── PASO 1: CREAR USUARIO (sin estatus ni marcas) ──────
+                const createPayload = {
+                    name: v.name,
+                    last_name: v.last_name,
+                    country_id: v.country_id,
+                    email: v.email,
+                    company: v.company,
+                    password: v.password,
+                };
 
-            this.service.updateUser(formData, v.user_id).subscribe({
-                next: () => {
-                    this.isConfirmLoading = false;
-                    this.modalRef.destroy();
-                    this.getUsersData();
-                },
-                error: (err) => {
-                    this.isConfirmLoading = false;
-                    console.error('Error updating user', err);
-                }
-            });
+                this.service.createUser(createPayload).subscribe({
+                    next: (res: any) => {
+                        // ── PASO 2: UPDATE con estatus, rol y marcas ───
+                        console.log('Usuario creado con ID:', res);
+                        const userId = res.id;
+                        const updateData = new FormData();
+                        updateData.append('user_id', String(userId));
+                        updateData.append('account_status', v.account_status);
+                        updateData.append('role_id', String(v.role_id));
+                        updateData.append('brand_ids', (v.brand_ids || []).join(','));
+
+                        this.service.updateUser(updateData, userId).subscribe({
+                            next: () => {
+                                this.isConfirmLoading = false;
+                                this.modalRef.destroy();
+                                this.getUsersData();
+                            },
+                            error: (err) => {
+                                this.isConfirmLoading = false;
+                                console.error('Error actualizando usuario recién creado', err);
+                            }
+                        });
+                    },
+                    error: (err) => {
+                        this.isConfirmLoading = false;
+                        console.error('Error creating user', err);
+                    }
+                });
+
+            } else {
+                // ── EDITAR USUARIO (lógica existente) ──────────────────
+                const formData = new FormData();
+                formData.append('user_id', String(v.user_id));
+                formData.append('account_status', v.account_status);
+                formData.append('role_id', String(v.role_id));
+                formData.append('brand_ids', v.brand_ids);
+
+                this.service.updateUser(formData, v.user_id).subscribe({
+                    next: () => {
+                        this.isConfirmLoading = false;
+                        this.modalRef.destroy();
+                        this.getUsersData();
+                    },
+                    error: (err) => {
+                        this.isConfirmLoading = false;
+                        console.error('Error updating user', err);
+                    }
+                });
+            }
+
         } else {
             Object.values(this.userForm.controls).forEach(ctrl => {
                 ctrl.markAsDirty();
                 ctrl.updateValueAndValidity();
             });
         }
+    }
+
+    openCreateModal(): void {
+        this.modalMode = 'create';
+
+        this.userForm = this.fb.group({
+            name: ['', Validators.required],
+            last_name: ['', Validators.required],
+            country_id: [1, Validators.required],
+            company: ['', Validators.required],
+            email: ['', [Validators.required, Validators.email]],
+            password: ['', [
+                Validators.required,
+                this.minLengthValidator.bind(this),
+                this.uppercaseValidator.bind(this),
+                this.lowercaseValidator.bind(this),
+                this.numberValidator.bind(this),
+                this.specialCharValidator.bind(this)
+            ]],
+            checkPassword: ['', [Validators.required, this.confirmationValidator]],
+            agree: [false, [Validators.requiredTrue]],
+            account_status: ['Active', Validators.required],
+            role_id: [null, Validators.required],
+            brand_ids: [[]]
+        });
+
+        this._bindFormLogic();
+
+        this.modalRef = this.modal.create({
+            nzTitle: 'Nuevo usuario',
+            nzContent: this.tplContent,
+            nzFooter: this.tplFooter,
+            nzViewContainerRef: this.viewContainerRef,
+            nzData: { item: null },   // sin item → modo creación
+            nzMaskClosable: false,
+            nzClosable: true,
+            nzWidth: 480,
+        });
     }
 
     // ----------------------------------------------------------------
@@ -338,8 +467,20 @@ export class OrdersListComponent implements OnInit {
             GALOPE: 'background:#FFF7ED;color:#C2410C',
             'ÓPTIMO': 'background:#FAF5FF;color:#7E22CE',
         };
-        return styles[name?.toUpperCase()] || 'background:#F1F5F9;color:#475569';
+        return 'background:#212121;color:#475569';
     }
+    getBrandColor(name: string): string {
+        const map: Record<string, string> = {
+            NUPEC: '#2563EB',
+            NUCAN: '#10B981',
+            GALOPE: '#F97316',
+            'ÓPTIMO': '#8B5CF6',
+            OPTIMO: '#8B5CF6',
+            PECUARIO: '#CBD5E1',
+        };
+        return map[name?.toUpperCase()] || '#94A3B8';
+    }
+
 
     exportToExcel(): void {
         // 1. Mapear los datos al formato de columnas de la tabla
@@ -352,7 +493,7 @@ export class OrdersListComponent implements OnInit {
                 : '',
             'Compañía': item.company,
             'Marcas': Array.isArray(item.brands)
-                ? item.brands.map( (b: any) => b.name).join(', ')
+                ? item.brands.map((b: any) => b.name).join(', ')
                 : '',
             'Rol': this.getRoleLabel(item.role_id),
             'Estatus': this.getStatusLabel(item.account_status),
