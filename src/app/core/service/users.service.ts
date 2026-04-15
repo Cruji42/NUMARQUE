@@ -12,7 +12,7 @@ export class UsersService {
     constructor(private endPointUsersService: EndPointUsersService) { }
 
     decodeToken() {
-        let token = localStorage.getItem('token');
+        let token:any = localStorage.getItem('token');
         let data = jwtDecode(token)        
         return data
     }

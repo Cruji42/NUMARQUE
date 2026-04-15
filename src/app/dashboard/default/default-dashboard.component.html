@@ -22,7 +22,8 @@
                         <nz-spin [nzSpinning]="isLoadingWeeklyNews" nzSimple>
                             <h2 *ngIf="weeklyNews" class="m-b-0 text-white"><b>{{weeklyNews.title}}</b></h2>
                             <p *ngIf="weeklyNews" class="m-b-0 bl-mutted">{{weeklyNews.description}}</p>
-                            <p *ngIf="!weeklyNews && !isLoadingWeeklyNews" class="m-b-0 bl-mutted text-white-50">No hay novedades este mes</p>
+                            <p *ngIf="!weeklyNews && !isLoadingWeeklyNews" class="m-b-0 bl-mutted text-white-50">No hay
+                                novedades este mes</p>
                         </nz-spin>
                     </div>
                 </div>
@@ -165,7 +166,7 @@
         <nz-card>
             <div class="d-flex justify-content-between align-items-center">
                 <h5>Top materiales descargados</h5>
-               <!--  <div>
+                <!--  <div>
                     <a nz-button nzType="default" nzSize="small" class="bg-primary text-white">View All</a>
                 </div> -->
             </div>
@@ -216,7 +217,7 @@
         <nz-card>
             <div class="d-flex justify-content-between align-items-center">
                 <h5 class="m-b-0">Último subido</h5>
-             <!--    <div>
+                <!--    <div>
                     <a nz-button nzType="default" nzSize="small" class="bg-primary text-white">View All</a>
                 </div> -->
             </div>
@@ -239,11 +240,11 @@
                             </a>
                             <nz-dropdown-menu #latestUploadDropDown="nzDropdownMenu">
                                 <ul nz-menu>
-                                    <li nz-menu-item>
+                                    <li nz-menu-item (click)="goToFile(item)">
                                         <i nz-icon nzType="eye" theme="outline"></i>
                                         <span class="m-l-5">Ver en carpeta</span>
                                     </li>
-                                    <li nz-menu-item>
+                                    <li nz-menu-item (click)="downloadFile(item)">
                                         <i nz-icon nzType="download" theme="outline"></i>
                                         <span class="m-l-5">Descargar</span>
                                     </li>

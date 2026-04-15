@@ -2,6 +2,8 @@ import { Component } from '@angular/core'
 import { ThemeConstantService } from '../../shared/services/theme-constant.service';
 import { UsersService } from 'src/app/core/service/users.service';
 import { forkJoin } from 'rxjs';
+import { Router } from '@angular/router';
+import { FilesService } from 'src/app/core/service/files.service';
 
 @Component({
     templateUrl: './default-dashboard.component.html',
@@ -36,7 +38,9 @@ export class DefaultDashboardComponent {
         total_shared: 0
     };
 
-    constructor(private colorConfig: ThemeConstantService, private userService: UsersService) {
+    constructor(
+        private service: FilesService,
+        private colorConfig: ThemeConstantService, private userService: UsersService, private router: Router) {
         // this.user = this.userService.decodeToken();
         // console.log(this.user)
     }
@@ -343,6 +347,7 @@ export class DefaultDashboardComponent {
     getLatestUploadedContent() {
         this.userService.getUploadedLogs().subscribe({
             next: (response: any) => {
+                console.log('Latest uploaded content response:', response);
                 const uploaded = response?.data ?? response?.logs ?? response ?? [];
                 const list = Array.isArray(uploaded) ? uploaded : [];
 
@@ -351,6 +356,9 @@ export class DefaultDashboardComponent {
                     const extension = fileName.includes('.') ? (fileName.split('.').pop()?.toLowerCase() ?? '') : '';
 
                     return {
+                        id: item?.content_id ?? item?.id ?? null,           // ✅ NUEVO
+                        entity_id: item?.entity_id ?? null,                        // ✅ NUEVO
+                        subcategory_id: item?.subcategory_id ?? null,                   // ✅ NUEVO
                         icon: this.getFileIconByExtension(extension),
                         name: fileName,
                         color: this.getBrandColor(item?.brand_name ?? this.extractBrandFromS3Key(item?.s3_key) ?? ''),
@@ -363,6 +371,37 @@ export class DefaultDashboardComponent {
                 this.fileList = [];
             }
         });
+    }
+
+    goToFile(item: any): void {
+        if (!item?.entity_id || !item?.subcategory_id) return;
+
+        this.router.navigate(['/pages/category-view'], {
+            queryParams: {
+                brandId: item.entity_id,
+                subcategoryId: item.subcategory_id,
+                contentId: item.id
+            }
+        });
+
+    }
+
+        downloadFile(file: any): void {
+        // console.log(this.selectedItem)
+        this.service.downloadFile(file.id).subscribe({
+            next: (url: any) => {
+                console.log(url)
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = (file?.name || 'archivo').toString();
+                // link.target = '_blank'; // opcional
+                link.click();
+
+            }, error: (err: any) => {
+                console.log(err)
+            }
+        })
+
     }
 
     getFileIconByExtension(extension: string): string {
