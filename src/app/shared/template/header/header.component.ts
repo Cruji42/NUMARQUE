@@ -110,7 +110,10 @@ export class HeaderComponent {
                             icon: this.getNotificationIcon(type),
                             color: this.getNotificationColor(type),
                             isRead,
-                            targetRoute: this.getNotificationRoute(type, rawMessage)
+                            brandId: item?.brand_id ?? null,
+                            contentId: item?.content_id ?? null,
+                            subcategoryId: item?.subcategory_id ?? null,
+                            targetRoute: this.getNotificationRoute(type, rawMessage, item?.brand_id, item?.content_id)
                         };
                     })
                     .filter((item: any) => !item.isRead);
@@ -140,16 +143,21 @@ export class HeaderComponent {
     }
 
     onNotificationClick(notification: any): void {
-        if (!notification) {
-            return;
-        }
+        if (!notification) return;
 
         const navigateToTarget = () => {
-            if (notification?.targetRoute) {
+            if (!notification?.targetRoute) return;
+
+            if (notification.brandId &&
+                (notification.targetRoute as string).includes('category-view')) {
+                const queryParams: any = { brandId: notification.brandId };
+                if (notification.subcategoryId) queryParams['subcategoryId'] = notification.subcategoryId;  // ✅ NUEVO
+                if (notification.contentId) queryParams['contentId'] = notification.contentId;
+                this.router.navigate(['/pages/category-view'], { queryParams });
+            } else {
                 this.router.navigateByUrl(notification.targetRoute);
             }
         };
-
         if (!notification?.id || notification?.isRead) {
             navigateToTarget();
             return;
@@ -191,7 +199,13 @@ export class HeaderComponent {
         return 'notification';
     }
 
-    private getNotificationRoute(type: string, text: string): string | null {
+    private getNotificationRoute(
+        type: string,
+        text: string,
+        brandId?: number | null,
+        contentId?: number | null,
+        subcategoryId?: number | null
+    ): string | null {
         const source = `${type} ${text}`.toUpperCase();
 
         if (
@@ -207,9 +221,15 @@ export class HeaderComponent {
             source.includes('UPLOAD') ||
             source.includes('CONTENT') ||
             source.includes('FILE') ||
-            source.includes('SHARE')
+            source.includes('SHARE') ||
+            source.includes('DOWNLOAD')
         ) {
-            return '/apps/file-manager';
+            if (brandId) {
+                const params = new URLSearchParams({ brandId: String(brandId) });
+                if (contentId) params.set('contentId', String(contentId));
+                return `/pages/category-view?${params.toString()}`;
+            }
+            return '/pages/category-view';
         }
 
         return null;

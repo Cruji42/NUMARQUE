@@ -127,8 +127,9 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
     activeSection = '';
     activeSubcategory = '';
     activeSectionId: number | null = null;
-activeSubcategoryId: number | null = null;
-  departmentId: number | null = null;
+    activeSubcategoryId: number | null = null;
+    departmentId: number | null = null;
+    pendingSelectContentId: number | null = null;
 
     // Trail de nombres de entity para construir el path de upload
     // Ej: PetFood->NUCAN->Digital  =>  ['NUCAN']
@@ -209,31 +210,36 @@ activeSubcategoryId: number | null = null;
                     this.menuDepartments = departments;
                     this.activeBrandId = this.parseNumberParam(params.get('brandId'));
                     // this.activeSectionId = this.parseNumberParam(params.get('sectionId'));
-this.departmentId = this.parseNumberParam(params.get('departmentId'));
+                    this.departmentId = this.parseNumberParam(params.get('departmentId'));
                     this.activeSubcategoryId = this.parseNumberParam(params.get('subcategoryId'));
                     this.activeBrand = params.get('brand') || '';
                     // this.activeSection     = params.get('section')     || '';
                     this.activeSubcategory = params.get('subcategory') || '';
+                    const contentId = this.parseNumberParam(params.get('contentId'));
+                    // const contentId = this.parseNumberParam(params.get('contentId'));
+                    if (contentId) {
+                        this.pendingSelectContentId = contentId; // guardamos para usarlo después de cargar
+                    }
                     // Reset trail en cada navegación; se reconstruye en enterCategoryMode / enterFileManager
                     this.activeEntityTrail = [];
 
                     if (this.departmentId) {
-                      this.enterDepartmentMode();
+                        this.enterDepartmentMode();
                     } else if (this.activeBrandId) {
-                      this.loadBrandInfo(this.activeBrandId, () => {
-                        if (this.activeSubcategoryId) {
-                          this.enterFileManager();
-                        } else {
-                          this.enterCategoryMode();
-                        }
-                      });
+                        this.loadBrandInfo(this.activeBrandId, () => {
+                            if (this.activeSubcategoryId) {
+                                this.enterFileManager();
+                            } else {
+                                this.enterCategoryMode();
+                            }
+                        });
                     } else {
-                      this.brandInfo = null;
-                      if (this.activeSubcategoryId) {
-                        this.enterFileManager();
-                      } else {
-                        this.enterCategoryMode();
-                      }
+                        this.brandInfo = null;
+                        if (this.activeSubcategoryId) {
+                            this.enterFileManager();
+                        } else {
+                            this.enterCategoryMode();
+                        }
                     }
 
                     this.ensureSubcategoryContextForBreadcrumb();
@@ -407,7 +413,7 @@ this.departmentId = this.parseNumberParam(params.get('departmentId'));
             : this.mapSubcategoriesToCards(subcategories);
     }
 
-private toEntityCard(entity: DepartmentEntityItem, index: number): CategoryCard {
+    private toEntityCard(entity: DepartmentEntityItem, index: number): CategoryCard {
         const style = this.getPaletteStyle(index);
         return {
             key: entity.name.toUpperCase(),
@@ -760,6 +766,14 @@ private toEntityCard(entity: DepartmentEntityItem, index: number): CategoryCard 
         this.filteredFiles = [...node.files];
         this.selectedFile = null;
         this.loadImagePreviews(this.filteredFiles);
+
+        if (this.pendingSelectContentId) {
+            const target = this.filteredFiles.find(f => f.id === this.pendingSelectContentId);
+            if (target) {
+                this.selectFile(target);
+                this.pendingSelectContentId = null;
+            }
+        }
 
 
         this.fileManagerFolderTrail = this.currentTreePath.map((segment, idx) => ({
@@ -1129,6 +1143,13 @@ private toEntityCard(entity: DepartmentEntityItem, index: number): CategoryCard 
                         this.fileManagerFolderTrail = [];
                     }
                     this.renderCurrentTreeLevel();
+                    if (this.pendingSelectContentId) {
+                        const target = this.filteredFiles.find(f => f.id === this.pendingSelectContentId);
+                        if (target) {
+                            this.selectFile(target);
+                            this.pendingSelectContentId = null;
+                        }
+                    }
                     return;
                 }
 
@@ -1146,6 +1167,14 @@ private toEntityCard(entity: DepartmentEntityItem, index: number): CategoryCard 
                 this.filteredFiles = files;
                 this.selectedFile = null;
                 this.refreshBreadcrumbs();
+
+                if (this.pendingSelectContentId) {
+                    const target = this.filteredFiles.find(f => f.id === this.pendingSelectContentId);
+                    if (target) {
+                        this.selectFile(target);
+                        this.pendingSelectContentId = null;
+                    }
+                }
             },
             error: () => {
                 this.allFolders = [];
@@ -1370,7 +1399,7 @@ private toEntityCard(entity: DepartmentEntityItem, index: number): CategoryCard 
         this.rebuildFileManagerBreadcrumb();
     }
 
-private shouldSkipDepartment(deptName: string): boolean {
+    private shouldSkipDepartment(deptName: string): boolean {
         if (!deptName) return false;
         const lower = deptName.toLowerCase();
         return lower.includes('petfood') || lower.includes('pet foot') || lower.includes('petfoot') || lower.includes('pecuario');
