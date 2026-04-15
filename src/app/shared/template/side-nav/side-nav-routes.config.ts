@@ -39,7 +39,7 @@ export const ROUTES: SideNavInterface[] = [
                 submenu: []
             },
             {
-                path: '/dashboard/default',
+                path: '/dashboard',
                 title: 'Dashboard',
                 iconType: 'nzIcon',
                 icon: 'dashboard',

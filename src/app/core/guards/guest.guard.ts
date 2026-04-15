@@ -14,7 +14,7 @@ export const guestGuard: CanActivateFn = () => {
       take(1),
       map((user: any) => {
         const roleId = user?.role_id;
-        return roleId == 1 ? router.parseUrl('/dashboard/default') : router.parseUrl('/apps/file-manager');
+        return roleId == 1 ? router.parseUrl('/dashboard') : router.parseUrl('/apps/file-manager');
       })
     );
   }

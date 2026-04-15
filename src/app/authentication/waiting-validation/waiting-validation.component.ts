@@ -59,7 +59,7 @@ export class WaitingValidationComponent implements OnInit, OnDestroy {
             .subscribe({
                 next: (isActive) => {
                     if (isActive) {
-                        this.router.navigate(['/dashboard/default']);
+                        this.router.navigate(['/dashboard']);
                     }
                 },
                 error: (err) => {

@@ -7,7 +7,6 @@ import { environment } from '../../../environments/environment';
 
 declare const google: any;
 
-
 @Component({
   templateUrl: './login-3.component.html',
   standalone: false
@@ -86,7 +85,7 @@ export class Login3Component implements AfterViewInit {
                   error: (err) => {
                     console.error('DEBUG: Error getting user:', err);
                     // Default to dashboard on error
-                    this.router.navigateByUrl('/dashboard/default');
+                    this.router.navigateByUrl('/dashboard');
                   }
                 });
               } else {
@@ -98,7 +97,7 @@ export class Login3Component implements AfterViewInit {
             error: (err) => {
               console.error('DEBUG: Error checking user status:', err);
               // Default to dashboard on error
-              this.router.navigateByUrl('/dashboard/default');
+              this.router.navigateByUrl('/dashboard');
             }
           });
         },
@@ -133,7 +132,7 @@ export class Login3Component implements AfterViewInit {
                   error: (err) => {
                     console.error('DEBUG: Error getting user:', err);
                     // Default to dashboard on error
-                    this.router.navigate(['/dashboard/default']);
+                    this.router.navigate(['/dashboard']);
                   }
                 });
               } else {
@@ -145,7 +144,7 @@ export class Login3Component implements AfterViewInit {
             error: (err) => {
               console.error('DEBUG: Error checking user status:', err);
               // Default to dashboard on error
-              this.router.navigate(['/dashboard/default']);
+              this.router.navigate(['/dashboard']);
             }
           });
         },

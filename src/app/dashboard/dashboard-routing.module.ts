@@ -17,10 +17,10 @@ const routes: Routes = [
         }
     },
     {
-        path: 'default',
+        path: '',
         component: DefaultDashboardComponent,
         data: {
-            title: 'Dashboard ',
+            title: 'Dashboard',
             headerDisplay: "none"
         }
     },
