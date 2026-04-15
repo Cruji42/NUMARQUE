@@ -4,9 +4,9 @@ import { WelcomeComponent } from 'src/app/pages/welcome/welcome.component';
 
 export const CommonLayout_ROUTES: Routes = [
 
-    //Home
+    //Búsqueda
     {
-        path: 'home',
+        path: 'busqueda',
         loadChildren: () => import('../../pages/home/home.module').then(m => m.HomeModule),
     },
 

@@ -29,7 +29,7 @@ export const ROUTES: SideNavInterface[] = [
                 submenu: []
             },
             {
-                path: '/home',
+                path: '/busqueda',
                 title: 'Búsqueda',
                 iconType: 'nzIcon',
                 icon: 'search',
