@@ -2,6 +2,7 @@ import { Component } from '@angular/core'
 import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { UsersService } from '../../core/service/users.service';
 import { Router } from '@angular/router';
+import { finalize } from 'rxjs/operators';
 
 
 @Component({
@@ -12,6 +13,8 @@ import { Router } from '@angular/router';
 export class SignUp3Component {
 
     signUpForm!: UntypedFormGroup;
+    
+    isSubmitting = false;
     
     patternPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&._-])[A-Za-z\d@$!%*?&._-]{8,}$/
 
@@ -90,7 +93,10 @@ export class SignUp3Component {
 
     submitForm(): void {
         if (this.signUpForm.valid) {
-            this.usersService.createUser(this.signUpForm.value).subscribe({
+            this.isSubmitting = true;
+            this.usersService.createUser(this.signUpForm.value).pipe(
+                finalize(() => this.isSubmitting = false)
+            ).subscribe({
                 next: (res) => {
                     console.log('User created successfully', res);
                     this.route.navigate(['/authentication/login'])

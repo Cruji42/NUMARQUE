@@ -4,6 +4,7 @@ import { AuthService } from '../../core/service/auth-service';
 import { UsersService } from '../../core/service/users.service';
 import { Router } from '@angular/router';
 import { environment } from '../../../environments/environment';
+import { finalize } from 'rxjs/operators';
 
 declare const google: any;
 
@@ -14,6 +15,7 @@ declare const google: any;
 
 export class Login3Component implements AfterViewInit {
   isPasswordVisible = false;
+  isSubmitting = false;
   loginForm!: UntypedFormGroup;
   private googleInitialized = false;
 
@@ -114,7 +116,10 @@ export class Login3Component implements AfterViewInit {
 
       console.log('HttpClient instance:', this.authService);
 
-      this.authService.login(email, password).subscribe({
+      this.isSubmitting = true;
+      this.authService.login(email, password).pipe(
+        finalize(() => this.isSubmitting = false)
+      ).subscribe({
         next: (response) => {
           // Handle successful login, e.g., navigate to dashboard
           console.log('DEBUG: Login successful:', response);

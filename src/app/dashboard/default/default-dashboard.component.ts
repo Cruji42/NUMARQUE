@@ -77,8 +77,10 @@ export class DefaultDashboardComponent {
                     this.isLoadingWeeklyNews = true;
                     this.userService.getWeeklyNews(this.user.id).subscribe({
                         next: (news: any) => {
+                            console.log('Fetched weekly news:', news);
                             this.weeklyNews = news;
                             this.isLoadingWeeklyNews = false;
+                            
                         },
                         error: (error) => {
                             console.error('Error fetching weekly news:', error);

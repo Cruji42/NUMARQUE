@@ -127,7 +127,7 @@
           </nz-form-item>
         </div>
 
-        <button nz-button class="btn" [nzType]="'primary'" [disabled]="signUpForm.invalid">Crear cuenta →</button>
+<button nz-button class="btn" [nzType]="'primary'" [nzLoading]="isSubmitting" [disabled]="signUpForm.invalid || isSubmitting">Crear cuenta →</button>
 
         <div class="divider">
           <div class="divider-line"></div><div class="divider-text">o</div><div class="divider-line"></div>

@@ -69,7 +69,7 @@
           <div id="googleBtn"></div>
         </div>
 
-        <button nz-button class="btn" [nzType]="'primary'">Iniciar sesión →</button>
+        <button nz-button class="btn" [nzType]="'primary'" [nzLoading]="isSubmitting" [disabled]="loginForm.invalid || isSubmitting">Iniciar sesión →</button>
 
         <div class="divider">
           <div class="divider-line"></div><div class="divider-text">o</div><div class="divider-line"></div>

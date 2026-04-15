@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { UsersService } from 'src/app/core/service/users.service';
 import { forkJoin, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
+import { ActivatedRoute, Route, Router } from '@angular/router';
 
 // ── Interfaces ──────────────────────────────────────────────
 export interface SearchResult {
@@ -57,7 +58,7 @@ export interface WeeklyHighlight {
 })
 export class HomeComponent implements OnInit, OnDestroy {
 
-  constructor(private usersService: UsersService) { }
+  constructor(private usersService: UsersService, public router: Router) { }
 
   // ── Search state ──────────────────────────────────────────
   searchQuery: string = '';
@@ -231,20 +232,20 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   rotatePlaceholder(): void {
-  const el = document.getElementById('ph-text');
-  el?.classList.add('ph-out');
+    const el = document.getElementById('ph-text');
+    el?.classList.add('ph-out');
 
-  setTimeout(() => {
-    this.currentPlaceholder =
-      (this.currentPlaceholder + 1) % this.placeholders.length;
-    this.displayPlaceholder =
-      this.placeholders[this.currentPlaceholder];
+    setTimeout(() => {
+      this.currentPlaceholder =
+        (this.currentPlaceholder + 1) % this.placeholders.length;
+      this.displayPlaceholder =
+        this.placeholders[this.currentPlaceholder];
 
-    el?.classList.remove('ph-out');
-    el?.classList.add('ph-in');
-    setTimeout(() => el?.classList.remove('ph-in'), 300);
-  }, 300);
-}
+      el?.classList.remove('ph-out');
+      el?.classList.add('ph-in');
+      setTimeout(() => el?.classList.remove('ph-in'), 300);
+    }, 300);
+  }
 
   onSearchBlur(): void {
     // Small delay so chip clicks register before panel hides
@@ -258,6 +259,19 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.searchQuery = term;
     this.searchFocused = false;
     this.executeSearch();
+  }
+
+  goToFile(item: any): void {
+    if (!item?.entity_id || !item?.subcategory_id) return;
+
+    this.router.navigate(['/pages/category-view'], {
+      queryParams: {
+        brandId: item.entity_id,
+        subcategoryId: item.subcategory_id,
+        contentId: item.id
+      }
+    });
+
   }
 
   getMetricsSummary(): void {
@@ -404,7 +418,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
 
     this.usersService.searchSemantic(trimmedQuery, 20).subscribe({
-      
+
       next: (response: any) => {
         console.log(response);
         const rawResults = response?.results ?? response?.data ?? [];
