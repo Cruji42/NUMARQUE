@@ -41,8 +41,9 @@
 
             <!-- Segundo nivel -->
             <ul class="ant-menu ant-menu-inline ant-menu-sub dropdown-menu" *ngIf="item.submenu.length > 0">
+            <ng-container *ngFor="let subItem of item.submenu">
                 <li [ngClass]="subItem.submenu.length > 0 ? 'ant-menu-submenu ant-menu-submenu-inline' : 'ant-menu-item'"
-                    *ngFor="let subItem of item.submenu"
+                    *ngIf="canAccessRoute(subItem)"
                     [routerLinkActive]="!isCategoryViewLink(subItem.path) ? (subItem.submenu.length > 0 ? 'ant-menu-submenu-open' : 'ant-menu-item-selected') : ''"
                     [routerLinkActiveOptions]="{exact: true}"
                     [class.ant-menu-item-selected]="isCategoryViewActive(subItem.path)">
@@ -92,8 +93,9 @@
 
                     <!-- Tercer nivel -->
                     <ul class="ant-menu ant-menu-inline ant-menu-sub dropdown-menu" *ngIf="subItem.submenu.length > 0">
+                        <ng-container *ngFor="let thirdItem of subItem.submenu">
                         <li [ngClass]="thirdItem.submenu.length > 0 ? 'ant-menu-submenu ant-menu-submenu-inline' : 'ant-menu-item'"
-                            *ngFor="let thirdItem of subItem.submenu"
+                            *ngIf="canAccessRoute(thirdItem)"
                             [routerLinkActive]="!isCategoryViewLink(thirdItem.path) ? 'ant-menu-item-selected' : ''"
                             [routerLinkActiveOptions]="{exact: true}"
                             [class.ant-menu-item-selected]="isCategoryViewActive(thirdItem.path)">
@@ -121,9 +123,11 @@
                                 <span *ngIf="thirdItem.title">{{thirdItem.title}}</span>
                             </a>
                         </li>
+                        </ng-container>
                     </ul>
 
                 </li>
+            </ng-container>
             </ul>
         </li>
     </ng-container>

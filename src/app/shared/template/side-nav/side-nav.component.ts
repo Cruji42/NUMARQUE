@@ -65,11 +65,104 @@ export class SideNavComponent implements OnInit {
         });
     }
 
+    // ----------------------------------------------------------------
+    // Constantes de roles
+    // ----------------------------------------------------------------
+    private readonly ROLE_ADMIN          = 1;
+    private readonly ROLE_HEAD_COMERCIAL = 2;
+    private readonly ROLE_PROVEEDOR      = 3;
+
     canAccessRoute(item: any): boolean {
-        if (!this.userData?.role_id) {
-            return false;
+        if (!this.userData?.role_id) return false;
+
+        const roleId: number = this.userData.role_id;
+
+        // 1. Verificar permiso de rol declarado en canAccess
+        if (!item?.canAccess?.includes(roleId)) return false;
+
+        // 2. Para proveedor: filtrar además por marcas asignadas
+        if (roleId === this.ROLE_PROVEEDOR) {
+            return this.proveedorCanSeeItem(item);
         }
-        return item?.canAccess?.includes(this.userData.role_id);
+
+        return true;
+    }
+
+    /**
+     * Extrae las marcas asignadas al usuario como sets de IDs y nombres normalizados
+     * para comparación eficiente.
+     */
+    private get assignedBrandSets(): { ids: Set<number>; names: Set<string> } {
+        const brands: any[] = this.userData?.brands ?? [];
+        return {
+            ids:   new Set(brands.map((b: any) => Number(b?.id)).filter(Boolean)),
+            names: new Set(brands.map((b: any) => this.normalizeText(b?.name ?? '')).filter(Boolean))
+        };
+    }
+
+    /**
+     * Un proveedor solo ve ítems cuyo brandId o título (o algún descendiente)
+     * coincida con una de sus marcas asignadas.
+     * Los ítems de utilidad (Inicio, Búsqueda, Perfil) siempre son visibles.
+     */
+    private proveedorCanSeeItem(item: any): boolean {
+        // Secciones estáticas siempre visibles (la sección padre "General" y sus hijos de utilidad)
+        const UTILITY_TITLES = ['GENERAL'];
+        if (item.title && UTILITY_TITLES.includes(this.normalizeText(item.title))) return true;
+
+        const UTILITY_PATHS = ['/dashboard/welcome', '/home', '/pages/setting'];
+        if (item.path && UTILITY_PATHS.includes(item.path)) return true;
+
+        const { ids, names } = this.assignedBrandSets;
+        if (!ids.size && !names.size) return false;
+
+        return this.itemMatchesBrands(item, ids, names);
+    }
+
+    /**
+     * Comparación dual: primero por brandId numérico (extraído del path),
+     * luego por nombre normalizado del título.
+     * Recorre recursivamente el árbol de submenús.
+     */
+    private itemMatchesBrands(item: any, ids: Set<number>, names: Set<string>): boolean {
+        if (item.path) {
+            const brandIdFromPath = this.extractBrandIdFromPath(item.path);
+            if (brandIdFromPath !== null && ids.has(brandIdFromPath)) return true;
+        }
+
+        const title = this.normalizeText(item?.title ?? '');
+        if (title && names.has(title)) return true;
+
+        if (item.submenu?.length) {
+            return item.submenu.some((child: any) => this.itemMatchesBrands(child, ids, names));
+        }
+
+        return false;
+    }
+
+    /**
+     * Extrae el brandId numérico del path de un ítem de menú.
+     * Soporta: "?brandId=1" y "?brand=NUPEC" (resuelto vía mapBrandToDepartmentId)
+     */
+    private extractBrandIdFromPath(path: string): number | null {
+        if (!path?.includes('?')) return null;
+
+        const [, qs] = path.split('?');
+        const params: Record<string, string> = {};
+        qs.split('&').forEach(pair => {
+            const [k, v] = pair.split('=');
+            if (k) params[decodeURIComponent(k)] = decodeURIComponent(v ?? '');
+        });
+
+        if (params['brandId'] && /^\d+$/.test(params['brandId'])) {
+            return Number(params['brandId']);
+        }
+
+        if (params['brand']) {
+            return this.mapBrandToDepartmentId(params['brand']);
+        }
+
+        return null;
     }
 
     isCategoryViewLink(path?: string): boolean {

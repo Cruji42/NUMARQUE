@@ -18,7 +18,7 @@ export const ROUTES: SideNavInterface[] = [
         iconType: 'nzIcon',
         iconTheme: 'outline',
         icon: 'home',
-        canAccess: [1],
+        canAccess: [1, 2, 3],
         submenu: [
             {
                 path: '/dashboard/welcome',

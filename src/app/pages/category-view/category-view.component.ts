@@ -11,6 +11,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { FilesService } from 'src/app/core/service/files.service';
 import { NzContextMenuService, NzDropdownMenuComponent } from 'ng-zorro-antd/dropdown';
 import { EndPointUsersService } from '../../core/apis/end-point-users.service';
+import { UsersService } from 'src/app/core/service/users.service';
 
 // ----------------------------------------------------------------
 // Interfaces
@@ -131,6 +132,12 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
     departmentId: number | null = null;
     pendingSelectContentId: number | null = null;
 
+    // Datos del usuario autenticado (rol + marcas asignadas)
+    userData: any = null;
+    private readonly ROLE_ADMIN          = 1;
+    private readonly ROLE_HEAD_COMERCIAL = 2;
+    private readonly ROLE_PROVEEDOR      = 3;
+
     // Trail de nombres de entity para construir el path de upload
     // Ej: PetFood->NUCAN->Digital  =>  ['NUCAN']
     // Ej: Pecuario->Aves->NUPIO->Digital  =>  ['Aves', 'NUPIO']
@@ -195,19 +202,21 @@ previewModalImageUrl: SafeUrl | null = null;
         private nzContextMenuService: NzContextMenuService,
         private endPointUsersService: EndPointUsersService,
         private sanitizer: DomSanitizer,
+        private usersService: UsersService,
     ) { }
 
     ngOnInit(): void {
-        // combineLatest emite cada vez que cambia cualquiera de los dos streams.
-        // Como menu$ tiene shareReplay(1), ya tiene valor en caché cuando
-        // queryParamMap emite — así no hay race condition.
+        // Incluir getUser() en el combineLatest garantiza que userData
+        // esté disponible junto con los params antes de cualquier navegación.
         combineLatest([
             this.sideNavMenuService.getDepartments(),
-            this.route.queryParamMap
+            this.route.queryParamMap,
+            this.usersService.getUser()
         ])
             .pipe(takeUntil(this.destroy$))
             .subscribe({
-                next: ([departments, params]) => {
+                next: ([departments, params, user]) => {
+                    this.userData = user;
                     this.menuDepartments = departments;
                     this.activeBrandId = this.parseNumberParam(params.get('brandId'));
                     // this.activeSectionId = this.parseNumberParam(params.get('sectionId'));
@@ -223,6 +232,13 @@ previewModalImageUrl: SafeUrl | null = null;
                     }
                     // Reset trail en cada navegación; se reconstruye en enterCategoryMode / enterFileManager
                     this.activeEntityTrail = [];
+
+                    // Bloquear acceso si el usuario no tiene permiso sobre esta marca
+                    if (!this.canAccessBrand(this.activeBrandId)) {
+                        this.message.warning('No tienes acceso a esta marca.');
+                        this.router.navigate(['/dashboard/welcome']);
+                        return;
+                    }
 
                     if (this.departmentId) {
                         this.enterDepartmentMode();
@@ -258,6 +274,28 @@ previewModalImageUrl: SafeUrl | null = null;
             description: ['',],
             tags: [[],]
         });
+    }
+
+    // ----------------------------------------------------------------
+    // Control de acceso por rol y marcas
+    // ----------------------------------------------------------------
+    /**
+     * Verifica si el usuario tiene acceso al brandId indicado.
+     * - Admin (1) y Head Comercial (2): acceso total.
+     * - Proveedor (3): solo sus marcas asignadas (por id o por nombre).
+     */
+    canAccessBrand(brandId: number | null): boolean {
+        if (!this.userData || !brandId) return true; // si aún no cargó, no bloquear
+
+        const roleId: number = this.userData.role_id;
+        if (roleId === this.ROLE_ADMIN || roleId === this.ROLE_HEAD_COMERCIAL) return true;
+
+        if (roleId === this.ROLE_PROVEEDOR) {
+            const brands: any[] = this.userData.brands ?? [];
+            return brands.some((b: any) => Number(b?.id) === brandId);
+        }
+
+        return false;
     }
 
     ngOnDestroy(): void {
@@ -331,7 +369,7 @@ previewModalImageUrl: SafeUrl | null = null;
                     if (brandEntity) {
                         // Entity encontrada: mostrar sus hijos si los tiene, si no → subcategorías
                         this.currentEntityId = brandEntity.id;
-                        this.categoryCards = this.buildCardsForEntityLevel(brandEntity.id, entities, subcategories);
+                        this.categoryCards = this.filterCardsByAccess(this.buildCardsForEntityLevel(brandEntity.id, entities, subcategories));
                     } else {
                         // No es una entity conocida (PetFood brands sin parent) → subcategorías directamente
                         this.categoryCards = this.mapSubcategoriesToCards(subcategories);
@@ -358,7 +396,7 @@ previewModalImageUrl: SafeUrl | null = null;
                     return;
                 }
 
-                this.categoryCards = this.buildCardsForEntityLevel(brandEntity.id, entities, subcategories);
+                this.categoryCards = this.filterCardsByAccess(this.buildCardsForEntityLevel(brandEntity.id, entities, subcategories));
             },
             error: () => {
                 this.categoryCards = [];
@@ -403,6 +441,35 @@ previewModalImageUrl: SafeUrl | null = null;
     // ----------------------------------------------------------------
     // Card builders
     // ----------------------------------------------------------------
+
+    /**
+     * Filtra las tarjetas de marca para que un proveedor solo vea
+     * las que corresponden a sus marcas asignadas (por entity id).
+     * Admin y Head Comercial ven todo sin filtro.
+     * Las tarjetas de subcategoría (sin nodeId) nunca se filtran aquí.
+     */
+    private filterCardsByAccess(cards: CategoryCard[]): CategoryCard[] {
+        if (!this.userData) return cards;
+
+        const roleId: number = this.userData.role_id;
+        if (roleId === this.ROLE_ADMIN || roleId === this.ROLE_HEAD_COMERCIAL) return cards;
+
+        if (roleId === this.ROLE_PROVEEDOR) {
+            const assignedIds = new Set<number>(
+                (this.userData.brands ?? []).map((b: any) => Number(b?.id))
+            );
+
+            return cards.filter(card => {
+                // Tarjeta de subcategoría (sin nodeId) → siempre visible una vez dentro de la marca
+                if (!card.nodeId) return true;
+                // Tarjeta de entity → solo si está en las marcas asignadas
+                return assignedIds.has(card.nodeId);
+            });
+        }
+
+        return cards;
+    }
+
     private buildCardsForEntityLevel(
         entityId: number,
         entities: DepartmentEntityItem[],
@@ -478,7 +545,7 @@ previewModalImageUrl: SafeUrl | null = null;
                     label: card.title, folderId: null,
                     crumbType: 'entity', entityId: card.nodeId
                 }];
-                this.categoryCards = children.map((child, index) => this.toEntityCard(child, index));
+                this.categoryCards = this.filterCardsByAccess(children.map((child, index) => this.toEntityCard(child, index)));
                 return;
             }
 
@@ -501,7 +568,7 @@ previewModalImageUrl: SafeUrl | null = null;
             }];
 
             if (children.length > 0) {
-                this.categoryCards = children.map((child, index) => this.toEntityCard(child, index));
+                this.categoryCards = this.filterCardsByAccess(children.map((child, index) => this.toEntityCard(child, index)));
                 return;
             }
 
@@ -639,7 +706,7 @@ previewModalImageUrl: SafeUrl | null = null;
 
             const children = this.departmentEntities.filter(e => e.parent_entity_id === targetEntityId);
             if (children.length > 0) {
-                this.categoryCards = children.map((child, i) => this.toEntityCard(child, i));
+                this.categoryCards = this.filterCardsByAccess(children.map((child, i) => this.toEntityCard(child, i)));
             } else {
                 // Leaf entity — show subcategories.
                 this.categoryCards = this.mapSubcategoriesToCards(this.currentDepartmentSubcategories);
@@ -1436,7 +1503,7 @@ previewModalImageUrl: SafeUrl | null = null;
         this.departmentEntities = dept.entities.map(e => ({
             id: e.id, name: e.name, logo: e.logo, parent_entity_id: e.parent_entity_id
         }));
-        this.categoryCards = rootEntities.map((entity, index) => this.toEntityCard(entity, index));
+        this.categoryCards = this.filterCardsByAccess(rootEntities.map((entity, index) => this.toEntityCard(entity, index)));
         this.currentEntityId = null;
         this.activeEntityTrail = [];   // en nivel departamento el trail está vacío
         this.viewMode = 'categories';
