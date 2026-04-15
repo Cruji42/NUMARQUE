@@ -174,7 +174,8 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
     previewModalUrl: SafeResourceUrl | null = null;
     previewModalVideoUrl: SafeUrl | null = null;
     previewModalType: 'pdf' | 'video' | 'image' | null = null;
-    previewModalImageUrl: SafeUrl | null = null;
+previewModalImageUrl: SafeUrl | null = null;
+  isUploading = false;
 
     @ViewChild('tplContent', { static: true }) tplContent!: TemplateRef<any>;
     @ViewChild('tplFooter', { static: true }) tplFooter!: TemplateRef<any>;
@@ -1731,7 +1732,7 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
         return false;
     };
 
-    enviarArchivo(): void {
+enviarArchivo(): void {
         const tipo = this.uploadForm.value.type;
         const uploadPath = this.getUploadBreadcrumbPath();
         const brandId = this.activeBrandId;
@@ -1747,6 +1748,8 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
             this.message.warning('No hay archivo seleccionado.');
             return;
         }
+
+        this.isUploading = true;
 
         if (tipo === 'file') {
             // ── SUBIR ARCHIVO ──────────────────────────────────────
@@ -1768,6 +1771,9 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
                 error: (error: any) => {
                     console.error('Error', error);
                     this.message.error('Error al subir el archivo.');
+                },
+                complete: () => {
+                    this.isUploading = false;
                 }
             });
 
@@ -1791,10 +1797,14 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
                 error: (error: any) => {
                     console.error('Error', error);
                     this.message.error('Error al crear la carpeta.');
+                },
+                complete: () => {
+                    this.isUploading = false;
                 }
             });
         }
     }
+
 
 
     private onSuccess(mensaje: string): void {

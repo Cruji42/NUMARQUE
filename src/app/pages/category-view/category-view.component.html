@@ -308,7 +308,7 @@
 <ng-template #tplFooter>
   <button nz-button nzType="default" (click)="cancelNewMaterial()">Cancelar</button>
   <button nz-button nzType="primary" [disabled]="!uploadForm.valid" (click)="enviarArchivo()"
-    [nzLoading]="isConfirmLoading">Guardar</button>
+[nzLoading]="isUploading">Guardar</button>
 </ng-template>
 
 <ng-template #previewModalTpl>
