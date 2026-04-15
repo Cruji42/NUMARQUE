@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { ComponentsComponent } from '../../components/components.component'
+import { WelcomeComponent } from 'src/app/pages/welcome/welcome.component';
 
 export const CommonLayout_ROUTES: Routes = [
 
@@ -13,6 +14,16 @@ export const CommonLayout_ROUTES: Routes = [
     {
         path: 'dashboard',
         loadChildren: () => import('../../dashboard/dashboard.module').then(m => m.DashboardModule),
+    },
+
+    //Welcome
+    {
+        path: 'welcome',
+        component: WelcomeComponent,
+        data: {
+            title: 'Welcome',
+            headerDisplay: "none"
+        }
     },
 
     //Apps

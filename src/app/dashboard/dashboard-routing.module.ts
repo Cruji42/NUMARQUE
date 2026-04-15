@@ -5,17 +5,8 @@ import { DefaultDashboardComponent } from './default/default-dashboard.component
 import { EcommerceDashboardComponent } from './e-commerce/e-commerce-dashboard.component';
 import { ProjectsDashboardComponent } from './projects/projects-dashboard.component';
 import { CrmDashboardComponent } from './crm/crm-dashboard.component';
-import { WelcomeComponent } from '../pages/welcome/welcome.component';
 
 const routes: Routes = [
-    {
-        path: 'welcome',
-        component: WelcomeComponent,
-        data: {
-            title: 'Welcome',
-            headerDisplay: "none"
-        }
-    },
     {
         path: '',
         component: DefaultDashboardComponent,

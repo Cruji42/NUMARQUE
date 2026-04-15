@@ -110,7 +110,7 @@ export class SideNavComponent implements OnInit {
         const UTILITY_TITLES = ['GENERAL'];
         if (item.title && UTILITY_TITLES.includes(this.normalizeText(item.title))) return true;
 
-        const UTILITY_PATHS = ['/dashboard/welcome', '/home', '/pages/setting'];
+        const UTILITY_PATHS = ['/welcome', '/home', '/pages/setting'];
         if (item.path && UTILITY_PATHS.includes(item.path)) return true;
 
         const { ids, names } = this.assignedBrandSets;

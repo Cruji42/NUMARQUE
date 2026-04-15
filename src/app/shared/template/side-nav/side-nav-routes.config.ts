@@ -1,6 +1,5 @@
 import { SideNavInterface } from '../../interfaces/side-nav.type';
 
-
 /**
  * ROUTES contiene únicamente las secciones **estáticas** del menú.
  *
@@ -21,7 +20,7 @@ export const ROUTES: SideNavInterface[] = [
         canAccess: [1, 2, 3],
         submenu: [
             {
-                path: '/dashboard/welcome',
+                path: '/welcome',
                 title: 'Inicio',
                 iconType: 'nzIcon',
                 icon: 'home',
