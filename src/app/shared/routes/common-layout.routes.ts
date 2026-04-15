@@ -7,7 +7,7 @@ export const CommonLayout_ROUTES: Routes = [
 
     //Búsqueda
     {
-        path: 'busqueda',
+        path: 'search',
         loadChildren: () => import('../../pages/home/home.module').then(m => m.HomeModule),
     },
 
@@ -26,14 +26,12 @@ export const CommonLayout_ROUTES: Routes = [
             headerDisplay: "none"
         }
     },
-
     {
         path: 'users',
-        loadChildren: () => import('../../apps/e-commerce/orders-list/users.module')
+         loadChildren: () => import('../../apps/e-commerce/orders-list/users.module')
             .then(m => m.UsersModule),
         data: {
-            title: 'Users',
-            headerDisplay: "none"
+            title: 'Users'
         }
     },
 
@@ -48,12 +46,12 @@ export const CommonLayout_ROUTES: Routes = [
                 path: '',
                 redirectTo: '/dashboard',
                 pathMatch: 'full'
-            },
+            }, 
             {
                 path: '',
                 loadChildren: () => import('../../apps/apps.module').then(m => m.AppsModule)
             },
-        ]
+        ]    
     },
 
     //Component
@@ -65,7 +63,7 @@ export const CommonLayout_ROUTES: Routes = [
                 path: '',
                 redirectTo: '/components/affix',
                 pathMatch: 'full'
-            },
+            }, 
             {
                 path: '',
                 loadChildren: () => import('../../components/components.module').then(m => m.ComponentsModule)
@@ -87,12 +85,12 @@ export const CommonLayout_ROUTES: Routes = [
                 path: '',
                 redirectTo: '/dashboard',
                 pathMatch: 'full'
-            },
+            }, 
             {
                 path: '',
                 loadChildren: () => import('../../charts/charts.module').then(m => m.ChartsModule)
             },
-        ]
+        ]    
     },
 
     //Pages
@@ -106,11 +104,12 @@ export const CommonLayout_ROUTES: Routes = [
                 path: '',
                 redirectTo: '/dashboard',
                 pathMatch: 'full'
-            },
+            }, 
             {
                 path: '',
                 loadChildren: () => import('../../pages/pages.module').then(m => m.PagesModule)
             },
-        ]
-    }
+        ]    
+    }    
 ];
+
