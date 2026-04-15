@@ -162,9 +162,9 @@
         <nz-card>
             <div class="d-flex justify-content-between align-items-center">
                 <h5>Top materiales descargados</h5>
-                <div>
+               <!--  <div>
                     <a nz-button nzType="default" nzSize="small" class="bg-primary text-white">View All</a>
-                </div>
+                </div> -->
             </div>
             <div class="m-t-30">
                 <nz-table #productTable [nzData]="downloadsList" [nzShowPagination]="false" class="no-border-last">
@@ -213,9 +213,9 @@
         <nz-card>
             <div class="d-flex justify-content-between align-items-center">
                 <h5 class="m-b-0">Último subido</h5>
-                <div>
+             <!--    <div>
                     <a nz-button nzType="default" nzSize="small" class="bg-primary text-white">View All</a>
-                </div>
+                </div> -->
             </div>
             <div class="m-t-30">
                 <div [ngClass]="{'m-b-25': !last}" *ngFor="let item of fileList; let last = last">
@@ -260,9 +260,9 @@
         <nz-card>
             <div class="d-flex justify-content-between align-items-center">
                 <h5 class="m-b-0">Actividad</h5>
-                <div>
+                <!-- <div>
                     <a nz-button nzType="default" nzSize="small" class="bg-primary text-white">View All</a>
-                </div>
+                </div> -->
             </div>
             <div class="m-t-30">
                 <div class="overflow-y-auto" style="height: 437px">
