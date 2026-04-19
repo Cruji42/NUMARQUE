@@ -64,7 +64,7 @@
         "EQUINOS": "High-performance equine nutrition",
         "GALLOS": "Specialized formulas for fighting and show roosters",
         "PECES": "Aquaculture nutrition for optimal fish growth",
-        "RUMIANTES": "Solutions for bovine, ovine and caprine livestock",
+        "RUMIANTES": "Solutions for bovine, ovina and caprina livestock",
         "FEED_SOLUTIONS": "Custom animal nutrition solutions"
       }
     },
@@ -103,7 +103,7 @@
       "COPYRIGHT": "© 2026 NUMARQUE CENTER, GRUPO NUTEC®",
       "TERMS": "Terms",
       "PRIVACY": "Privacy",
-      "FAQS": "FAQs",
+      "FAQs": "FAQs",
       "CONTACT": "Contact",
       "FILES": "files"
     },
@@ -115,6 +115,153 @@
       "ES": "Spanish",
       "SELECT": "Language"
     }
+  },
+  "HOME": {
+    "HERO": {
+      "TITLE": "Find the creative material<span class=\"hero-title-accent\"> you need</span>",
+      "SUBTITLE": "Search thousands of files, brands and campaigns in seconds."
+    },
+    "CATEGORIES": {
+      "ALL": "All categories",
+      "PHOTOS": "Photos",
+      "VIDEOS": "Videos",
+      "DOCUMENTS": "Documents",
+      "PRESENTATIONS": "Presentations",
+      "AUDIO": "Audio"
+    },
+    "SEARCH": {
+      "RECENT": "Recent searches",
+      "POPULAR": "Popular now",
+      "SEARCHING": "Searching...",
+      "BACK_TO_EXPLORE": "Back to explore",
+      "RELEVANCE_LABEL": "Relevance",
+      "DOWNLOAD": "Download",
+      "SHARE": "Share",
+      "NO_RESULTS": "No results",
+      "NO_RESULTS_SUB": "Try different search terms or change the type filter.",
+      "CLEAR": "Clear search",
+      "RESULT_ONE": "result for",
+      "RESULT_MANY": "results for",
+      "RESULT_FOR": "for",
+      "SORT": {
+        "RELEVANCE": "Most relevant",
+        "DATE": "Most recent",
+        "NAME": "Name A–Z",
+        "SIZE": "Size"
+      },
+      "VIEW": {
+        "GRID": "Grid view",
+        "LIST": "List view"
+      },
+      "FILTER": {
+        "ALL": "All",
+        "PDF": "PDF",
+        "PNG": "PNG",
+        "MP4": "MP4",
+        "PPT": "PPT",
+        "DOC": "DOC"
+      }
+    },
+    "EXPLORE": {
+      "SECTION_CATEGORIES": "Explore by category",
+      "SECTION_RECENT": "Latest uploaded material",
+      "POPULAR_LABEL": "Popular now",
+      "WORKSPACES_EMPTY": {
+        "TITLE": "Your workspaces will appear here",
+        "SUB": "Create or join a workspace to organize your materials by project or team.",
+        "CREATE": "Create workspace"
+      },
+      "WEEKLY_NEWS_TAG": "News of the month",
+      "WEEKLY_NEWS_NO_CONTENT": "No news this month",
+      "WEEKLY_NEWS_NO_SUB": "Check back later for new recent material"
+    },
+    "QUICK_CATEGORIES": [
+      {
+        "LABEL": "Photos",
+        "ICON": "🖼️",
+        "VALUE": "photos"
+      },
+      {
+        "LABEL": "Videos",
+        "ICON": "🎬",
+        "VALUE": "videos"
+      },
+      {
+        "LABEL": "Documents",
+        "ICON": "📄",
+        "VALUE": "documents"
+      },
+      {
+        "LABEL": "Presentations",
+        "ICON": "📊",
+        "VALUE": "presentations"
+      },
+      {
+        "LABEL": "Audio",
+        "ICON": "🎵",
+        "VALUE": "audio"
+      }
+    ],
+    "PLACEHOLDERS": [
+      "I want to make a NUPEC ad for Mercado Libre...",
+      "I need launch materials for NUCAN...",
+      "I'm looking for institutional videos from GRUPO NUTEC®...",
+      "I want product images from NUFIT for social media...",
+      "I need a sales presentation for the livestock sector..."
+    ]
+  },
+  "SETTINGS": {
+  "PAGE_TITLE": "My profile",
+  "PAGE_SUBTITLE": "Manage your information",
+  "STATS": {
+    "BRANDS":    "Brands",
+    "DOWNLOADS": "Downloads",
+    "SHARED":    "Shared",
+    "FAVORITES": "Favorites"
+  },
+  "PHOTO": {
+    "LABEL":      "Profile photo",
+    "HINT":       "PNG or JPG. Max 5MB · 120×120 recommended",
+    "CHANGE":     "Change photo",
+    "UPLOAD_BTN": "Upload photo"
+  },
+  "BASIC_INFO": {
+    "TITLE":      "Basic information",
+    "FIRST_NAME": "First name",
+    "LAST_NAME":  "Last name",
+    "COMPANY":    "Company"
+  },
+  "FORM": {
+    "REQUIRED": "Required field",
+    "CANCEL":   "Cancel",
+    "SAVE":     "Save changes"
+  },
+  "BRANDS": {
+    "TITLE": "Assigned brands",
+    "EMPTY": "No brands assigned",
+    "INFO":  "Brands are assigned by the Commercial Head. Contact the administrator to request additional access."
+  },
+  "SECURITY": {
+    "TITLE":          "Security",
+    "CURRENT_PW":     "Current password",
+    "NEW_PW":         "New password",
+    "UPDATE_BTN":     "Update password",
+    "CONFIRM_TITLE":  "Do you want to change your password?",
+    "CONFIRM_OK":     "Yes, change it",
+    "CONFIRM_CANCEL": "Cancel"
+  },
+  "ROLES": {
+    "ADMIN":    "Administrator",
+    "HEAD":     "Commercial Head",
+    "PROVIDER": "Provider",
+    "USER":     "User"
+  },
+  "MESSAGES": {
+    "PROFILE_UPDATED": "Profile updated successfully",
+    "PROFILE_ERROR":   "Error updating profile",
+    "PHOTO_UPDATED":   "Profile photo updated",
+    "PHOTO_ERROR":     "Error uploading photo",
+    "PW_UPDATED":      "Password updated successfully"
   }
 }
-
+}

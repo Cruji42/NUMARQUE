@@ -11,11 +11,8 @@
     <div class="hero-inner">
 
       <!-- Title -->
-      <h1 class="hero-title">
-        Encuentra el material creativo<br>
-        <span class="hero-title-accent">que necesitas</span>
-      </h1>
-      <p class="hero-subtitle">Busca entre miles de archivos, marcas y campañas en segundos.</p>
+      <div class="hero-title" [innerHTML]="'HOME.HERO.TITLE' | translate | async"></div>
+      <p class="hero-subtitle">{{ 'HOME.HERO.SUBTITLE' | translate | async }}</p>
 
       <!-- ── Search Bar ── -->
       <div class="search-wrapper" [class.search-focused]="searchFocused" [class.search-active-glow]="searchFocused">
@@ -43,15 +40,15 @@
 
           <!-- Clear button (visible when there's a query) -->
           <button class="search-clear-btn" *ngIf="searchQuery.length > 0" (click)="clearSearch()"
-            title="Limpiar búsqueda">
+            [title]="'HOME.SEARCH.CLEAR' | translate | async">
             <i class="fas fa-times"></i>
           </button>
 
           <!-- Search Button -->
-          <button class="search-btn" (click)="executeSearch()" [class.is-loading]="isSearching" title="Buscar">
+          <button class="search-btn" (click)="executeSearch()"
+            [title]="'HOME.SEARCH.SEARCHING' | translate | async">
             <span class="search-btn-inner" *ngIf="!isSearching">
-              <!-- <i class="fas fa-search"></i> -->
-                  <img src="assets/images/others/search-ai.png" class="w-100" alt="">
+              <img src="assets/images/others/search-ai.png" class="w-100" alt="">
             </span>
             <span class="search-spinner" *ngIf="isSearching"></span>
           </button>
@@ -62,17 +59,16 @@
         <div class="suggestions-panel" *ngIf="searchFocused && !searchActive">
           <div class="suggestions-col">
             <div class="suggestions-label">
-              <i class="fas fa-history"></i> Búsquedas recientes
+              <i class="fas fa-history"></i> {{ 'HOME.SEARCH.RECENT' | translate | async }}
             </div>
             <div class="suggestions-chips">
-              <span class="suggestion-chip" *ngFor="let term of recentSearches" (mousedown)="applySearch(term)">{{ term
-                }}</span>
+              <span class="suggestion-chip" *ngFor="let term of recentSearches" (mousedown)="applySearch(term)">{{ term }}</span>
             </div>
           </div>
           <div class="suggestions-divider"></div>
           <div class="suggestions-col">
             <div class="suggestions-label">
-              <i class="fas fa-fire"></i> Populares ahora
+              <i class="fas fa-fire"></i> {{ 'HOME.EXPLORE.POPULAR_LABEL' | translate | async }}
             </div>
             <div class="suggestions-chips">
               <span class="suggestion-chip popular" *ngFor="let term of popularSearches"
@@ -104,34 +100,35 @@
     <div class="results-header">
       <div class="results-info">
         <span class="results-count" *ngIf="!isSearching">
-          <strong>{{ totalResults }}</strong> resultado<span *ngIf="totalResults !== 1">s</span>
-          para "<em>{{ searchQuery }}</em>"
+          <strong>{{ totalResults }}</strong>
+          {{ totalResults === 1 ? ('HOME.SEARCH.RESULT_ONE' | translate | async) : ('HOME.SEARCH.RESULT_MANY' | translate | async) }}
+          {{ 'HOME.SEARCH.RESULT_FOR' | translate | async }} "<em>{{ searchQuery }}</em>"
         </span>
         <span class="results-count searching" *ngIf="isSearching">
-          <i class="fas fa-circle-notch fa-spin"></i> Buscando...
+          <i class="fas fa-circle-notch fa-spin"></i> {{ 'HOME.SEARCH.SEARCHING' | translate | async }}
         </span>
         <button class="back-btn" (click)="clearSearch()">
-          <i class="fas fa-arrow-left"></i> Volver a explorar
+          <i class="fas fa-arrow-left"></i> {{ 'HOME.SEARCH.BACK_TO_EXPLORE' | translate | async }}
         </button>
       </div>
 
       <div class="results-controls">
         <!-- Sort Select -->
         <select class="sort-select" [(ngModel)]="sortBy">
-          <option value="relevance">Más relevante</option>
-          <option value="date">Más reciente</option>
-          <option value="name">Nombre A–Z</option>
-          <option value="size">Tamaño</option>
+          <option value="relevance">{{ 'HOME.SEARCH.SORT.RELEVANCE' | translate | async }}</option>
+          <option value="date">{{ 'HOME.SEARCH.SORT.DATE' | translate | async }}</option>
+          <option value="name">{{ 'HOME.SEARCH.SORT.NAME' | translate | async }}</option>
+          <option value="size">{{ 'HOME.SEARCH.SORT.SIZE' | translate | async }}</option>
         </select>
 
         <!-- Grid / List Toggle -->
         <div class="view-toggle">
           <button class="view-toggle-btn" [class.active]="viewMode === 'grid'" (click)="viewMode = 'grid'"
-            title="Vista cuadrícula">
+            [title]="'HOME.SEARCH.VIEW.GRID' | translate | async">
             <i class="fas fa-th"></i>
           </button>
           <button class="view-toggle-btn" [class.active]="viewMode === 'list'" (click)="viewMode = 'list'"
-            title="Vista lista">
+            [title]="'HOME.SEARCH.VIEW.LIST' | translate | async">
             <i class="fas fa-list"></i>
           </button>
         </div>
@@ -171,24 +168,24 @@
           <!-- Hover overlay -->
           <div class="result-overlay">
             <button class="overlay-action-btn download">
-              <i class="fas fa-download"></i> Descargar
+              <i class="fas fa-download"></i> {{ 'HOME.SEARCH.DOWNLOAD' | translate | async }}
             </button>
             <button class="overlay-action-btn share">
-              <i class="fas fa-share-alt"></i> Compartir
+              <i class="fas fa-share-alt"></i> {{ 'HOME.SEARCH.SHARE' | translate | async }}
             </button>
           </div>
         </div>
 
         <!-- Info area -->
         <div class="result-info">
-          <div class="result-name" title="{{ result.name }}">{{ result.name }}</div>
-          <div class="result-meta-row">            
+          <div class="result-name" [title]="result.name">{{ result.name }}</div>
+          <div class="result-meta-row">
             <span class="result-brand-badge">{{ result.brand }}</span>
             <span class="result-size">{{ result.size }}</span>
           </div>
           <!-- Relevance bar -->
           <div class="relevance-wrap">
-            <span class="relevance-label">Relevancia</span>
+            <span class="relevance-label">{{ 'HOME.SEARCH.RELEVANCE_LABEL' | translate | async }}</span>
             <div class="relevance-track">
               <div class="relevance-fill" [style.width.%]="result.relevance"></div>
             </div>
@@ -225,10 +222,10 @@
         </div>
 
         <div class="list-actions">
-          <button class="overlay-action-btn download sm" title="Descargar">
+          <button class="overlay-action-btn download sm" [title]="'HOME.SEARCH.DOWNLOAD' | translate | async">
             <i class="fas fa-download"></i>
           </button>
-          <button class="overlay-action-btn share sm" title="Compartir">
+          <button class="overlay-action-btn share sm" [title]="'HOME.SEARCH.SHARE' | translate | async">
             <i class="fas fa-share-alt"></i>
           </button>
         </div>
@@ -239,8 +236,8 @@
     <!-- ── No Results ── -->
     <div class="no-results" *ngIf="!isSearching && searchResults.length === 0">
       <div class="no-results-icon">🔍</div>
-      <div class="no-results-title">Sin resultados</div>
-      <div class="no-results-sub">Intenta con otros términos de búsqueda o cambia el filtro de tipo.</div>
+      <div class="no-results-title">{{ 'HOME.SEARCH.NO_RESULTS' | translate | async }}</div>
+      <div class="no-results-sub">{{ 'HOME.SEARCH.NO_RESULTS_SUB' | translate | async }}</div>
     </div>
 
   </section><!-- /.results-section -->
@@ -256,22 +253,22 @@
     <nz-spin [nzSpinning]="isLoadingHomeWeeklyNews" nzSimple>
       <div class="nm-banner weekly-banner" *ngIf="homeWeeklyNews">
         <div class="weekly-banner-body">
-          <div class="nm-banner-tag">Novedades del mes</div>
+          <div class="nm-banner-tag">{{ 'HOME.EXPLORE.WEEKLY_NEWS_TAG' | translate | async }}</div>
           <div class="nm-banner-title">{{ homeWeeklyNews.title }}</div>
           <div class="nm-banner-sub">{{ homeWeeklyNews.description }}</div>
         </div>
         <button class="nm-banner-btn" (click)="goToFile(homeWeeklyNews)">
-          Ver material <i class="fas fa-arrow-right"></i>
+          {{ 'HOME.EXPLORE.WEEKLY_NEWS_TAG' | translate | async }} <i class="fas fa-arrow-right"></i>
         </button>
       </div>
       <div class="nm-banner weekly-banner loading-banner" *ngIf="!homeWeeklyNews && !isLoadingHomeWeeklyNews">
         <div class="weekly-banner-body">
-          <div class="nm-banner-tag">Novedades del mes</div>
-          <div class="nm-banner-title">No hay novedades este mes</div>
-          <div class="nm-banner-sub">Revisa más tarde para nuevo material reciente</div>
+          <div class="nm-banner-tag">{{ 'HOME.EXPLORE.WEEKLY_NEWS_TAG' | translate | async }}</div>
+          <div class="nm-banner-title">{{ 'HOME.EXPLORE.WEEKLY_NEWS_NO_CONTENT' | translate | async }}</div>
+          <div class="nm-banner-sub">{{ 'HOME.EXPLORE.WEEKLY_NEWS_NO_SUB' | translate | async }}</div>
         </div>
         <button class="nm-banner-btn disabled" disabled>
-          Ver material <i class="fas fa-arrow-right"></i>
+          {{ 'HOME.EXPLORE.WEEKLY_NEWS_TAG' | translate | async }} <i class="fas fa-arrow-right"></i>
         </button>
       </div>
     </nz-spin>
@@ -288,7 +285,7 @@
     <!-- ── Browse Tabs ── -->
     <div class="browse-tabs-bar">
       <button class="browse-tab-btn" [class.active]="browseTab === 'explore'" (click)="browseTab = 'explore'">
-        <i class="fas fa-compass"></i> Explorar
+        <i class="fas fa-compass"></i> {{ 'HOME.EXPLORE.SECTION_CATEGORIES' | translate | async }}
       </button>
     </div>
 
@@ -296,7 +293,7 @@
     <div *ngIf="browseTab === 'explore'">
 
       <!-- Section label -->
-      <div class="section-label">Explorar por categoría</div>
+      <div class="section-label">{{ 'HOME.EXPLORE.SECTION_CATEGORIES' | translate | async }}</div>
 
       <!-- Browse Categories Grid -->
       <div class="browse-grid">
@@ -304,12 +301,12 @@
           (click)="browseCategory(cat.id)">
           <div class="browse-card-icon">{{ cat.icon }}</div>
           <div class="browse-card-name">{{ cat.name }}</div>
-           <!--<div class="browse-card-count">{{ cat.count }} archivos</div>-->
+          <!--<div class="browse-card-count">{{ cat.count }} archivos</div>-->
         </div>
       </div>
 
       <!-- Section label -->
-      <div class="section-label" style="margin-top: 32px;">Último material subido</div>
+      <div class="section-label" style="margin-top: 32px;">{{ 'HOME.EXPLORE.SECTION_RECENT' | translate | async }}</div>
 
       <!-- Recent Files List -->
       <div class="recent-files-list">
@@ -328,10 +325,10 @@
             [style.border]="'1px solid ' + file.brandColor + '44'">{{ file.brand }}</span>
 
           <div class="recent-file-actions">
-            <button class="recent-action-btn" title="Descargar">
+            <button class="recent-action-btn" [title]="'HOME.SEARCH.DOWNLOAD' | translate | async">
               <i class="fas fa-download"></i>
             </button>
-            <button class="recent-action-btn" title="Compartir">
+            <button class="recent-action-btn" [title]="'HOME.SEARCH.SHARE' | translate | async">
               <i class="fas fa-share-alt"></i>
             </button>
           </div>
@@ -344,11 +341,10 @@
     <!-- ── TAB: Mis Workspaces ── -->
     <div class="workspaces-empty" *ngIf="browseTab === 'workspaces'">
       <div class="workspaces-empty-icon">🗂️</div>
-      <div class="workspaces-empty-title">Tus workspaces aparecerán aquí</div>
-      <div class="workspaces-empty-sub">Crea o únete a un workspace para organizar tu material por proyecto o equipo.
-      </div>
+      <div class="workspaces-empty-title">{{ 'HOME.EXPLORE.WORKSPACES_EMPTY.TITLE' | translate | async }}</div>
+      <div class="workspaces-empty-sub">{{ 'HOME.EXPLORE.WORKSPACES_EMPTY.SUB' | translate | async }}</div>
       <button class="workspace-create-btn">
-        <i class="fas fa-plus"></i> Crear workspace
+        <i class="fas fa-plus"></i> {{ 'HOME.EXPLORE.WORKSPACES_EMPTY.CREATE' | translate | async }}
       </button>
     </div>
 

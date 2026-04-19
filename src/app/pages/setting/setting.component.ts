@@ -3,6 +3,9 @@ import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { UsersService } from 'src/app/core/service/users.service';
+import { TranslationService } from 'src/app/shared/services/translation.service';
+import { forkJoin } from 'rxjs';
+import { take } from 'rxjs/operators';
 
 @Component({
     templateUrl: './setting.component.html',
@@ -36,7 +39,8 @@ export class SettingComponent implements OnInit {
         private fb: UntypedFormBuilder,
         private modalService: NzModalService,
         private message: NzMessageService,
-        private service: UsersService
+        private service: UsersService,
+        private translationService: TranslationService
     ) {}
 
     ngOnInit(): void {
@@ -70,7 +74,7 @@ export class SettingComponent implements OnInit {
                 this.profile_picture_url = user.profile_picture_url || '';
                 this.brands_data = user.brands || [];
                 this.userEmail   = user.email || '';
-                this.userRole    = this._resolveRoleLabel(user.role_id);
+                this._resolveRoleLabel(user.role_id);
                 this.avatarGradient = this._getAvatarGradient(user.name);
             },
             error: (err) => console.error('Error fetching user:', err)
@@ -93,13 +97,15 @@ export class SettingComponent implements OnInit {
             this.service.updateUser(formData, v.user_id).subscribe({
                 next: () => {
                     this.isConfirmLoading = false;
-                    this.message.success('Perfil actualizado correctamente');
+                    this.translationService.translate('SETTINGS.MESSAGES.PROFILE_UPDATED')
+                        .pipe(take(1)).subscribe(msg => this.message.success(msg));
                     this.getUserData();
                 },
                 error: (err) => {
                     this.isConfirmLoading = false;
                     console.error('Error updating user:', err);
-                    this.message.error('Error al actualizar el perfil');
+                    this.translationService.translate('SETTINGS.MESSAGES.PROFILE_ERROR')
+                        .pipe(take(1)).subscribe(msg => this.message.error(msg));
                 }
             });
         } else {
@@ -126,14 +132,22 @@ export class SettingComponent implements OnInit {
             });
             return;
         }
-        this.modalService.confirm({
-            nzTitle: '¿Deseas cambiar tu contraseña?',
-            nzOkText: 'Sí, cambiar',
-            nzCancelText: 'Cancelar',
-            nzOnOk: () => {
-                this.message.success('Contraseña actualizada correctamente');
-                this.changePWForm.reset();
-            }
+
+        forkJoin({
+            title:   this.translationService.translate('SETTINGS.SECURITY.CONFIRM_TITLE').pipe(take(1)),
+            ok:      this.translationService.translate('SETTINGS.SECURITY.CONFIRM_OK').pipe(take(1)),
+            cancel:  this.translationService.translate('SETTINGS.SECURITY.CONFIRM_CANCEL').pipe(take(1)),
+            success: this.translationService.translate('SETTINGS.MESSAGES.PW_UPDATED').pipe(take(1)),
+        }).subscribe(({ title, ok, cancel, success }) => {
+            this.modalService.confirm({
+                nzTitle:      title,
+                nzOkText:     ok,
+                nzCancelText: cancel,
+                nzOnOk: () => {
+                    this.message.success(success);
+                    this.changePWForm.reset();
+                }
+            });
         });
     }
 
@@ -143,7 +157,7 @@ export class SettingComponent implements OnInit {
     beforeUpload = (file: File): boolean => {
         this.file = file;
         this.enviarArchivo();
-        return false; // prevent auto upload
+        return false;
     };
 
     enviarArchivo(): void {
@@ -154,12 +168,14 @@ export class SettingComponent implements OnInit {
 
         this.service.uploadPhoto(formData, this.form.value.user_id).subscribe({
             next: () => {
-                this.message.success('Foto de perfil actualizada');
+                this.translationService.translate('SETTINGS.MESSAGES.PHOTO_UPDATED')
+                    .pipe(take(1)).subscribe(msg => this.message.success(msg));
                 this.getUserData();
             },
             error: (err) => {
                 console.error('Error uploading photo:', err);
-                this.message.error('Error al subir la foto');
+                this.translationService.translate('SETTINGS.MESSAGES.PHOTO_ERROR')
+                    .pipe(take(1)).subscribe(msg => this.message.error(msg));
             }
         });
     }
@@ -179,13 +195,16 @@ export class SettingComponent implements OnInit {
         return map[name?.toUpperCase()] || '#94A3B8';
     }
 
-    private _resolveRoleLabel(roleId: number): string {
-        const map: Record<number, string> = {
-            1: 'Administrador',
-            2: 'Head Comercial',
-            3: 'Proveedor',
+    private _resolveRoleLabel(roleId: number): void {
+        const keyMap: Record<number, string> = {
+            1: 'SETTINGS.ROLES.ADMIN',
+            2: 'SETTINGS.ROLES.HEAD',
+            3: 'SETTINGS.ROLES.PROVIDER',
         };
-        return map[roleId] || 'Usuario';
+        const key = keyMap[roleId] || 'SETTINGS.ROLES.USER';
+        this.translationService.translate(key).pipe(take(1)).subscribe(label => {
+            this.userRole = label;
+        });
     }
 
     private _getAvatarGradient(name: string): string {

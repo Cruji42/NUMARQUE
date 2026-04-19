@@ -1,8 +1,9 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { UsersService } from 'src/app/core/service/users.service';
+import { TranslationService } from 'src/app/shared/services/translation.service';
 import { forkJoin, of } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
-import { ActivatedRoute, Route, Router } from '@angular/router';
+import { catchError, map, take } from 'rxjs/operators';
+import { Router } from '@angular/router';
 
 // ── Interfaces ──────────────────────────────────────────────
 export interface SearchResult {
@@ -58,7 +59,11 @@ export interface WeeklyHighlight {
 })
 export class HomeComponent implements OnInit, OnDestroy {
 
-  constructor(private usersService: UsersService, public router: Router) { }
+  constructor(
+    private usersService: UsersService,
+    public router: Router,
+    private translationService: TranslationService
+  ) { }
 
   // ── Search state ──────────────────────────────────────────
   searchQuery: string = '';
@@ -75,46 +80,25 @@ export class HomeComponent implements OnInit, OnDestroy {
   // ── Browse state ──────────────────────────────────────────
   browseTab: string = 'explore';
 
-  // ── Category dropdown options ─────────────────────────────
-  categories = [
-    { value: 'all', label: 'Todas las categorías' },
-    { value: 'photos', label: 'Fotos' },
-    { value: 'videos', label: 'Videos' },
-    { value: 'documents', label: 'Documentos' },
-    { value: 'presentations', label: 'Presentaciones' },
-    { value: 'audio', label: 'Audio' },
-  ];
-
-  // ── Quick category pills ──────────────────────────────────
-  quickCategories = [
-    { label: 'Fotos', icon: '🖼️', value: 'photos' },
-    { label: 'Videos', icon: '🎬', value: 'videos' },
-    { label: 'Documentos', icon: '📄', value: 'documents' },
-    { label: 'Presentaciones', icon: '📊', value: 'presentations' },
-    { label: 'Audio', icon: '🎵', value: 'audio' },
-  ];
-
-  // ── Suggestion chips ──────────────────────────────────────
+  // ── Translated arrays (load dynamically) ──────────────────
+  categories: { value: string; label: string }[] = [];
+  quickCategories: { label: string; icon: string; value: string }[] = [];
+  typeFilters: { label: string; value: string }[] = [];
+  popularSearches: string[] = [];
   recentSearches: string[] = [];
-  popularSearches: string[] = ['Identidad visual', 'Campaña verano', 'Material ATL', 'Redes sociales'];
 
-  // ── Type filter chips ─────────────────────────────────────
-  typeFilters = [
-    { label: 'Todos', value: 'all' },
-    { label: 'PDF', value: 'pdf' },
-    { label: 'PNG', value: 'png' },
-    { label: 'MP4', value: 'mp4' },
-    { label: 'PPT', value: 'ppt' },
-    { label: 'DOC', value: 'doc' },
-  ];
-
+  // ── Placeholder animator ───────────────────────────────────
+  placeholders: string[] = [];
+  currentPlaceholder: number = 0;
+  displayPlaceholder: string = '';
+  isTyping: boolean = false;
 
   // ── Stats bar ─────────────────────────────────────────────
   stats: Stat[] = [
-    { icon: '⬇️', value: '0', label: 'Material descargado', color: 'var(--blue)' },
-    { icon: '👥', value: '0', label: 'Usuarios activos', color: 'var(--cyan)' },
-    { icon: '⬆️', value: '0', label: 'Material subido', color: '#a78bfa' },
-    { icon: '🔗', value: '0', label: 'Materiales compartidos', color: '#34d399' },
+    { icon: '⬇️', value: '0', label: '', color: 'var(--blue)' },
+    { icon: '👥', value: '0', label: '', color: 'var(--cyan)' },
+    { icon: '⬆️', value: '0', label: '', color: '#a78bfa' },
+    { icon: '🔗', value: '0', label: '', color: '#34d399' },
   ];
 
   metricsSummary = {
@@ -143,10 +127,10 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   // ── Weekly highlight ──────────────────────────────────────
   weeklyHighlight: WeeklyHighlight = {
-    tag: 'Novedades de la semana',
-    title: 'Nueva campaña Nupec — Temporada Verano 2025',
-    description: 'Se han subido 47 nuevos materiales para la campaña de verano. Incluye fotografías, videos y material digital listo para usar.',
-    cta: 'Ver novedades'
+    tag: '',
+    title: '',
+    description: '',
+    cta: ''
   };
 
   // ── Recent files ──────────────────────────────────────────
@@ -154,24 +138,11 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   // ── Private ───────────────────────────────────────────────
   private searchTimeout: any;
-
-
-  placeholders = [
-    'Quiero hacer un anuncio de NUPEC para Mercado Libre...',
-    'Necesito materiales de lanzamiento para NUCAN...',
-    'Busco videos institucionales de GRUPO NUTEC®...',
-    'Quiero imágenes de producto de NUFIT para redes sociales...',
-    'Necesito una presentación de ventas del sector pecuario...'
-  ];
-
-  currentPlaceholder = 0;
-  displayPlaceholder = this.placeholders[0];
-  isTyping = false;
-
   private interval: any;
 
   // ── Lifecycle ─────────────────────────────────────────────
   ngOnInit(): void {
+    this.loadTranslations();
     this.loadRecentSearches();
     this.getMetricsSummary();
     this.getLatestUploadedContent();
@@ -179,6 +150,45 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.interval = setInterval(() => {
       this.rotatePlaceholder();
     }, 3000);
+  }
+
+  loadTranslations(): void {
+    // Categories dropdown
+    this.translationService.getTranslatedArray('HOME.CATEGORIES').pipe(take(1)).subscribe((cats: any) => {
+      this.categories = Object.keys(cats).map((key: string) => ({
+        value: key.toLowerCase(),
+        label: cats[key]
+      }));
+    });
+
+    // Type filters
+    this.translationService.getTranslatedArray('HOME.SEARCH.FILTER').pipe(take(1)).subscribe((filters: any) => {
+      this.typeFilters = Object.keys(filters).map((key: string) => ({
+        value: key.toLowerCase(),
+        label: filters[key]
+      }));
+    });
+
+    // Quick category pills
+    this.translationService.getTranslatedArray('HOME.QUICK_CATEGORIES').pipe(take(1)).subscribe((cats: any) => {
+      this.quickCategories = cats.map((cat: any) => ({
+        label: cat.LABEL,
+        icon: cat.ICON,
+        value: cat.VALUE
+      }));
+    });
+
+    // Animated placeholders
+    this.translationService.getTranslatedArray('HOME.PLACEHOLDERS').pipe(take(1)).subscribe((phs: any) => {
+      this.placeholders = phs;
+      this.currentPlaceholder = 0;
+      this.displayPlaceholder = this.placeholders[0] ?? '';
+    });
+
+    // Re-load on language change
+    this.translationService.currentLang$.pipe(take(1)).subscribe(() => {
+      this.loadTranslations();
+    });
   }
 
   loadWeeklyHighlight(): void {
@@ -209,10 +219,10 @@ export class HomeComponent implements OnInit, OnDestroy {
   updateWeeklyHighlight(): void {
     if (this.homeWeeklyNews) {
       this.weeklyHighlight = {
-        tag: 'Novedades del mes',
+        tag: '',
         title: this.homeWeeklyNews.title,
         description: this.homeWeeklyNews.description,
-        cta: 'Ver material'
+        cta: ''
       };
     }
   }
@@ -221,7 +231,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     if (this.searchTimeout) {
       clearTimeout(this.searchTimeout);
     }
-
     clearInterval(this.interval);
   }
 
@@ -271,7 +280,6 @@ export class HomeComponent implements OnInit, OnDestroy {
         contentId: item.id
       }
     });
-
   }
 
   getMetricsSummary(): void {
@@ -284,12 +292,20 @@ export class HomeComponent implements OnInit, OnDestroy {
           total_shared: Number(summary?.total_shared) || 0
         };
 
-        this.stats = [
-          { icon: '⬇️', value: this.metricsSummary.total_downloads.toLocaleString('es-MX'), label: 'Material descargado', color: 'var(--blue)' },
-          { icon: '👥', value: this.metricsSummary.active_users.toLocaleString('es-MX'), label: 'Usuarios activos', color: 'var(--cyan)' },
-          { icon: '⬆️', value: this.metricsSummary.total_files.toLocaleString('es-MX'), label: 'Material subido', color: '#a78bfa' },
-          { icon: '🔗', value: this.metricsSummary.total_shared.toLocaleString('es-MX'), label: 'Materiales compartidos', color: '#34d399' }
+        const statKeys = [
+          'WELCOME.STATS.DOWNLOADS',
+          'WELCOME.STATS.USERS',
+          'WELCOME.STATS.MATERIALS',
+          'WELCOME.STATS.BRANDS'
         ];
+        forkJoin(statKeys.map(key => this.translationService.translate(key).pipe(take(1)))).subscribe(labels => {
+          this.stats = [
+            { icon: '⬇️', value: this.metricsSummary.total_downloads.toLocaleString(), label: labels[0], color: 'var(--blue)' },
+            { icon: '👥', value: this.metricsSummary.active_users.toLocaleString(), label: labels[1], color: 'var(--cyan)' },
+            { icon: '⬆️', value: this.metricsSummary.total_files.toLocaleString(), label: labels[2], color: '#a78bfa' },
+            { icon: '🔗', value: this.metricsSummary.total_shared.toLocaleString(), label: labels[3], color: '#34d399' }
+          ];
+        });
       },
       error: (error) => {
         console.error('Error fetching metrics summary:', error);
@@ -422,7 +438,6 @@ export class HomeComponent implements OnInit, OnDestroy {
       next: (response: any) => {
         console.log(response);
         const rawResults = response?.results ?? response?.data ?? [];
-
 
         const mappedResults: SearchResult[] = rawResults.map((item: any, index: number) => {
           const file = item?.file ?? item ?? {};

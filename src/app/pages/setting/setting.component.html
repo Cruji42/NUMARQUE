@@ -1,219 +1,13 @@
-<!-- <div class="page-header has-tab">
-    <h2 class="font-weight-normal">Perfil</h2>
-</div>
-<nz-tabset class="page-header-tab">
-    <nz-tab nzTitle="">
-        <div class="container">
-            <nz-card nzTitle="Información básica">
-                <div class="media align-items-center">
-                    <nz-avatar [nzSize]="80" nzIcon="user" [nzSrc]="profile_picture_url"></nz-avatar>
-                    <div class="m-l-20 m-r-20">
-                        <h5 class="m-b-5 font-size-18">Foto de perfil</h5>
-                        <p class="opacity-07 font-size-13 m-b-0">
-                            Dimensiones Recomendadas: <br>
-                            120x120 tamaño maximo: 5MB
-                        </p>
-                    </div>
-                    <nz-upload nzName="profile_picture" [nzShowUploadList]="true" [nzBeforeUpload]="beforeUpload"
-                        [nzAccept]="'image/png,image/jpeg,image/jpg'" >
-                        <button nz-button nzType="primary">
-                            <span>Cargar</span>
-                        </button>
-                    </nz-upload>
-                </div>
-                <hr class="m-v-25">
-
-                <form nz-form [formGroup]="form" (ngSubmit)="submitForm()">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <nz-form-item>
-                                <nz-form-label nzFor="name">Nombre</nz-form-label>
-                                <nz-form-control>
-                                    <input nz-input formControlName="name" nz-input placeholder="Nombre" type="text">
-                                </nz-form-control>
-                            </nz-form-item>
-                        </div>
-                        <div class="col-md-6">
-                            <nz-form-item>
-                                <nz-form-label>Apellido</nz-form-label>
-                                <nz-form-control>
-                                    <input nz-input placeholder="Apellido" type="text" formControlName="last_name"
-                                        nz-input>
-                                </nz-form-control>
-                            </nz-form-item>
-                        </div>
-                        <div class="col-md-12">
-                            <nz-form-item>
-                                <nz-form-label>Compañia</nz-form-label>
-                                <nz-form-control>
-                                    <input nz-input placeholder="Compañia" type="text" formControlName="company"
-                                        nz-input>
-                                </nz-form-control>
-                            </nz-form-item>
-                        </div>
-                        <div class="d-flex justify-content-end">
-                            <nz-form-item>
-                                <nz-form-control>
-                                    <button nz-button nzType="primary" [disabled]="form.invalid"
-                                        [nzLoading]="isConfirmLoading">Editar</button>
-                                </nz-form-control>
-                            </nz-form-item>
-                        </div>
-                    </div>
-                </form>
-
-                <!- - <div class="row">
-                    <div class="col-md-4">
-                        <nz-form-item>
-                            <nz-form-label>Phone Number</nz-form-label>
-                            <nz-form-control>
-                                <input nz-input placeholder="Phone Number" >
-                            </nz-form-control>
-                        </nz-form-item>
-                    </div>
-                    <div class="col-md-4">
-                        <nz-form-item>
-                            <nz-form-label>Date of Birth</nz-form-label>
-                            <nz-form-control>
-                                <nz-date-picker class="w-100" nzFormat="yyyy/MM/dd" nzPlaceHolder="Date of Birth"></nz-date-picker>
-                            </nz-form-control>
-                        </nz-form-item>
-                    </div>
-                    <div class="col-md-4">
-                        <nz-form-item>
-                            <nz-form-label>Language</nz-form-label>
-                            <nz-form-control>
-                                <nz-select class="w-100" [(ngModel)]="selectedLanguage" nzPlaceHolder="Language">
-                                    <nz-option nzValue="US" nzLabel="United Stata"></nz-option>
-                                    <nz-option nzValue="UK" nzLabel="United Kingdom"></nz-option>
-                                    <nz-option nzValue="FR" nzLabel="France"></nz-option>
-                                    <nz-option nzValue="DE" nzLabel="German"></nz-option>
-                                </nz-select>
-                            </nz-form-control>
-                        </nz-form-item>
-                    </div>
-                </div> -- >
-            </nz-card>
-            <nz-card nzTitle="Marcas asignadas">
-                <div class="row">
-                    <nz-tag *ngFor="let b of brands_data">{{b.name}}</nz-tag>
-
-                </div>
-            </nz-card>
-            <!- - <nz-card nzTitle="Address Details">
-                <div class="row">
-                    <div class="col-md-12">
-                        <nz-form-item>
-                            <nz-form-label>Full Address</nz-form-label>
-                            <nz-form-control>
-                                <input nz-input placeholder="Address">
-                            </nz-form-control>
-                        </nz-form-item>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <nz-form-item>
-                            <nz-form-label>State & City</nz-form-label>
-                            <nz-form-control>
-                                <input nz-input placeholder="State & City">
-                            </nz-form-control>
-                        </nz-form-item>
-                    </div>
-                    <div class="col-md-6">
-                        <nz-form-item>
-                            <nz-form-label>Country</nz-form-label>
-                            <nz-form-control>
-                                <nz-select class="w-100" [(ngModel)]="selectedCountry" nzPlaceHolder="Country">
-                                    <nz-option nzValue="US" nzLabel="United Stata"></nz-option>
-                                    <nz-option nzValue="UK" nzLabel="United Kingdom"></nz-option>
-                                    <nz-option nzValue="FR" nzLabel="France"></nz-option>
-                                    <nz-option nzValue="DE" nzLabel="German"></nz-option>
-                                </nz-select>
-                            </nz-form-control>
-                        </nz-form-item>
-                    </div>
-                </div>
-            </nz-card> - ->
-        </div>
-    </nz-tab>
-    <!- - <nz-tab nzTitle="Network">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-8 mx-auto">
-                    <nz-card nzTitle="Network Integration">
-                        <nz-list [nzDataSource]="networkList" [nzRenderItem]="network" [nzItemLayout]="'horizontal'">
-                            <ng-template #network let-item>
-                                <nz-list-item [nzActions]="[moreAction]">
-                                    <ng-template #moreAction>
-                                        <span class="m-r-10 text-gray" *ngIf="item.status">{{item.link}}</span>
-                                        <nz-switch [ngModel]="item.status" [nzCheckedChildren]="checkedTemplate" [nzUnCheckedChildren]="unCheckedTemplate"></nz-switch>
-                                        <ng-template #checkedTemplate><i class="font-size-12" nz-icon nzType="check"></i></ng-template>
-                                        <ng-template #unCheckedTemplate><i class="font-size-12" nz-icon nzType="close"></i></ng-template>
-                                    </ng-template>
-                                    <nz-list-item-meta
-                                        [nzTitle]="networkName"
-                                        [nzAvatar]="networkIcon">
-                                        <ng-template #networkIcon>
-                                            <nz-avatar [nzIcon]="item.icon" [ngStyle]="{'color': item.avatarColor, 'background': item.avatarBg}"></nz-avatar>
-                                        </ng-template>
-                                        <ng-template #networkName>
-                                            <div class="font-size-15 font-weight-semibold m-t-10">{{item.name}}</div>
-                                        </ng-template>
-                                    </nz-list-item-meta>
-                                </nz-list-item>
-                            </ng-template>
-                        </nz-list>
-                    </nz-card>
-                </div>
-            </div>
-        </div>
-    </nz-tab>
-    <nz-tab nzTitle="Notification">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-8 mx-auto">
-                    <nz-card nzTitle="Notification Config">
-                        <nz-list [nzDataSource]="notificationConfigList" [nzRenderItem]="notification" [nzItemLayout]="'horizontal'">
-                            <ng-template #notification let-item>
-                                <nz-list-item [nzActions]="[configStatus]">
-                                    <ng-template #configStatus>
-                                        <nz-switch [ngModel]="item.status" [nzCheckedChildren]="checkedTemplate2nd" [nzUnCheckedChildren]="unCheckedTemplate2nd"></nz-switch>
-                                        <ng-template #checkedTemplate2nd><i class="font-size-12" nz-icon nzType="check"></i></ng-template>
-                                        <ng-template #unCheckedTemplate2nd><i class="font-size-12" nz-icon nzType="close"></i></ng-template>
-                                    </ng-template>
-                                    <nz-list-item-meta
-                                        [nzTitle]="notificationTitle"
-                                        [nzAvatar]="notificationIcon">
-                                        <ng-template #notificationIcon>
-                                            <nz-avatar [nzIcon]="item.icon" [ngClass]="item.color" class="m-t-5"></nz-avatar>
-                                        </ng-template>
-                                        <ng-template #notificationTitle>
-                                            <h5 class="font-weight-semibold m-b-0">{{item.title}}</h5>
-                                            <p class="m-b-0 font-weight-normal">{{item.desc}}</p>
-                                        </ng-template>
-                                    </nz-list-item-meta>
-                                </nz-list-item>
-                            </ng-template>
-                        </nz-list>
-                    </nz-card>
-                </div>
-            </div>
-        </div>
-    </nz-tab> - ->
-</nz-tabset> -->
-
+<!-- ============================================================
+     SETTING COMPONENT — NUMARQUE DAM
+     Profile & security settings
+     ============================================================ -->
 
 <!-- Page Header -->
-
-<div class="justify-content-start my-3 ">
-    <h1> <b>Mi perfil</b></h1>
-    <h5 class="text-mutted">Administra tu información</h5>
+<div class="justify-content-start my-3">
+    <h1><b>{{ 'SETTINGS.PAGE_TITLE' | translate | async }}</b></h1>
+    <h5 class="text-mutted">{{ 'SETTINGS.PAGE_SUBTITLE' | translate | async }}</h5>
 </div>
-<!-- <div class="page-header">
-    <div class="page-title">Mi perfil</div>
-    <div class="page-subtitle">Administra tu información</div>
-</div> -->
 
 <!-- Two-column layout -->
 <div class="profile-layout">
@@ -224,11 +18,12 @@
 
             <!-- Avatar -->
             <div class="avatar-wrapper">
-                <nz-avatar [nzSize]="80" nzIcon="user" [nzSrc]="profile_picture_url" [style.background]="avatarGradient"
-                    class="profile-avatar"></nz-avatar>
+                <nz-avatar [nzSize]="80" nzIcon="user" [nzSrc]="profile_picture_url"
+                    [style.background]="avatarGradient" class="profile-avatar"></nz-avatar>
                 <nz-upload nzName="profile_picture" [nzShowUploadList]="false" [nzBeforeUpload]="beforeUpload"
                     [nzAccept]="'image/png,image/jpeg,image/jpg'">
-                    <button class="avatar-edit-btn" nz-tooltip nzTooltipTitle="Cambiar foto">
+                    <button class="avatar-edit-btn" nz-tooltip
+                        [nzTooltipTitle]="'SETTINGS.PHOTO.CHANGE' | translate | async">
                         <i nz-icon nzType="edit"></i>
                     </button>
                 </nz-upload>
@@ -247,19 +42,19 @@
             <div class="profile-stats">
                 <div class="stat-item">
                     <div class="stat-number">{{ brands_data?.length || 0 }}</div>
-                    <div class="stat-label">Marcas</div>
+                    <div class="stat-label">{{ 'SETTINGS.STATS.BRANDS' | translate | async }}</div>
                 </div>
                 <div class="stat-item">
                     <div class="stat-number">—</div>
-                    <div class="stat-label">Descargas</div>
+                    <div class="stat-label">{{ 'SETTINGS.STATS.DOWNLOADS' | translate | async }}</div>
                 </div>
                 <div class="stat-item">
                     <div class="stat-number">—</div>
-                    <div class="stat-label">Compartidos</div>
+                    <div class="stat-label">{{ 'SETTINGS.STATS.SHARED' | translate | async }}</div>
                 </div>
                 <div class="stat-item">
                     <div class="stat-number">—</div>
-                    <div class="stat-label">Favoritos</div>
+                    <div class="stat-label">{{ 'SETTINGS.STATS.FAVORITES' | translate | async }}</div>
                 </div>
             </div>
 
@@ -271,21 +66,21 @@
 
         <!-- Card: Información básica -->
         <div class="form-card">
-            <div class="form-card-title">Información básica</div>
+            <div class="form-card-title">{{ 'SETTINGS.BASIC_INFO.TITLE' | translate | async }}</div>
 
             <!-- Avatar upload row -->
             <div class="photo-row">
                 <nz-avatar [nzSize]="52" nzIcon="user" [nzSrc]="profile_picture_url"
                     [style.background]="avatarGradient"></nz-avatar>
                 <div class="photo-info">
-                    <div class="photo-label">Foto de perfil</div>
-                    <div class="photo-hint">PNG o JPG. Máximo 5MB · 120×120 recomendado</div>
+                    <div class="photo-label">{{ 'SETTINGS.PHOTO.LABEL' | translate | async }}</div>
+                    <div class="photo-hint">{{ 'SETTINGS.PHOTO.HINT' | translate | async }}</div>
                 </div>
                 <nz-upload nzName="profile_picture" [nzShowUploadList]="false" [nzBeforeUpload]="beforeUpload"
                     [nzAccept]="'image/png,image/jpeg,image/jpg'">
                     <button class="btn-outline">
                         <i nz-icon nzType="upload"></i>
-                        Cargar foto
+                        {{ 'SETTINGS.PHOTO.UPLOAD_BTN' | translate | async }}
                     </button>
                 </nz-upload>
             </div>
@@ -295,32 +90,37 @@
             <form nz-form [formGroup]="form" (ngSubmit)="submitForm()" nzLayout="vertical">
                 <div class="form-grid-2">
                     <nz-form-item>
-                        <nz-form-label nzRequired>Nombre</nz-form-label>
-                        <nz-form-control nzErrorTip="Campo requerido">
-                            <input nz-input formControlName="name" placeholder="Nombre" />
+                        <nz-form-label nzRequired>{{ 'SETTINGS.BASIC_INFO.FIRST_NAME' | translate | async }}</nz-form-label>
+                        <nz-form-control [nzErrorTip]="'SETTINGS.FORM.REQUIRED' | translate | async">
+                            <input nz-input formControlName="name"
+                                [placeholder]="'SETTINGS.BASIC_INFO.FIRST_NAME' | translate | async" />
                         </nz-form-control>
                     </nz-form-item>
 
                     <nz-form-item>
-                        <nz-form-label nzRequired>Apellido</nz-form-label>
-                        <nz-form-control nzErrorTip="Campo requerido">
-                            <input nz-input formControlName="last_name" placeholder="Apellido" />
+                        <nz-form-label nzRequired>{{ 'SETTINGS.BASIC_INFO.LAST_NAME' | translate | async }}</nz-form-label>
+                        <nz-form-control [nzErrorTip]="'SETTINGS.FORM.REQUIRED' | translate | async">
+                            <input nz-input formControlName="last_name"
+                                [placeholder]="'SETTINGS.BASIC_INFO.LAST_NAME' | translate | async" />
                         </nz-form-control>
                     </nz-form-item>
 
                     <nz-form-item class="span-2">
-                        <nz-form-label nzRequired>Compañía</nz-form-label>
-                        <nz-form-control nzErrorTip="Campo requerido">
-                            <input nz-input formControlName="company" placeholder="Compañía" />
+                        <nz-form-label nzRequired>{{ 'SETTINGS.BASIC_INFO.COMPANY' | translate | async }}</nz-form-label>
+                        <nz-form-control [nzErrorTip]="'SETTINGS.FORM.REQUIRED' | translate | async">
+                            <input nz-input formControlName="company"
+                                [placeholder]="'SETTINGS.BASIC_INFO.COMPANY' | translate | async" />
                         </nz-form-control>
                     </nz-form-item>
                 </div>
 
                 <div class="form-actions">
-                    <button type="button" class="btn-cancel" nz-button (click)="resetForm()">Cancelar</button>
-                    <button type="submit" class="btn-save" nz-button nzType="primary" [disabled]="form.invalid"
-                        [nzLoading]="isConfirmLoading">
-                        Guardar cambios
+                    <button type="button" class="btn-cancel" nz-button (click)="resetForm()">
+                        {{ 'SETTINGS.FORM.CANCEL' | translate | async }}
+                    </button>
+                    <button type="submit" class="btn-save" nz-button nzType="primary"
+                        [disabled]="form.invalid" [nzLoading]="isConfirmLoading">
+                        {{ 'SETTINGS.FORM.SAVE' | translate | async }}
                     </button>
                 </div>
             </form>
@@ -328,34 +128,33 @@
 
         <!-- Card: Marcas asignadas -->
         <div class="form-card">
-            <div class="form-card-title">Marcas asignadas</div>
+            <div class="form-card-title">{{ 'SETTINGS.BRANDS.TITLE' | translate | async }}</div>
             <div class="brands-grid">
                 <div class="brand-chip active" *ngFor="let b of brands_data">
                     <span class="brand-dot" [style.background]="getBrandColor(b.name)"></span>
                     {{ b.name }}
                 </div>
                 <div *ngIf="!brands_data || brands_data.length === 0" class="no-brands">
-                    Sin marcas asignadas
+                    {{ 'SETTINGS.BRANDS.EMPTY' | translate | async }}
                 </div>
             </div>
             <div class="info-box">
                 <i nz-icon nzType="info-circle"></i>
-                Las marcas son asignadas por el Head Comercial. Contacta al administrador para solicitar acceso
-                adicional.
+                {{ 'SETTINGS.BRANDS.INFO' | translate | async }}
             </div>
         </div>
 
         <!-- Card: Seguridad -->
         <div class="form-card">
-            <div class="form-card-title">Seguridad</div>
+            <div class="form-card-title">{{ 'SETTINGS.SECURITY.TITLE' | translate | async }}</div>
             <form nz-form [formGroup]="changePWForm" nzLayout="vertical">
                 <div class="form-grid-2">
                     <nz-form-item>
-                        <nz-form-label nzRequired>Contraseña actual</nz-form-label>
+                        <nz-form-label nzRequired>{{ 'SETTINGS.SECURITY.CURRENT_PW' | translate | async }}</nz-form-label>
                         <nz-form-control>
                             <nz-input-group [nzSuffix]="pwSuffix1">
-                                <input [type]="showOldPw ? 'text' : 'password'" nz-input formControlName="oldPassword"
-                                    placeholder="••••••••" />
+                                <input [type]="showOldPw ? 'text' : 'password'" nz-input
+                                    formControlName="oldPassword" placeholder="••••••••" />
                             </nz-input-group>
                             <ng-template #pwSuffix1>
                                 <i nz-icon [nzType]="showOldPw ? 'eye-invisible' : 'eye'" class="pw-toggle"
@@ -365,11 +164,11 @@
                     </nz-form-item>
 
                     <nz-form-item>
-                        <nz-form-label nzRequired>Nueva contraseña</nz-form-label>
+                        <nz-form-label nzRequired>{{ 'SETTINGS.SECURITY.NEW_PW' | translate | async }}</nz-form-label>
                         <nz-form-control>
                             <nz-input-group [nzSuffix]="pwSuffix2">
-                                <input [type]="showNewPw ? 'text' : 'password'" nz-input formControlName="newPassword"
-                                    placeholder="••••••••" />
+                                <input [type]="showNewPw ? 'text' : 'password'" nz-input
+                                    formControlName="newPassword" placeholder="••••••••" />
                             </nz-input-group>
                             <ng-template #pwSuffix2>
                                 <i nz-icon [nzType]="showNewPw ? 'eye-invisible' : 'eye'" class="pw-toggle"
@@ -380,9 +179,9 @@
                 </div>
 
                 <div class="form-actions">
-                    <button type="button" class="btn-save" nz-button nzType="primary" (click)="showConfirm()"
-                        [disabled]="changePWForm.invalid">
-                        Actualizar contraseña
+                    <button type="button" class="btn-save" nz-button nzType="primary"
+                        (click)="showConfirm()" [disabled]="changePWForm.invalid">
+                        {{ 'SETTINGS.SECURITY.UPDATE_BTN' | translate | async }}
                     </button>
                 </div>
             </form>

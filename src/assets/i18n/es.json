@@ -103,7 +103,7 @@
       "COPYRIGHT": "© 2026 NUMARQUE CENTER, GRUPO NUTEC®",
       "TERMS": "Términos",
       "PRIVACY": "Privacidad",
-      "FAQS": "FAQs",
+      "FAQs": "FAQs",
       "CONTACT": "Contacto",
       "FILES": "archivos"
     },
@@ -115,6 +115,152 @@
       "ES": "Español",
       "SELECT": "Idioma"
     }
+  },
+  "HOME": {
+    "HERO": {
+      "TITLE": "Encuentra el material creativo<span class=\"hero-title-accent\"> que necesitas</span>",
+      "SUBTITLE": "Busca entre miles de archivos, marcas y campañas en segundos."
+    },
+    "CATEGORIES": {
+      "ALL": "Todas las categorías",
+      "PHOTOS": "Fotos",
+      "VIDEOS": "Videos",
+      "DOCUMENTS": "Documentos",
+      "PRESENTATIONS": "Presentaciones",
+      "AUDIO": "Audio"
+    },
+    "SEARCH": {
+      "RECENT": "Búsquedas recientes",
+      "POPULAR": "Populares ahora",
+      "SEARCHING": "Buscando...",
+      "BACK_TO_EXPLORE": "Volver a explorar",
+      "RELEVANCE_LABEL": "Relevancia",
+      "DOWNLOAD": "Descargar",
+      "SHARE": "Compartir",
+      "NO_RESULTS": "Sin resultados",
+      "NO_RESULTS_SUB": "Intenta con otros términos de búsqueda o cambia el filtro de tipo.",
+      "CLEAR": "Limpiar búsqueda",
+      "RESULT_ONE":  "resultado para",
+"RESULT_MANY": "resultados para",
+      "SORT": {
+        "RELEVANCE": "Más relevante",
+        "DATE": "Más reciente",
+        "NAME": "Nombre A–Z",
+        "SIZE": "Tamaño"
+      },
+      "VIEW": {
+        "GRID": "Vista cuadrícula",
+        "LIST": "Vista lista"
+      },
+      "FILTER": {
+        "ALL": "Todos",
+        "PDF": "PDF",
+        "PNG": "PNG",
+        "MP4": "MP4",
+        "PPT": "PPT",
+        "DOC": "DOC"
+      }
+    },
+    "EXPLORE": {
+      "SECTION_CATEGORIES": "Explorar por categoría",
+      "SECTION_RECENT": "Último material subido",
+      "POPULAR_LABEL": "Populares ahora",
+      "WORKSPACES_EMPTY": {
+        "TITLE": "Tus workspaces aparecerán aquí",
+        "SUB": "Crea o únete a un workspace para organizar tu material por proyecto o equipo.",
+        "CREATE": "Crear workspace"
+      },
+      "WEEKLY_NEWS_TAG": "Novedades del mes",
+      "WEEKLY_NEWS_NO_CONTENT": "No hay novedades este mes",
+      "WEEKLY_NEWS_NO_SUB": "Revisa más tarde para nuevo material reciente"
+    },
+    "QUICK_CATEGORIES": [
+      {
+        "LABEL": "Fotos",
+        "ICON": "🖼️",
+        "VALUE": "photos"
+      },
+      {
+        "LABEL": "Videos",
+        "ICON": "🎬",
+        "VALUE": "videos"
+      },
+      {
+        "LABEL": "Documentos",
+        "ICON": "📄",
+        "VALUE": "documents"
+      },
+      {
+        "LABEL": "Presentaciones",
+        "ICON": "📊",
+        "VALUE": "presentations"
+      },
+      {
+        "LABEL": "Audio",
+        "ICON": "🎵",
+        "VALUE": "audio"
+      }
+    ],
+    "PLACEHOLDERS": [
+      "Quiero hacer un anuncio de NUPEC para Mercado Libre...",
+      "Necesito materiales de lanzamiento para NUCAN...",
+      "Busco videos institucionales de GRUPO NUTEC®...",
+      "Quiero imágenes de producto de NUFIT para redes sociales...",
+      "Necesito una presentación de ventas del sector pecuario..."
+    ]
+  },
+  "SETTINGS": {
+  "PAGE_TITLE": "Mi perfil",
+  "PAGE_SUBTITLE": "Administra tu información",
+  "STATS": {
+    "BRANDS":    "Marcas",
+    "DOWNLOADS": "Descargas",
+    "SHARED":    "Compartidos",
+    "FAVORITES": "Favoritos"
+  },
+  "PHOTO": {
+    "LABEL":      "Foto de perfil",
+    "HINT":       "PNG o JPG. Máximo 5MB · 120×120 recomendado",
+    "CHANGE":     "Cambiar foto",
+    "UPLOAD_BTN": "Cargar foto"
+  },
+  "BASIC_INFO": {
+    "TITLE":      "Información básica",
+    "FIRST_NAME": "Nombre",
+    "LAST_NAME":  "Apellido",
+    "COMPANY":    "Compañía"
+  },
+  "FORM": {
+    "REQUIRED": "Campo requerido",
+    "CANCEL":   "Cancelar",
+    "SAVE":     "Guardar cambios"
+  },
+  "BRANDS": {
+    "TITLE": "Marcas asignadas",
+    "EMPTY": "Sin marcas asignadas",
+    "INFO":  "Las marcas son asignadas por el Head Comercial. Contacta al administrador para solicitar acceso adicional."
+  },
+  "SECURITY": {
+    "TITLE":          "Seguridad",
+    "CURRENT_PW":     "Contraseña actual",
+    "NEW_PW":         "Nueva contraseña",
+    "UPDATE_BTN":     "Actualizar contraseña",
+    "CONFIRM_TITLE":  "¿Deseas cambiar tu contraseña?",
+    "CONFIRM_OK":     "Sí, cambiar",
+    "CONFIRM_CANCEL": "Cancelar"
+  },
+  "ROLES": {
+    "ADMIN":    "Administrador",
+    "HEAD":     "Head Comercial",
+    "PROVIDER": "Proveedor",
+    "USER":     "Usuario"
+  },
+  "MESSAGES": {
+    "PROFILE_UPDATED": "Perfil actualizado correctamente",
+    "PROFILE_ERROR":   "Error al actualizar el perfil",
+    "PHOTO_UPDATED":   "Foto de perfil actualizada",
+    "PHOTO_ERROR":     "Error al subir la foto",
+    "PW_UPDATED":      "Contraseña actualizada correctamente"
   }
 }
-
+}
