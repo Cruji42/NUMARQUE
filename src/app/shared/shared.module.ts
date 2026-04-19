@@ -10,6 +10,8 @@ import { ThemeConstantService } from './services/theme-constant.service';
 import { SearchPipe } from './pipes/search.pipe';
 import { NavQueryPipe } from './pipes/nav-query.pipe';
 import { NavPathPipe } from './pipes/nav-path.pipe';
+import { TranslatePipe } from './pipes/translate.pipe';
+import { TranslationService } from './services/translation.service';
 
 @NgModule({
     exports: [
@@ -19,13 +21,15 @@ import { NavPathPipe } from './pipes/nav-path.pipe';
         NzIconModule,
         SearchPipe,
         NavPathPipe,
-        NavQueryPipe
+        NavQueryPipe,
+        TranslatePipe
     ],
     imports: [
         RouterModule,
         CommonModule,
         NzIconModule,
-        NzToolTipModule
+        NzToolTipModule,
+        TranslatePipe
     ],
     declarations: [
         SearchPipe,

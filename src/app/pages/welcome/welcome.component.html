@@ -28,26 +28,16 @@
   <div class="hero-bg"></div>
   <div class="hero-grid"></div>
   <div class="hero-content">
-    <div class="badge"><span class="badge-dot"></span>Plataforma oficial de activos de marca</div>
-    <h1 class="text-white">Todo el material de<br><span class="gold">GRUPO NUTEC®</span>, en un<br><span class="blue">solo lugar.</span></h1>
-    <p class="hero-sub">
-      Accede y descarga materiales de campaña para
-      <strong>Marcas Petfood y Pecuario</strong>.
-      Organizado, siempre actualizado, listo para usar.
-    </p>
+    <div class="badge"><span class="badge-dot"></span>{{ 'WELCOME.HERO.BADGE' | translate | async }}</div>
+    <h1 class="text-white" [innerHTML]="'WELCOME.HERO.TITLE' | translate | async"></h1>
+    <p class="hero-sub" [innerHTML]="'WELCOME.HERO.SUBTITLE' | translate | async"></p>
     <div class="search-wrap" (click)="$event.stopPropagation()">
       <input class="search-box" placeholder="¿Qué buscas hoy? Prueba Banner NUPEC o Kit BTL..." (focus)="goToLogin('busqueda')" />
       <span class="search-icon">🔍</span>
-      <button class="search-btn" (click)="goToLogin('busqueda')">→</button>
+      <button class="search-btn" (click)="goToLogin('busqueda')">{{ 'WELCOME.HERO.SEARCH_BUTTON' | translate | async }}</button>
     </div>
     <div class="chips">
-      <div class="chip" (click)="goToLogin('busqueda')">📺 ATL</div>
-      <div class="chip" (click)="goToLogin('busqueda')">📋 BTL</div>
-      <div class="chip" (click)="goToLogin('busqueda')">💻 Digital</div>
-      <div class="chip" (click)="goToLogin('busqueda')">📊 Comunicación técnica</div>
-      <div class="chip" (click)="goToLogin('busqueda')">🎪 Eventos</div>
-      <div class="chip" (click)="goToLogin('busqueda')">✨ Nuevo esta semana</div>
-      <div class="chip" (click)="goToLogin('busqueda')">🔥 Tendencias</div>
+      <div class="chip" (click)="goToLogin('busqueda')" *ngFor="let chip of chips$ | async">{{ chip }}</div>
     </div>
   </div>
 </section>
@@ -56,19 +46,19 @@
 <div class="stats" *ngIf="stats">
   <div class="stat">
     <div class="stat-n">{{ formatNumber(stats.materials) }}</div>
-    <div class="stat-l">Materiales disponibles</div>
+  <div class="stat-l">{{ 'WELCOME.STATS.MATERIALS' | translate | async }}</div>
   </div>
   <div class="stat">
     <div class="stat-n">{{ stats.brands }}</div>
-    <div class="stat-l">Marcas en la plataforma</div>
+    <div class="stat-l">{{ 'WELCOME.STATS.BRANDS' | translate | async }}</div>
   </div>
   <div class="stat">
     <div class="stat-n">{{ formatNumber(stats.downloads) }}</div>
-    <div class="stat-l">Descargas totales</div>
+    <div class="stat-l">{{ 'WELCOME.STATS.DOWNLOADS' | translate | async }}</div>
   </div>
   <div class="stat">
     <div class="stat-n">{{ stats.users }}</div>
-    <div class="stat-l">Usuarios activos</div>
+    <div class="stat-l">{{ 'WELCOME.STATS.USERS' | translate | async }}</div>
   </div>
 </div>
 <div class="stats-placeholder" *ngIf="loadingStats">
@@ -81,41 +71,39 @@
 
 <!-- BRANDS -->
 <section class="brands">
-  <div class="sec-label">Marcas disponibles</div>
-  <h2 class="sec-title text-white">Explora marcas Petfood</h2>
-  <p class="sec-sub">Cada marca tiene su propio espacio con materiales organizados por categoría y campaña.</p>
+  <div class="sec-label">{{ 'WELCOME.BRANDS.LABEL' | translate | async }}</div>
+  <h2 class="sec-title text-white">{{ 'WELCOME.BRANDS.TITLE' | translate | async }}</h2>
+  <p class="sec-sub" [innerHTML]="'WELCOME.BRANDS.SUBTITLE' | translate | async"></p>
   <div class="brands-grid">
-    <div class="brand-card" (click)="goToLogin('/pages/category-view?brandId=' + brand.id)" *ngFor="let brand of brands">
+    <div class="brand-card" (click)="goToLogin('/pages/category-view?brandId=' + brand.id)" *ngFor="let brand of staticBrands">
       <span class="brand-icon"><img src="{{brand.icon}}" alt="" class="logo-icon"></span>
-      <div class="brand-name">{{ brand.name }}</div>
-      <div class="brand-desc">{{ brand.desc }}</div>
-      <div class="brand-count">📁 {{ brand.count }} archivos</div>
+      <div class="brand-name">{{ brand.nameKey | translate | async }}</div>
+      <div class="brand-desc">{{ brand.descKey | translate | async }}</div>
+      <div class="brand-count">{{ 'WELCOME.FOOTER.FILES' | translate | async }} {{ brand.count }}</div>
     </div>
   </div>
 </section>
 
 <!-- SPECIES -->
 <section class="brands">
-  <div class="sec-label">Material Pecuario</div>
-  <h2 class="sec-title text-white">Busca por especie</h2>
-  <p class="sec-sub">Cada especie tiene sus marcas con materiales técnicos y de comunicación.</p>
+  <div class="sec-label">{{ 'WELCOME.SPECIES.LABEL' | translate | async }}</div>
   <div class="species-grid">
-    <div class="brand-card" (click)="goToLogin('/pages/category-view?brandId=' + brand.id)" *ngFor="let brand of species">
+    <div class="brand-card" (click)="goToLogin('/pages/category-view?brandId=' + brand.id)" *ngFor="let brand of staticSpecies">
       <span class="brand-icon"><img src="{{brand.icon}}" alt="" class="logo-icon icon-white"></span>
-      <div class="brand-name">{{ brand.name }}</div>
-      <div class="brand-desc">{{ brand.desc }}</div>
-      <!-- <div class="brand-count">📁 {{ brand.count }} archivos</div> -->
+      <div class="brand-name">{{ brand.nameKey | translate | async }}</div>
+      <div class="brand-desc">{{ brand.descKey | translate | async }}</div>
+      <!-- <div class="brand-count">{{ 'WELCOME.FOOTER.FILES' | translate | async }} {{ brand.count }}</div> -->
     </div>
   </div>
 </section>
 
 <!-- HOW IT WORKS -->
 <section class="how">
-  <div class="sec-label">¿Cómo funciona?</div>
-  <h2 class="sec-title text-white">Simple. Rápido. Siempre disponible.</h2>
-  <p class="sec-sub">En tres pasos tienes el material que necesitas.</p>
+  <div class="sec-label">{{ 'WELCOME.HOW_IT_WORKS.LABEL' | translate | async }}</div>
+  <h2 class="sec-title text-white">{{ 'WELCOME.HOW_IT_WORKS.TITLE' | translate | async }}</h2>
+  <p class="sec-sub">{{ 'WELCOME.HOW_IT_WORKS.SUBTITLE' | translate | async }}</p>
   <div class="steps">
-    <div class="step" *ngFor="let step of steps" (click)="goToLogin('busqueda')">
+    <div class="step" *ngFor="let step of steps$ | async" (click)="goToLogin('busqueda')">
       <div class="step-num">{{ step.num }}</div>
       <span class="step-ico">{{ step.icon }}</span>
       <div class="step-title">{{ step.title }}</div>
@@ -126,21 +114,13 @@
 
 <!-- CTA -->
 <section class="cta">
-  <h2 class="text-white">¿Listo para encontrar<br>lo que necesitas?</h2>
-  <p>Todo el material de GRUPO NUTEC® está aquí, organizado y listo para tu próxima campaña.</p>
+<h2 class="text-white" [innerHTML]="'WELCOME.CTA.TITLE' | translate | async"></h2>
+  <p>{{ 'WELCOME.CTA.SUBTITLE' | translate | async }}</p>
   <div class="cta-btns">
-    <button class="btn-p" (click)="goToLogin('busqueda')">Explorar materiales →</button>
-    <button class="btn-g" (click)="goToLogin('busqueda')">Ver novedades</button>
+    <button class="btn-p" (click)="goToLogin('busqueda')">{{ 'WELCOME.CTA.PRIMARY' | translate | async }}</button>
+    <button class="btn-g" (click)="goToLogin('busqueda')">{{ 'WELCOME.CTA.SECONDARY' | translate | async }}</button>
   </div>
 </section>
 
 <!-- FOOTER -->
-<footer>
-  <div>© 2026 NUMARQUE CENTER, GRUPO NUTEC®</div>
-  <div>
-    <a (click)="goToLogin('busqueda')">Términos</a>
-    <a (click)="goToLogin('busqueda')">Privacidad</a>
-    <a (click)="goToLogin('busqueda')">FAQs</a>
-    <a (click)="goToLogin('busqueda')">Contacto</a>
-  </div>
-</footer>
+

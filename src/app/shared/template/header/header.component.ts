@@ -3,6 +3,7 @@ import { ThemeConstantService } from '../../services/theme-constant.service';
 import { AuthService } from 'src/app/core/service/auth-service';
 import { Router } from '@angular/router';
 import { UsersService } from 'src/app/core/service/users.service';
+import { TranslationService } from 'src/app/shared/services/translation.service';
 
 @Component({
     selector: 'app-header',
@@ -11,7 +12,8 @@ import { UsersService } from 'src/app/core/service/users.service';
 })
 
 export class HeaderComponent {
-
+    currentLang$ = this.translationService.currentLang$;
+    
     searchVisible: boolean = false;
     quickViewVisible: boolean = false;
     isFolded: boolean = false;
@@ -25,7 +27,21 @@ export class HeaderComponent {
     notificationsPage: number = 1;
     notificationsPerPage: number = 20;
 
-    constructor(private service: UsersService, private themeService: ThemeConstantService, private authService: AuthService, private router: Router) { }
+    constructor(
+        private service: UsersService, 
+        private themeService: ThemeConstantService, 
+        private authService: AuthService, 
+        private router: Router,
+        private translationService: TranslationService
+    ) { }
+
+    switchToEnglish(): void {
+        this.translationService.switchLanguage('en');
+    }
+
+    switchToSpanish(): void {
+        this.translationService.switchLanguage('es');
+    }
 
     ngOnInit(): void {
         this.themeService.isMenuFoldedChanges.subscribe(isFolded => this.isFolded = isFolded);
