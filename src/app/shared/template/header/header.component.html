@@ -100,24 +100,6 @@
                                 <i class="font-size-10" nz-icon nzType="right" theme="outline"></i>
                             </a>
                         </li>
-                        <!-- <li nz-menu-item>
-                            <a class="p-v-5 d-flex align-items-center justify-content-between">
-                                <div>
-                                    <i class="opacity-04 font-size-16" nz-icon nzType="lock" theme="outline"></i>
-                                    <span class="m-l-10">Account Setting</span>
-                                </div>
-                                <i class="font-size-10" nz-icon nzType="right" theme="outline"></i>
-                            </a>
-                        </li> -->
-                        <!-- <li nz-menu-item>
-                            <a class="p-v-5 d-flex align-items-center justify-content-between">
-                                <div>
-                                    <i class="opacity-04 font-size-16" nz-icon nzType="project" theme="outline"></i>
-                                    <span class="m-l-10">Projects</span>
-                                </div>
-                                <i class="font-size-10" nz-icon nzType="right" theme="outline"></i>
-                            </a>
-                        </li> -->
                         <li nz-menu-item (click)="logOut()">
                             <a class="p-v-5 d-flex align-items-center justify-content-between" >
                                 <div>
@@ -129,6 +111,22 @@
                         </li>
                     </ul>
                 </nz-dropdown-menu >
+            </li>
+            <li>
+                <a nz-dropdown nzTrigger="click" [nzDropdownMenu]="langMenu" [nzPlacement]="'bottomRight'" class="p-h-10 pointer">
+                    <i nz-icon nzType="global" theme="outline"></i>
+                    <span class="m-l-5">{{ currentLang$ | async }}</span>
+                </a>
+                <nz-dropdown-menu #langMenu="nzDropdownMenu">
+                    <ul nz-menu>
+                        <li nz-menu-item (click)="switchToEnglish()">
+                            🇺🇸 EN
+                        </li>
+                        <li nz-menu-item (click)="switchToSpanish()">
+                            🇪🇸 ES
+                        </li>
+                    </ul>
+                </nz-dropdown-menu>
             </li>
             <li>
                 <!-- <a (click)="quickViewToggle()">

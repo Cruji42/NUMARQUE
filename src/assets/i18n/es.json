@@ -1,0 +1,120 @@
+{
+  "WELCOME": {
+    "HERO": {
+      "BADGE": "Plataforma oficial de activos de marca",
+      "TITLE": "Todo el material de<br><span class=\"gold\">GRUPO NUTEC®</span>, en un<br><span class=\"blue\">solo lugar.</span>",
+      "SUBTITLE": "Accede y descarga materiales de campaña para <strong>Marcas Petfood y Pecuario</strong>. Organizado, siempre actualizado, listo para usar.",
+      "SEARCH_PLACEHOLDER": "¿Qué buscas hoy? Prueba Banner NUPEC o Kit BTL...",
+      "SEARCH_BUTTON": "→"
+    },
+    "CHIPS": [
+      "📺 ATL",
+      "📋 BTL",
+      "💻 Digital",
+      "📊 Comunicación técnica",
+      "🎪 Eventos",
+      "✨ Nuevo esta semana",
+      "🔥 Tendencias"
+    ],
+    "STATS": {
+      "MATERIALS": "Materiales disponibles",
+      "BRANDS": "Marcas en la plataforma",
+      "DOWNLOADS": "Descargas totales",
+      "USERS": "Usuarios activos"
+    },
+    "BRANDS": {
+      "LABEL": "Marcas disponibles",
+      "TITLE": "Explora marcas Petfood",
+      "SUBTITLE": "Cada marca tiene su propio espacio con materiales organizados por categoría y campaña.",
+      "NAME": {
+        "NUPEC": "NUPEC",
+        "NUCAN": "NUCAN",
+        "NUCAT": "NUCAT",
+        "NUFIT": "NUFIT",
+        "OPTIMO": "ÓPTIMO",
+        "OPTIMO_FELINO": "ÓPTIMO FELINO"
+      },
+      "DESC": {
+        "NUPEC": "Alimento premium para mascotas de todas las etapas",
+        "NUCAN": "Nutrición canina especializada y balanceada",
+        "NUCAT": "Nutrición felina adaptada a cada etapa de vida",
+        "NUFIT": "Nutrición de alto rendimiento para perros activos",
+        "OPTIMO": "Alimento balanceado de calidad para tu mascota",
+        "OPTIMO_FELINO": "Fórmula especializada en la nutrición del gato"
+      }
+    },
+    "SPECIES": {
+      "LABEL": "Material Pecuario",
+      "TITLE": "Busca por especie",
+      "SUBTITLE": "Cada especie tiene sus marcas con materiales técnicos y de comunicación.",
+      "NAME": {
+        "AVES": "AVES",
+        "CAMARONES": "CAMARONES",
+        "CERDOS": "CERDOS",
+        "EQUINOS": "EQUINOS",
+        "GALLOS": "GALLOS",
+        "PECES": "PECES",
+        "RUMIANTES": "RUMIANTES",
+        "FEED_SOLUTIONS": "FEED SOLUTIONS"
+      },
+      "DESC": {
+        "AVES": "Nutrición especializada para aves de producción",
+        "CAMARONES": "Soluciones nutricionales para acuicultura de camarón",
+        "CERDOS": "Alimentación balanceada para porcicultura",
+        "EQUINOS": "Nutrición equina de alto rendimiento",
+        "GALLOS": "Fórmulas especializadas para gallos de combate y exhibición",
+        "PECES": "Nutrición acuícola para el crecimiento óptimo de peces",
+        "RUMIANTES": "Soluciones para ganadería bovina, ovina y caprina",
+        "FEED_SOLUTIONS": "Soluciones integrales de nutrición animal a medida"
+      }
+    },
+    "HOW_IT_WORKS": {
+      "LABEL": "¿Cómo funciona?",
+      "TITLE": "Simple. Rápido. Siempre disponible.",
+      "SUBTITLE": "En tres pasos tienes el material que necesitas."
+    },
+    "STEPS": [
+      {
+        "num": "01",
+        "icon": "🔍",
+        "title": "Busca o explora",
+        "desc": "Usa el buscador o navega por marca y categoría. Filtra por tipo de material, fecha o campaña."
+      },
+      {
+        "num": "02",
+        "icon": "👁",
+        "title": "Previsualiza",
+        "desc": "Ve un preview del archivo antes de descargar: imágenes, PDFs, videos y presentaciones."
+      },
+      {
+        "num": "03",
+        "icon": "⬇",
+        "title": "Descarga",
+        "desc": "Descarga en el formato original"
+      }
+    ],
+    "CTA": {
+      "TITLE": "¿Listo para encontrar<br>lo que necesitas?",
+      "SUBTITLE": "Todo el material de GRUPO NUTEC® está aquí, organizado y listo para tu próxima campaña.",
+      "PRIMARY": "Explorar materiales →",
+      "SECONDARY": "Ver novedades"
+    },
+    "FOOTER": {
+      "COPYRIGHT": "© 2026 NUMARQUE CENTER, GRUPO NUTEC®",
+      "TERMS": "Términos",
+      "PRIVACY": "Privacidad",
+      "FAQS": "FAQs",
+      "CONTACT": "Contacto",
+      "FILES": "archivos"
+    },
+    "BRAND_COUNT": "📁 {{count}} archivos"
+  },
+  "HEADER": {
+    "LANGUAGE": {
+      "EN": "English",
+      "ES": "Español",
+      "SELECT": "Idioma"
+    }
+  }
+}
+
