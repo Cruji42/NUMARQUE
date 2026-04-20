@@ -135,18 +135,19 @@
     <!-- ============================================================
          FAVORITOS — ítem fijo al final del menú
          ============================================================ -->
-    <li class="ant-menu-item fav-menu-item"
-        [class.ant-menu-item-selected]="isFavoritesActive()"
-        (click)="navigateToFavorites()">
-        <a class="fav-menu-link">
-            <i nz-icon
-               [nzType]="'star'"
-               [nzTheme]="isFavoritesActive() ? 'fill' : 'outline'"
-               [style.color]="isFavoritesActive() ? '#F59E0B' : ''">
-            </i>
-            <span>Favoritos</span>
-        </a>
-    </li>
+<!-- Bloque FAVORITOS al final -->
+<li class="ant-menu-item fav-menu-item"
+    [class.ant-menu-item-selected]="isFavoritesActive()"
+    (click)="navigateToFavorites()">
+    <a class="fav-menu-link">
+        <i nz-icon
+           [nzType]="'star'"
+           [nzTheme]="isFavoritesActive() ? 'fill' : 'outline'"
+           [style.color]="isFavoritesActive() ? '#F59E0B' : ''">
+        </i>
+        <span>{{ 'MENU.SIDENAV.FAVORITES' | translate | async }}</span>
+    </a>
+</li>
 
     </ul>
 </div>

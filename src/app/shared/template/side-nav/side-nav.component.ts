@@ -3,6 +3,7 @@ import { ThemeConstantService } from '../../services/theme-constant.service';
 import { UsersService } from 'src/app/core/service/users.service';
 import { SideNavMenuService } from '../../../core/service/sidenav.service'; // ajusta la ruta según tu proyecto
 import { SideNavInterface } from '../../interfaces/side-nav.type';
+import { TranslationService } from '../../services/translation.service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -22,8 +23,17 @@ export class SideNavComponent implements OnInit {
         private themeService: ThemeConstantService,
         public usersService: UsersService,
         private menuService: SideNavMenuService,
-        private router: Router
+        private router: Router,
+        public translationService: TranslationService
     ) { }
+
+    private translateStaticRoutes(routes: SideNavInterface[]): SideNavInterface[] {
+    return routes.map(item => ({
+        ...item,
+        title: item.title,  // se resuelve abajo
+        submenu: this.translateStaticRoutes(item.submenu)
+    }));
+}
 
     ngOnInit(): void {
         this.themeService.isMenuFoldedChanges.subscribe(isFolded => this.isFolded = isFolded);
@@ -34,16 +44,35 @@ export class SideNavComponent implements OnInit {
         this.loadMenu();
     }
 
-    loadMenu(): void {
-        this.menuService.getMenuItems().subscribe({
-            next: (items) => {
-                this.menuItems = items;
-            },
-            error: (error) => {
-                console.error('Error loading menu:', error);
-            }
-        });
-    }
+loadMenu(): void {
+    this.menuService.getMenuItems().subscribe({
+        next: (items) => {
+            // Traducir solo el primer ítem (General) que tiene claves i18n
+            const [general, ...dynamic] = items;
+            const translatedGeneral = {
+                ...general,
+                submenu: general.submenu.map(sub => ({
+                    ...sub,
+                    title: sub.title  // se resuelve con subscribe abajo
+                }))
+            };
+
+            // Resolver cada clave con subscribe
+            this.translationService.translate(general.title!).subscribe(t => {
+                translatedGeneral.title = t;
+            });
+
+            translatedGeneral.submenu.forEach((sub, i) => {
+                this.translationService.translate(sub.title!).subscribe(t => {
+                    translatedGeneral.submenu[i].title = t;
+                });
+            });
+
+            this.menuItems = [translatedGeneral, ...dynamic];
+        },
+        error: (error) => console.error('Error loading menu:', error)
+    });
+}
 
     closeMobileMenu(): void {
         if (window.innerWidth < 992) {

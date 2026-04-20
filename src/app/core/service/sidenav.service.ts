@@ -214,7 +214,8 @@ export class SideNavMenuService {
     getMenuItems(): Observable<SideNavInterface[]> {
         return this.menu$.pipe(
             map((response: ApiMenuResponse) => {
-                const generalSection  = ROUTES.find(r => r.title === 'General')!;
+                //const generalSection  = ROUTES.find(r => r.title === 'General')!;
+                const generalSection = ROUTES.find(r => r.title === 'MENU.SIDENAV.GENERAL')!;
                 const dynamicSections = response.data.map(mapDepartmentToNavItem);
                 return [generalSection, ...dynamicSections];
             })

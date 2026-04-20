@@ -8,12 +8,9 @@ import { SideNavInterface } from '../../interfaces/side-nav.type';
  * respuesta del API mediante `SideNavMenuService.getMenuItems()`.
  */
 export const ROUTES: SideNavInterface[] = [
-    // ----------------------------------------------------------------
-    // General — sección estática, siempre visible
-    // ----------------------------------------------------------------
     {
         path: '',
-        title: 'General',
+        title: 'MENU.SIDENAV.GENERAL',   // ← antes: 'General'
         iconType: 'nzIcon',
         iconTheme: 'outline',
         icon: 'home',
@@ -21,7 +18,7 @@ export const ROUTES: SideNavInterface[] = [
         submenu: [
             {
                 path: '/welcome',
-                title: 'Inicio',
+                title: 'MENU.SIDENAV.HOME',       // ← antes: 'Inicio'
                 iconType: 'nzIcon',
                 icon: 'home',
                 iconTheme: '',
@@ -30,7 +27,7 @@ export const ROUTES: SideNavInterface[] = [
             },
             {
                 path: '/search',
-                title: 'Búsqueda',
+                title: 'MENU.SIDENAV.SEARCH',     // ← antes: 'Búsqueda'
                 iconType: 'nzIcon',
                 icon: 'search',
                 iconTheme: '',
@@ -39,7 +36,7 @@ export const ROUTES: SideNavInterface[] = [
             },
             {
                 path: '/dashboard',
-                title: 'Dashboard',
+                title: 'MENU.SIDENAV.DASHBOARD',  // ← antes: 'Dashboard'
                 iconType: 'nzIcon',
                 icon: 'dashboard',
                 iconTheme: '',
@@ -48,7 +45,7 @@ export const ROUTES: SideNavInterface[] = [
             },
             {
                 path: '/users',
-                title: 'Usuarios',
+                title: 'MENU.SIDENAV.USERS',      // ← antes: 'Usuarios'
                 iconType: 'nzIcon',
                 icon: 'ordered-list',
                 iconTheme: 'outline',
@@ -57,7 +54,7 @@ export const ROUTES: SideNavInterface[] = [
             },
             {
                 path: '/pages/setting',
-                title: 'Perfil',
+                title: 'MENU.SIDENAV.PROFILE',    // ← antes: 'Perfil'
                 iconType: 'nzIcon',
                 icon: 'user',
                 iconTheme: 'outline',
@@ -66,7 +63,7 @@ export const ROUTES: SideNavInterface[] = [
             },
             {
                 path: '/pages/category-view?favorites=true',
-                title: 'Favoritos',
+                title: 'MENU.SIDENAV.FAVORITES',  // ← antes: 'Favoritos'
                 iconType: 'nzIcon',
                 icon: 'star',
                 iconTheme: 'outline',

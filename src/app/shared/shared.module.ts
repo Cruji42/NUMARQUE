@@ -17,7 +17,6 @@ import { TranslationService } from './services/translation.service';
     exports: [
         CommonModule,
         FormsModule,
-
         NzIconModule,
         SearchPipe,
         NavPathPipe,
