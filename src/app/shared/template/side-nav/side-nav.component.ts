@@ -165,6 +165,20 @@ const UTILITY_PATHS = ['/welcome', '/search', '/users', '/pages/setting'];
         return null;
     }
 
+    // ----------------------------------------------------------------
+    // Favoritos
+    // ----------------------------------------------------------------
+    isFavoritesActive(): boolean {
+        return this.router.url.includes('favorites=true');
+    }
+
+    navigateToFavorites(): void {
+        this.router.navigate(['/pages/category-view'], {
+            queryParams: { favorites: 'true' }
+        });
+        this.closeMobileMenu();
+    }
+
     isCategoryViewLink(path?: string): boolean {
         return !!path && path.includes('/pages/category-view');
     }

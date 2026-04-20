@@ -95,4 +95,18 @@ export class EndPointFilesService {
             { headers: this.configHeaders() }
         );
     }
+
+    getFavorites(): Observable<any> {
+        return this.http.get(`${this.apiUrl}/favorites`, { headers: this.configHeaders() });
+    }
+
+    toggleFavorite(contentId: number): Observable<any> {
+        return this.http.post(`${this.apiUrl}/favorites/${contentId}`, {}, { headers: this.configHeaders() });
+    }
+
+
+    checkFavorite(contentId: number): Observable<any> {
+        return this.http.get(`${this.apiUrl}/favorites/${contentId}/check`, { headers: this.configHeaders() });
+    }
+
 }

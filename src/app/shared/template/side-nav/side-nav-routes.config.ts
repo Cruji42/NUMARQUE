@@ -63,8 +63,16 @@ export const ROUTES: SideNavInterface[] = [
                 iconTheme: 'outline',
                 canAccess: [1, 2, 3],
                 submenu: []
+            },
+            {
+                path: '/pages/category-view?favorites=true',
+                title: 'Favoritos',
+                iconType: 'nzIcon',
+                icon: 'star',
+                iconTheme: 'outline',
+                canAccess: [1, 2, 3],
+                submenu: []
             }
         ]
     }
 ];
-

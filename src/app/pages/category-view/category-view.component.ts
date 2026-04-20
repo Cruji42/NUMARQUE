@@ -5,7 +5,7 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 import { combineLatest, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { EndPointFilesService } from '../../core/apis/end-point-files.service';
-import { SideNavMenuService, ApiDepartment } from '../../core/service/sidenav.service'; // ajusta la ruta según tu proyecto
+import { SideNavMenuService, ApiDepartment } from '../../core/service/sidenav.service';
 import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { FilesService } from 'src/app/core/service/files.service';
@@ -35,6 +35,8 @@ export interface FolderItem {
     favorite: boolean;
     parentId: number | null;
     brand?: string;
+    entityId?: number | null;
+    subcategoryId?: number | null;
 }
 
 export interface FileItem {
@@ -57,11 +59,10 @@ export interface FileItem {
 export interface BreadcrumbItem {
     label: string;
     folderId: number | null;
-    // Navigation metadata — populated when building breadcrumbs
     crumbType?: 'department' | 'entity' | 'subcategory' | 'folder';
-    entityId?: number | null;        // for entity crumbs
-    subcategoryId?: number | null;   // for subcategory crumbs
-    departmentId?: number | null;    // for department crumbs
+    entityId?: number | null;
+    subcategoryId?: number | null;
+    departmentId?: number | null;
 }
 
 interface DepartmentEntityItem {
@@ -80,7 +81,6 @@ interface SubcategoryItem {
     created_at?: string;
 }
 
-// Respuesta real del API: { status, message, data: SubcategoryItem[] }
 interface SubcategoriesApiResponse {
     status: number;
     message: string;
@@ -120,7 +120,8 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
 
     private destroy$ = new Subject<void>();
 
-    viewMode: 'categories' | 'files' = 'categories';
+    // viewMode ahora incluye 'favorites'
+    viewMode: 'categories' | 'files' | 'favorites' = 'categories';
     fileViewMode: 'grid' | 'list' = 'grid';
 
     activeBrand = '';
@@ -131,16 +132,13 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
     activeSubcategoryId: number | null = null;
     departmentId: number | null = null;
     pendingSelectContentId: number | null = null;
+    pendingOpenFolderId: number | null = null;
 
-    // Datos del usuario autenticado (rol + marcas asignadas)
     userData: any = null;
-    private readonly ROLE_ADMIN          = 1;
+    private readonly ROLE_ADMIN = 1;
     private readonly ROLE_HEAD_COMERCIAL = 2;
-    private readonly ROLE_PROVEEDOR      = 3;
+    private readonly ROLE_PROVEEDOR = 3;
 
-    // Trail de nombres de entity para construir el path de upload
-    // Ej: PetFood->NUCAN->Digital  =>  ['NUCAN']
-    // Ej: Pecuario->Aves->NUPIO->Digital  =>  ['Aves', 'NUPIO']
     activeEntityTrail: string[] = [];
 
     categoryCards: CategoryCard[] = [];
@@ -156,7 +154,6 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
     uploadMaterialTagInput = '';
     currentBreadcrumbPath = '';
 
-    // Departamentos cargados desde el API del menú (se usan para resolver brand → department_id)
     private menuDepartments: ApiDepartment[] = [];
 
     // File manager state
@@ -172,6 +169,14 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
     private folderTreeRoot: FolderTreeNode | null = null;
     private currentTreePath: string[] = [];
 
+    // ── Favorites state ──────────────────────────────────────────────
+    favoritesLoading = false;
+    favoritesSearchQuery = '';
+    allFavFolders: FolderItem[] = [];
+    allFavFiles: FileItem[] = [];
+    filteredFavFolders: FolderItem[] = [];
+    filteredFavFiles: FileItem[] = [];
+
     uploadForm!: FormGroup;
     file!: File;
     selectedContextItem: FileItem | FolderItem | null = null;
@@ -181,8 +186,8 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
     previewModalUrl: SafeResourceUrl | null = null;
     previewModalVideoUrl: SafeUrl | null = null;
     previewModalType: 'pdf' | 'video' | 'image' | null = null;
-previewModalImageUrl: SafeUrl | null = null;
-  isUploading = false;
+    previewModalImageUrl: SafeUrl | null = null;
+    isUploading = false;
 
     @ViewChild('tplContent', { static: true }) tplContent!: TemplateRef<any>;
     @ViewChild('tplFooter', { static: true }) tplFooter!: TemplateRef<any>;
@@ -206,8 +211,6 @@ previewModalImageUrl: SafeUrl | null = null;
     ) { }
 
     ngOnInit(): void {
-        // Incluir getUser() en el combineLatest garantiza que userData
-        // esté disponible junto con los params antes de cualquier navegación.
         combineLatest([
             this.sideNavMenuService.getDepartments(),
             this.route.queryParamMap,
@@ -219,21 +222,27 @@ previewModalImageUrl: SafeUrl | null = null;
                     this.userData = user;
                     this.menuDepartments = departments;
                     this.activeBrandId = this.parseNumberParam(params.get('brandId'));
-                    // this.activeSectionId = this.parseNumberParam(params.get('sectionId'));
                     this.departmentId = this.parseNumberParam(params.get('departmentId'));
                     this.activeSubcategoryId = this.parseNumberParam(params.get('subcategoryId'));
                     this.activeBrand = params.get('brand') || '';
-                    // this.activeSection     = params.get('section')     || '';
                     this.activeSubcategory = params.get('subcategory') || '';
                     const contentId = this.parseNumberParam(params.get('contentId'));
-                    // const contentId = this.parseNumberParam(params.get('contentId'));
                     if (contentId) {
-                        this.pendingSelectContentId = contentId; // guardamos para usarlo después de cargar
+                        this.pendingSelectContentId = contentId;
                     }
-                    // Reset trail en cada navegación; se reconstruye en enterCategoryMode / enterFileManager
+
+                    const folderId = this.parseNumberParam(params.get('folderId'));
+                    if (folderId) {
+                        this.pendingOpenFolderId = folderId;
+                    }
                     this.activeEntityTrail = [];
 
-                    // Bloquear acceso si el usuario no tiene permiso sobre esta marca
+                    // ── Activar modo favoritos desde query param ─────────────
+                    if (params.get('favorites') === 'true') {
+                        this.enterFavoritesMode();
+                        return;
+                    }
+
                     if (!this.canAccessBrand(this.activeBrandId)) {
                         this.message.warning('No tienes acceso a esta marca.');
                         this.router.navigate(['/welcome']);
@@ -266,26 +275,19 @@ previewModalImageUrl: SafeUrl | null = null;
                 }
             });
 
-
-
         this.uploadForm = this.fb.group({
-            type: ['file'], // valor por defecto
+            type: ['file'],
             title: ['', Validators.required],
-            description: ['',],
-            tags: [[],]
+            description: [''],
+            tags: [[]]
         });
     }
 
     // ----------------------------------------------------------------
     // Control de acceso por rol y marcas
     // ----------------------------------------------------------------
-    /**
-     * Verifica si el usuario tiene acceso al brandId indicado.
-     * - Admin (1) y Head Comercial (2): acceso total.
-     * - Proveedor (3): solo sus marcas asignadas (por id o por nombre).
-     */
     canAccessBrand(brandId: number | null): boolean {
-        if (!this.userData || !brandId) return true; // si aún no cargó, no bloquear
+        if (!this.userData || !brandId) return true;
 
         const roleId: number = this.userData.role_id;
         if (roleId === this.ROLE_ADMIN || roleId === this.ROLE_HEAD_COMERCIAL) return true;
@@ -303,22 +305,202 @@ previewModalImageUrl: SafeUrl | null = null;
         this.destroy$.complete();
     }
 
-    // ----------------------------------------------------------------
-    // Mode switching
-    // ----------------------------------------------------------------
+    // ================================================================
+    // FAVORITES MODE
+    // ================================================================
+
+    /**
+     * Activa la vista de favoritos. Se puede llamar desde el sidenav
+     * navegando a la misma ruta con ?view=favorites, o directamente.
+     */
+    enterFavoritesMode(): void {
+        this.viewMode = 'favorites';
+        this.selectedFile = null;
+        this.favoritesSearchQuery = '';
+        this.breadcrumbs = [{ label: '⭐ Favoritos', folderId: null }];
+        this.loadFavorites();
+    }
+
+    private loadFavorites(): void {
+        this.favoritesLoading = true;
+        this.allFavFolders = [];
+        this.allFavFiles = [];
+        this.filteredFavFolders = [];
+        this.filteredFavFiles = [];
+
+        this.endPointFilesService.getFavorites().subscribe({
+            next: (resp: any) => {
+                const items: any[] = Array.isArray(resp?.data)
+                    ? resp.data
+                    : Array.isArray(resp?.items)
+                        ? resp.items
+                        : Array.isArray(resp)
+                            ? resp
+                            : [];
+
+                // Separar carpetas de archivos por file_type === 'folder'
+                this.allFavFolders = items
+                    .filter((item: any) => (item?.file_type || '').toLowerCase() === 'folder')
+                    .map((item: any): FolderItem => ({
+                        id: Number(item.id),
+                        name: (item.title || item.name || 'Carpeta').toString(),
+                        count: 0,
+                        favorite: true,
+                        parentId: item.folder_id ?? null,
+                        entityId: item.entity_id ?? null,      // ← agrega
+                        subcategoryId: item.subcategory_id ?? null, // ← agrega
+                    }));
+
+                this.allFavFiles = items
+                    .filter((item: any) => (item?.file_type || '').toLowerCase() !== 'folder')
+                    .map((item: any) => this.toFavFileItem(item));
+
+                this.filteredFavFolders = [...this.allFavFolders];
+                this.filteredFavFiles = [...this.allFavFiles];
+
+                this.loadImagePreviews(this.filteredFavFiles);
+                this.favoritesLoading = false;
+            },
+            error: () => {
+                this.message.warning('No se pudieron cargar los favoritos.');
+                this.favoritesLoading = false;
+            }
+        });
+    }
+    private toFavFileItem(item: any): FileItem {
+        const rawType = (
+            item?.file_type || item?.extension || item?.type ||
+            item?.mime_type || item?.mimetype || ''
+        ).toString().trim();
+
+        const type = rawType.includes('/')
+            ? rawType.split('/').pop()!.toLowerCase()
+            : rawType.replace('.', '').toLowerCase() || 'file';
+
+        const size = item?.file_size_bytes
+            ? (item.file_size_bytes / (1024 * 1024)).toFixed(2) + ' MB'
+            : item?.file_size
+                ? item.file_size.toString()
+                : '—';
+
+        // Nombre: intenta todos los campos comunes
+        const name = (
+            item?.title || item?.name || item?.file_name ||
+            item?.filename || item?.hidden_file || 'Archivo'
+        ).toString().trim();
+
+        // Marca: puede venir del item o del contexto activo
+        const brand = (
+            item?.brand || item?.brand_name ||
+            item?.entity?.name || item?.entity_name ||
+            this.getBrandDisplayName() || this.activeBrand || 'N/A'
+        ).toString();
+
+        // Categoría
+        const category = (
+            item?.category || item?.subcategory ||
+            item?.subcategory_name || this.activeSubcategory || '—'
+        ).toString();
+
+        return {
+            id: Number(item?.id) || Math.floor(Math.random() * 1e9),
+            name,
+            description: (item?.description || '').toString(),
+            type,
+            size,
+            uploaded_at: (item?.uploaded_at || item?.created_at || new Date().toISOString()).toString(),
+            uploaded_by: (item?.uploaded_by || item?.user_name || item?.owner || 'N/A').toString(),
+            brand,
+            category,
+            downloads: Number(item?.downloads || item?.download_count || 0),
+            favorite: true,
+            folderId: item?.folder_id ?? null,
+            url: (item?.url || item?.file_url || item?.download_url || item?.preview_url || '').toString() || undefined,
+            s3Key: (item?.s3_key || item?.key || '').toString() || undefined,
+        };
+    }
+
+    applyFavoritesSearch(): void {
+        const q = this.favoritesSearchQuery.trim().toLowerCase();
+        if (!q) {
+            this.filteredFavFolders = [...this.allFavFolders];
+            this.filteredFavFiles = [...this.allFavFiles];
+            return;
+        }
+        this.filteredFavFolders = this.allFavFolders.filter(f =>
+            f.name.toLowerCase().includes(q)
+        );
+        this.filteredFavFiles = this.allFavFiles.filter(f =>
+            f.name.toLowerCase().includes(q) ||
+            f.type.toLowerCase().includes(q) ||
+            f.brand.toLowerCase().includes(q)
+        );
+    }
+
+    openFavoriteFolder(folder: FolderItem): void {
+        const queryParams: any = {
+            brandId: folder.entityId || this.activeBrandId,
+            subcategoryId: folder.subcategoryId,
+            folderId: folder.id,   // ← para abrir la carpeta directo
+        };
+        this.router.navigate(['/pages/category-view'], { queryParams });
+    }
+
+    removeFolderFromFavorites(folder: FolderItem): void {
+        this.endPointFilesService.toggleFavorite(folder.id).subscribe({
+            next: () => {
+                this.allFavFolders = this.allFavFolders.filter(f => f.id !== folder.id);
+                this.applyFavoritesSearch();
+                // Sincroniza estado en la vista de files
+                const inAll = this.allFolders.find(f => f.id === folder.id);
+                if (inAll) inAll.favorite = false;
+                this.message.success(`"${folder.name}" eliminado de favoritos`);
+            },
+            error: () => this.message.error('No se pudo actualizar favoritos.')
+        });
+    }
+
+    removeFileFromFavorites(file: FileItem): void {
+        this.endPointFilesService.toggleFavorite(file.id).subscribe({
+            next: () => {
+                this.allFavFiles = this.allFavFiles.filter(f => f.id !== file.id);
+                this.applyFavoritesSearch();
+                const inAll = this.allFiles.find(f => f.id === file.id);
+                if (inAll) inAll.favorite = false;
+                if (this.selectedFile?.id === file.id) this.selectedFile = null;
+                this.message.success(`"${file.name}" eliminado de favoritos`);
+            },
+            error: () => this.message.error('No se pudo actualizar favoritos.')
+        });
+    }
+
+    // ── Alias usado desde el template de favoritos ───────────────────
+    removeFavFile(file: FileItem): void {
+        this.removeFileFromFavorites(file);
+    }
+
+    removeFavFolder(folder: FolderItem): void {
+        this.endPointFilesService.toggleFavorite(folder.id).subscribe({
+            next: () => {
+                this.allFavFolders = this.allFavFolders.filter(f => f.id !== folder.id);
+                this.filteredFavFolders = this.filteredFavFolders.filter(f => f.id !== folder.id);
+                const inAll = this.allFolders.find(f => f.id === folder.id);
+                if (inAll) inAll.favorite = false;
+                this.message.success(`"${folder.name}" eliminado de favoritos`);
+            },
+            error: () => this.message.error('No se pudo actualizar favoritos.')
+        });
+    }
+    // ================================================================
+    // MODE SWITCHING
+    // ================================================================
     private enterCategoryMode(): void {
         this.viewMode = 'categories';
         this.currentEntityId = null;
         const departmentLabel = this.getCurrentDepartmentName();
         const departmentId = this.getCurrentDepartmentId();
 
-        // Construir el trail de entities para el breadcrumb visual y el path de upload.
-        // El trail parte desde la entity activa (activeBrandId) y sube por sus ancestros
-        // hasta la raíz, excluyendo siempre el departamento.
         this.activeEntityTrail = this.buildEntityTrail(this.activeBrandId);
-
-        // Build entity crumbs with their entityId metadata so navigateToBreadcrumb
-        // can reconstruct the correct navigation state for each level.
         const entityCrumbItems = this.buildEntityCrumbItems(this.activeBrandId);
 
         this.breadcrumbs = [
@@ -337,7 +519,6 @@ previewModalImageUrl: SafeUrl | null = null;
             return;
         }
 
-        // Tomar las entities del menú cacheado para este departamento
         const deptFromMenu = this.menuDepartments.find(d => d.department_id === departmentId);
         const entities: DepartmentEntityItem[] = deptFromMenu
             ? deptFromMenu.entities.map(e => ({
@@ -351,41 +532,32 @@ previewModalImageUrl: SafeUrl | null = null;
         this.departmentEntities = entities;
         this.allFolders = this.mapEntitiesToFolders(entities);
 
-        // Llamar al endpoint de subcategorías del departamento
         this.endPointFilesService.getSubcategoriesByDepartment(departmentId).subscribe({
-
             next: (resp: SubcategoriesApiResponse) => {
-                // console.log('Subcategories API response:', resp);
                 const subcategories: SubcategoryItem[] = Array.isArray(resp?.data) ? resp.data : [];
                 this.currentDepartmentSubcategories = subcategories;
 
-                // Buscar la entity por brandId (id directo) o por nombre
                 const brandEntity = this.activeBrandId
                     ? entities.find(e => e.id === this.activeBrandId) || null
                     : this.findEntityByName(entities, this.activeBrand);
 
-                // Sin section/subcategory: decidir qué mostrar según si la entity tiene hijos
                 if (!this.activeSection && !this.activeSubcategory && !this.activeSectionId && !this.activeSubcategoryId) {
                     if (brandEntity) {
-                        // Entity encontrada: mostrar sus hijos si los tiene, si no → subcategorías
                         this.currentEntityId = brandEntity.id;
                         this.categoryCards = this.filterCardsByAccess(this.buildCardsForEntityLevel(brandEntity.id, entities, subcategories));
                     } else {
-                        // No es una entity conocida (PetFood brands sin parent) → subcategorías directamente
                         this.categoryCards = this.mapSubcategoriesToCards(subcategories);
                     }
                     return;
                 }
 
                 if (!brandEntity) {
-                    // brand no es una entity → mostrar subcategorías
                     this.categoryCards = this.mapSubcategoriesToCards(subcategories);
                     return;
                 }
 
                 this.currentEntityId = brandEntity.id;
 
-                // Deep-link: brandId=Aves + sectionId=NUPIO → mostrar subcategorías de esa sub-entidad
                 const sectionEntity = this.activeSectionId
                     ? entities.find(e => e.id === this.activeSectionId) || null
                     : (this.activeSection ? this.findEntityByName(entities, this.activeSection) : null);
@@ -406,26 +578,16 @@ previewModalImageUrl: SafeUrl | null = null;
         });
     }
 
-    // ----------------------------------------------------------------
-    // Resolución dinámica brand → department_id
-    // Busca la entidad por nombre dentro de los departamentos del menú
-    // (ya no hay listas hardcodeadas)
-    // ----------------------------------------------------------------
     private getDepartmentIdByBrand(brand: string): number | null {
         if (!brand || !this.menuDepartments.length) return null;
-
         const normalized = this.normalizeText(brand);
-
         const found = this.menuDepartments.find(dept =>
             dept.entities.some(entity => this.normalizeText(entity.name) === normalized)
         );
-
         return found ? found.department_id : null;
     }
 
     private getCurrentDepartmentId(): number | null {
-        // department_id debe resolverse por la entidad (brand) seleccionada,
-        // no por activeBrandId directo (que es entity/brand id).
         if (!this.menuDepartments.length) return null;
 
         if (this.activeBrandId) {
@@ -441,13 +603,6 @@ previewModalImageUrl: SafeUrl | null = null;
     // ----------------------------------------------------------------
     // Card builders
     // ----------------------------------------------------------------
-
-    /**
-     * Filtra las tarjetas de marca para que un proveedor solo vea
-     * las que corresponden a sus marcas asignadas (por entity id).
-     * Admin y Head Comercial ven todo sin filtro.
-     * Las tarjetas de subcategoría (sin nodeId) nunca se filtran aquí.
-     */
     private filterCardsByAccess(cards: CategoryCard[]): CategoryCard[] {
         if (!this.userData) return cards;
 
@@ -458,11 +613,8 @@ previewModalImageUrl: SafeUrl | null = null;
             const assignedIds = new Set<number>(
                 (this.userData.brands ?? []).map((b: any) => Number(b?.id))
             );
-
             return cards.filter(card => {
-                // Tarjeta de subcategoría (sin nodeId) → siempre visible una vez dentro de la marca
                 if (!card.nodeId) return true;
-                // Tarjeta de entity → solo si está en las marcas asignadas
                 return assignedIds.has(card.nodeId);
             });
         }
@@ -470,11 +622,7 @@ previewModalImageUrl: SafeUrl | null = null;
         return cards;
     }
 
-    private buildCardsForEntityLevel(
-        entityId: number,
-        entities: DepartmentEntityItem[],
-        subcategories: SubcategoryItem[]
-    ): CategoryCard[] {
+    private buildCardsForEntityLevel(entityId: number, entities: DepartmentEntityItem[], subcategories: SubcategoryItem[]): CategoryCard[] {
         const children = entities.filter(e => e.parent_entity_id === entityId);
         return children.length > 0
             ? children.map((child, index) => this.toEntityCard(child, index))
@@ -533,38 +681,29 @@ previewModalImageUrl: SafeUrl | null = null;
     }
 
     openCategory(card: CategoryCard): void {
-        // ── Modo departamento: venimos de ?departmentId=X ──────────────────
         if (this.departmentId && card.nodeId) {
             const children = this.departmentEntities.filter(e => e.parent_entity_id === card.nodeId);
 
             if (children.length > 0) {
-                // Hay sub-entities: mostrarlas como cards, actualizar trail y breadcrumb
                 this.currentEntityId = card.nodeId;
                 this.activeEntityTrail = [...this.activeEntityTrail, card.title];
                 this.breadcrumbs = [...this.breadcrumbs, {
-                    label: card.title, folderId: null,
-                    crumbType: 'entity', entityId: card.nodeId
+                    label: card.title, folderId: null, crumbType: 'entity', entityId: card.nodeId
                 }];
                 this.categoryCards = this.filterCardsByAccess(children.map((child, index) => this.toEntityCard(child, index)));
                 return;
             }
 
-            // Sin sub-entities: navegar a la entity como brand (mostrará sus sub-entities o subcategorías)
-            this.router.navigate([], {
-                relativeTo: this.route,
-                queryParams: { brandId: card.nodeId },
-            });
+            this.router.navigate([], { relativeTo: this.route, queryParams: { brandId: card.nodeId } });
             return;
         }
 
-        // ── Modo brand normal: card.nodeId = sub-entity, card.id = subcategory ──
         if (this.viewMode === 'categories' && card.nodeId) {
             const children = this.departmentEntities.filter(e => e.parent_entity_id === card.nodeId);
             this.currentEntityId = card.nodeId;
             this.activeEntityTrail = [...this.activeEntityTrail, card.title];
             this.breadcrumbs = [...this.breadcrumbs, {
-                label: card.title, folderId: null,
-                crumbType: 'entity', entityId: card.nodeId
+                label: card.title, folderId: null, crumbType: 'entity', entityId: card.nodeId
             }];
 
             if (children.length > 0) {
@@ -572,7 +711,6 @@ previewModalImageUrl: SafeUrl | null = null;
                 return;
             }
 
-            // Sin hijos: mostrar subcategorías
             const subcategoryCards = this.mapSubcategoriesToCards(this.currentDepartmentSubcategories);
             if (subcategoryCards.length > 0) {
                 this.categoryCards = subcategoryCards;
@@ -580,8 +718,6 @@ previewModalImageUrl: SafeUrl | null = null;
             }
         }
 
-        // ── Navegar al file manager con la subcategoría seleccionada ──
-        // brandId = la entity hoja actual (currentEntityId o activeBrandId)
         this.router.navigate([], {
             relativeTo: this.route,
             queryParams: {
@@ -602,33 +738,58 @@ previewModalImageUrl: SafeUrl | null = null;
         this.searchQuery = '';
         this.selectedFile = null;
 
-        // Asegurar que departmentEntities esté poblado para poder construir el trail
         if (!this.departmentEntities.length && this.activeBrandId) {
             const deptId = this.getCurrentDepartmentId();
             const deptFromMenu = deptId ? this.menuDepartments.find(d => d.department_id === deptId) : null;
             if (deptFromMenu) {
                 this.departmentEntities = deptFromMenu.entities.map(e => ({
-                    id: e.id,
-                    name: e.name,
-                    logo: e.logo,
-                    parent_entity_id: e.parent_entity_id
+                    id: e.id, name: e.name, logo: e.logo, parent_entity_id: e.parent_entity_id
                 }));
             }
         }
 
-        // Construir el trail de entities (ej: ['Aves', 'NUPIO'] o ['NUCAN'])
         this.activeEntityTrail = this.buildEntityTrail(this.activeBrandId);
-
         this.rebuildFileManagerBreadcrumb();
+
+        // ── Cargar favoritos en paralelo para saber qué carpetas/archivos
+        //    están marcados, sin bloquear la carga del contenido ──────────
+        if (!this.allFavFolders.length && !this.allFavFiles.length) {
+            this.endPointFilesService.getFavorites().subscribe({
+                next: (resp: any) => {
+                    const items: any[] = Array.isArray(resp?.data)
+                        ? resp.data
+                        : Array.isArray(resp?.items)
+                            ? resp.items
+                            : Array.isArray(resp)
+                                ? resp
+                                : [];
+
+                    this.allFavFolders = items
+                        .filter((item: any) => (item?.file_type || '').toLowerCase() === 'folder')
+                        .map((item: any): FolderItem => ({
+                            id: Number(item.id),
+                            name: (item.title || item.name || 'Carpeta').toString(),
+                            count: 0,
+                            favorite: true,
+                            parentId: item.folder_id ?? null,
+                        }));
+
+                    this.allFavFiles = items
+                        .filter((item: any) => (item?.file_type || '').toLowerCase() !== 'folder')
+                        .map((item: any) => this.toFavFileItem(item));
+
+                    // Re-renderiza para que las carpetas reflejen el estado de favorito
+                    this.renderCurrentTreeLevel();
+                },
+                error: () => { } // silencioso, no bloquea la vista
+            });
+        }
 
         this.loadFilesBySubcategory();
     }
 
     loadCurrentLevel(): void {
-        // Si estamos en contexto de subcategoría seleccionada, no recalcular desde allFolders/allFiles.
-        if (this.activeSubcategoryId) {
-            return;
-        }
+        if (this.activeSubcategoryId) return;
 
         this.selectedFile = null;
 
@@ -672,8 +833,6 @@ previewModalImageUrl: SafeUrl | null = null;
     }
 
     navigateToBreadcrumb(crumb: BreadcrumbItem, index: number): void {
-        // ── Department crumb ────────────────────────────────────────────────
-        // Always navigate via URL so the full page re-initializes cleanly.
         if (crumb.crumbType === 'department' || index === 0 && this.departmentId) {
             this.router.navigate([], {
                 relativeTo: this.route,
@@ -682,25 +841,15 @@ previewModalImageUrl: SafeUrl | null = null;
             return;
         }
 
-        // ── Entity crumb ────────────────────────────────────────────────────
-        // We need to go back to showing category cards for this entity level.
         if (crumb.crumbType === 'entity' && crumb.entityId != null) {
             const targetEntityId = crumb.entityId;
-
-            // Trim breadcrumbs and trail back to this crumb (inclusive).
             this.breadcrumbs = this.breadcrumbs.slice(0, index + 1);
-            this.activeEntityTrail = this.breadcrumbs
-                .filter(b => b.crumbType === 'entity')
-                .map(b => b.label);
-
-            // Reset file-manager state.
+            this.activeEntityTrail = this.breadcrumbs.filter(b => b.crumbType === 'entity').map(b => b.label);
             this.fileManagerFolderTrail = [];
             this.currentFolderId = null;
             this.currentTreePath = [];
             this.searchQuery = '';
             this.selectedFile = null;
-
-            // Switch to category view and show children of the target entity.
             this.viewMode = 'categories';
             this.currentEntityId = targetEntityId;
 
@@ -708,14 +857,11 @@ previewModalImageUrl: SafeUrl | null = null;
             if (children.length > 0) {
                 this.categoryCards = this.filterCardsByAccess(children.map((child, i) => this.toEntityCard(child, i)));
             } else {
-                // Leaf entity — show subcategories.
                 this.categoryCards = this.mapSubcategoriesToCards(this.currentDepartmentSubcategories);
             }
             return;
         }
 
-        // ── Subcategory crumb ───────────────────────────────────────────────
-        // Go back to root of the file manager (no folder selected).
         if (crumb.crumbType === 'subcategory') {
             this.fileManagerFolderTrail = [];
             this.currentFolderId = null;
@@ -734,7 +880,6 @@ previewModalImageUrl: SafeUrl | null = null;
             return;
         }
 
-        // ── Folder crumb ────────────────────────────────────────────────────
         const baseCount = this.getBaseBreadcrumbCount();
         const folderTrailIndex = index - baseCount;
 
@@ -757,13 +902,9 @@ previewModalImageUrl: SafeUrl | null = null;
             return;
         }
 
-        // ── Fallback: first crumb without metadata (legacy) ─────────────────
         if (index === 0) {
             if (this.departmentId) {
-                this.router.navigate([], {
-                    relativeTo: this.route,
-                    queryParams: { departmentId: this.departmentId },
-                });
+                this.router.navigate([], { relativeTo: this.route, queryParams: { departmentId: this.departmentId } });
             } else {
                 this.router.navigate([], {
                     relativeTo: this.route,
@@ -778,17 +919,13 @@ previewModalImageUrl: SafeUrl | null = null;
     // ----------------------------------------------------------------
     applySearch(): void {
         const q = this.searchQuery.trim().toLowerCase();
-        const baseFolders = [...this.allFolders];
-        const baseFiles = [...this.allFiles];
-
         if (!q) {
-            this.filteredFolders = baseFolders;
-            this.filteredFiles = baseFiles;
+            this.filteredFolders = [...this.allFolders];
+            this.filteredFiles = [...this.allFiles];
             return;
         }
-
-        this.filteredFolders = baseFolders.filter(f => f.name.toLowerCase().includes(q));
-        this.filteredFiles = baseFiles.filter(f =>
+        this.filteredFolders = this.allFolders.filter(f => f.name.toLowerCase().includes(q));
+        this.filteredFiles = this.allFiles.filter(f =>
             f.name.toLowerCase().includes(q) ||
             f.type.toLowerCase().includes(q) ||
             f.brand.toLowerCase().includes(q)
@@ -801,7 +938,6 @@ previewModalImageUrl: SafeUrl | null = null;
             this.filteredFolders = [];
             this.allFiles = [];
             this.filteredFiles = [];
-
             return;
         }
 
@@ -819,11 +955,11 @@ previewModalImageUrl: SafeUrl | null = null;
             return;
         }
 
-        const folders: FolderItem[] = node.folders.map((folderNode, index) => ({
-            id: folderNode.id || (index + 1),
+        const folders: FolderItem[] = node.folders.map((folderNode) => ({
+            id: folderNode.id,
             name: folderNode.name,
             count: folderNode.files.length + folderNode.folders.length,
-            favorite: false,
+            favorite: this.allFavFolders.some(f => f.id === folderNode.id),
             parentId: this.currentFolderId,
             brand: (this.activeBrand || this.getBrandDisplayName() || '').toString() || undefined
         }));
@@ -835,6 +971,24 @@ previewModalImageUrl: SafeUrl | null = null;
         this.selectedFile = null;
         this.loadImagePreviews(this.filteredFiles);
 
+        // ── Breadcrumb antes de cualquier navegación pendiente ───────────
+        this.fileManagerFolderTrail = this.currentTreePath.map((segment, idx) => ({
+            label: segment,
+            folderId: idx + 1
+        }));
+        this.refreshBreadcrumbs();
+
+        // ── Abrir carpeta pendiente (viene de favoritos) ─────────────────
+        if (this.pendingOpenFolderId) {
+            const target = folders.find(f => f.id === this.pendingOpenFolderId);
+            if (target) {
+                this.pendingOpenFolderId = null;
+                this.openFolder(target);
+                return;
+            }
+        }
+
+        // ── Seleccionar archivo pendiente (viene de notificaciones) ──────
         if (this.pendingSelectContentId) {
             const target = this.filteredFiles.find(f => f.id === this.pendingSelectContentId);
             if (target) {
@@ -842,14 +996,6 @@ previewModalImageUrl: SafeUrl | null = null;
                 this.pendingSelectContentId = null;
             }
         }
-
-
-        this.fileManagerFolderTrail = this.currentTreePath.map((segment, idx) => ({
-            label: segment,
-            folderId: idx + 1
-        }));
-
-        this.refreshBreadcrumbs();
     }
 
     // ----------------------------------------------------------------
@@ -859,6 +1005,7 @@ previewModalImageUrl: SafeUrl | null = null;
         this.selectedFile = this.selectedFile?.id === file.id ? null : file;
 
         if (this.selectedFile?.id) {
+            // Preview URL
             this.endPointUsersService.getContentPreviewUrl(this.selectedFile.id).subscribe({
                 next: (resp: any) => {
                     const previewUrl = (resp?.preview_url || resp?.url || '').toString().trim();
@@ -868,50 +1015,84 @@ previewModalImageUrl: SafeUrl | null = null;
                 },
                 error: () => { }
             });
+
+            // ── Verificar si está en favoritos ───────────────────────────
+            this.endPointFilesService.checkFavorite(this.selectedFile.id).subscribe({
+                next: (resp: any) => {
+                    const isFav = !!(resp?.is_favorite ?? resp?.favorite ?? resp?.data?.is_favorite ?? false);
+                    if (this.selectedFile) {
+                        this.selectedFile = { ...this.selectedFile, favorite: isFav };
+                    }
+                },
+                error: () => { }
+            });
         }
     }
-
+    /**
+     * Toggle favorito de carpeta — llama al API POST /api/v1/favorites/{content_id}
+     * y sincroniza la lista local de favoritos en tiempo real.
+     */
     toggleFolderFav(folder: FolderItem): void {
-        folder.favorite = !folder.favorite;
-        this.message.success(folder.favorite ? `"${folder.name}" agregado a favoritos` : `"${folder.name}" eliminado de favoritos`);
+        this.endPointFilesService.toggleFavorite(folder.id).subscribe({
+            next: () => {
+                folder.favorite = !folder.favorite;
+                if (folder.favorite) {
+                    if (!this.allFavFolders.find(f => f.id === folder.id)) {
+                        this.allFavFolders = [...this.allFavFolders, { ...folder }];
+                        this.applyFavoritesSearch();
+                    }
+                } else {
+                    this.allFavFolders = this.allFavFolders.filter(f => f.id !== folder.id);
+                    this.applyFavoritesSearch();
+                }
+                this.message.success(folder.favorite
+                    ? `"${folder.name}" agregado a favoritos`
+                    : `"${folder.name}" eliminado de favoritos`);
+            },
+            error: () => this.message.error('No se pudo actualizar favoritos.')
+        });
     }
 
+    /**
+     * Toggle favorito de archivo — llama al API POST /api/v1/favorites/{content_id}
+     * y sincroniza la lista local de favoritos en tiempo real.
+     */
     toggleFileFav(file: FileItem): void {
-        file.favorite = !file.favorite;
-        if (this.selectedFile?.id === file.id) this.selectedFile = { ...file };
-        this.message.success(file.favorite ? `"${file.name}" agregado a favoritos` : `"${file.name}" eliminado de favoritos`);
+        this.endPointFilesService.toggleFavorite(file.id).subscribe({
+            next: () => {
+                file.favorite = !file.favorite;
+                if (this.selectedFile?.id === file.id) {
+                    this.selectedFile = { ...file };
+                }
+                if (file.favorite) {
+                    if (!this.allFavFiles.find(f => f.id === file.id)) {
+                        this.allFavFiles = [...this.allFavFiles, { ...file }];
+                        this.applyFavoritesSearch();
+                    }
+                } else {
+                    this.allFavFiles = this.allFavFiles.filter(f => f.id !== file.id);
+                    this.applyFavoritesSearch();
+                }
+                this.message.success(file.favorite
+                    ? `"${file.name}" agregado a favoritos`
+                    : `"${file.name}" eliminado de favoritos`);
+            },
+            error: () => this.message.error('No se pudo actualizar favoritos.')
+        });
     }
-
-    // downloadFile(file: FileItem): void {
-    //     if (file.url) {
-    //         const a = document.createElement('a');
-    //         a.href = file.url; a.download = file.name; a.click();
-    //     } else {
-    //         this.message.info(`Descargando "${file.name}"...`);
-    //     }
-    // }
 
     shareFile(file: FileItem): void {
-        // this.openFilePreview(file);
-
-           this.endPointUsersService.getContentPreviewUrl(file.id).subscribe({
+        this.endPointUsersService.getContentPreviewUrl(file.id).subscribe({
             next: (resp: any) => {
                 const previewUrl = (resp?.preview_url || resp?.url || '').toString().trim();
                 if (previewUrl) {
                     file.url = previewUrl;
-                     navigator.clipboard.writeText(previewUrl)
-                     .then(() => {
-                         this.message.success('URL copiada al portapapeles.');
-                     })
-                     .catch(() => {
-                         this.message.error('No se pudo copiar la URL al portapapeles.');
-                     });
+                    navigator.clipboard.writeText(previewUrl)
+                        .then(() => this.message.success('URL copiada al portapapeles.'))
+                        .catch(() => this.message.error('No se pudo copiar la URL al portapapeles.'));
                 }
-                
             },
-            error: () => {
-                this.message.error('No se pudo obtener la previsualización.');
-            }
+            error: () => this.message.error('No se pudo obtener la previsualización.')
         });
     }
 
@@ -955,14 +1136,10 @@ previewModalImageUrl: SafeUrl | null = null;
         this.endPointUsersService.getContentPreviewUrl(file.id).subscribe({
             next: (resp: any) => {
                 const previewUrl = (resp?.preview_url || resp?.url || '').toString().trim();
-                if (previewUrl) {
-                    file.url = previewUrl;
-                }
+                if (previewUrl) file.url = previewUrl;
                 openWithUrl(previewUrl);
             },
-            error: () => {
-                this.message.error('No se pudo obtener la previsualización.');
-            }
+            error: () => this.message.error('No se pudo obtener la previsualización.')
         });
     }
 
@@ -974,9 +1151,7 @@ previewModalImageUrl: SafeUrl | null = null;
         this.nzContextMenuService.create(event, menu);
     }
 
-    closeContextMenu(): void {
-        this.nzContextMenuService.close();
-    }
+    closeContextMenu(): void { this.nzContextMenuService.close(); }
 
     contextDownload(): void {
         if (this.selectedContextType !== 'file' || !this.selectedContextItem) {
@@ -984,7 +1159,6 @@ previewModalImageUrl: SafeUrl | null = null;
             this.closeContextMenu();
             return;
         }
-
         this.downloadFile(this.selectedContextItem as FileItem);
         this.closeContextMenu();
     }
@@ -995,87 +1169,49 @@ previewModalImageUrl: SafeUrl | null = null;
             this.closeContextMenu();
             return;
         }
-
         const file = this.selectedContextItem as FileItem;
         this.renamingFileId = file.id;
         this.renamingFileName = file.name || '';
         this.closeContextMenu();
     }
 
-    cancelRename(): void {
-        this.renamingFileId = null;
-        this.renamingFileName = '';
-    }
+    cancelRename(): void { this.renamingFileId = null; this.renamingFileName = ''; }
 
     onRenameKeydown(event: KeyboardEvent, file: FileItem): void {
-        if (event.key === 'Enter') {
-            event.preventDefault();
-            this.confirmRename(file);
-            return;
-        }
-
-        if (event.key === 'Escape') {
-            event.preventDefault();
-            this.cancelRename();
-        }
+        if (event.key === 'Enter') { event.preventDefault(); this.confirmRename(file); return; }
+        if (event.key === 'Escape') { event.preventDefault(); this.cancelRename(); }
     }
 
     confirmRename(file: FileItem): void {
         const newTitle = (this.renamingFileName || '').trim();
-
-        if (!newTitle) {
-            this.cancelRename();
-            return;
-        }
-
-        if (!file?.id) {
-            this.message.warning('No se pudo identificar el archivo a renombrar.');
-            this.cancelRename();
-            return;
-        }
+        if (!newTitle) { this.cancelRename(); return; }
+        if (!file?.id) { this.message.warning('No se pudo identificar el archivo a renombrar.'); this.cancelRename(); return; }
 
         this.service.renameContent(file.id, newTitle).subscribe({
             next: () => {
                 file.name = newTitle;
-                if (this.selectedFile?.id === file.id) {
-                    this.selectedFile = { ...this.selectedFile, name: newTitle };
-                }
+                if (this.selectedFile?.id === file.id) this.selectedFile = { ...this.selectedFile, name: newTitle };
                 this.message.success('Archivo renombrado correctamente.');
                 this.cancelRename();
             },
-            error: () => {
-                this.message.error('No se pudo renombrar el archivo.');
-                this.cancelRename();
-            }
+            error: () => { this.message.error('No se pudo renombrar el archivo.'); this.cancelRename(); }
         });
     }
 
     contextMove(): void {
-        if (!this.selectedContextItem) {
-            this.closeContextMenu();
-            return;
-        }
-
+        if (!this.selectedContextItem) { this.closeContextMenu(); return; }
         const name = (this.selectedContextItem as any)?.name || 'ítem';
         this.message.info(`Mover "${name}" (pendiente integración API).`);
         this.closeContextMenu();
     }
 
     contextDelete(): void {
-        if (!this.selectedContextItem) {
-            this.closeContextMenu();
-            return;
-        }
-
+        if (!this.selectedContextItem) { this.closeContextMenu(); return; }
         const target = this.selectedContextItem as any;
         const id = Number(target?.id);
         const name = target?.name || 'ítem';
 
-        if (!id) {
-            this.message.warning('No se pudo identificar el elemento a eliminar.');
-            this.closeContextMenu();
-            return;
-        }
+        if (!id) { this.message.warning('No se pudo identificar el elemento a eliminar.'); this.closeContextMenu(); return; }
 
         this.service.deleteContent(id).subscribe({
             next: () => {
@@ -1084,10 +1220,7 @@ previewModalImageUrl: SafeUrl | null = null;
                 this.selectedFile = null;
                 this.loadFilesBySubcategory();
             },
-            error: () => {
-                this.message.error(`No se pudo eliminar "${name}".`);
-                this.closeContextMenu();
-            }
+            error: () => { this.message.error(`No se pudo eliminar "${name}".`); this.closeContextMenu(); }
         });
     }
 
@@ -1125,74 +1258,43 @@ previewModalImageUrl: SafeUrl | null = null;
             next: (resp: any) => {
                 const data = this.extractBrandData(resp);
                 this.brandInfo = data;
-
                 const resolvedName = this.resolveBrandName(data);
-                if (resolvedName) {
-                    this.activeBrand = resolvedName;
-                }
-
+                if (resolvedName) this.activeBrand = resolvedName;
                 done();
             },
-            error: () => {
-                this.brandInfo = null;
-                done();
-            }
+            error: () => { this.brandInfo = null; done(); }
         });
     }
 
     private extractBrandData(resp: any): BrandInfoItem | null {
         if (!resp) return null;
-
         if (resp.data && typeof resp.data === 'object') {
             if (Array.isArray(resp.data)) return resp.data[0] || null;
             return resp.data;
         }
-
         if (Array.isArray(resp)) return resp[0] || null;
         if (typeof resp === 'object') return resp;
-
         return null;
     }
 
     private resolveBrandName(brand: BrandInfoItem | null): string {
         if (!brand) return '';
-        return (
-            brand.name ||
-            brand.brand_name ||
-            brand.title ||
-            ''
-        ).toString().trim();
+        return (brand.name || brand.brand_name || brand.title || '').toString().trim();
     }
 
-    getBrandDisplayName(): string {
-        return this.resolveBrandName(this.brandInfo) || this.activeBrand;
-    }
-
-    getBrandDisplayDescription(): string {
-        return (this.brandInfo?.description || '').toString().trim();
-    }
-
+    getBrandDisplayName(): string { return this.resolveBrandName(this.brandInfo) || this.activeBrand; }
+    getBrandDisplayDescription(): string { return (this.brandInfo?.description || '').toString().trim(); }
     getBrandDisplayLogo(): string {
-        return (
-            this.brandInfo?.logo ||
-            this.brandInfo?.logo_url ||
-            ''
-        ).toString().trim();
+        return (this.brandInfo?.logo || this.brandInfo?.logo_url || '').toString().trim();
     }
 
     isImageType(type: string): boolean {
-        const t = (type || '').toLowerCase();
-        return ['png', 'jpg', 'jpeg', 'gif', 'webp', 'svg', 'bmp'].includes(t);
+        return ['png', 'jpg', 'jpeg', 'gif', 'webp', 'svg', 'bmp'].includes((type || '').toLowerCase());
     }
-
     isVideoType(type: string): boolean {
-        const t = (type || '').toLowerCase();
-        return ['mp4', 'mov', 'avi', 'webm', 'mkv'].includes(t);
+        return ['mp4', 'mov', 'avi', 'webm', 'mkv'].includes((type || '').toLowerCase());
     }
-
-    isPdfType(type: string): boolean {
-        return (type || '').toLowerCase() === 'pdf';
-    }
+    isPdfType(type: string): boolean { return (type || '').toLowerCase() === 'pdf'; }
 
     getFileIcon(type: string): string {
         const map: Record<string, string> = {
@@ -1233,20 +1335,13 @@ previewModalImageUrl: SafeUrl | null = null;
                     this.renderCurrentTreeLevel();
                     if (this.pendingSelectContentId) {
                         const target = this.filteredFiles.find(f => f.id === this.pendingSelectContentId);
-                        if (target) {
-                            this.selectFile(target);
-                            this.pendingSelectContentId = null;
-                        }
+                        if (target) { this.selectFile(target); this.pendingSelectContentId = null; }
                     }
                     return;
                 }
 
-                const folders = items
-                    .filter((item: any) => this.isFolderItem(item))
-                    .map((item: any) => this.toFolderItem(item));
-                const files = items
-                    .filter((item: any) => !this.isFolderItem(item))
-                    .map((item: any) => this.toFileItem(item));
+                const folders = items.filter((item: any) => this.isFolderItem(item)).map((item: any) => this.toFolderItem(item));
+                const files = items.filter((item: any) => !this.isFolderItem(item)).map((item: any) => this.toFileItem(item));
 
                 this.currentFolderId = folderId ?? this.currentFolderId ?? null;
                 this.allFolders = folders;
@@ -1258,19 +1353,13 @@ previewModalImageUrl: SafeUrl | null = null;
 
                 if (this.pendingSelectContentId) {
                     const target = this.filteredFiles.find(f => f.id === this.pendingSelectContentId);
-                    if (target) {
-                        this.selectFile(target);
-                        this.pendingSelectContentId = null;
-                    }
+                    if (target) { this.selectFile(target); this.pendingSelectContentId = null; }
                 }
             },
             error: () => {
-                this.allFolders = [];
-                this.filteredFolders = [];
-                this.allFiles = [];
-                this.filteredFiles = [];
-                this.selectedFile = null;
-                this.folderTreeRoot = null;
+                this.allFolders = []; this.filteredFolders = [];
+                this.allFiles = []; this.filteredFiles = [];
+                this.selectedFile = null; this.folderTreeRoot = null;
                 this.message.warning('No se pudo cargar el contenido de la subcategoría.');
             }
         });
@@ -1287,17 +1376,9 @@ previewModalImageUrl: SafeUrl | null = null;
 
     private isFolderItem(item: any): boolean {
         const candidates = [
-            item?.type,
-            item?.item_type,
-            item?.content_type,
-            item?.kind,
-            item?.resource_type,
-            item?.mime_type,
-            item?.mimetype,
-            item?.file_type,
-            item?.extension
-        ]
-            .map((v: any) => (v || '').toString().toLowerCase().trim());
+            item?.type, item?.item_type, item?.content_type, item?.kind,
+            item?.resource_type, item?.mime_type, item?.mimetype, item?.file_type, item?.extension
+        ].map((v: any) => (v || '').toString().toLowerCase().trim());
 
         if (item?.is_folder === true || item?.folder === true) return true;
         if (item?.is_file === false) return true;
@@ -1310,11 +1391,11 @@ previewModalImageUrl: SafeUrl | null = null;
         if ((item?.hidden_file || '').toString().trim().length > 0 && candidates.some(v => v.includes('folder') || v === '')) return true;
         if ((item?.hidden_file || '').toString().trim().length > 0 && (item?.file_url || item?.download_url || item?.url)) return false;
         if ((item?.name || '').toString().trim().length > 0 && !item?.file_url && !item?.download_url && !item?.url && candidates.includes('folder')) return true;
-
         return false;
     }
 
     private toFolderItem(item: any): FolderItem {
+        console.log(item)
         const childrenCount = Number(item?.children_count ?? item?.items_count ?? item?.count ?? 0);
         return {
             id: Number(item?.id) || Math.floor(Math.random() * 1000000000),
@@ -1330,7 +1411,9 @@ previewModalImageUrl: SafeUrl | null = null;
         const rawType = (item?.file_type || item?.extension || item?.mime_type || '').toString().trim();
         const normalizedRawType = rawType.replace('.', '').toLowerCase();
         const type = normalizedRawType.includes('/') ? normalizedRawType.split('/').pop() || 'file' : (normalizedRawType || 'file');
-        const size_to_mb = item?.file_size_bytes ? (item.file_size_bytes / (1024 * 1024)).toFixed(2) + ' MB' : (item?.file_size || '—').toString();
+        const size_to_mb = item?.file_size_bytes
+            ? (item.file_size_bytes / (1024 * 1024)).toFixed(2) + ' MB'
+            : (item?.file_size || '—').toString();
 
         const nameFromKey = (() => {
             const key = (item?.s3_key || item?.key || '').toString().trim();
@@ -1368,7 +1451,6 @@ previewModalImageUrl: SafeUrl | null = null;
         return styles[brand?.toUpperCase()] || 'background:#F1F5F9;color:#475569';
     }
 
-
     addNewMaterial(): void {
         this.resetUploadMaterialForm();
         this.modalRef = this.modal.create({
@@ -1383,69 +1465,44 @@ previewModalImageUrl: SafeUrl | null = null;
         });
     }
 
-    triggerFileInput(): void {
-        this.fileInputRef?.nativeElement.click();
-    }
+    triggerFileInput(): void { this.fileInputRef?.nativeElement.click(); }
 
     onMaterialFileSelected(event: Event): void {
         const input = event.target as HTMLInputElement;
-        const file = input?.files?.[0] || null;
-        this.uploadMaterialFile = file;
+        this.uploadMaterialFile = input?.files?.[0] || null;
     }
 
     onTagInputKeydown(event: KeyboardEvent): void {
-        if (event.key === 'Enter' || event.key === ',') {
-            event.preventDefault();
-            this.addTagFromInput();
-        }
+        if (event.key === 'Enter' || event.key === ',') { event.preventDefault(); this.addTagFromInput(); }
     }
 
     addTagFromInput(): void {
         const normalized = (this.uploadMaterialTagInput || '').trim();
         if (!normalized) return;
-        if (this.uploadMaterialTags.includes(normalized)) {
-            this.uploadMaterialTagInput = '';
-            return;
-        }
-        if (this.uploadMaterialTags.length >= this.MAX_TAGS) {
-            this.message.warning(`Máximo ${this.MAX_TAGS} tags`);
-            return;
-        }
+        if (this.uploadMaterialTags.includes(normalized)) { this.uploadMaterialTagInput = ''; return; }
+        if (this.uploadMaterialTags.length >= this.MAX_TAGS) { this.message.warning(`Máximo ${this.MAX_TAGS} tags`); return; }
         this.uploadMaterialTags = [...this.uploadMaterialTags, normalized];
         this.uploadMaterialTagInput = '';
     }
 
-    removeTag(tag: string): void {
-        this.uploadMaterialTags = this.uploadMaterialTags.filter(t => t !== tag);
-    }
+    removeTag(tag: string): void { this.uploadMaterialTags = this.uploadMaterialTags.filter(t => t !== tag); }
 
     removeSelectedFile(): void {
         this.uploadMaterialFile = null;
-        if (this.fileInputRef?.nativeElement) {
-            this.fileInputRef.nativeElement.value = '';
-        }
+        if (this.fileInputRef?.nativeElement) this.fileInputRef.nativeElement.value = '';
     }
 
     saveNewMaterial(): void {
-        if (!this.uploadMaterialTitle.trim()) {
-            this.message.warning('El título es obligatorio.');
-            return;
-        }
-
-        if (!this.uploadMaterialFile) {
-            this.message.warning('Debes seleccionar un archivo.');
-            return;
-        }
-
+        if (!this.uploadMaterialTitle.trim()) { this.message.warning('El título es obligatorio.'); return; }
+        if (!this.uploadMaterialFile) { this.message.warning('Debes seleccionar un archivo.'); return; }
         this.message.success('Material agregado correctamente (pendiente integración API).');
         this.modalRef?.close();
         this.resetUploadMaterialForm();
     }
 
-    cancelNewMaterial(): void {
-        this.modalRef?.close();
-        this.resetUploadMaterialForm();
-    }
+    cancelNewMaterial(): void { this.modalRef?.close(); this.resetUploadMaterialForm(); }
+
+    preventOpen(open: boolean): void { /* noop */ }
 
     private resetUploadMaterialForm(): void {
         this.uploadMaterialFile = null;
@@ -1453,19 +1510,13 @@ previewModalImageUrl: SafeUrl | null = null;
         this.uploadMaterialDescription = '';
         this.uploadMaterialTags = [];
         this.uploadMaterialTagInput = '';
-        if (this.fileInputRef?.nativeElement) {
-            this.fileInputRef.nativeElement.value = '';
-        }
+        if (this.fileInputRef?.nativeElement) this.fileInputRef.nativeElement.value = '';
     }
 
     private resolveSubcategoryDisplayName(): string {
         if (this.activeSubcategory?.trim()) return this.activeSubcategory.trim();
         if (!this.activeSubcategoryId) return '';
-
-        const found = this.currentDepartmentSubcategories.find(
-            s => Number(s.id) === Number(this.activeSubcategoryId)
-        );
-
+        const found = this.currentDepartmentSubcategories.find(s => Number(s.id) === Number(this.activeSubcategoryId));
         return (found?.name || '').toString().trim();
     }
 
@@ -1483,15 +1534,7 @@ previewModalImageUrl: SafeUrl | null = null;
         ].filter(v => (v || '').trim().length > 0).length;
     }
 
-    private refreshBreadcrumbs(): void {
-        this.rebuildFileManagerBreadcrumb();
-    }
-
-    private shouldSkipDepartment(deptName: string): boolean {
-        if (!deptName) return false;
-        const lower = deptName.toLowerCase();
-        return lower.includes('petfood') || lower.includes('pet foot') || lower.includes('petfoot') || lower.includes('pecuario');
-    }
+    private refreshBreadcrumbs(): void { this.rebuildFileManagerBreadcrumb(); }
 
     private enterDepartmentMode(): void {
         const dept = this.menuDepartments.find(d => d.department_id === this.departmentId);
@@ -1505,12 +1548,11 @@ previewModalImageUrl: SafeUrl | null = null;
         }));
         this.categoryCards = this.filterCardsByAccess(rootEntities.map((entity, index) => this.toEntityCard(entity, index)));
         this.currentEntityId = null;
-        this.activeEntityTrail = [];   // en nivel departamento el trail está vacío
+        this.activeEntityTrail = [];
         this.viewMode = 'categories';
         this.breadcrumbs = [{ label: dept.department_name, folderId: null, crumbType: 'department', departmentId: dept.department_id }];
         this.brandInfo = null;
 
-        // Pre-cargar subcategorías para cuando se navegue a una entity hoja
         this.endPointFilesService.getSubcategoriesByDepartment(dept.department_id).subscribe({
             next: (resp: SubcategoriesApiResponse) => {
                 this.currentDepartmentSubcategories = Array.isArray(resp?.data) ? resp.data : [];
@@ -1524,12 +1566,10 @@ previewModalImageUrl: SafeUrl | null = null;
         const departmentId = this.getCurrentDepartmentId();
         const subcategoryLabel = this.resolveSubcategoryDisplayName();
 
-        // Breadcrumb visual: Departamento > [trail de entities] > Subcategoría > [carpetas]
         const entityCrumbs = this.activeEntityTrail.length > 0
             ? this.activeEntityTrail
             : (this.getBrandDisplayName() || this.activeBrand ? [this.getBrandDisplayName() || this.activeBrand] : []);
 
-        // Build entity crumb items with entityId metadata for correct back-navigation.
         const entityCrumbItems = this.buildEntityCrumbItemsFromTrail(entityCrumbs);
 
         this.breadcrumbs = [
@@ -1539,14 +1579,9 @@ previewModalImageUrl: SafeUrl | null = null;
             ...this.fileManagerFolderTrail.map(f => ({ ...f, crumbType: 'folder' as const }))
         ];
 
-        // Upload path: NUNCA incluye el departamento, parte desde la primera entity
-        // PetFood -> NUCAN -> Digital  =>  nucan/digital
-        // Pecuario -> Aves -> NUPIO -> Digital  =>  aves/nupio/digital
         const uploadEntityParts = entityCrumbs;
         this.currentBreadcrumbPath = this.buildBreadcrumbPathForUpload(
-            uploadEntityParts,
-            subcategoryLabel,
-            this.currentTreePath
+            uploadEntityParts, subcategoryLabel, this.currentTreePath
         );
     }
 
@@ -1554,11 +1589,7 @@ previewModalImageUrl: SafeUrl | null = null;
         if (!this.activeSubcategoryId) return;
         if (!this.getCurrentDepartmentId()) return;
 
-        // Si ya tenemos nombre, solo reconstruimos por consistencia.
-        if (this.resolveSubcategoryDisplayName()) {
-            this.rebuildFileManagerBreadcrumb();
-            return;
-        }
+        if (this.resolveSubcategoryDisplayName()) { this.rebuildFileManagerBreadcrumb(); return; }
 
         const departmentId = this.getCurrentDepartmentId();
         if (!departmentId) return;
@@ -1567,12 +1598,8 @@ previewModalImageUrl: SafeUrl | null = null;
             next: (resp: SubcategoriesApiResponse) => {
                 const subcategories: SubcategoryItem[] = Array.isArray(resp?.data) ? resp.data : [];
                 this.currentDepartmentSubcategories = subcategories;
-
                 const resolved = this.resolveSubcategoryDisplayName();
-                if (resolved) {
-                    this.activeSubcategory = resolved;
-                    this.rebuildFileManagerBreadcrumb();
-                }
+                if (resolved) { this.activeSubcategory = resolved; this.rebuildFileManagerBreadcrumb(); }
             },
             error: () => { }
         });
@@ -1585,18 +1612,12 @@ previewModalImageUrl: SafeUrl | null = null;
         return (found?.department_name || '').toString().trim();
     }
 
-    /**
-     * Builds BreadcrumbItem array for the entity trail starting from entityId,
-     * each crumb carrying its entityId so navigateToBreadcrumb can restore state.
-     * Order: root → leaf  (same as buildEntityTrail).
-     */
     private buildEntityCrumbItems(entityId: number | null): BreadcrumbItem[] {
         if (!entityId || !this.departmentEntities.length) {
             const name = this.getBrandDisplayName() || this.activeBrand;
             return name ? [{ label: name, folderId: null, crumbType: 'entity', entityId }] : [];
         }
 
-        // Walk up the tree collecting ancestors, then reverse to root→leaf.
         const items: BreadcrumbItem[] = [];
         let current: DepartmentEntityItem | undefined = this.departmentEntities.find(e => e.id === entityId);
 
@@ -1609,33 +1630,15 @@ previewModalImageUrl: SafeUrl | null = null;
         return items;
     }
 
-    /**
-     * Maps an already-computed string trail to BreadcrumbItems with entityId metadata.
-     * Used when we only have the names (e.g. after entering file manager).
-     */
     private buildEntityCrumbItemsFromTrail(trail: string[]): BreadcrumbItem[] {
         return trail.map(name => {
-            const entity = this.departmentEntities.find(
-                e => this.normalizeText(e.name) === this.normalizeText(name)
-            );
-            return {
-                label: name,
-                folderId: null,
-                crumbType: 'entity' as const,
-                entityId: entity?.id ?? null
-            };
+            const entity = this.departmentEntities.find(e => this.normalizeText(e.name) === this.normalizeText(name));
+            return { label: name, folderId: null, crumbType: 'entity' as const, entityId: entity?.id ?? null };
         });
     }
 
-    /**
-     * Construye el trail de nombres de entity desde entityId hasta la raíz,
-     * excluyendo el departamento. Orden: raíz → hoja.
-     * Ej: NUPIO (id=18, parent=Aves id=8) => ['Aves', 'NUPIO']
-     * Ej: NUCAN (id=2, parent=null)        => ['NUCAN']
-     */
     private buildEntityTrail(entityId: number | null): string[] {
         if (!entityId || !this.departmentEntities.length) {
-            // Fallback: usar activeBrand si existe
             const name = this.getBrandDisplayName() || this.activeBrand;
             return name ? [name] : [];
         }
@@ -1666,93 +1669,51 @@ previewModalImageUrl: SafeUrl | null = null;
     }
 
     private extractPathParts(pathValue: string): string[] {
-        return (pathValue || '')
-            .split('/')
-            .map(p => (p || '').trim())
-            .filter(Boolean);
+        return (pathValue || '').split('/').map(p => (p || '').trim()).filter(Boolean);
     }
 
     private buildTreeFromPathItems(items: any[]): FolderTreeNode {
-        const root: FolderTreeNode = {
-            id: 0,
-            name: '__root__',
-            fullPath: '',
-            folders: [],
-            files: []
-        };
-
+        const root: FolderTreeNode = { id: 0, name: '__root__', fullPath: '', folders: [], files: [] };
         const subcategorySlug = this.getSubcategorySlug();
 
         for (const rawItem of items) {
-            const itemPath = (
-                rawItem?.path ||
-                rawItem?.folder_path ||
-                rawItem?.s3_key ||
-                rawItem?.key ||
-                ''
-            ).toString().trim();
-
+            const itemPath = (rawItem?.path || rawItem?.folder_path || rawItem?.s3_key || rawItem?.key || '').toString().trim();
             const parts = this.extractPathParts(itemPath);
-            const fileLikeName = (
-                rawItem?.name ||
-                rawItem?.file_name ||
-                rawItem?.title ||
-                rawItem?.hidden_file ||
-                ''
-            ).toString().trim();
-
+            const fileLikeName = (rawItem?.name || rawItem?.file_name || rawItem?.title || rawItem?.hidden_file || '').toString().trim();
             const isFolder = this.isFolderItem(rawItem);
 
-            // Si no hay path usable: fallback en raíz
             if (!parts.length) {
-                if (isFolder) {
-                    this.ensureFolderNode(root, fileLikeName || 'Carpeta');
-                } else {
-                    root.files.push(this.toFileItem(rawItem));
-                }
+                if (isFolder) { this.ensureFolderNode(root, fileLikeName || 'Carpeta', Number(rawItem?.id) || undefined); }
+                else { root.files.push(this.toFileItem(rawItem)); }
                 continue;
             }
 
             const subIndex = subcategorySlug ? parts.findIndex(p => this.slugifyPathPart(p) === subcategorySlug) : -1;
             const relativeParts = subIndex >= 0 ? parts.slice(subIndex + 1) : [];
 
-            // Si no se encontró subcategoría o queda vacío => elemento directo en raíz de subcategoría
             if (relativeParts.length === 0) {
-                if (isFolder) {
-                    this.ensureFolderNode(root, fileLikeName || parts[parts.length - 1] || 'Carpeta');
-                } else {
-                    root.files.push(this.toFileItem(rawItem));
-                }
+                if (isFolder) { this.ensureFolderNode(root, fileLikeName || parts[parts.length - 1] || 'Carpeta', Number(rawItem?.id) || undefined); }
+                else { root.files.push(this.toFileItem(rawItem)); }
                 continue;
             }
 
             let currentNode = root;
 
             if (isFolder) {
-                // carpeta: todo relativeParts es ruta de carpetas
-                for (const segment of relativeParts) {
-                    currentNode = this.ensureFolderNode(currentNode, segment);
-                }
+                const folderId = Number(rawItem?.id) || undefined;
+                relativeParts.forEach((segment, idx) => {
+                    // El id real solo aplica al último segmento (la carpeta en sí)
+                    const id = idx === relativeParts.length - 1 ? folderId : undefined;
+                    currentNode = this.ensureFolderNode(currentNode, segment, id);
+                });
             } else {
-                // archivo: tomar nombre real desde metadata o s3_key y evitar crear carpeta con nombre de archivo
                 const mappedFile = this.toFileItem(rawItem);
                 const effectiveFileName = (mappedFile.name || fileLikeName || '').toString().trim();
-                const effectiveFileSlug = this.slugifyPathPart(effectiveFileName);
-                const lastSegment = relativeParts[relativeParts.length - 1] || '';
-                const lastSegmentSlug = this.slugifyPathPart(lastSegment);
-
-                const parents = effectiveFileSlug && effectiveFileSlug === lastSegmentSlug
-                    ? relativeParts.slice(0, -1)
-                    : relativeParts.slice(0, -1);
-
-                for (const segment of parents) {
-                    currentNode = this.ensureFolderNode(currentNode, segment);
-                }
-
+                const parents = relativeParts.slice(0, -1);
+                for (const segment of parents) { currentNode = this.ensureFolderNode(currentNode, segment); }
                 if (!mappedFile.name || mappedFile.name === 'Archivo') {
-                    mappedFile.name = effectiveFileName || lastSegment || 'Archivo';
+                    mappedFile.name = effectiveFileName || relativeParts[relativeParts.length - 1] || 'Archivo';
                 }
-
                 currentNode.files.push(mappedFile);
             }
         }
@@ -1760,66 +1721,49 @@ previewModalImageUrl: SafeUrl | null = null;
         return root;
     }
 
-    private ensureFolderNode(parent: FolderTreeNode, folderName: string): FolderTreeNode {
+    private ensureFolderNode(parent: FolderTreeNode, folderName: string, realId?: number): FolderTreeNode {
         const normalized = this.slugifyPathPart(folderName || '');
         let found = parent.folders.find(f => this.slugifyPathPart(f.name) === normalized);
 
         if (!found) {
             found = {
-                id: Math.floor(Math.random() * 1000000000),
+                id: realId ?? Math.floor(Math.random() * 1000000000),
                 name: folderName || 'Carpeta',
                 fullPath: parent.fullPath ? `${parent.fullPath}/${folderName}` : folderName,
                 folders: [],
                 files: []
             };
             parent.folders.push(found);
+        } else if (realId && found.id !== realId) {
+            // Si ya existía el nodo (creado desde path de archivo), actualiza con el id real
+            found.id = realId;
         }
 
         return found;
     }
 
-    private buildBreadcrumbPathForUpload(
-        entityParts: string[],
-        subcategory: string,
-        folderTrail: string[] = []
-    ): string {
-        // entityParts: trail de entity names (sin departamento)
-        // subcategory: nombre de la subcategoría activa
-        // folderTrail: carpetas abiertas dentro del file manager
+
+    private buildBreadcrumbPathForUpload(entityParts: string[], subcategory: string, folderTrail: string[] = []): string {
         const parts = [...entityParts, subcategory]
-            .map(v => (v || '').trim())
-            .filter(Boolean)
-            .map(v => this.slugifyPathPart(v))
-            .filter(Boolean);
+            .map(v => (v || '').trim()).filter(Boolean)
+            .map(v => this.slugifyPathPart(v)).filter(Boolean);
 
         const folderParts = (folderTrail || [])
-            .map(v => (v || '').trim())
-            .filter(Boolean)
-            .map(v => this.slugifyPathPart(v))
-            .filter(Boolean);
+            .map(v => (v || '').trim()).filter(Boolean)
+            .map(v => this.slugifyPathPart(v)).filter(Boolean);
 
         return [...parts, ...folderParts].join('/');
     }
 
-    getUploadBreadcrumbPath(): string {
-        return this.currentBreadcrumbPath;
-    }
+    getUploadBreadcrumbPath(): string { return this.currentBreadcrumbPath; }
 
     beforeUpload = (file: File): boolean => {
-
         this.file = file;
-
-        // opcional: autocompletar título si está vacío
-        if (!this.uploadForm.value.title) {
-            this.uploadForm.patchValue({
-                title: file.name
-            });
-        }
-
+        if (!this.uploadForm.value.title) { this.uploadForm.patchValue({ title: file.name }); }
         return false;
     };
 
-enviarArchivo(): void {
+    enviarArchivo(): void {
         const tipo = this.uploadForm.value.type;
         const uploadPath = this.getUploadBreadcrumbPath();
         const brandId = this.activeBrandId;
@@ -1830,16 +1774,11 @@ enviarArchivo(): void {
             return;
         }
 
-        // Validación específica para archivo
-        if (tipo === 'file' && !this.file) {
-            this.message.warning('No hay archivo seleccionado.');
-            return;
-        }
+        if (tipo === 'file' && !this.file) { this.message.warning('No hay archivo seleccionado.'); return; }
 
         this.isUploading = true;
 
         if (tipo === 'file') {
-            // ── SUBIR ARCHIVO ──────────────────────────────────────
             const formData = new FormData();
             formData.append('file', this.file);
             formData.append('title', this.uploadForm.value.title);
@@ -1851,25 +1790,14 @@ enviarArchivo(): void {
             formData.append('id_country', '1');
 
             this.service.uploadFile(formData).subscribe({
-                next: (resp: any) => {
-                    console.log('Archivo subido', resp);
-                    this.onSuccess('Archivo subido correctamente.');
-                },
-                error: (error: any) => {
-                    console.error('Error', error);
-                    this.message.error('Error al subir el archivo.');
-                },
-                complete: () => {
-                    this.isUploading = false;
-                }
+                next: (resp: any) => { console.log('Archivo subido', resp); this.onSuccess('Archivo subido correctamente.'); },
+                error: (error: any) => { console.error('Error', error); this.message.error('Error al subir el archivo.'); },
+                complete: () => { this.isUploading = false; }
             });
-
         } else {
-            // ── CREAR CARPETA ──────────────────────────────────────
             const payload = {
                 title: this.uploadForm.value.title,
                 description: this.uploadForm.value.description,
-                // tags: this.uploadForm.value.tags,
                 path: uploadPath + '/' + this.slugifyPathPart(this.uploadForm.value.title),
                 entity_id: brandId,
                 subcategory_id: subcategoryId,
@@ -1877,51 +1805,31 @@ enviarArchivo(): void {
             };
 
             this.service.createFolder(payload).subscribe({
-                next: (resp: any) => {
-                    console.log('Carpeta creada', resp);
-                    this.onSuccess('Carpeta creada correctamente.');
-                },
-                error: (error: any) => {
-                    console.error('Error', error);
-                    this.message.error('Error al crear la carpeta.');
-                },
-                complete: () => {
-                    this.isUploading = false;
-                }
+                next: (resp: any) => { console.log('Carpeta creada', resp); this.onSuccess('Carpeta creada correctamente.'); },
+                error: (error: any) => { console.error('Error', error); this.message.error('Error al crear la carpeta.'); },
+                complete: () => { this.isUploading = false; }
             });
         }
     }
 
-
-
     private onSuccess(mensaje: string): void {
         this.modalRef.close();
-        if (this.activeSubcategoryId) {
-            this.loadFilesBySubcategory();
-        } else {
-            this.loadCurrentLevel();
-        }
+        if (this.activeSubcategoryId) { this.loadFilesBySubcategory(); } else { this.loadCurrentLevel(); }
         this.message.success(mensaje);
     }
 
     downloadFile(file: any): void {
-        // console.log(this.selectedItem)
         this.service.downloadFile(file.id).subscribe({
             next: (url: any) => {
-                console.log(url)
+                console.log(url);
                 const link = document.createElement('a');
                 link.href = url;
                 link.download = (file?.name || 'archivo').toString();
-                // link.target = '_blank'; // opcional
                 link.click();
-
-            }, error: (err: any) => {
-                console.log(err)
-            }
-        })
-
+            },
+            error: (err: any) => { console.log(err); }
+        });
     }
-
 
     private loadImagePreviews(files: FileItem[]): void {
         files.forEach(file => {
@@ -1929,13 +1837,13 @@ enviarArchivo(): void {
                 this.endPointUsersService.getContentPreviewUrl(file.id).subscribe({
                     next: (resp: any) => {
                         const previewUrl = (resp?.preview_url || resp?.url || '').toString().trim();
-                        if (previewUrl) {
-                            file.url = previewUrl;
-                        }
+                        if (previewUrl) file.url = previewUrl;
                     },
                     error: () => { }
                 });
             }
         });
     }
+
+
 }

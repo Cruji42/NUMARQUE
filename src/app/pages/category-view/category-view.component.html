@@ -1,5 +1,5 @@
 <!-- ============================================================
-     TOOLBAR — breadcrumb + search (solo en modo files)
+     TOOLBAR — breadcrumb + search
      ============================================================ -->
 <div class="fm-toolbar">
   <div class="breadcrumb">
@@ -32,11 +32,29 @@
       </button>
     </div>
   </ng-container>
+
+  <!-- Search en modo favoritos -->
+  <ng-container *ngIf="viewMode === 'favorites'">
+    <div class="fm-search-wrap">
+      <i nz-icon nzType="search" class="fm-search-icon"></i>
+      <input class="fm-search" placeholder="Buscar en favoritos..." [(ngModel)]="favoritesSearchQuery"
+        (ngModelChange)="applyFavoritesSearch()" />
+    </div>
+    <div class="view-btns">
+      <button class="view-btn" [class.active]="fileViewMode === 'grid'" nz-tooltip nzTooltipTitle="Vista cuadrícula"
+        (click)="fileViewMode = 'grid'">
+        <i nz-icon nzType="appstore"></i>
+      </button>
+      <button class="view-btn" [class.active]="fileViewMode === 'list'" nz-tooltip nzTooltipTitle="Vista lista"
+        (click)="fileViewMode = 'list'">
+        <i nz-icon nzType="unordered-list"></i>
+      </button>
+    </div>
+  </ng-container>
 </div>
 
 <!-- ============================================================
      MODO: CATEGORY CARDS
-     Muestra las secciones de la marca (ATL, Digital, etc.)
      ============================================================ -->
 <div class="category-mode" *ngIf="viewMode === 'categories'">
 
@@ -71,11 +89,9 @@
 
 <!-- ============================================================
      MODO: FILE MANAGER
-     Muestra carpetas y archivos dentro de la sección
      ============================================================ -->
 <div class="fm-body" *ngIf="viewMode === 'files'">
 
-  <!-- Content area -->
   <div class="fm-content">
 
     <!-- Folders section -->
@@ -119,14 +135,9 @@
       <div class="files-grid" *ngIf="fileViewMode === 'grid'">
         <div class="file-card" *ngFor="let file of filteredFiles" [class.selected]="selectedFile?.id === file.id"
           (click)="selectFile(file)" (contextmenu)="contextMenu($event, contextMenuTpl, file, 'file')">
-         <div class="file-thumb">
+          <div class="file-thumb">
             <img *ngIf="isImageType(file.type) && file.url" [src]="file.url" [alt]="file.name" class="file-thumb-image" />
             <span *ngIf="!(isImageType(file.type) && file.url)" class="file-thumb-icon">{{ getFileIcon(file.type) }}</span>
-            <!-- Overlay solo para imágenes -->
-            <!-- <div class="thumb-overlay" *ngIf="isImageType(file.type) && file.url"
-              (click)="$event.stopPropagation(); openFilePreview(file)">
-              <i nz-icon nzType="eye"></i>
-            </div> -->
           </div>
           <div class="file-name" *ngIf="renamingFileId !== file.id">{{ file.name }}</div>
           <input *ngIf="renamingFileId === file.id" nz-input [ngModel]="renamingFileName"
@@ -163,11 +174,8 @@
   <!-- Preview panel -->
   <div class="preview-panel" *ngIf="selectedFile">
     <div class="preview-thumb">
-      <!-- Imagen: sigue mostrándose directo -->
       <img *ngIf="isImageType(selectedFile.type) && selectedFile.url" [src]="selectedFile.url" [alt]="selectedFile.name"
         class="preview-media-image" />
-
-      <!-- Video, PDF y cualquier otro tipo: siempre icono -->
       <span *ngIf="!isImageType(selectedFile.type) || !selectedFile.url" class="preview-thumb-icon">{{
         getFileIcon(selectedFile.type) }}</span>
     </div>
@@ -181,21 +189,13 @@
     </div>
     <nz-divider class="preview-divider"></nz-divider>
     <div class="preview-meta">
-      <div class="meta-row"><span class="meta-key">Tipo</span><span class="meta-val">{{ selectedFile.type | uppercase
-          }}</span></div>
-      <div class="meta-row"><span class="meta-key">Tamaño</span><span class="meta-val">{{ selectedFile.size }}</span>
-      </div>
-      <div class="meta-row"><span class="meta-key">Descripción</span><span class="meta-val">{{ selectedFile.description
-          }}</span>
-      </div>
-      <div class="meta-row"><span class="meta-key">Subido</span><span class="meta-val">{{ selectedFile.uploaded_at |
-          date: 'dd/MM/yyyy' }}</span></div>
-      <div class="meta-row"><span class="meta-key">Por</span><span class="meta-val">{{ selectedFile.uploaded_by
-          }}</span></div>
-      <div class="meta-row"><span class="meta-key">Categoría</span><span class="meta-val">{{ selectedFile.category
-          }}</span></div>
-      <div class="meta-row"><span class="meta-key">Descargas</span><span class="meta-val">{{ selectedFile.downloads
-          }}</span></div>
+      <div class="meta-row"><span class="meta-key">Tipo</span><span class="meta-val">{{ selectedFile.type | uppercase }}</span></div>
+      <div class="meta-row"><span class="meta-key">Tamaño</span><span class="meta-val">{{ selectedFile.size }}</span></div>
+      <div class="meta-row"><span class="meta-key">Descripción</span><span class="meta-val">{{ selectedFile.description }}</span></div>
+      <div class="meta-row"><span class="meta-key">Subido</span><span class="meta-val">{{ selectedFile.uploaded_at | date: 'dd/MM/yyyy' }}</span></div>
+      <div class="meta-row"><span class="meta-key">Por</span><span class="meta-val">{{ selectedFile.uploaded_by }}</span></div>
+      <div class="meta-row"><span class="meta-key">Categoría</span><span class="meta-val">{{ selectedFile.category }}</span></div>
+      <div class="meta-row"><span class="meta-key">Descargas</span><span class="meta-val">{{ selectedFile.downloads }}</span></div>
     </div>
     <button class="btn-download" (click)="downloadFile(selectedFile)">
       <i nz-icon nzType="download"></i> Descargar
@@ -209,7 +209,7 @@
     <div class="fav-link" (click)="toggleFileFav(selectedFile)">
       <i nz-icon nzType="star" [nzTheme]="selectedFile.favorite ? 'fill' : 'outline'"
         [style.color]="selectedFile.favorite ? '#F59E0B' : '#94A3B8'"></i>
-      {{ selectedFile.favorite ? 'En favoritos' : 'Agregar a favoritos' }}
+      {{ selectedFile.favorite ? 'Quitar de favoritos' : 'Agregar a favoritos' }}
     </div>
   </div>
 
@@ -221,6 +221,144 @@
 
 </div>
 
+<!-- ============================================================
+     MODO: FAVORITOS
+     ============================================================ -->
+<div class="fm-body" *ngIf="viewMode === 'favorites'">
+
+  <div class="fm-content">
+
+    <!-- Loading -->
+    <div class="fav-loading" *ngIf="favoritesLoading">
+      <nz-spin nzSimple></nz-spin>
+      <span>Cargando favoritos...</span>
+    </div>
+
+    <ng-container *ngIf="!favoritesLoading">
+
+      <!-- Carpetas favoritas -->
+      <div *ngIf="filteredFavFolders.length > 0">
+        <div class="sec-label">Carpetas guardadas</div>
+
+        <!-- Grid -->
+        <div class="folders-grid" *ngIf="fileViewMode === 'grid'">
+          <div class="folder-card" *ngFor="let folder of filteredFavFolders" (click)="openFavoriteFolder(folder)">
+            <button class="fav-btn starred" nz-tooltip nzTooltipTitle="Quitar de favoritos"
+              (click)="$event.stopPropagation(); removeFavFolder(folder)">
+              <i nz-icon nzType="star" nzTheme="fill"></i>
+            </button>
+            <div class="folder-icon">📂</div>
+            <div class="folder-name">{{ folder.name }}</div>
+            <div class="folder-count">{{ folder.count }} archivos</div>
+          </div>
+        </div>
+
+        <!-- List -->
+        <div class="list-table" *ngIf="fileViewMode === 'list'">
+          <div class="list-row folder-row" *ngFor="let folder of filteredFavFolders" (click)="openFavoriteFolder(folder)">
+            <span class="list-icon">📂</span>
+            <span class="list-name">{{ folder.name }}</span>
+            <span class="list-meta">{{ folder.count }} archivos</span>
+            <button class="fav-btn-sm" nz-tooltip nzTooltipTitle="Quitar de favoritos"
+              (click)="removeFavFolder(folder)">
+              <i nz-icon nzType="star" nzTheme="fill" style="color:#F59E0B"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Archivos favoritos -->
+      <div *ngIf="filteredFavFiles.length > 0">
+        <div class="sec-label">Archivos guardados</div>
+
+        <!-- Grid -->
+        <div class="files-grid" *ngIf="fileViewMode === 'grid'">
+          <div class="file-card" *ngFor="let file of filteredFavFiles"
+            [class.selected]="selectedFile?.id === file.id"
+            (click)="selectFile(file)">
+            <div class="file-thumb">
+              <img *ngIf="isImageType(file.type) && file.url" [src]="file.url" [alt]="file.name" class="file-thumb-image" />
+              <span *ngIf="!(isImageType(file.type) && file.url)" class="file-thumb-icon">{{ getFileIcon(file.type) }}</span>
+            </div>
+            <div class="file-name">{{ file.name }}</div>
+            <div class="file-meta">{{ file.type | uppercase }} · {{ file.size }}</div>
+          </div>
+        </div>
+
+        <!-- List -->
+        <div class="list-table" *ngIf="fileViewMode === 'list'">
+          <div class="list-row" *ngFor="let file of filteredFavFiles"
+            [class.selected]="selectedFile?.id === file.id"
+            (click)="selectFile(file)">
+            <span class="list-icon">{{ getFileIcon(file.type) }}</span>
+            <span class="list-name">{{ file.name }}</span>
+            <span class="list-meta list-type">{{ file.type | uppercase }}</span>
+            <span class="list-meta">{{ file.size }}</span>
+            <span class="list-meta">{{ file.uploaded_at | date: 'dd/MM/yyyy' }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Empty state -->
+      <div class="empty-state fav-empty"
+        *ngIf="filteredFavFiles.length === 0 && filteredFavFolders.length === 0">
+        <div class="empty-icon">⭐</div>
+        <div class="empty-title">No tienes favoritos aún</div>
+        <div class="empty-sub">Marca archivos o carpetas con ★ para verlos aquí</div>
+      </div>
+
+    </ng-container>
+  </div>
+
+  <!-- Preview panel favoritos -->
+  <div class="preview-panel" *ngIf="selectedFile">
+    <div class="preview-thumb">
+      <img *ngIf="isImageType(selectedFile.type) && selectedFile.url" [src]="selectedFile.url"
+        [alt]="selectedFile.name" class="preview-media-image" />
+      <span *ngIf="!isImageType(selectedFile.type) || !selectedFile.url" class="preview-thumb-icon">{{
+        getFileIcon(selectedFile.type) }}</span>
+    </div>
+    <div class="preview-header">
+      <div class="preview-name">{{ selectedFile.name }}</div>
+      <div class="preview-brand-wrap">
+        <span class="brand-tag" [style]="getBrandStyle(selectedFile.brand)">{{ selectedFile.brand }}</span>
+      </div>
+    </div>
+    <nz-divider class="preview-divider"></nz-divider>
+    <div class="preview-meta">
+      <div class="meta-row"><span class="meta-key">Tipo</span><span class="meta-val">{{ selectedFile.type | uppercase }}</span></div>
+      <div class="meta-row"><span class="meta-key">Tamaño</span><span class="meta-val">{{ selectedFile.size }}</span></div>
+      <div class="meta-row"><span class="meta-key">Descripción</span><span class="meta-val">{{ selectedFile.description }}</span></div>
+      <div class="meta-row"><span class="meta-key">Subido</span><span class="meta-val">{{ selectedFile.uploaded_at | date: 'dd/MM/yyyy' }}</span></div>
+      <div class="meta-row"><span class="meta-key">Por</span><span class="meta-val">{{ selectedFile.uploaded_by }}</span></div>
+      <div class="meta-row"><span class="meta-key">Categoría</span><span class="meta-val">{{ selectedFile.category }}</span></div>
+    </div>
+    <button class="btn-download" (click)="downloadFile(selectedFile)">
+      <i nz-icon nzType="download"></i> Descargar
+    </button>
+    <button class="btn-share" (click)="shareFile(selectedFile)">
+      <i nz-icon nzType="share-alt"></i> Compartir
+    </button>
+    <button class="btn-share" (click)="openFilePreview(selectedFile)">
+      <i nz-icon nzType="eye"></i> Previsualizar
+    </button>
+    <div class="fav-link fav-link--remove" (click)="removeFavFile(selectedFile)">
+      <i nz-icon nzType="star" nzTheme="fill" style="color:#F59E0B"></i>
+      Quitar de favoritos
+    </div>
+  </div>
+
+  <!-- No selection placeholder -->
+  <div class="preview-panel preview-empty" *ngIf="!selectedFile">
+    <div class="preview-empty-icon">⭐</div>
+    <div class="preview-empty-text">Selecciona un archivo para ver su detalle</div>
+  </div>
+
+</div>
+
+<!-- ============================================================
+     Context menu
+     ============================================================ -->
 <nz-dropdown-menu #contextMenuTpl="nzDropdownMenu">
   <ul nz-menu>
     <li nz-menu-item *ngIf="selectedContextType === 'file'" (click)="contextDownload()">
@@ -231,10 +369,6 @@
       <i nz-icon nzType="edit"></i>
       Renombrar
     </li>
-    <!-- <li nz-menu-item (click)="contextMove()">
-      <i nz-icon nzType="drag"></i>
-      Mover
-    </li> -->
     <li nz-menu-item nzDanger (click)="contextDelete()">
       <i nz-icon nzType="delete"></i>
       Eliminar
@@ -246,7 +380,6 @@
 <ng-template #tplContent>
   <form nz-form nzLayout="vertical" [formGroup]="uploadForm">
 
-    <!-- TIPO: ARCHIVO O CARPETA -->
     <nz-form-item>
       <nz-form-label nzRequired>Tipo</nz-form-label>
       <nz-form-control>
@@ -261,7 +394,6 @@
       </nz-form-control>
     </nz-form-item>
 
-    <!-- ARCHIVO (solo si tipo = 'file') -->
     <nz-form-item *ngIf="uploadForm.get('type')?.value === 'file'">
       <nz-form-label nzRequired>Archivo</nz-form-label>
       <nz-form-control>
@@ -274,7 +406,6 @@
       </nz-form-control>
     </nz-form-item>
 
-    <!-- TÍTULO -->
     <nz-form-item>
       <nz-form-label nzRequired>Título</nz-form-label>
       <nz-form-control>
@@ -283,7 +414,6 @@
       </nz-form-control>
     </nz-form-item>
 
-    <!-- DESCRIPCIÓN (solo si tipo = 'file') -->
     <nz-form-item *ngIf="uploadForm.get('type')?.value === 'file'">
       <nz-form-label>Descripción</nz-form-label>
       <nz-form-control>
@@ -292,7 +422,6 @@
       </nz-form-control>
     </nz-form-item>
 
-    <!-- TAGS (solo si tipo = 'file') -->
     <nz-form-item *ngIf="uploadForm.get('type')?.value === 'file'">
       <nz-form-label>Tags</nz-form-label>
       <nz-form-control>
@@ -308,21 +437,16 @@
 <ng-template #tplFooter>
   <button nz-button nzType="default" (click)="cancelNewMaterial()">Cancelar</button>
   <button nz-button nzType="primary" [disabled]="!uploadForm.valid" (click)="enviarArchivo()"
-[nzLoading]="isUploading">Guardar</button>
+    [nzLoading]="isUploading">Guardar</button>
 </ng-template>
 
 <ng-template #previewModalTpl>
-  <!-- PDF -->
   <div *ngIf="previewModalType === 'pdf' && previewModalUrl" class="preview-modal-wrap">
     <iframe [src]="previewModalUrl" class="preview-modal-frame" type="application/pdf"></iframe>
   </div>
-
-  <!-- Video -->
   <div *ngIf="previewModalType === 'video' && previewModalVideoUrl" class="preview-modal-wrap">
     <video [src]="previewModalVideoUrl" controls class="preview-modal-video"></video>
   </div>
-
-  <!-- Imagen -->
   <div *ngIf="previewModalType === 'image' && previewModalImageUrl" class="preview-modal-wrap preview-modal-image-wrap">
     <img [src]="previewModalImageUrl" class="preview-modal-image" alt="Previsualización" />
   </div>
