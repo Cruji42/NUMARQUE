@@ -15,6 +15,8 @@ import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 
 import { OrdersListComponent } from './orders-list.component';
 import { TableService } from '../../../shared/services/table.service'; // ← importar
+import { NzRadioModule } from 'ng-zorro-antd/radio';
+import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
 
 const routes: Routes = [
     { path: '', component: OrdersListComponent }
@@ -36,6 +38,8 @@ const routes: Routes = [
         NzIconModule.forChild([]),
         NzTagModule,
         NzPopconfirmModule,
+        NzRadioModule,
+        NzCheckboxModule
     ],
     providers: [
         TableService  // ← agregar aquí

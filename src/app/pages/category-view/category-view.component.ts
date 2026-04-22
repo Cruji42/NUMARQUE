@@ -3,7 +3,7 @@ import { DomSanitizer, SafeResourceUrl, SafeUrl } from '@angular/platform-browse
 import { ActivatedRoute, Router } from '@angular/router';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { combineLatest, Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { finalize, takeUntil } from 'rxjs/operators';
 import { EndPointFilesService } from '../../core/apis/end-point-files.service';
 import { SideNavMenuService, ApiDepartment } from '../../core/service/sidenav.service';
 import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
@@ -1789,7 +1789,12 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
             formData.append('subcategory_id', String(subcategoryId));
             formData.append('id_country', '1');
 
-            this.service.uploadFile(formData).subscribe({
+            this.service.uploadFile(formData).pipe(
+                finalize(()=>{
+                     this.uploadForm.reset();
+                     this.uploadForm.reset()
+                    })
+            ).subscribe({
                 next: (resp: any) => { console.log('Archivo subido', resp); this.onSuccess('Archivo subido correctamente.'); },
                 error: (error: any) => { console.error('Error', error); this.message.error('Error al subir el archivo.'); },
                 complete: () => { this.isUploading = false; }
@@ -1804,7 +1809,12 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
                 id_country: 1
             };
 
-            this.service.createFolder(payload).subscribe({
+            this.service.createFolder(payload).pipe(
+                finalize(()=>{ 
+                    this.uploadForm.reset()
+                    this.uploadForm.reset();
+                })
+            ).subscribe({
                 next: (resp: any) => { console.log('Carpeta creada', resp); this.onSuccess('Carpeta creada correctamente.'); },
                 error: (error: any) => { console.error('Error', error); this.message.error('Error al crear la carpeta.'); },
                 complete: () => { this.isUploading = false; }
@@ -1814,6 +1824,7 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
 
     private onSuccess(mensaje: string): void {
         this.modalRef.close();
+        this.uploadForm.reset()
         if (this.activeSubcategoryId) { this.loadFilesBySubcategory(); } else { this.loadCurrentLevel(); }
         this.message.success(mensaje);
     }
