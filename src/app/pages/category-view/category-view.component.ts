@@ -1815,8 +1815,43 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
     private onSuccess(mensaje: string): void {
         this.modalRef.close();
         this.uploadForm.reset();
-        if (this.activeSubcategoryId) { this.loadFilesBySubcategory(); } else { this.loadCurrentLevel(); }
         this.message.success(mensaje);
+
+        if (this.activeSubcategoryId) {
+            // Guardar el path actual antes de recargar
+            const savedTreePath = [...this.currentTreePath];
+            const savedFolderTrail = [...this.fileManagerFolderTrail];
+
+            this.loadFilesBySubcategoryKeepingLevel(savedTreePath, savedFolderTrail);
+        } else {
+            this.loadCurrentLevel();
+        }
+    }
+
+    private loadFilesBySubcategoryKeepingLevel(
+        savedTreePath: string[],
+        savedFolderTrail: BreadcrumbItem[]
+    ): void {
+        const brandId = this.activeBrandId || this.getDepartmentIdByBrand(this.activeBrand);
+        const subcategoryId = this.activeSubcategoryId;
+
+        if (!brandId || !subcategoryId) return;
+
+        this.endPointFilesService.getContentBySubcategory(brandId, subcategoryId, undefined).subscribe({
+            next: (resp: any) => {
+                const items = this.extractFilesFromContentResponse(resp);
+                this.folderTreeRoot = this.buildTreeFromPathItems(items);
+
+                // Restaurar el nivel donde estaba el usuario
+                this.currentTreePath = savedTreePath;
+                this.fileManagerFolderTrail = savedFolderTrail;
+
+                this.renderCurrentTreeLevel();
+            },
+            error: () => {
+                this.message.warning('No se pudo recargar el contenido.');
+            }
+        });
     }
 
     downloadFile(file: any): void {
