@@ -12,6 +12,7 @@ import { NavQueryPipe } from './pipes/nav-query.pipe';
 import { NavPathPipe } from './pipes/nav-path.pipe';
 import { TranslatePipe } from './pipes/translate.pipe';
 import { TranslationService } from './services/translation.service';
+import { LazyPreviewDirective } from './directives/lazy-preview.directive';
 
 @NgModule({
     exports: [
@@ -33,8 +34,9 @@ import { TranslationService } from './services/translation.service';
     declarations: [
         SearchPipe,
         NavPathPipe,
-        NavQueryPipe
-    ],
+        NavQueryPipe,
+        LazyPreviewDirective
+        ],
     providers: [
         ThemeConstantService
     ]

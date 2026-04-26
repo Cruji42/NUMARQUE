@@ -133,11 +133,25 @@
 
       <!-- Grid -->
       <div class="files-grid" *ngIf="fileViewMode === 'grid'">
-        <div class="file-card" *ngFor="let file of filteredFiles" [class.selected]="selectedFile?.id === file.id"
-          (click)="selectFile(file)" (contextmenu)="contextMenu($event, contextMenuTpl, file, 'file')">
+        <!--
+          CAMBIO: Se agrega appLazyPreview en cada card de imagen.
+          La directiva usa IntersectionObserver para emitir (visible)
+          solo cuando la card entra al viewport, evitando peticiones masivas al cargar.
+          [hasUrl]="!!file.url" evita que la directiva observe cards que ya tienen URL cacheada.
+        -->
+        <div class="file-card"
+             *ngFor="let file of filteredFiles"
+             [appLazyPreview]="file.id"
+             [hasUrl]="!!file.url"
+             (visible)="loadPreviewForFile($event)"
+             [class.selected]="selectedFile?.id === file.id"
+             (click)="selectFile(file)"
+             (contextmenu)="contextMenu($event, contextMenuTpl, file, 'file')">
           <div class="file-thumb">
-            <img *ngIf="isImageType(file.type) && file.url" [src]="file.url" [alt]="file.name" class="file-thumb-image" />
-            <span *ngIf="!(isImageType(file.type) && file.url)" class="file-thumb-icon">{{ getFileIcon(file.type) }}</span>
+            <img *ngIf="isImageType(file.type) && file.url"
+                 [src]="file.url" [alt]="file.name" class="file-thumb-image" />
+            <span *ngIf="!(isImageType(file.type) && file.url)"
+                  class="file-thumb-icon">{{ getFileIcon(file.type) }}</span>
           </div>
           <div class="file-name" *ngIf="renamingFileId !== file.id">{{ file.name }}</div>
           <input *ngIf="renamingFileId === file.id" nz-input [ngModel]="renamingFileName"
@@ -148,6 +162,7 @@
       </div>
 
       <!-- List -->
+      <!-- En modo lista no se muestran thumbnails, no se necesita lazy preview -->
       <div class="list-table" *ngIf="fileViewMode === 'list'">
         <div class="list-row" *ngFor="let file of filteredFiles" [class.selected]="selectedFile?.id === file.id"
           (click)="selectFile(file)" (contextmenu)="contextMenu($event, contextMenuTpl, file, 'file')">
@@ -273,12 +288,22 @@
 
         <!-- Grid -->
         <div class="files-grid" *ngIf="fileViewMode === 'grid'">
-          <div class="file-card" *ngFor="let file of filteredFavFiles"
-            [class.selected]="selectedFile?.id === file.id"
-            (click)="selectFile(file)">
+          <!--
+            CAMBIO: Lazy preview también en favoritos.
+            Misma lógica: solo se pide la URL cuando la card es visible en pantalla.
+          -->
+          <div class="file-card"
+               *ngFor="let file of filteredFavFiles"
+               [appLazyPreview]="file.id"
+               [hasUrl]="!!file.url"
+               (visible)="loadPreviewForFavFile($event)"
+               [class.selected]="selectedFile?.id === file.id"
+               (click)="selectFile(file)">
             <div class="file-thumb">
-              <img *ngIf="isImageType(file.type) && file.url" [src]="file.url" [alt]="file.name" class="file-thumb-image" />
-              <span *ngIf="!(isImageType(file.type) && file.url)" class="file-thumb-icon">{{ getFileIcon(file.type) }}</span>
+              <img *ngIf="isImageType(file.type) && file.url"
+                   [src]="file.url" [alt]="file.name" class="file-thumb-image" />
+              <span *ngIf="!(isImageType(file.type) && file.url)"
+                    class="file-thumb-icon">{{ getFileIcon(file.type) }}</span>
             </div>
             <div class="file-name">{{ file.name }}</div>
             <div class="file-meta">{{ file.type | uppercase }} · {{ file.size }}</div>

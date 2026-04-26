@@ -12,6 +12,7 @@ import { FilesService } from 'src/app/core/service/files.service';
 import { NzContextMenuService, NzDropdownMenuComponent } from 'ng-zorro-antd/dropdown';
 import { EndPointUsersService } from '../../core/apis/end-point-users.service';
 import { UsersService } from 'src/app/core/service/users.service';
+import { PreviewUrlCacheService } from 'src/app/core/service/preview-url-cache.service';
 
 // ----------------------------------------------------------------
 // Interfaces
@@ -120,7 +121,6 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
 
     private destroy$ = new Subject<void>();
 
-    // viewMode ahora incluye 'favorites'
     viewMode: 'categories' | 'files' | 'favorites' = 'categories';
     fileViewMode: 'grid' | 'list' = 'grid';
 
@@ -208,6 +208,7 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
         private endPointUsersService: EndPointUsersService,
         private sanitizer: DomSanitizer,
         private usersService: UsersService,
+        private previewCache: PreviewUrlCacheService, // ← NUEVO
     ) { }
 
     ngOnInit(): void {
@@ -237,7 +238,6 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
                     }
                     this.activeEntityTrail = [];
 
-                    // ── Activar modo favoritos desde query param ─────────────
                     if (params.get('favorites') === 'true') {
                         this.enterFavoritesMode();
                         return;
@@ -308,11 +308,6 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
     // ================================================================
     // FAVORITES MODE
     // ================================================================
-
-    /**
-     * Activa la vista de favoritos. Se puede llamar desde el sidenav
-     * navegando a la misma ruta con ?view=favorites, o directamente.
-     */
     enterFavoritesMode(): void {
         this.viewMode = 'favorites';
         this.selectedFile = null;
@@ -338,7 +333,6 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
                             ? resp
                             : [];
 
-                // Separar carpetas de archivos por file_type === 'folder'
                 this.allFavFolders = items
                     .filter((item: any) => (item?.file_type || '').toLowerCase() === 'folder')
                     .map((item: any): FolderItem => ({
@@ -347,8 +341,8 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
                         count: 0,
                         favorite: true,
                         parentId: item.folder_id ?? null,
-                        entityId: item.entity_id ?? null,      // ← agrega
-                        subcategoryId: item.subcategory_id ?? null, // ← agrega
+                        entityId: item.entity_id ?? null,
+                        subcategoryId: item.subcategory_id ?? null,
                     }));
 
                 this.allFavFiles = items
@@ -357,8 +351,8 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
 
                 this.filteredFavFolders = [...this.allFavFolders];
                 this.filteredFavFiles = [...this.allFavFiles];
-
-                this.loadImagePreviews(this.filteredFavFiles);
+                // ← ELIMINADO: this.loadImagePreviews(this.filteredFavFiles)
+                // Las previews se cargan lazy desde el template con appLazyPreview
                 this.favoritesLoading = false;
             },
             error: () => {
@@ -367,6 +361,7 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
             }
         });
     }
+
     private toFavFileItem(item: any): FileItem {
         const rawType = (
             item?.file_type || item?.extension || item?.type ||
@@ -383,20 +378,17 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
                 ? item.file_size.toString()
                 : '—';
 
-        // Nombre: intenta todos los campos comunes
         const name = (
             item?.title || item?.name || item?.file_name ||
             item?.filename || item?.hidden_file || 'Archivo'
         ).toString().trim();
 
-        // Marca: puede venir del item o del contexto activo
         const brand = (
             item?.brand || item?.brand_name ||
             item?.entity?.name || item?.entity_name ||
             this.getBrandDisplayName() || this.activeBrand || 'N/A'
         ).toString();
 
-        // Categoría
         const category = (
             item?.category || item?.subcategory ||
             item?.subcategory_name || this.activeSubcategory || '—'
@@ -441,7 +433,7 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
         const queryParams: any = {
             brandId: folder.entityId || this.activeBrandId,
             subcategoryId: folder.subcategoryId,
-            folderId: folder.id,   // ← para abrir la carpeta directo
+            folderId: folder.id,
         };
         this.router.navigate(['/pages/category-view'], { queryParams });
     }
@@ -451,7 +443,6 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
             next: () => {
                 this.allFavFolders = this.allFavFolders.filter(f => f.id !== folder.id);
                 this.applyFavoritesSearch();
-                // Sincroniza estado en la vista de files
                 const inAll = this.allFolders.find(f => f.id === folder.id);
                 if (inAll) inAll.favorite = false;
                 this.message.success(`"${folder.name}" eliminado de favoritos`);
@@ -474,7 +465,6 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
         });
     }
 
-    // ── Alias usado desde el template de favoritos ───────────────────
     removeFavFile(file: FileItem): void {
         this.removeFileFromFavorites(file);
     }
@@ -491,6 +481,7 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
             error: () => this.message.error('No se pudo actualizar favoritos.')
         });
     }
+
     // ================================================================
     // MODE SWITCHING
     // ================================================================
@@ -751,8 +742,6 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
         this.activeEntityTrail = this.buildEntityTrail(this.activeBrandId);
         this.rebuildFileManagerBreadcrumb();
 
-        // ── Cargar favoritos en paralelo para saber qué carpetas/archivos
-        //    están marcados, sin bloquear la carga del contenido ──────────
         if (!this.allFavFolders.length && !this.allFavFiles.length) {
             this.endPointFilesService.getFavorites().subscribe({
                 next: (resp: any) => {
@@ -778,10 +767,13 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
                         .filter((item: any) => (item?.file_type || '').toLowerCase() !== 'folder')
                         .map((item: any) => this.toFavFileItem(item));
 
-                    // Re-renderiza para que las carpetas reflejen el estado de favorito
-                    this.renderCurrentTreeLevel();
+                    // Solo re-renderizar para actualizar íconos de favorito,
+                    // nunca si hay navegación pendiente en curso
+                    if (!this.pendingSelectContentId && !this.pendingOpenFolderId) {
+                        this.renderCurrentTreeLevel();
+                    }
                 },
-                error: () => { } // silencioso, no bloquea la vista
+                error: () => { }
             });
         }
 
@@ -808,7 +800,7 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
 
         this.filteredFolders = folders;
         this.filteredFiles = files;
-        this.loadImagePreviews(this.filteredFiles);
+        // ← ELIMINADO: this.loadImagePreviews(this.filteredFiles)
     }
 
     openFolder(folder: FolderItem): void {
@@ -968,10 +960,14 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
         this.filteredFolders = folders;
         this.allFiles = [...node.files];
         this.filteredFiles = [...node.files];
-        this.selectedFile = null;
-        this.loadImagePreviews(this.filteredFiles);
+        // ← ELIMINADO: this.loadImagePreviews(this.filteredFiles)
+        // Las previews se cargan lazy desde el template con appLazyPreview
 
-        // ── Breadcrumb antes de cualquier navegación pendiente ───────────
+        // Solo limpiar selectedFile si el archivo ya no está en este nivel
+        if (this.selectedFile && !node.files.some(f => f.id === this.selectedFile!.id)) {
+            this.selectedFile = null;
+        }
+
         this.fileManagerFolderTrail = this.currentTreePath.map((segment, idx) => ({
             label: segment,
             folderId: idx + 1
@@ -990,11 +986,12 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
 
         // ── Seleccionar archivo pendiente (viene de notificaciones) ──────
         if (this.pendingSelectContentId) {
-            const target = this.filteredFiles.find(f => f.id === this.pendingSelectContentId);
-            if (target) {
-                this.selectFile(target);
-                this.pendingSelectContentId = null;
+            const pendingId = this.pendingSelectContentId;
+            this.pendingSelectContentId = null; // ← limpiar ANTES de llamar resolve
+            if (!this.resolvePendingContentInTree(pendingId)) {
+                // no se encontró, no hacer nada más
             }
+            return;
         }
     }
 
@@ -1004,34 +1001,36 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
     selectFile(file: FileItem): void {
         this.selectedFile = this.selectedFile?.id === file.id ? null : file;
 
-        if (this.selectedFile?.id) {
-            // Preview URL
-            this.endPointUsersService.getContentPreviewUrl(this.selectedFile.id).subscribe({
-                next: (resp: any) => {
-                    const previewUrl = (resp?.preview_url || resp?.url || '').toString().trim();
-                    if (previewUrl && this.selectedFile) {
-                        this.selectedFile = { ...this.selectedFile, url: previewUrl };
-                    }
-                },
-                error: () => { }
-            });
+        if (!this.selectedFile?.id) return;
 
-            // ── Verificar si está en favoritos ───────────────────────────
-            this.endPointFilesService.checkFavorite(this.selectedFile.id).subscribe({
-                next: (resp: any) => {
-                    const isFav = !!(resp?.is_favorite ?? resp?.favorite ?? resp?.data?.is_favorite ?? false);
-                    if (this.selectedFile) {
-                        this.selectedFile = { ...this.selectedFile, favorite: isFav };
+        const current = this.selectedFile;
+
+        // Solo pedir la URL si no la tiene — usa el caché para evitar duplicados
+        if (!current.url) {
+            this.previewCache.getUrl(current.id).subscribe({
+                next: (url: any) => {
+                    if (url && this.selectedFile?.id === current.id) {
+                        this.selectedFile.url = url;
+                        this.persistUrlInTree(current.id, url);
+                        const inFiltered = this.filteredFiles.find(f => f.id === current.id);
+                        if (inFiltered) inFiltered.url = url;
                     }
                 },
                 error: () => { }
             });
         }
+
+        this.endPointFilesService.checkFavorite(current.id).subscribe({
+            next: (resp: any) => {
+                const isFav = !!(resp?.is_favorite ?? resp?.favorite ?? resp?.data?.is_favorite ?? false);
+                if (this.selectedFile?.id === current.id) {
+                    this.selectedFile.favorite = isFav;
+                }
+            },
+            error: () => { }
+        });
     }
-    /**
-     * Toggle favorito de carpeta — llama al API POST /api/v1/favorites/{content_id}
-     * y sincroniza la lista local de favoritos en tiempo real.
-     */
+
     toggleFolderFav(folder: FolderItem): void {
         this.endPointFilesService.toggleFavorite(folder.id).subscribe({
             next: () => {
@@ -1053,10 +1052,6 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
         });
     }
 
-    /**
-     * Toggle favorito de archivo — llama al API POST /api/v1/favorites/{content_id}
-     * y sincroniza la lista local de favoritos en tiempo real.
-     */
     toggleFileFav(file: FileItem): void {
         this.endPointFilesService.toggleFavorite(file.id).subscribe({
             next: () => {
@@ -1133,11 +1128,11 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
             return;
         }
 
-        this.endPointUsersService.getContentPreviewUrl(file.id).subscribe({
-            next: (resp: any) => {
-                const previewUrl = (resp?.preview_url || resp?.url || '').toString().trim();
-                if (previewUrl) file.url = previewUrl;
-                openWithUrl(previewUrl);
+        // Reutiliza el caché también para el modal de preview
+        this.previewCache.getUrl(file.id).subscribe({
+            next: (url: any) => {
+                if (url) file.url = url;
+                openWithUrl(url);
             },
             error: () => this.message.error('No se pudo obtener la previsualización.')
         });
@@ -1215,6 +1210,7 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
 
         this.service.deleteContent(id).subscribe({
             next: () => {
+                this.previewCache.invalidate(id); // ← Limpia la URL cacheada del archivo eliminado
                 this.message.success(`"${name}" eliminado correctamente.`);
                 this.closeContextMenu();
                 this.selectedFile = null;
@@ -1333,10 +1329,6 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
                         this.fileManagerFolderTrail = [];
                     }
                     this.renderCurrentTreeLevel();
-                    if (this.pendingSelectContentId) {
-                        const target = this.filteredFiles.find(f => f.id === this.pendingSelectContentId);
-                        if (target) { this.selectFile(target); this.pendingSelectContentId = null; }
-                    }
                     return;
                 }
 
@@ -1702,7 +1694,6 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
             if (isFolder) {
                 const folderId = Number(rawItem?.id) || undefined;
                 relativeParts.forEach((segment, idx) => {
-                    // El id real solo aplica al último segmento (la carpeta en sí)
                     const id = idx === relativeParts.length - 1 ? folderId : undefined;
                     currentNode = this.ensureFolderNode(currentNode, segment, id);
                 });
@@ -1735,13 +1726,11 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
             };
             parent.folders.push(found);
         } else if (realId && found.id !== realId) {
-            // Si ya existía el nodo (creado desde path de archivo), actualiza con el id real
             found.id = realId;
         }
 
         return found;
     }
-
 
     private buildBreadcrumbPathForUpload(entityParts: string[], subcategory: string, folderTrail: string[] = []): string {
         const parts = [...entityParts, subcategory]
@@ -1790,10 +1779,10 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
             formData.append('id_country', '1');
 
             this.service.uploadFile(formData).pipe(
-                finalize(()=>{
-                     this.uploadForm.reset();
-                     this.uploadForm.reset()
-                    })
+                finalize(() => {
+                    this.uploadForm.reset();
+                    this.uploadForm.reset();
+                })
             ).subscribe({
                 next: (resp: any) => { console.log('Archivo subido', resp); this.onSuccess('Archivo subido correctamente.'); },
                 error: (error: any) => { console.error('Error', error); this.message.error('Error al subir el archivo.'); },
@@ -1810,8 +1799,8 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
             };
 
             this.service.createFolder(payload).pipe(
-                finalize(()=>{ 
-                    this.uploadForm.reset()
+                finalize(() => {
+                    this.uploadForm.reset();
                     this.uploadForm.reset();
                 })
             ).subscribe({
@@ -1824,7 +1813,7 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
 
     private onSuccess(mensaje: string): void {
         this.modalRef.close();
-        this.uploadForm.reset()
+        this.uploadForm.reset();
         if (this.activeSubcategoryId) { this.loadFilesBySubcategory(); } else { this.loadCurrentLevel(); }
         this.message.success(mensaje);
     }
@@ -1842,19 +1831,117 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
         });
     }
 
-    private loadImagePreviews(files: FileItem[]): void {
-        files.forEach(file => {
-            if (this.isImageType(file.type) && !file.url) {
-                this.endPointUsersService.getContentPreviewUrl(file.id).subscribe({
-                    next: (resp: any) => {
-                        const previewUrl = (resp?.preview_url || resp?.url || '').toString().trim();
-                        if (previewUrl) file.url = previewUrl;
-                    },
-                    error: () => { }
-                });
-            }
+    // ----------------------------------------------------------------
+    // Lazy preview — llamados desde el template vía (visible)
+    // ----------------------------------------------------------------
+
+    /** Carga la preview URL de un archivo del file manager cuando entra al viewport */
+    loadPreviewForFile(fileId: number): void {
+        const file = this.filteredFiles.find(f => f.id === fileId);
+        if (!file || file.url) return;
+
+        this.previewCache.getUrl(fileId).subscribe({
+            next: (url: any) => {
+                if (!url) return;
+                file.url = url;
+                this.persistUrlInTree(fileId, url);
+            },
+            error: () => { }
         });
     }
 
+    /** Carga la preview URL de un archivo favorito cuando entra al viewport */
+    loadPreviewForFavFile(fileId: number): void {
+        const file = this.filteredFavFiles.find(f => f.id === fileId);
+        if (!file || file.url) return;
 
+        this.previewCache.getUrl(fileId).subscribe({
+            next: (url: any) => {
+                if (!url) return;
+                file.url = url;
+            },
+            error: () => { }
+        });
+    }
+
+    // ----------------------------------------------------------------
+    // Tree URL helpers
+    // ----------------------------------------------------------------
+
+    /** Persiste una URL en el nodo del árbol para que sobreviva re-renders */
+    private persistUrlInTree(fileId: number, url: string): void {
+        if (!this.folderTreeRoot) return;
+        const search = (node: FolderTreeNode): boolean => {
+            const found = node.files.find(f => f.id === fileId);
+            if (found) { found.url = url; return true; }
+            return node.folders.some(child => search(child));
+        };
+        search(this.folderTreeRoot);
+    }
+
+    // ----------------------------------------------------------------
+    // Pending content resolver (notificaciones)
+    // ----------------------------------------------------------------
+
+    /** Busca recursivamente el archivo en el árbol y navega hasta el nivel donde está */
+    private resolvePendingContentInTree(targetId: number): boolean {
+        if (!targetId || !this.folderTreeRoot) return false;
+
+        // ya no lee this.pendingSelectContentId — viene como parámetro
+        const findPath = (node: FolderTreeNode, path: string[]): string[] | null => {
+            if (node.files.some(f => f.id === targetId)) return path;
+            for (const child of node.folders) {
+                const found = findPath(child, [...path, child.name]);
+                if (found !== null) return found;
+            }
+            return null;
+        };
+
+        const pathToFile = findPath(this.folderTreeRoot, []);
+        if (pathToFile === null) return false;
+
+        this.currentTreePath = pathToFile;
+        this.fileManagerFolderTrail = pathToFile.map((segment, idx) => ({
+            label: segment,
+            folderId: idx + 1
+        }));
+        this.refreshBreadcrumbs();
+
+        // pendingSelectContentId ya fue limpiado en renderCurrentTreeLevel
+        // así que esta llamada NO volverá a entrar al bloque de pending
+        this.renderCurrentTreeLevel();
+
+        const target = this.filteredFiles.find(f => f.id === targetId);
+        if (target) {
+            setTimeout(() => {
+                this.selectedFile = target;
+
+                if (!target.url) {
+                    this.previewCache.getUrl(target.id).subscribe({
+                        next: (url) => {
+                            if (url && this.selectedFile?.id === target.id) {
+                                this.selectedFile.url = url;
+                                this.persistUrlInTree(target.id, url);
+                                const inFiltered = this.filteredFiles.find(f => f.id === target.id);
+                                if (inFiltered) inFiltered.url = url;
+                            }
+                        },
+                        error: () => { }
+                    });
+                }
+
+                this.endPointFilesService.checkFavorite(target.id).subscribe({
+                    next: (resp: any) => {
+                        const isFav = !!(resp?.is_favorite ?? resp?.favorite ?? resp?.data?.is_favorite ?? false);
+                        if (this.selectedFile?.id === target.id) {
+                            this.selectedFile.favorite = isFav;
+                        }
+                    },
+                    error: () => { }
+                });
+            }, 0);
+        }
+
+        return true;
+    }
 }
