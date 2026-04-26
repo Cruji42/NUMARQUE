@@ -52,7 +52,8 @@ export class EndPointFilesService {
     getContentBySubcategory(brandId: number, subCategoryId: number, folderId?: number | null): Observable<any> {
         const params = new URLSearchParams({
             entity_id: String(brandId),
-            subcategory_id: String(subCategoryId)
+            subcategory_id: String(subCategoryId),
+            per_page: '100'
         });
 
         if (folderId !== null && folderId !== undefined) {

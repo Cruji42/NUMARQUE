@@ -22,7 +22,8 @@ import { LazyPreviewDirective } from './directives/lazy-preview.directive';
         SearchPipe,
         NavPathPipe,
         NavQueryPipe,
-        TranslatePipe
+        TranslatePipe,
+        LazyPreviewDirective
     ],
     imports: [
         RouterModule,

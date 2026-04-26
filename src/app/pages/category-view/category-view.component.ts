@@ -960,6 +960,7 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
         this.filteredFolders = folders;
         this.allFiles = [...node.files];
         this.filteredFiles = [...node.files];
+        this.loadVisibleImagePreviews();
         // ← ELIMINADO: this.loadImagePreviews(this.filteredFiles)
         // Las previews se cargan lazy desde el template con appLazyPreview
 
@@ -1943,5 +1944,21 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
         }
 
         return true;
+    }
+
+    /** Carga previews de todas las imágenes del nivel actual usando el caché */
+    private loadVisibleImagePreviews(): void {
+        this.filteredFiles.forEach(file => {
+            if (!this.isImageType(file.type) || file.url) return;
+
+            this.previewCache.getUrl(file.id).subscribe({
+                next: (url) => {
+                    if (!url) return;
+                    file.url = url;
+                    this.persistUrlInTree(file.id, url);
+                },
+                error: () => { }
+            });
+        });
     }
 }
