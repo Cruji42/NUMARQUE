@@ -84,7 +84,7 @@ export class EndPointFilesService {
     }
 
     deleteContent(id: number): Observable<any> {
-        return this.http.delete(`${this.apiUrl}/files/contents/delete/${id}`, { headers: this.configHeaders() });
+        return this.http.delete(`${this.apiUrl}/files/contents/${id}`, { headers: this.configHeaders() });
     }
 
 
