@@ -109,4 +109,8 @@ export class EndPointFilesService {
         return this.http.get(`${this.apiUrl}/favorites/${contentId}/check`, { headers: this.configHeaders() });
     }
 
+    editInfoContent(data: any): Observable<any>{
+        return this.http.put(`${this.apiUrl}/contents/${data.content_id}`, data, { headers: this.configHeaders()})
+    }
+
 }

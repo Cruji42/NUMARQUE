@@ -55,6 +55,7 @@ export interface FileItem {
     folderId: number | null;
     url?: string;
     s3Key?: string;
+    tags?: string[];
 }
 
 export interface BreadcrumbItem {
@@ -189,6 +190,9 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
     previewModalImageUrl: SafeUrl | null = null;
     isUploading = false;
 
+    isEditingContent = false;
+    editContentForm!: FormGroup;
+
     @ViewChild('tplContent', { static: true }) tplContent!: TemplateRef<any>;
     @ViewChild('tplFooter', { static: true }) tplFooter!: TemplateRef<any>;
     @ViewChild('fileInputRef') fileInputRef?: ElementRef<HTMLInputElement>;
@@ -277,6 +281,12 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
 
         this.uploadForm = this.fb.group({
             type: ['file'],
+            title: ['', Validators.required],
+            description: [''],
+            tags: [[]]
+        });
+
+        this.editContentForm = this.fb.group({
             title: ['', Validators.required],
             description: [''],
             tags: [[]]
@@ -409,6 +419,12 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
             folderId: item?.folder_id ?? null,
             url: (item?.url || item?.file_url || item?.download_url || item?.preview_url || '').toString() || undefined,
             s3Key: (item?.s3_key || item?.key || '').toString() || undefined,
+            tags: Array.isArray(item?.tags)
+                ? item.tags
+                : typeof item?.tags === 'string'
+                    ? item.tags.split(',').map((t: string) => t.trim()).filter(Boolean)
+                    : [],
+
         };
     }
 
@@ -1032,6 +1048,69 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
         });
     }
 
+    openEditContent(file: FileItem): void {
+        this.isEditingContent = true;
+        this.editContentForm.patchValue({
+            title: file.name || '',
+            description: file.description || '',
+            tags: file.tags || []  // si el API devuelve tags en el FileItem puedes mapearlos aquí
+        });
+    }
+
+    cancelEditContent(): void {
+        this.isEditingContent = false;
+        this.editContentForm.reset();
+    }
+
+    saveEditContent(): void {
+        if (!this.selectedFile || !this.editContentForm.valid) return;
+
+        const payload = {
+            content_id: this.selectedFile.id,
+            title: this.editContentForm.value.title,
+            description: this.editContentForm.value.description,
+            tags: this.editContentForm.value.tags || []
+        };
+
+        this.endPointFilesService.editInfoContent(payload).subscribe({
+            next: () => {
+                // Actualizar el objeto local sin recargar todo el árbol
+                this.selectedFile!.name = payload.title;
+                this.selectedFile!.description = payload.description;
+                this.selectedFile!.tags = payload.tags;
+
+                // Sincronizar en filteredFiles y en el árbol
+                const inFiltered = this.filteredFiles.find(f => f.id === this.selectedFile!.id);
+                if (inFiltered) {
+                    inFiltered.name = payload.title;
+                    inFiltered.description = payload.description;
+                     inFiltered.tags = payload.tags;
+                }
+                this.persistFileDataInTree(this.selectedFile!.id, payload.title, payload.description);
+
+                this.message.success('Contenido actualizado correctamente.');
+                this.isEditingContent = false;
+            },
+            error: () => {
+                this.message.error('No se pudo actualizar el contenido.');
+            }
+        });
+    }
+
+    private persistFileDataInTree(fileId: number, name: string, description: string): void {
+        if (!this.folderTreeRoot) return;
+        const search = (node: FolderTreeNode): boolean => {
+            const found = node.files.find(f => f.id === fileId);
+            if (found) {
+                found.name = name;
+                found.description = description;
+                return true;
+            }
+            return node.folders.some(child => search(child));
+        };
+        search(this.folderTreeRoot);
+    }
+
     toggleFolderFav(folder: FolderItem): void {
         this.endPointFilesService.toggleFavorite(folder.id).subscribe({
             next: () => {
@@ -1429,7 +1508,12 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
             favorite: !!item?.favorite,
             folderId: item?.folder_id ?? null,
             url: (item?.url || item?.file_url || item?.download_url || '').toString() || undefined,
-            s3Key: (item?.s3_key || item?.key || '').toString() || undefined
+            s3Key: (item?.s3_key || item?.key || '').toString() || undefined,
+            tags: Array.isArray(item?.tags)
+                ? item.tags
+                : typeof item?.tags === 'string'
+                    ? item.tags.split(',').map((t: string) => t.trim()).filter(Boolean)
+                    : [],
         };
     }
 

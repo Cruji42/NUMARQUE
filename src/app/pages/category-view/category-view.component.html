@@ -139,19 +139,14 @@
           solo cuando la card entra al viewport, evitando peticiones masivas al cargar.
           [hasUrl]="!!file.url" evita que la directiva observe cards que ya tienen URL cacheada.
         -->
-        <div class="file-card"
-             *ngFor="let file of filteredFiles"
-             [appLazyPreview]="file.id"
-             [hasUrl]="!!file.url"
-             (visible)="loadPreviewForFile($event)"
-             [class.selected]="selectedFile?.id === file.id"
-             (click)="selectFile(file)"
-             (contextmenu)="contextMenu($event, contextMenuTpl, file, 'file')">
+        <div class="file-card" *ngFor="let file of filteredFiles" [appLazyPreview]="file.id" [hasUrl]="!!file.url"
+          (visible)="loadPreviewForFile($event)" [class.selected]="selectedFile?.id === file.id"
+          (click)="selectFile(file)" (contextmenu)="contextMenu($event, contextMenuTpl, file, 'file')">
           <div class="file-thumb">
-            <img *ngIf="isImageType(file.type) && file.url"
-                 [src]="file.url" [alt]="file.name" class="file-thumb-image" />
-            <span *ngIf="!(isImageType(file.type) && file.url)"
-                  class="file-thumb-icon">{{ getFileIcon(file.type) }}</span>
+            <img *ngIf="isImageType(file.type) && file.url" [src]="file.url" [alt]="file.name"
+              class="file-thumb-image" />
+            <span *ngIf="!(isImageType(file.type) && file.url)" class="file-thumb-icon">{{ getFileIcon(file.type)
+              }}</span>
           </div>
           <div class="file-name" *ngIf="renamingFileId !== file.id">{{ file.name }}</div>
           <input *ngIf="renamingFileId === file.id" nz-input [ngModel]="renamingFileName"
@@ -187,45 +182,108 @@
   </div>
 
   <!-- Preview panel -->
+  <!-- Preview panel -->
   <div class="preview-panel" *ngIf="selectedFile">
-    <div class="preview-thumb">
-      <img *ngIf="isImageType(selectedFile.type) && selectedFile.url" [src]="selectedFile.url" [alt]="selectedFile.name"
-        class="preview-media-image" />
-      <span *ngIf="!isImageType(selectedFile.type) || !selectedFile.url" class="preview-thumb-icon">{{
-        getFileIcon(selectedFile.type) }}</span>
-    </div>
-    <div class="preview-header">
-      <div class="preview-name">{{ selectedFile.name }}</div>
-      <div class="preview-brand-wrap">
-        <span class="brand-tag" [style]="getBrandStyle(selectedFile.brand)">
-          {{ selectedFile.brand }}
+
+    <!-- ── Vista normal ── -->
+    <ng-container *ngIf="!isEditingContent">
+      <div class="preview-thumb">
+        <img *ngIf="isImageType(selectedFile.type) && selectedFile.url" [src]="selectedFile.url"
+          [alt]="selectedFile.name" class="preview-media-image" />
+        <span *ngIf="!isImageType(selectedFile.type) || !selectedFile.url" class="preview-thumb-icon">
+          {{ getFileIcon(selectedFile.type) }}
         </span>
       </div>
-    </div>
-    <nz-divider class="preview-divider"></nz-divider>
-    <div class="preview-meta">
-      <div class="meta-row"><span class="meta-key">Tipo</span><span class="meta-val">{{ selectedFile.type | uppercase }}</span></div>
-      <div class="meta-row"><span class="meta-key">Tamaño</span><span class="meta-val">{{ selectedFile.size }}</span></div>
-      <div class="meta-row"><span class="meta-key">Descripción</span><span class="meta-val">{{ selectedFile.description }}</span></div>
-      <div class="meta-row"><span class="meta-key">Subido</span><span class="meta-val">{{ selectedFile.uploaded_at | date: 'dd/MM/yyyy' }}</span></div>
-      <div class="meta-row"><span class="meta-key">Por</span><span class="meta-val">{{ selectedFile.uploaded_by }}</span></div>
-      <div class="meta-row"><span class="meta-key">Categoría</span><span class="meta-val">{{ selectedFile.category }}</span></div>
-      <div class="meta-row"><span class="meta-key">Descargas</span><span class="meta-val">{{ selectedFile.downloads }}</span></div>
-    </div>
-    <button class="btn-download" (click)="downloadFile(selectedFile)">
-      <i nz-icon nzType="download"></i> Descargar
-    </button>
-    <button class="btn-share" (click)="shareFile(selectedFile)">
-      <i nz-icon nzType="share-alt"></i> Compartir
-    </button>
-    <button class="btn-share" (click)="openFilePreview(selectedFile)">
-      <i nz-icon nzType="eye"></i> Previsualizar
-    </button>
-    <div class="fav-link" (click)="toggleFileFav(selectedFile)">
-      <i nz-icon nzType="star" [nzTheme]="selectedFile.favorite ? 'fill' : 'outline'"
-        [style.color]="selectedFile.favorite ? '#F59E0B' : '#94A3B8'"></i>
-      {{ selectedFile.favorite ? 'Quitar de favoritos' : 'Agregar a favoritos' }}
-    </div>
+      <div class="preview-header">
+        <div class="preview-name">{{ selectedFile.name }}</div>
+        <div class="preview-brand-wrap">
+          <span class="brand-tag" [style]="getBrandStyle(selectedFile.brand)">
+            {{ selectedFile.brand }}
+          </span>
+        </div>
+      </div>
+      <nz-divider class="preview-divider"></nz-divider>
+      <div class="preview-meta">
+        <div class="meta-row"><span class="meta-key">Tipo</span><span class="meta-val">{{ selectedFile.type | uppercase
+            }}</span></div>
+        <div class="meta-row"><span class="meta-key">Tamaño</span><span class="meta-val">{{ selectedFile.size }}</span>
+        </div>
+        <div class="meta-row"><span class="meta-key">Descripción</span><span class="meta-val">{{
+            selectedFile.description }}</span></div>
+        <div class="meta-row"><span class="meta-key">Subido</span><span class="meta-val">{{ selectedFile.uploaded_at |
+            date: 'dd/MM/yyyy' }}</span></div>
+        <div class="meta-row"><span class="meta-key">Tags</span><span class="meta-val">{{ selectedFile.tags
+            }}</span></div>
+        <div class="meta-row"><span class="meta-key">Categoría</span><span class="meta-val">{{ selectedFile.category
+            }}</span></div>
+        <div class="meta-row"><span class="meta-key">Descargas</span><span class="meta-val">{{ selectedFile.downloads
+            }}</span></div>
+      </div>
+      <button class="btn-download" (click)="downloadFile(selectedFile)">
+        <i nz-icon nzType="download"></i> Descargar
+      </button>
+      <button class="btn-share" (click)="shareFile(selectedFile)">
+        <i nz-icon nzType="share-alt"></i> Compartir
+      </button>
+      <button class="btn-share" (click)="openFilePreview(selectedFile)">
+        <i nz-icon nzType="eye"></i> Previsualizar
+      </button>
+      <button class="btn-share" (click)="openEditContent(selectedFile)">
+        <i nz-icon nzType="edit"></i> Editar información
+      </button>
+      <div class="fav-link" (click)="toggleFileFav(selectedFile)">
+        <i nz-icon nzType="star" [nzTheme]="selectedFile.favorite ? 'fill' : 'outline'"
+          [style.color]="selectedFile.favorite ? '#F59E0B' : '#94A3B8'"></i>
+        {{ selectedFile.favorite ? 'Quitar de favoritos' : 'Agregar a favoritos' }}
+      </div>
+    </ng-container>
+
+    <!-- ── Formulario de edición ── -->
+    <ng-container *ngIf="isEditingContent">
+      <div class="preview-header">
+        <div class="preview-name">Editar información</div>
+      </div>
+      <nz-divider class="preview-divider"></nz-divider>
+
+      <form nz-form nzLayout="vertical" [formGroup]="editContentForm" style="padding: 0 4px;">
+
+        <nz-form-item>
+          <nz-form-label nzRequired>Título</nz-form-label>
+          <nz-form-control nzErrorTip="El título es obligatorio">
+            <input nz-input formControlName="title" placeholder="Título del archivo" />
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+          <nz-form-label>Descripción</nz-form-label>
+          <nz-form-control>
+            <textarea nz-input rows="3" formControlName="description" placeholder="Descripción del archivo"></textarea>
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+          <nz-form-label>Tags</nz-form-label>
+          <nz-form-control>
+            <nz-select nzMode="tags" [nzTokenSeparators]="[',']" [nzNotFoundContent]="null"
+              [nzAutoClearSearchValue]="true" (nzOpenChange)="preventOpen($event)" formControlName="tags"
+              nzPlaceHolder="Agrega tags separados por coma">
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+
+      </form>
+
+      <div style="display:flex; gap:8px; margin-top:12px;">
+        <button nz-button nzType="primary" [disabled]="!editContentForm.valid" (click)="saveEditContent()"
+          style="flex:1">
+          <i nz-icon nzType="save"></i> Guardar
+        </button>
+        <button nz-button nzType="default" (click)="cancelEditContent()" style="flex:1">
+          Cancelar
+        </button>
+      </div>
+    </ng-container>
+
   </div>
 
   <!-- No selection placeholder -->
@@ -270,7 +328,8 @@
 
         <!-- List -->
         <div class="list-table" *ngIf="fileViewMode === 'list'">
-          <div class="list-row folder-row" *ngFor="let folder of filteredFavFolders" (click)="openFavoriteFolder(folder)">
+          <div class="list-row folder-row" *ngFor="let folder of filteredFavFolders"
+            (click)="openFavoriteFolder(folder)">
             <span class="list-icon">📂</span>
             <span class="list-name">{{ folder.name }}</span>
             <span class="list-meta">{{ folder.count }} archivos</span>
@@ -292,18 +351,14 @@
             CAMBIO: Lazy preview también en favoritos.
             Misma lógica: solo se pide la URL cuando la card es visible en pantalla.
           -->
-          <div class="file-card"
-               *ngFor="let file of filteredFavFiles"
-               [appLazyPreview]="file.id"
-               [hasUrl]="!!file.url"
-               (visible)="loadPreviewForFavFile($event)"
-               [class.selected]="selectedFile?.id === file.id"
-               (click)="selectFile(file)">
+          <div class="file-card" *ngFor="let file of filteredFavFiles" [appLazyPreview]="file.id" [hasUrl]="!!file.url"
+            (visible)="loadPreviewForFavFile($event)" [class.selected]="selectedFile?.id === file.id"
+            (click)="selectFile(file)">
             <div class="file-thumb">
-              <img *ngIf="isImageType(file.type) && file.url"
-                   [src]="file.url" [alt]="file.name" class="file-thumb-image" />
-              <span *ngIf="!(isImageType(file.type) && file.url)"
-                    class="file-thumb-icon">{{ getFileIcon(file.type) }}</span>
+              <img *ngIf="isImageType(file.type) && file.url" [src]="file.url" [alt]="file.name"
+                class="file-thumb-image" />
+              <span *ngIf="!(isImageType(file.type) && file.url)" class="file-thumb-icon">{{ getFileIcon(file.type)
+                }}</span>
             </div>
             <div class="file-name">{{ file.name }}</div>
             <div class="file-meta">{{ file.type | uppercase }} · {{ file.size }}</div>
@@ -312,8 +367,7 @@
 
         <!-- List -->
         <div class="list-table" *ngIf="fileViewMode === 'list'">
-          <div class="list-row" *ngFor="let file of filteredFavFiles"
-            [class.selected]="selectedFile?.id === file.id"
+          <div class="list-row" *ngFor="let file of filteredFavFiles" [class.selected]="selectedFile?.id === file.id"
             (click)="selectFile(file)">
             <span class="list-icon">{{ getFileIcon(file.type) }}</span>
             <span class="list-name">{{ file.name }}</span>
@@ -325,8 +379,7 @@
       </div>
 
       <!-- Empty state -->
-      <div class="empty-state fav-empty"
-        *ngIf="filteredFavFiles.length === 0 && filteredFavFolders.length === 0">
+      <div class="empty-state fav-empty" *ngIf="filteredFavFiles.length === 0 && filteredFavFolders.length === 0">
         <div class="empty-icon">⭐</div>
         <div class="empty-title">No tienes favoritos aún</div>
         <div class="empty-sub">Marca archivos o carpetas con ★ para verlos aquí</div>
@@ -338,8 +391,8 @@
   <!-- Preview panel favoritos -->
   <div class="preview-panel" *ngIf="selectedFile">
     <div class="preview-thumb">
-      <img *ngIf="isImageType(selectedFile.type) && selectedFile.url" [src]="selectedFile.url"
-        [alt]="selectedFile.name" class="preview-media-image" />
+      <img *ngIf="isImageType(selectedFile.type) && selectedFile.url" [src]="selectedFile.url" [alt]="selectedFile.name"
+        class="preview-media-image" />
       <span *ngIf="!isImageType(selectedFile.type) || !selectedFile.url" class="preview-thumb-icon">{{
         getFileIcon(selectedFile.type) }}</span>
     </div>
@@ -351,12 +404,18 @@
     </div>
     <nz-divider class="preview-divider"></nz-divider>
     <div class="preview-meta">
-      <div class="meta-row"><span class="meta-key">Tipo</span><span class="meta-val">{{ selectedFile.type | uppercase }}</span></div>
-      <div class="meta-row"><span class="meta-key">Tamaño</span><span class="meta-val">{{ selectedFile.size }}</span></div>
-      <div class="meta-row"><span class="meta-key">Descripción</span><span class="meta-val">{{ selectedFile.description }}</span></div>
-      <div class="meta-row"><span class="meta-key">Subido</span><span class="meta-val">{{ selectedFile.uploaded_at | date: 'dd/MM/yyyy' }}</span></div>
-      <div class="meta-row"><span class="meta-key">Por</span><span class="meta-val">{{ selectedFile.uploaded_by }}</span></div>
-      <div class="meta-row"><span class="meta-key">Categoría</span><span class="meta-val">{{ selectedFile.category }}</span></div>
+      <div class="meta-row"><span class="meta-key">Tipo</span><span class="meta-val">{{ selectedFile.type | uppercase
+          }}</span></div>
+      <div class="meta-row"><span class="meta-key">Tamaño</span><span class="meta-val">{{ selectedFile.size }}</span>
+      </div>
+      <div class="meta-row"><span class="meta-key">Descripción</span><span class="meta-val">{{ selectedFile.description
+          }}</span></div>
+      <div class="meta-row"><span class="meta-key">Subido</span><span class="meta-val">{{ selectedFile.uploaded_at |
+          date: 'dd/MM/yyyy' }}</span></div>
+      <div class="meta-row"><span class="meta-key">Por</span><span class="meta-val">{{ selectedFile.uploaded_by
+          }}</span></div>
+      <div class="meta-row"><span class="meta-key">Categoría</span><span class="meta-val">{{ selectedFile.category
+          }}</span></div>
     </div>
     <button class="btn-download" (click)="downloadFile(selectedFile)">
       <i nz-icon nzType="download"></i> Descargar
