@@ -8,23 +8,23 @@
     </div>
   </div>
   <div class="nav-links">
-    <a class="active" (click)="goToLogin('busqueda')">Inicio</a>
-    <a (click)="goToLogin('busqueda')">Marcas</a>
-    <a (click)="goToLogin('busqueda')">Categorías</a>
-    <a (click)="goToLogin('busqueda')">Novedades</a>
-    <a (click)="goToLogin('busqueda')">FAQs</a>
+    <a class="active" (click)="goToLogin('search')">Inicio</a>
+    <a (click)="goToLogin('search')">Marcas</a>
+    <a (click)="goToLogin('search')">Categorías</a>
+    <a (click)="goToLogin('search')">Novedades</a>
+    <a (click)="goToLogin('search')">FAQs</a>
   </div>
   <div class="nav-right">
-    <div class="notif-btn" (click)="goToLogin('busqueda')">
+    <div class="notif-btn" (click)="goToLogin('search')">
       🔔
       <span class="notif-dot"></span>
     </div>
-    <div class="avatar" (click)="goToLogin('busqueda')">EA</div>
+    <div class="avatar" (click)="goToLogin('search')">EA</div>
   </div>
 </nav> -->
 
 <!-- HERO -->
-<section class="hero" (click)="goToLogin('busqueda')">
+<section class="hero" (click)="goToLogin('search')">
   <div class="hero-bg"></div>
   <div class="hero-grid"></div>
   <div class="hero-content">
@@ -32,12 +32,12 @@
     <h1 class="text-white" [innerHTML]="'WELCOME.HERO.TITLE' | translate | async"></h1>
     <p class="hero-sub" [innerHTML]="'WELCOME.HERO.SUBTITLE' | translate | async"></p>
     <div class="search-wrap" (click)="$event.stopPropagation()">
-      <input class="search-box" placeholder="¿Qué buscas hoy? Prueba Banner NUPEC o Kit BTL..." (focus)="goToLogin('busqueda')" />
+      <input class="search-box" placeholder="¿Qué buscas hoy? Prueba Banner NUPEC o Kit BTL..." (focus)="goToLogin('search')" />
       <span class="search-icon">🔍</span>
-      <button class="search-btn" (click)="goToLogin('busqueda')">{{ 'WELCOME.HERO.SEARCH_BUTTON' | translate | async }}</button>
+      <button class="search-btn" (click)="goToLogin('search')">{{ 'WELCOME.HERO.SEARCH_BUTTON' | translate | async }}</button>
     </div>
     <div class="chips">
-      <div class="chip" (click)="goToLogin('busqueda')" *ngFor="let chip of chips$ | async">{{ chip }}</div>
+      <div class="chip" (click)="goToLogin('search')" *ngFor="let chip of chips$ | async">{{ chip }}</div>
     </div>
   </div>
 </section>
@@ -103,7 +103,7 @@
   <h2 class="sec-title text-white">{{ 'WELCOME.HOW_IT_WORKS.TITLE' | translate | async }}</h2>
   <p class="sec-sub">{{ 'WELCOME.HOW_IT_WORKS.SUBTITLE' | translate | async }}</p>
   <div class="steps">
-    <div class="step" *ngFor="let step of steps$ | async" (click)="goToLogin('busqueda')">
+    <div class="step" *ngFor="let step of steps$ | async" (click)="goToLogin('search')">
       <div class="step-num">{{ step.num }}</div>
       <span class="step-ico">{{ step.icon }}</span>
       <div class="step-title">{{ step.title }}</div>
@@ -117,8 +117,8 @@
 <h2 class="text-white" [innerHTML]="'WELCOME.CTA.TITLE' | translate | async"></h2>
   <p>{{ 'WELCOME.CTA.SUBTITLE' | translate | async }}</p>
   <div class="cta-btns">
-    <button class="btn-p" (click)="goToLogin('busqueda')">{{ 'WELCOME.CTA.PRIMARY' | translate | async }}</button>
-    <button class="btn-g" (click)="goToLogin('busqueda')">{{ 'WELCOME.CTA.SECONDARY' | translate | async }}</button>
+    <button class="btn-p" (click)="goToLogin('search')">{{ 'WELCOME.CTA.PRIMARY' | translate | async }}</button>
+    <button class="btn-g" (click)="goToLogin('search')">{{ 'WELCOME.CTA.SECONDARY' | translate | async }}</button>
   </div>
 </section>
 
