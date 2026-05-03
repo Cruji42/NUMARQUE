@@ -113,4 +113,11 @@ export class EndPointFilesService {
         return this.http.put(`${this.apiUrl}/contents/${data.content_id}`, data, { headers: this.configHeaders()})
     }
 
+    deleteFolder(data: any): Observable<any> {
+        return this.http.post(`${this.apiUrl}/files/delete-folder`, data,{ headers: this.configHeaders() });
+    }
+
+    renameFolder(data: any): Observable<any> {
+        return this.http.post(`${this.apiUrl}/files/rename-folder`, data,{ headers: this.configHeaders() });
+    }
 }

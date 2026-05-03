@@ -100,7 +100,8 @@
 
       <!-- Grid -->
       <div class="folders-grid" *ngIf="fileViewMode === 'grid'">
-        <div class="folder-card" *ngFor="let folder of filteredFolders" (click)="openFolder(folder)"
+        <div class="folder-card" *ngFor="let folder of filteredFolders"
+          (click)="renamingFolderId !== folder.id && openFolder(folder)"
           (contextmenu)="contextMenu($event, contextMenuTpl, folder, 'folder')">
           <button class="fav-btn" [class.starred]="folder.favorite" nz-tooltip
             [nzTooltipTitle]="folder.favorite ? 'Quitar de favoritos' : 'Agregar a favoritos'"
@@ -108,17 +109,24 @@
             <i nz-icon nzType="star" [nzTheme]="folder.favorite ? 'fill' : 'outline'"></i>
           </button>
           <div class="folder-icon">📂</div>
-          <div class="folder-name">{{ folder.name }}</div>
+          <div class="folder-name" *ngIf="renamingFolderId !== folder.id">{{ folder.name }}</div>
+          <input *ngIf="renamingFolderId === folder.id" nz-input [ngModel]="renamingFolderName"
+            (ngModelChange)="renamingFolderName = $event" (keydown)="onRenameFolderKeydown($event, folder)"
+            (blur)="confirmRenameFolder(folder)" (click)="$event.stopPropagation()" autocomplete="off" />
           <div class="folder-count">{{ folder.count }} archivos</div>
         </div>
       </div>
 
       <!-- List -->
       <div class="list-table" *ngIf="fileViewMode === 'list'">
-        <div class="list-row folder-row" *ngFor="let folder of filteredFolders" (click)="openFolder(folder)"
+        <div class="list-row folder-row" *ngFor="let folder of filteredFolders"
+          (click)="renamingFolderId !== folder.id && openFolder(folder)"
           (contextmenu)="contextMenu($event, contextMenuTpl, folder, 'folder')">
           <span class="list-icon">📂</span>
-          <span class="list-name">{{ folder.name }}</span>
+          <span class="list-name" *ngIf="renamingFolderId !== folder.id">{{ folder.name }}</span>
+          <input *ngIf="renamingFolderId === folder.id" nz-input class="list-name" [ngModel]="renamingFolderName"
+            (ngModelChange)="renamingFolderName = $event" (keydown)="onRenameFolderKeydown($event, folder)"
+            (blur)="confirmRenameFolder(folder)" (click)="$event.stopPropagation()" autocomplete="off" />
           <span class="list-meta">{{ folder.count }} archivos</span>
           <button class="fav-btn-sm" (click)="$event.stopPropagation(); toggleFolderFav(folder)">
             <i nz-icon nzType="star" [nzTheme]="folder.favorite ? 'fill' : 'outline'"></i>
@@ -133,12 +141,6 @@
 
       <!-- Grid -->
       <div class="files-grid" *ngIf="fileViewMode === 'grid'">
-        <!--
-          CAMBIO: Se agrega appLazyPreview en cada card de imagen.
-          La directiva usa IntersectionObserver para emitir (visible)
-          solo cuando la card entra al viewport, evitando peticiones masivas al cargar.
-          [hasUrl]="!!file.url" evita que la directiva observe cards que ya tienen URL cacheada.
-        -->
         <div class="file-card" *ngFor="let file of filteredFiles" [appLazyPreview]="file.id" [hasUrl]="!!file.url"
           (visible)="loadPreviewForFile($event)" [class.selected]="selectedFile?.id === file.id"
           (click)="selectFile(file)" (contextmenu)="contextMenu($event, contextMenuTpl, file, 'file')">
@@ -157,7 +159,6 @@
       </div>
 
       <!-- List -->
-      <!-- En modo lista no se muestran thumbnails, no se necesita lazy preview -->
       <div class="list-table" *ngIf="fileViewMode === 'list'">
         <div class="list-row" *ngFor="let file of filteredFiles" [class.selected]="selectedFile?.id === file.id"
           (click)="selectFile(file)" (contextmenu)="contextMenu($event, contextMenuTpl, file, 'file')">
@@ -181,7 +182,6 @@
     </div>
   </div>
 
-  <!-- Preview panel -->
   <!-- Preview panel -->
   <div class="preview-panel" *ngIf="selectedFile">
 
@@ -347,10 +347,6 @@
 
         <!-- Grid -->
         <div class="files-grid" *ngIf="fileViewMode === 'grid'">
-          <!--
-            CAMBIO: Lazy preview también en favoritos.
-            Misma lógica: solo se pide la URL cuando la card es visible en pantalla.
-          -->
           <div class="file-card" *ngFor="let file of filteredFavFiles" [appLazyPreview]="file.id" [hasUrl]="!!file.url"
             (visible)="loadPreviewForFavFile($event)" [class.selected]="selectedFile?.id === file.id"
             (click)="selectFile(file)">

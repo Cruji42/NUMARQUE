@@ -38,6 +38,7 @@ export interface FolderItem {
     brand?: string;
     entityId?: number | null;
     subcategoryId?: number | null;
+    s3Key?: string;
 }
 
 export interface FileItem {
@@ -104,6 +105,7 @@ interface FolderTreeNode {
     id: number;
     name: string;
     fullPath: string;
+    s3Key?: string;
     folders: FolderTreeNode[];
     files: FileItem[];
 }
@@ -184,6 +186,8 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
     selectedContextType: 'file' | 'folder' | null = null;
     renamingFileId: number | null = null;
     renamingFileName = '';
+    renamingFolderId: number | null = null;
+    renamingFolderName = '';
     previewModalUrl: SafeResourceUrl | null = null;
     previewModalVideoUrl: SafeUrl | null = null;
     previewModalType: 'pdf' | 'video' | 'image' | null = null;
@@ -948,7 +952,7 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
             this.filteredFiles = [];
             return;
         }
-
+        console.log('Renderizando nivel del árbol:', this.folderTreeRoot);
         let node: FolderTreeNode | null = this.folderTreeRoot;
         for (const segment of this.currentTreePath) {
             node = node.folders.find(f => f.name === segment) || null;
@@ -969,7 +973,8 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
             count: folderNode.files.length + folderNode.folders.length,
             favorite: this.allFavFolders.some(f => f.id === folderNode.id),
             parentId: this.currentFolderId,
-            brand: (this.activeBrand || this.getBrandDisplayName() || '').toString() || undefined
+            brand: (this.activeBrand || this.getBrandDisplayName() || '').toString() || undefined,
+            s3Key: folderNode.s3Key || folderNode.fullPath || undefined
         }));
 
         this.allFolders = folders;
@@ -1239,8 +1244,18 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
     }
 
     contextRename(): void {
-        if (this.selectedContextType !== 'file' || !this.selectedContextItem) {
-            this.message.info('Solo se pueden renombrar archivos.');
+        if (!this.selectedContextItem) { this.closeContextMenu(); return; }
+
+        if (this.selectedContextType === 'folder') {
+            const folder = this.selectedContextItem as FolderItem;
+            this.renamingFolderId = folder.id;
+            this.renamingFolderName = folder.name || '';
+            this.closeContextMenu();
+            return;
+        }
+
+        if (this.selectedContextType !== 'file') {
+            this.message.info('Solo se pueden renombrar archivos o carpetas.');
             this.closeContextMenu();
             return;
         }
@@ -1251,6 +1266,35 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
     }
 
     cancelRename(): void { this.renamingFileId = null; this.renamingFileName = ''; }
+
+    cancelRenameFolder(): void { this.renamingFolderId = null; this.renamingFolderName = ''; }
+
+    onRenameFolderKeydown(event: KeyboardEvent, folder: FolderItem): void {
+        if (event.key === 'Enter') { event.preventDefault(); this.confirmRenameFolder(folder); return; }
+        if (event.key === 'Escape') { event.preventDefault(); this.cancelRenameFolder(); }
+    }
+
+    confirmRenameFolder(folder: FolderItem): void {
+        const newName = (this.renamingFolderName || '').trim();
+        if (!newName) { this.cancelRenameFolder(); return; }
+        if (!folder?.s3Key) { this.message.warning('No se pudo identificar la carpeta a renombrar.'); this.cancelRenameFolder(); return; }
+
+        const fromPath = folder.s3Key;
+        const segments = fromPath.split('/');
+        segments[segments.length - 1] = newName;
+        const toPath = segments.join('/');
+
+        this.endPointFilesService.renameFolder({ from_path: fromPath, to_path: toPath }).subscribe({
+            next: () => {
+                this.message.success('Carpeta renombrada correctamente.');
+                this.cancelRenameFolder();
+                const savedTreePath = [...this.currentTreePath];
+                const savedFolderTrail = [...this.fileManagerFolderTrail];
+                this.loadFilesBySubcategoryKeepingLevel(savedTreePath, savedFolderTrail);
+            },
+            error: () => { this.message.error('No se pudo renombrar la carpeta.'); this.cancelRenameFolder(); }
+        });
+    }
 
     onRenameKeydown(event: KeyboardEvent, file: FileItem): void {
         if (event.key === 'Enter') { event.preventDefault(); this.confirmRename(file); return; }
@@ -1282,21 +1326,74 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
 
     contextDelete(): void {
         if (!this.selectedContextItem) { this.closeContextMenu(); return; }
-        const target = this.selectedContextItem as any;
-        const id = Number(target?.id);
-        const name = target?.name || 'ítem';
 
-        if (!id) { this.message.warning('No se pudo identificar el elemento a eliminar.'); this.closeContextMenu(); return; }
+        if (this.selectedContextType === 'folder') {
+            this.deleteFolderWithConfirm(this.selectedContextItem as FolderItem);
+        } else {
+            this.deleteFileItem(this.selectedContextItem as FileItem);
+        }
+    }
+
+    private deleteFileItem(file: FileItem): void {
+        const id = Number(file?.id);
+        const name = file?.name || 'item';
+
+        if (!id) { this.message.warning('No se pudo identificar el archivo a eliminar.'); this.closeContextMenu(); return; }
 
         this.service.deleteContent(id).subscribe({
             next: () => {
-                this.previewCache.invalidate(id); // ← Limpia la URL cacheada del archivo eliminado
+                this.previewCache.invalidate(id);
                 this.message.success(`"${name}" eliminado correctamente.`);
                 this.closeContextMenu();
                 this.selectedFile = null;
                 this.loadFilesBySubcategory();
             },
             error: () => { this.message.error(`No se pudo eliminar "${name}".`); this.closeContextMenu(); }
+        });
+    }
+
+    private deleteFolderWithConfirm(folder: FolderItem): void {
+        const name = folder?.name || 'carpeta';
+        const s3Key = folder?.s3Key;
+
+        console.log('Intentando eliminar carpeta:', { name, s3Key, folder });
+
+        this.closeContextMenu();
+
+        if (!s3Key) {
+            this.message.warning('No se pudo determinar la ruta de la carpeta para eliminarla.');
+            return;
+        }
+
+        this.modal.confirm({
+            nzTitle: `Eliminar la carpeta "${name}"`,
+            nzContent: `<b>Atención:</b> Se eliminarán permanentemente todos los archivos y subcarpetas que contiene. Esta acción no se puede deshacer.`,
+            nzOkText: 'Sí, eliminar todo',
+            nzOkDanger: true,
+            nzCancelText: 'Cancelar',
+            nzOnOk: () => new Promise((resolve, reject) => {
+                this.service.deleteFolder({ path: s3Key }).subscribe({
+                    next: () => {
+                        this.message.success(`La carpeta "${name}" y su contenido fueron eliminados correctamente.`);
+                        this.selectedFile = null;
+
+                        // Si estamos dentro de la carpeta eliminada, retroceder un nivel
+                        if (this.currentTreePath[this.currentTreePath.length - 1] === name) {
+                            this.currentTreePath = this.currentTreePath.slice(0, -1);
+                            this.fileManagerFolderTrail = this.fileManagerFolderTrail.slice(0, -1);
+                        }
+
+                        const savedTreePath = [...this.currentTreePath];
+                        const savedFolderTrail = [...this.fileManagerFolderTrail];
+                        this.loadFilesBySubcategoryKeepingLevel(savedTreePath, savedFolderTrail);
+                        resolve(true);
+                    },
+                    error: () => {
+                        this.message.error(`No se pudo eliminar la carpeta "${name}".`);
+                        reject();
+                    }
+                });
+            })
         });
     }
 
@@ -1782,6 +1879,7 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
                     const id = idx === relativeParts.length - 1 ? folderId : undefined;
                     currentNode = this.ensureFolderNode(currentNode, segment, id);
                 });
+                if (itemPath) { currentNode.s3Key = itemPath; }
             } else {
                 const mappedFile = this.toFileItem(rawItem);
                 const effectiveFileName = (mappedFile.name || fileLikeName || '').toString().trim();
@@ -1925,6 +2023,8 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
             next: (resp: any) => {
                 const items = this.extractFilesFromContentResponse(resp);
                 this.folderTreeRoot = this.buildTreeFromPathItems(items);
+
+                console.log('Árbol reconstruido después de carga:', this.folderTreeRoot);
 
                 // Restaurar el nivel donde estaba el usuario
                 this.currentTreePath = savedTreePath;

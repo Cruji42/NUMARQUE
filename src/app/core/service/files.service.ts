@@ -82,5 +82,16 @@ export class FilesService {
         )
     }
 
+    deleteFolder(data: any): Observable<any> {
+        return this.endPointFilesService.deleteFolder(data).pipe(
+            map((res: any) => {
+                return res;
+            }),
+            catchError((error) => {
+                return throwError(() => error);
+            })
+        )
+    }
+
 
 }
