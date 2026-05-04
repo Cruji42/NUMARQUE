@@ -194,6 +194,21 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
     previewModalImageUrl: SafeUrl | null = null;
     isUploading = false;
 
+    // ── Move modal state ──────────────────────────────────────────────
+    moveContextItem: (FileItem | FolderItem) | null = null;
+    moveItemIsFolder = false;
+    moveModalRef!: NzModalRef;
+    moveBreadcrumbs: { name: string; node: FolderTreeNode | null; subcategoryId: number | null }[] = [];
+    moveCurrentNode: FolderTreeNode | null = null;
+    moveCurrentSubcategoryId: number | null = null;
+    moveAvailableFolders: FolderItem[] = [];
+    moveAvailableSubcategories: SubcategoryItem[] = [];
+    moveSelectedFolderId: number | null = null;
+    moveSelectedFolderNode: FolderTreeNode | null = null;
+    moveSelectedSubcategoryId: number | null = null;
+    moveLoadingFolders = false;
+    isMoving = false;
+
     isEditingContent = false;
     editContentForm!: FormGroup;
 
@@ -201,6 +216,8 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
     @ViewChild('tplFooter', { static: true }) tplFooter!: TemplateRef<any>;
     @ViewChild('fileInputRef') fileInputRef?: ElementRef<HTMLInputElement>;
     @ViewChild('previewModalTpl', { static: true }) previewModalTpl!: TemplateRef<any>;
+    @ViewChild('moveTpl', { static: true }) moveTpl!: TemplateRef<any>;
+    @ViewChild('moveFooterTpl', { static: true }) moveFooterTpl!: TemplateRef<any>;
 
     constructor(
         private message: NzMessageService,
@@ -1284,7 +1301,7 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
         segments[segments.length - 1] = newName;
         const toPath = segments.join('/');
 
-        this.endPointFilesService.renameFolder({ from_path: fromPath, to_path: toPath }).subscribe({
+        this.endPointFilesService.renameFolder({ from_path: fromPath, to_path: toPath, subcategory_id: this.activeSubcategoryId }).subscribe({
             next: () => {
                 this.message.success('Carpeta renombrada correctamente.');
                 this.cancelRenameFolder();
@@ -1319,9 +1336,258 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
 
     contextMove(): void {
         if (!this.selectedContextItem) { this.closeContextMenu(); return; }
-        const name = (this.selectedContextItem as any)?.name || 'ítem';
-        this.message.info(`Mover "${name}" (pendiente integración API).`);
+
+        if (!this.activeBrandId || !this.currentDepartmentSubcategories.length) {
+            this.message.warning('La funcionalidad de mover solo está disponible dentro de una brand con subcategorías.');
+            this.closeContextMenu();
+            return;
+        }
+
+        this.moveContextItem = this.selectedContextItem;
+        this.moveItemIsFolder = this.selectedContextType === 'folder';
         this.closeContextMenu();
+
+        // Arrancar en el nivel de subcategorías (primer nivel navegable)
+        this.moveBreadcrumbs = [];
+        this.moveCurrentNode = null;
+        this.moveCurrentSubcategoryId = null;
+        this.moveSelectedFolderId = null;
+        this.moveSelectedFolderNode = null;
+        this.moveSelectedSubcategoryId = null;
+        this.moveAvailableFolders = [];
+        this.moveAvailableSubcategories = this.currentDepartmentSubcategories.filter(
+            s => !!s.id && !!s.name
+        );
+
+        this.moveModalRef = this.modal.create({
+            nzTitle: `Mover "${this.moveContextItem.name}"`,
+            nzContent: this.moveTpl,
+            nzFooter: this.moveFooterTpl,
+            nzViewContainerRef: this.viewContainerRef,
+            nzWidth: 500,
+            nzMaskClosable: false,
+        });
+    }
+
+    /** Entra a una subcategoría: carga sus carpetas via API */
+    moveNavIntoSubcategory(sub: SubcategoryItem): void {
+        if (!sub.id || !this.activeBrandId) return;
+
+        this.moveLoadingFolders = true;
+        this.moveCurrentSubcategoryId = sub.id;
+        this.moveSelectedFolderId = null;
+        this.moveSelectedFolderNode = null;
+        this.moveSelectedSubcategoryId = sub.id; // seleccionar la raíz de esta subcategoría por defecto
+        this.moveBreadcrumbs = [{ name: sub.name!, node: null, subcategoryId: sub.id }];
+
+        this.endPointFilesService.getContentBySubcategory(this.activeBrandId, sub.id, undefined).subscribe({
+            next: (resp: any) => {
+                const items = this.extractFilesFromContentResponse(resp);
+                const tree = this.buildTreeFromPathItems(items);
+                this.moveCurrentNode = tree;
+                this.refreshMoveAvailableFolders();
+                this.moveLoadingFolders = false;
+            },
+            error: () => {
+                this.moveCurrentNode = null;
+                this.moveAvailableFolders = [];
+                this.moveLoadingFolders = false;
+                this.message.warning('No se pudieron cargar las carpetas de esta subcategoría.');
+            }
+        });
+    }
+
+    /** Entra a una carpeta dentro de la subcategoría activa */
+    moveNavIntoFolder(folder: FolderItem): void {
+        const treeNode = this.moveCurrentNode?.folders.find(fn => fn.id === folder.id);
+        if (!treeNode) return;
+
+        this.moveBreadcrumbs = [...this.moveBreadcrumbs, { name: folder.name, node: treeNode, subcategoryId: this.moveCurrentSubcategoryId }];
+        this.moveCurrentNode = treeNode;
+        this.moveSelectedFolderId = null;
+        this.moveSelectedFolderNode = null;
+        this.refreshMoveAvailableFolders();
+    }
+
+    /** Refresca la lista de carpetas del nodo actual */
+    private refreshMoveAvailableFolders(): void {
+        if (!this.moveCurrentNode) { this.moveAvailableFolders = []; return; }
+
+        const itemId = (this.moveContextItem as any)?.id;
+        const itemName = (this.moveContextItem as any)?.name;
+
+        this.moveAvailableFolders = this.moveCurrentNode.folders
+            .filter(fn => {
+                if (this.moveItemIsFolder && (fn.id === itemId || fn.name === itemName)) return false;
+                return true;
+            })
+            .map(fn => ({
+                id: fn.id,
+                name: fn.name,
+                count: fn.files.length + fn.folders.length,
+                favorite: false,
+                parentId: null,
+                s3Key: fn.s3Key || fn.fullPath
+            } as FolderItem));
+    }
+
+    /** Click simple → selecciona como destino */
+    selectMoveTarget(folder: FolderItem): void {
+        this.moveSelectedFolderId = folder.id;
+        this.moveSelectedFolderNode = this.moveCurrentNode?.folders.find(fn => fn.id === folder.id) || null;
+        this.moveSelectedSubcategoryId = this.moveCurrentSubcategoryId;
+    }
+
+    /** Navega a la raíz (lista de subcategorías) */
+    moveNavToRoot(): void {
+        this.moveBreadcrumbs = [];
+        this.moveCurrentNode = null;
+        this.moveCurrentSubcategoryId = null;
+        this.moveSelectedFolderId = null;
+        this.moveSelectedFolderNode = null;
+        this.moveSelectedSubcategoryId = null;
+        this.moveAvailableFolders = [];
+    }
+
+    /** Navega a un crumb anterior */
+    moveNavToCrumb(index: number): void {
+        const crumb = this.moveBreadcrumbs[index];
+        this.moveBreadcrumbs = this.moveBreadcrumbs.slice(0, index + 1);
+        this.moveCurrentNode = crumb.node;
+        this.moveCurrentSubcategoryId = crumb.subcategoryId;
+        this.moveSelectedFolderId = null;
+        this.moveSelectedFolderNode = null;
+        // Al navegar a un crumb, la raíz de esa subcategoría queda seleccionada por defecto
+        this.moveSelectedSubcategoryId = crumb.subcategoryId;
+        if (crumb.node) {
+            this.refreshMoveAvailableFolders();
+        } else {
+            // Volvimos a la raíz de la subcategoría, recargar árbol
+            const sub = this.currentDepartmentSubcategories.find(s => s.id === crumb.subcategoryId);
+            if (sub) this.moveNavIntoSubcategory(sub);
+        }
+    }
+
+    isMoveTargetDisabled(folder: FolderItem): boolean {
+        if (!this.moveItemIsFolder) return false;
+        return folder.id === (this.moveContextItem as FolderItem)?.id;
+    }
+
+    getMoveDestinationLabel(): string {
+        if (this.moveSelectedFolderNode) {
+            return this.moveSelectedFolderNode.name;
+        }
+        if (this.moveSelectedSubcategoryId) {
+            const sub = this.currentDepartmentSubcategories.find(s => s.id === this.moveSelectedSubcategoryId);
+            const subName = sub?.name || 'subcategoría';
+            if (this.moveBreadcrumbs.length > 0) {
+                const lastCrumb = this.moveBreadcrumbs[this.moveBreadcrumbs.length - 1];
+                return lastCrumb.node ? lastCrumb.name : `Raíz de ${subName}`;
+            }
+            return `Raíz de ${subName}`;
+        }
+        return 'Selecciona un destino';
+    }
+
+    canConfirmMove(): boolean {
+        if (!this.moveContextItem || this.moveLoadingFolders) return false;
+        // Debe haber al menos una subcategoría seleccionada
+        if (!this.moveSelectedSubcategoryId) return false;
+        // Si es la misma subcategoría, verificar que el destino sea diferente al origen
+        if (this.moveSelectedSubcategoryId === this.activeSubcategoryId) {
+            const targetPath = this.getMoveTargetPath();
+            const currentPath = this.currentTreePath.join('/');
+            return targetPath !== currentPath;
+        }
+        return true;
+    }
+
+    private getMoveTargetPath(): string {
+        if (this.moveSelectedFolderNode) return this.moveSelectedFolderNode.fullPath;
+        if (this.moveCurrentNode && this.moveCurrentNode.name !== '__root__') return this.moveCurrentNode.fullPath;
+        return '';
+    }
+
+    cancelMove(): void {
+        this.moveModalRef?.close();
+        this.moveContextItem = null;
+        this.isMoving = false;
+    }
+
+    confirmMove(): void {
+        if (!this.moveContextItem || this.isMoving || !this.moveSelectedSubcategoryId) return;
+
+        const item = this.moveContextItem;
+        const brandId = this.activeBrandId;
+        const targetSubcategoryId = this.moveSelectedSubcategoryId;
+
+        if (!brandId) {
+            this.message.warning('No se pudo determinar el contexto de la operación.');
+            return;
+        }
+
+        // Calcular la ruta base de la subcategoría destino
+        const targetSub = this.currentDepartmentSubcategories.find(s => s.id === targetSubcategoryId);
+        const targetSubSlug = this.slugifyPathPart(targetSub?.name || '');
+        const entitySlug = this.activeEntityTrail.map(e => this.slugifyPathPart(e)).join('/');
+        const subcategoryBasePath = `${entitySlug}/${targetSubSlug}`;
+
+        // Ruta final = base de subcategoría + carpeta destino (si hay)
+        const folderSuffix = this.getMoveTargetPath()
+            ? '/' + this.getMoveTargetPath().split('/').slice(
+                // quitar los segmentos de entity+subcategoría que ya tiene fullPath
+                this.moveSelectedFolderNode
+                    ? this.moveSelectedFolderNode.fullPath.split('/').findIndex(s => s === targetSubSlug) + 1
+                    : 0
+              ).filter(Boolean).join('/')
+            : '';
+
+        const targetBasePath = this.moveSelectedFolderNode
+            ? this.moveSelectedFolderNode.fullPath
+            : subcategoryBasePath;
+
+        if (this.moveItemIsFolder) {
+            const folder = item as FolderItem;
+            const s3Key = folder.s3Key;
+            if (!s3Key) {
+                this.message.warning('No se pudo identificar la ruta de la carpeta.');
+                return;
+            }
+            const folderName = s3Key.split('/').filter(Boolean).pop() || folder.name;
+            const toPath = `${targetBasePath}/${folderName}`;
+
+            this.isMoving = true;
+            this.endPointFilesService.moveFolder({ from_path: s3Key, to_path: toPath, subcategory_id: targetSubcategoryId }).subscribe({
+                next: () => { this.onMoveSuccess(folder.name); },
+                error: () => { this.message.error('No se pudo mover la carpeta.'); this.isMoving = false; }
+            });
+        } else {
+            const file = item as FileItem;
+            const fileNameFromS3 = file.s3Key?.split('/').filter(Boolean).pop() || file.name;
+            const payload = {
+                content_id: file.id,
+                path_destination: `${targetBasePath}/${fileNameFromS3}`,
+                entity_id: brandId,
+                subcategory_id: targetSubcategoryId
+            };
+
+            this.isMoving = true;
+            this.endPointFilesService.moveContent(payload).subscribe({
+                next: () => { this.onMoveSuccess(file.name); },
+                error: () => { this.message.error('No se pudo mover el archivo.'); this.isMoving = false; }
+            });
+        }
+    }
+
+    private onMoveSuccess(name: string): void {
+        this.isMoving = false;
+        this.message.success(`"${name}" movido correctamente.`);
+        this.moveModalRef?.close();
+        this.moveContextItem = null;
+
+        const savedTreePath = [...this.currentTreePath];
+        const savedFolderTrail = [...this.fileManagerFolderTrail];
+        this.loadFilesBySubcategoryKeepingLevel(savedTreePath, savedFolderTrail);
     }
 
     contextDelete(): void {

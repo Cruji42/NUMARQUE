@@ -84,7 +84,7 @@ export class EndPointFilesService {
     }
 
     deleteContent(id: number): Observable<any> {
-        return this.http.delete(`${this.apiUrl}/files/contents/${id}`, { headers: this.configHeaders() });
+        return this.http.delete(`${this.apiUrl}/files/contents/delete/${id}`, { headers: this.configHeaders() });
     }
 
 
@@ -119,5 +119,13 @@ export class EndPointFilesService {
 
     renameFolder(data: any): Observable<any> {
         return this.http.post(`${this.apiUrl}/files/rename-folder`, data,{ headers: this.configHeaders() });
+    }
+
+    moveContent(data: any): Observable<any> {
+        return this.http.put(`${this.apiUrl}/files/contents/move/${data.content_id}?path_destination=${data.path_destination}&subcategory_id=${data.subcategory_id}`, data,{ headers: this.configHeaders() });
+    }
+
+    moveFolder(data: any): Observable<any> {
+        return this.http.post(`${this.apiUrl}/files/move-folder`, data,{ headers: this.configHeaders() });
     }
 }

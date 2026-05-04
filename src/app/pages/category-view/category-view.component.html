@@ -449,12 +449,116 @@
       <i nz-icon nzType="edit"></i>
       Renombrar
     </li>
+    <li nz-menu-item (click)="contextMove()">
+      <i nz-icon nzType="drag"></i>
+      Mover
+    </li>
     <li nz-menu-item nzDanger (click)="contextDelete()">
       <i nz-icon nzType="delete"></i>
       Eliminar
     </li>
   </ul>
 </nz-dropdown-menu>
+
+<!-- ============================================================
+     Modal: Mover archivo o carpeta
+     ============================================================ -->
+<ng-template #moveTpl>
+  <div class="move-modal">
+
+    <!-- Header info del ítem a mover -->
+    <div class="move-item-info">
+      <span class="move-item-icon">{{ moveItemIsFolder ? '📂' : getFileIcon(moveContextItem?.type || '') }}</span>
+      <span class="move-item-name">{{ moveContextItem?.name }}</span>
+    </div>
+
+    <!-- Breadcrumb de navegación dentro del modal -->
+    <div class="move-breadcrumb">
+      <span class="move-crumb-root" (click)="moveNavToRoot()">
+        <i nz-icon nzType="home"></i> Subcategorías
+      </span>
+      <ng-container *ngFor="let crumb of moveBreadcrumbs; let i = index">
+        <span class="move-crumb-sep">›</span>
+        <span class="move-crumb" (click)="moveNavToCrumb(i)">{{ crumb.name }}</span>
+      </ng-container>
+    </div>
+
+    <!-- Nivel 0: lista de subcategorías -->
+    <div class="move-folder-list" *ngIf="moveBreadcrumbs.length === 0">
+      <div class="move-empty" *ngIf="moveAvailableSubcategories.length === 0">
+        <i nz-icon nzType="folder-open"></i>
+        <span>No hay subcategorías disponibles</span>
+      </div>
+      <div
+        *ngFor="let sub of moveAvailableSubcategories"
+        class="move-folder-row move-subcategory-row"
+        (click)="moveNavIntoSubcategory(sub)">
+        <span class="move-folder-icon">🗂️</span>
+        <span class="move-folder-name">{{ sub.name }}</span>
+        <span class="move-folder-enter" nz-tooltip nzTooltipTitle="Entrar a subcategoría">
+          <i nz-icon nzType="right"></i>
+        </span>
+      </div>
+    </div>
+
+    <!-- Nivel 1+: carpetas dentro de la subcategoría seleccionada -->
+    <div class="move-folder-list" *ngIf="moveBreadcrumbs.length > 0">
+
+      <!-- Loading -->
+      <div class="move-loading" *ngIf="moveLoadingFolders">
+        <nz-spin nzSimple nzSize="small"></nz-spin>
+        <span>Cargando carpetas...</span>
+      </div>
+
+      <ng-container *ngIf="!moveLoadingFolders">
+        <!-- Opción: mover a la raíz de esta subcategoría -->
+        <div
+          class="move-folder-row move-root-option"
+          [class.move-folder-selected]="moveSelectedFolderId === null && moveSelectedSubcategoryId !== null"
+          (click)="moveSelectedFolderId = null; moveSelectedFolderNode = null; moveSelectedSubcategoryId = moveCurrentSubcategoryId">
+          <span class="move-folder-icon">📂</span>
+          <span class="move-folder-name" style="font-style: italic; color: var(--muted)">
+            Raíz de {{ moveBreadcrumbs[0]?.name }}
+          </span>
+        </div>
+
+        <!-- Subcarpetas -->
+        <div class="move-empty" *ngIf="moveAvailableFolders.length === 0">
+          <i nz-icon nzType="folder-open"></i>
+          <span>No hay subcarpetas aquí</span>
+        </div>
+        <div
+          *ngFor="let folder of moveAvailableFolders"
+          class="move-folder-row"
+          [class.move-folder-selected]="moveSelectedFolderId === folder.id"
+          [class.move-folder-disabled]="isMoveTargetDisabled(folder)"
+          (click)="!isMoveTargetDisabled(folder) && selectMoveTarget(folder)"
+          (dblclick)="!isMoveTargetDisabled(folder) && moveNavIntoFolder(folder)">
+          <span class="move-folder-icon">📂</span>
+          <span class="move-folder-name">{{ folder.name }}</span>
+          <span class="move-folder-enter" *ngIf="!isMoveTargetDisabled(folder)" nz-tooltip nzTooltipTitle="Entrar a carpeta"
+            (click)="$event.stopPropagation(); moveNavIntoFolder(folder)">
+            <i nz-icon nzType="right"></i>
+          </span>
+        </div>
+      </ng-container>
+    </div>
+
+    <!-- Destino seleccionado -->
+    <div class="move-destination">
+      <i nz-icon nzType="environment"></i>
+      Mover a: <strong>{{ getMoveDestinationLabel() }}</strong>
+    </div>
+
+  </div>
+</ng-template>
+
+<ng-template #moveFooterTpl>
+  <button nz-button nzType="default" (click)="cancelMove()">Cancelar</button>
+  <button nz-button nzType="primary" [disabled]="!canConfirmMove()" [nzLoading]="isMoving" (click)="confirmMove()">
+    <i nz-icon nzType="drag"></i> Mover aquí
+  </button>
+</ng-template>
 
 
 <ng-template #tplContent>
