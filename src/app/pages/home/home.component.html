@@ -167,10 +167,10 @@
 
           <!-- Hover overlay -->
           <div class="result-overlay">
-            <button class="overlay-action-btn download">
+            <button class="overlay-action-btn download" (click)="downloadFile(result)">
               <i class="fas fa-download"></i> {{ 'HOME.SEARCH.DOWNLOAD' | translate | async }}
             </button>
-            <button class="overlay-action-btn share">
+            <button class="overlay-action-btn share" (click)="shareFile(result)">
               <i class="fas fa-share-alt"></i> {{ 'HOME.SEARCH.SHARE' | translate | async }}
             </button>
           </div>

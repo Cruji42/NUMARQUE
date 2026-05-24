@@ -4,6 +4,8 @@ import { TranslationService } from 'src/app/shared/services/translation.service'
 import { forkJoin, of } from 'rxjs';
 import { catchError, map, take } from 'rxjs/operators';
 import { Router } from '@angular/router';
+import { FilesService } from 'src/app/core/service/files.service';
+import { NzMessageService } from 'ng-zorro-antd/message';
 
 // ── Interfaces ──────────────────────────────────────────────
 export interface SearchResult {
@@ -62,7 +64,9 @@ export class HomeComponent implements OnInit, OnDestroy {
   constructor(
     private usersService: UsersService,
     public router: Router,
-    private translationService: TranslationService
+    private translationService: TranslationService,
+    private service: FilesService,
+    private message: NzMessageService,
   ) { }
 
   // ── Search state ──────────────────────────────────────────
@@ -608,4 +612,33 @@ export class HomeComponent implements OnInit, OnDestroy {
   getSkeletonArray(): number[] {
     return Array(10).fill(0);
   }
+
+  downloadFile(file: any): void {
+    this.service.downloadFile(file.id).subscribe({
+      next: (url: any) => {
+        console.log(url);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = (file?.name || 'archivo').toString();
+        link.click();
+      },
+      error: (err: any) => { console.log(err); }
+    });
+  }
+
+  shareFile(file: any): void {
+    this.usersService.getContentPreviewUrl(file.id).subscribe({
+      next: (resp: any) => {
+        const previewUrl = (resp?.preview_url || resp?.url || '').toString().trim();
+        if (previewUrl) {
+          file.url = previewUrl;
+          navigator.clipboard.writeText(previewUrl)
+            .then(() => this.message.success('URL copiada al portapapeles.'))
+            .catch(() => this.message.error('No se pudo copiar la URL al portapapeles.'));
+        }
+      },
+      error: () => this.message.error('No se pudo obtener la previsualización.')
+    });
+  }
+
 }
