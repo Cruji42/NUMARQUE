@@ -1106,7 +1106,7 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
                 if (inFiltered) {
                     inFiltered.name = payload.title;
                     inFiltered.description = payload.description;
-                     inFiltered.tags = payload.tags;
+                    inFiltered.tags = payload.tags;
                 }
                 this.persistFileDataInTree(this.selectedFile!.id, payload.title, payload.description);
 
@@ -1539,11 +1539,12 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
                 this.moveSelectedFolderNode
                     ? this.moveSelectedFolderNode.fullPath.split('/').findIndex(s => s === targetSubSlug) + 1
                     : 0
-              ).filter(Boolean).join('/')
+            ).filter(Boolean).join('/')
             : '';
 
+
         const targetBasePath = this.moveSelectedFolderNode
-            ? this.moveSelectedFolderNode.fullPath
+            ? `${subcategoryBasePath}/${this.moveSelectedFolderNode.fullPath}`
             : subcategoryBasePath;
 
         if (this.moveItemIsFolder) {
@@ -1557,11 +1558,14 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
             const toPath = `${targetBasePath}/${folderName}`;
 
             this.isMoving = true;
+
             this.endPointFilesService.moveFolder({ from_path: s3Key, to_path: toPath, subcategory_id: targetSubcategoryId }).subscribe({
                 next: () => { this.onMoveSuccess(folder.name); },
                 error: () => { this.message.error('No se pudo mover la carpeta.'); this.isMoving = false; }
             });
         } else {
+
+
             const file = item as FileItem;
             const fileNameFromS3 = file.s3Key?.split('/').filter(Boolean).pop() || file.name;
             const payload = {
@@ -1571,6 +1575,7 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
                 subcategory_id: targetSubcategoryId
             };
 
+            console.log('Payload para mover contenido:', payload);
             this.isMoving = true;
             this.endPointFilesService.moveContent(payload).subscribe({
                 next: () => { this.onMoveSuccess(file.name); },
