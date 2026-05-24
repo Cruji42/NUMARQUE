@@ -18,6 +18,9 @@ export interface SearchResult {
   previewBg: string;
   previewUrl?: string;
   fileTypeRaw?: string;
+  brandId?: number | null;       // ← igual que header
+  subcategoryId?: number | null; // ← igual que header
+  contentId?: number | null;     // ← igual que header
 }
 
 export interface RecentFile {
@@ -439,8 +442,11 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     this.usersService.searchSemantic(trimmedQuery, 20).subscribe({
 
+
+
       next: (response: any) => {
         console.log(response);
+        console.log('RAW ITEM 0:', JSON.stringify(response?.results?.[0], null, 2));
         const rawResults = response?.results ?? response?.data ?? [];
 
         const mappedResults: SearchResult[] = rawResults.map((item: any, index: number) => {
@@ -466,7 +472,10 @@ export class HomeComponent implements OnInit, OnDestroy {
             relevance: Number(relevance) || 0,
             previewBg: this.getPreviewGradientByBrand(brand),
             previewUrl: '',
-            fileTypeRaw: file?.file_type ?? ''
+            fileTypeRaw: file?.file_type ?? '',
+            brandId: file?.entity_id ?? null,        // ← entity_id del file
+            subcategoryId: file?.subcategory_id ?? null, // ← subcategory_id del file
+            contentId: file?.id ?? null,             // ← id del file
           };
         });
 
@@ -641,4 +650,15 @@ export class HomeComponent implements OnInit, OnDestroy {
     });
   }
 
+
+  onResultClick(result: any): void {
+    if (!result) return;
+
+    if (result.brandId) {
+      const queryParams: any = { brandId: result.brandId };
+      if (result.subcategoryId) queryParams['subcategoryId'] = result.subcategoryId;
+      if (result.contentId) queryParams['contentId'] = result.contentId;
+      this.router.navigate(['/pages/category-view'], { queryParams });
+    }
+  }
 }

@@ -156,7 +156,7 @@
 
     <!-- ── Grid Results ── -->
     <div class="results-grid" *ngIf="!isSearching && viewMode === 'grid' && searchResults.length > 0">
-      <div class="result-card" *ngFor="let result of searchResults">
+      <div class="result-card" *ngFor="let result of searchResults" (click)="onResultClick(result)">
 
         <!-- Preview area -->
         <div class="result-preview" [style.background]="result.previewUrl ? 'transparent' : result.previewBg">
@@ -167,10 +167,10 @@
 
           <!-- Hover overlay -->
           <div class="result-overlay">
-            <button class="overlay-action-btn download" (click)="downloadFile(result)">
+            <button class="overlay-action-btn download" (click)="$event.stopPropagation(); downloadFile(result)">
               <i class="fas fa-download"></i> {{ 'HOME.SEARCH.DOWNLOAD' | translate | async }}
             </button>
-            <button class="overlay-action-btn share" (click)="shareFile(result)">
+            <button class="overlay-action-btn share" (click)="$event.stopPropagation(); shareFile(result)">
               <i class="fas fa-share-alt"></i> {{ 'HOME.SEARCH.SHARE' | translate | async }}
             </button>
           </div>
