@@ -1434,10 +1434,12 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
     /** Click simple → selecciona como destino */
     selectMoveTarget(folder: FolderItem): void {
         this.moveSelectedFolderId = folder.id;
-        this.moveSelectedFolderNode = this.moveCurrentNode?.folders.find(fn => fn.id === folder.id) || null;
+        this.moveSelectedFolderNode =
+            this.moveCurrentNode?.folders.find(fn => fn.id === folder.id) ||
+            this.moveCurrentNode?.folders.find(fn => fn.name === folder.name) ||
+            null;
         this.moveSelectedSubcategoryId = this.moveCurrentSubcategoryId;
     }
-
     /** Navega a la raíz (lista de subcategorías) */
     moveNavToRoot(): void {
         this.moveBreadcrumbs = [];
@@ -1532,20 +1534,19 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
         const entitySlug = this.activeEntityTrail.map(e => this.slugifyPathPart(e)).join('/');
         const subcategoryBasePath = `${entitySlug}/${targetSubSlug}`;
 
-        // Ruta final = base de subcategoría + carpeta destino (si hay)
-        const folderSuffix = this.getMoveTargetPath()
-            ? '/' + this.getMoveTargetPath().split('/').slice(
-                // quitar los segmentos de entity+subcategoría que ya tiene fullPath
-                this.moveSelectedFolderNode
-                    ? this.moveSelectedFolderNode.fullPath.split('/').findIndex(s => s === targetSubSlug) + 1
-                    : 0
-            ).filter(Boolean).join('/')
-            : '';
+        // Calcular ruta relativa del destino (sin prefijo entity/subcategory)
+        const folderRelativePath = this.moveSelectedFolderNode?.fullPath ||
+            (this.moveCurrentNode && this.moveCurrentNode.name !== '__root__'
+                ? this.moveCurrentNode.fullPath
+                : '');
 
-
-        const targetBasePath = this.moveSelectedFolderNode
-            ? `${subcategoryBasePath}/${this.moveSelectedFolderNode.fullPath}`
+        const targetBasePath = folderRelativePath
+            ? `${subcategoryBasePath}/${folderRelativePath}`
             : subcategoryBasePath;
+
+        console.log('subcategoryBasePath:', subcategoryBasePath);
+        console.log('folderRelativePath:', folderRelativePath);
+        console.log('targetBasePath:', targetBasePath);
 
         if (this.moveItemIsFolder) {
             const folder = item as FolderItem;
@@ -1557,15 +1558,19 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
             const folderName = s3Key.split('/').filter(Boolean).pop() || folder.name;
             const toPath = `${targetBasePath}/${folderName}`;
 
-            this.isMoving = true;
+            console.log('Moviendo carpeta — from:', s3Key, '| to:', toPath);
 
-            this.endPointFilesService.moveFolder({ from_path: s3Key, to_path: toPath, subcategory_id: targetSubcategoryId }).subscribe({
+            this.isMoving = true;
+            this.endPointFilesService.moveFolder({
+                from_path: s3Key,
+                to_path: toPath,
+                subcategory_id: targetSubcategoryId
+            }).subscribe({
                 next: () => { this.onMoveSuccess(folder.name); },
                 error: () => { this.message.error('No se pudo mover la carpeta.'); this.isMoving = false; }
             });
+
         } else {
-
-
             const file = item as FileItem;
             const fileNameFromS3 = file.s3Key?.split('/').filter(Boolean).pop() || file.name;
             const payload = {
@@ -1576,6 +1581,7 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
             };
 
             console.log('Payload para mover contenido:', payload);
+
             this.isMoving = true;
             this.endPointFilesService.moveContent(payload).subscribe({
                 next: () => { this.onMoveSuccess(file.name); },
@@ -2245,7 +2251,7 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
         } else {
             const payload = {
                 title: this.uploadForm.value.title,
-                description: this.uploadForm.value.description,
+                description: this.uploadForm.value.description || '',
                 path: uploadPath + '/' + this.slugifyPathPart(this.uploadForm.value.title),
                 entity_id: brandId,
                 subcategory_id: subcategoryId,
