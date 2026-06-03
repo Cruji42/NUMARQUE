@@ -79,6 +79,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   isSearching: boolean = false;
   searchFocused: boolean = false;
   searchResults: SearchResult[] = [];
+  allSearchResults: SearchResult[] = [];
   totalResults: number = 0;
   viewMode: 'grid' | 'list' = 'grid';
   sortBy: string = 'relevance';
@@ -479,44 +480,26 @@ export class HomeComponent implements OnInit, OnDestroy {
           };
         });
 
-        const previewRequests = mappedResults.map((result) =>
+        // Show results immediately, then load image previews progressively
+        this.allSearchResults = mappedResults;
+        this.applyTypeFilter();
+        this.isSearching = false;
+
+        const IMAGE_TYPES = new Set(['png', 'jpg', 'jpeg', 'gif', 'webp', 'svg', 'bmp']);
+
+        mappedResults.forEach((result) => {
+          if (!IMAGE_TYPES.has(result.type.toLowerCase())) return;
+
           this.usersService.getContentPreviewUrl(result.id).pipe(
-            map((previewRes: any) => ({
-              ...result,
-              previewUrl: previewRes?.preview_url ?? previewRes?.url ?? ''
-            })),
-            catchError(() => of(result))
-          )
-        );
-
-        if (previewRequests.length === 0) {
-          this.searchResults = [];
-          this.totalResults = 0;
-          this.isSearching = false;
-          return;
-        }
-
-        forkJoin(previewRequests).subscribe({
-          next: (resultsWithPreview: SearchResult[]) => {
-            let finalResults = resultsWithPreview;
-            if (this.activeTypeFilter !== 'all') {
-              finalResults = finalResults.filter(r => r.type.toLowerCase() === this.activeTypeFilter.toLowerCase());
-            }
-
-            this.searchResults = finalResults;
-            this.totalResults = finalResults.length;
-            this.isSearching = false;
-          },
-          error: () => {
-            let fallbackResults = mappedResults;
-            if (this.activeTypeFilter !== 'all') {
-              fallbackResults = fallbackResults.filter(r => r.type.toLowerCase() === this.activeTypeFilter.toLowerCase());
-            }
-
-            this.searchResults = fallbackResults;
-            this.totalResults = fallbackResults.length;
-            this.isSearching = false;
-          }
+            map((previewRes: any) => (previewRes?.preview_url ?? previewRes?.url ?? '').toString().trim()),
+            catchError(() => of(''))
+          ).subscribe((previewUrl) => {
+            if (!previewUrl) return;
+            const inAll = this.allSearchResults.find(r => r.id === result.id);
+            if (inAll) inAll.previewUrl = previewUrl;
+            const inFiltered = this.searchResults.find(r => r.id === result.id);
+            if (inFiltered) inFiltered.previewUrl = previewUrl;
+          });
         });
       },
       error: (error) => {
@@ -534,17 +517,36 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.searchActive = false;
     this.isSearching = false;
     this.searchResults = [];
+    this.allSearchResults = [];
     this.totalResults = 0;
     if (this.searchTimeout) {
       clearTimeout(this.searchTimeout);
     }
   }
 
-  /** Set active type filter and re-run search */
+  get resultTypeFilters(): { label: string; value: string }[] {
+    const seen = new Set<string>();
+    const chips: { label: string; value: string }[] = [{ label: 'Todos', value: 'all' }];
+    for (const r of this.allSearchResults) {
+      const t = r.type.toLowerCase();
+      if (!seen.has(t)) { seen.add(t); chips.push({ label: r.type.toUpperCase(), value: t }); }
+    }
+    return chips;
+  }
+
+  applyTypeFilter(): void {
+    const filtered = this.activeTypeFilter === 'all'
+      ? this.allSearchResults
+      : this.allSearchResults.filter(r => r.type.toLowerCase() === this.activeTypeFilter.toLowerCase());
+    this.searchResults = filtered;
+    this.totalResults = filtered.length;
+  }
+
+  /** Set active type filter and apply client-side without re-fetching */
   setTypeFilter(type: string): void {
     this.activeTypeFilter = type;
     if (this.searchActive) {
-      this.executeSearch();
+      this.applyTypeFilter();
     }
   }
 
@@ -559,7 +561,10 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   private extractExtension(fileName: string, fallbackType?: string): string {
     if (fallbackType) {
-      return String(fallbackType).replace('.', '').toLowerCase();
+      const cleaned = String(fallbackType).trim().toLowerCase();
+      // "image/jpeg" → "jpeg", "application/pdf" → "pdf"
+      if (cleaned.includes('/')) return cleaned.split('/').pop() || 'file';
+      return cleaned.replace('.', '') || 'file';
     }
     const cleanName = String(fileName || '');
     if (!cleanName.includes('.')) return 'file';

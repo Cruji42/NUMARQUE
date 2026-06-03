@@ -137,7 +137,7 @@
 
     <!-- Type Filter Chips -->
     <div class="type-filters">
-      <span class="type-chip" *ngFor="let f of typeFilters" [class.active]="activeTypeFilter === f.value"
+      <span class="type-chip" *ngFor="let f of resultTypeFilters" [class.active]="activeTypeFilter === f.value"
         (click)="setTypeFilter(f.value)">{{ f.label }}</span>
     </div>
 

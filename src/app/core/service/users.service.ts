@@ -173,7 +173,7 @@ export class UsersService {
         );
     }
 
-    searchSemantic(query: string, limit: number = 20): Observable<any> {
+    searchSemantic(query: string, limit: number = 100): Observable<any> {
         return this.endPointUsersService.searchSemantic({ query, limit }).pipe(
             map((response: any) => {
                 return response;
