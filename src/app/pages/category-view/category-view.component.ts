@@ -1044,8 +1044,8 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
 
         const current = this.selectedFile;
 
-        // Solo pedir la URL si no la tiene — usa el caché para evitar duplicados
-        if (!current.url) {
+        // Solo pedir la URL si no la tiene y es imagen — PDFs y videos se cargan solo al previsualizar
+        if (!current.url && !this.isVideoType(current.type) && !this.isPdfType(current.type)) {
             this.previewCache.getUrl(current.id).subscribe({
                 next: (url: any) => {
                     if (url && this.selectedFile?.id === current.id) {
@@ -2335,7 +2335,7 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
     /** Carga la preview URL de un archivo del file manager cuando entra al viewport */
     loadPreviewForFile(fileId: number): void {
         const file = this.filteredFiles.find(f => f.id === fileId);
-        if (!file || file.url) return;
+        if (!file || file.url || this.isVideoType(file.type) || this.isPdfType(file.type)) return;
 
         this.previewCache.getUrl(fileId).subscribe({
             next: (url: any) => {
@@ -2350,7 +2350,7 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
     /** Carga la preview URL de un archivo favorito cuando entra al viewport */
     loadPreviewForFavFile(fileId: number): void {
         const file = this.filteredFavFiles.find(f => f.id === fileId);
-        if (!file || file.url) return;
+        if (!file || file.url || this.isVideoType(file.type) || this.isPdfType(file.type)) return;
 
         this.previewCache.getUrl(fileId).subscribe({
             next: (url: any) => {
@@ -2413,7 +2413,7 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
             setTimeout(() => {
                 this.selectedFile = target;
 
-                if (!target.url) {
+                if (!target.url && !this.isVideoType(target.type) && !this.isPdfType(target.type)) {
                     this.previewCache.getUrl(target.id).subscribe({
                         next: (url) => {
                             if (url && this.selectedFile?.id === target.id) {
