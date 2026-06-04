@@ -9,11 +9,13 @@ import {
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { ErrorHandlingService } from './error-handling.service';
+import { AuthService } from '../service/auth-service';
+import { Router } from '@angular/router';
 
 @Injectable()
 export class MessageErrorInterceptor implements HttpInterceptor {
 
-  constructor(private errorService: ErrorHandlingService) {
+  constructor(private errorService: ErrorHandlingService, private authService: AuthService, private router: Router) {
     //  console.log('🔥 INTERCEPTOR INSTANCIADO');
   }
 
@@ -24,7 +26,12 @@ export class MessageErrorInterceptor implements HttpInterceptor {
     //  console.log('➡️ Interceptando request:', req);
 
     //  console.log('Interceptor ejecutándose'); // 👈 agrega esto
-
+    if (!this.authService.isAuthenticated() && this.authService._currentUser()) {
+      this.router.navigate(['/authentication/login']);
+      this.errorService.handleHttpError({status: 0, message: 'Usuario no autenticado'} );
+      return throwError(() => new Error('Usuario no autenticado'));
+    }
+    
     return next.handle(req).pipe(
       catchError((error: HttpErrorResponse) => {
 

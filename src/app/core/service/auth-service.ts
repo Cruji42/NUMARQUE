@@ -110,7 +110,7 @@ export class AuthService {
         }
     }
 
-    private isTokenExpired(token: string): boolean {
+     isTokenExpired(token: string): boolean {
         try {
             const decoded = jwtDecode<JwtPayload>(token);
             return Date.now() >= decoded.exp * 1000;

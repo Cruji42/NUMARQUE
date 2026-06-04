@@ -11,7 +11,7 @@ export class ErrorHandlingService {
     constructor(private router: Router, private modal: NzModalService) { }
 
 
-    public handleHttpError(error: HttpErrorResponse) {
+    public handleHttpError(error: HttpErrorResponse | any): void {
         const errorMessage = this.getErrorMessage(error);
         this.modal.error({
             nzTitle: errorMessage.title,
@@ -24,11 +24,18 @@ export class ErrorHandlingService {
 
 
     public getErrorMessage(error: HttpErrorResponse | any): { icon: 'warning' | 'error' | 'success' | 'info', title: string, text: string } {
-        if (!navigator.onLine) {
+             
+         if (!navigator.onLine) {
             return {
                 icon: 'warning',
                 title: 'Sin Conexión a Internet',
                 text: 'No se pudo completar la solicitud, verificar la conexión a Internet.'
+            };
+        }else if (error.status === 0) {
+            return {
+                icon: 'error',
+                title: 'Sesión Expirada',
+                text: 'Tu sesión ha expirado. Por favor, inicia sesión nuevamente.'
             };
         } else if (error.status === 400) {
             return {
