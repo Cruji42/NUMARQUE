@@ -222,6 +222,102 @@
       "I need a sales presentation for the livestock sector..."
     ]
   },
+  "CATEGORY_VIEW": {
+    "TOOLBAR": {
+      "SEARCH_IN_FOLDER": "Search in this folder...",
+      "SEARCH_IN_FAVORITES": "Search in favorites...",
+      "TOOLTIP_GRID": "Grid view",
+      "TOOLTIP_LIST": "List view",
+      "TOOLTIP_ADD": "Add new material"
+    },
+    "CATEGORY": {
+      "DEFAULT_SUBTITLE": "Select a category to explore its materials"
+    },
+    "FILES": {
+      "SECTION_FOLDERS": "Folders",
+      "SECTION_FILES": "Files",
+      "FILES_COUNT": "files",
+      "TOOLTIP_ADD_FAV": "Add to favorites",
+      "TOOLTIP_REMOVE_FAV": "Remove from favorites",
+      "ADD_TO_FAVORITES": "Add to favorites",
+      "REMOVE_FROM_FAVORITES": "Remove from favorites",
+      "EMPTY_TITLE": "This folder is empty",
+      "EMPTY_SUB": "No files or folders found"
+    },
+    "PREVIEW": {
+      "META_TYPE": "Type",
+      "META_SIZE": "Size",
+      "META_DESC": "Description",
+      "META_UPLOADED": "Uploaded",
+      "META_BY": "By",
+      "META_TAGS": "Tags",
+      "META_CATEGORY": "Category",
+      "META_DOWNLOADS": "Downloads",
+      "BTN_DOWNLOAD": "Download",
+      "BTN_SHARE": "Share",
+      "BTN_PREVIEW": "Preview",
+      "BTN_EDIT": "Edit info",
+      "PLACEHOLDER_ICON": "👆",
+      "PLACEHOLDER_TEXT": "Select a file to see its detail"
+    },
+    "EDIT_FORM": {
+      "TITLE": "Edit info",
+      "LABEL_TITLE": "Title",
+      "ERROR_TITLE": "Title is required",
+      "PLACEHOLDER_TITLE": "File title",
+      "LABEL_DESC": "Description",
+      "PLACEHOLDER_DESC": "File description",
+      "LABEL_TAGS": "Tags",
+      "PLACEHOLDER_TAGS": "Add tags separated by comma",
+      "BTN_SAVE": "Save",
+      "BTN_CANCEL": "Cancel"
+    },
+    "FAVORITES": {
+      "LOADING": "Loading favorites...",
+      "SECTION_FOLDERS": "Saved folders",
+      "SECTION_FILES": "Saved files",
+      "TOOLTIP_REMOVE_FAV": "Remove from favorites",
+      "EMPTY_ICON": "⭐",
+      "EMPTY_TITLE": "No favorites yet",
+      "EMPTY_SUB": "Mark files or folders with ★ to see them here",
+      "PLACEHOLDER_ICON": "⭐",
+      "PLACEHOLDER_TEXT": "Select a file to see its detail",
+      "REMOVE_FROM_FAVORITES": "Remove from favorites"
+    },
+    "CONTEXT_MENU": {
+      "DOWNLOAD": "Download",
+      "RENAME": "Rename",
+      "MOVE": "Move",
+      "DELETE": "Delete"
+    },
+    "MOVE_MODAL": {
+      "BREADCRUMB_ROOT": "Subcategories",
+      "NO_SUBCATEGORIES": "No subcategories available",
+      "TOOLTIP_ENTER_SUB": "Enter subcategory",
+      "LOADING_FOLDERS": "Loading folders...",
+      "ROOT_OF": "Root of",
+      "NO_SUBFOLDERS": "No subfolders here",
+      "TOOLTIP_ENTER_FOLDER": "Enter folder",
+      "MOVE_TO": "Move to:",
+      "BTN_CANCEL": "Cancel",
+      "BTN_MOVE": "Move here"
+    },
+    "UPLOAD_MODAL": {
+      "LABEL_TYPE": "Type",
+      "TYPE_FILE": "File",
+      "TYPE_FOLDER": "Folder",
+      "LABEL_FILE": "File",
+      "BTN_SELECT_FILE": "Select file",
+      "LABEL_TITLE": "Title",
+      "PLACEHOLDER_TITLE_FILE": "File title",
+      "PLACEHOLDER_TITLE_FOLDER": "Folder name",
+      "LABEL_DESC": "Description",
+      "PLACEHOLDER_DESC": "File description",
+      "LABEL_TAGS": "Tags",
+      "BTN_CANCEL": "Cancel",
+      "BTN_SAVE": "Save"
+    }
+  },
   "SETTINGS": {
     "PAGE_TITLE": "My profile",
     "PAGE_SUBTITLE": "Manage your information",

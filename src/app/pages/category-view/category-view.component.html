@@ -14,20 +14,24 @@
   <ng-container *ngIf="viewMode === 'files'">
     <div class="fm-search-wrap">
       <i nz-icon nzType="search" class="fm-search-icon"></i>
-      <input class="fm-search" placeholder="Buscar en esta carpeta..." [(ngModel)]="searchQuery"
-        (ngModelChange)="applySearch()" />
+      <input class="fm-search" [placeholder]="'CATEGORY_VIEW.TOOLBAR.SEARCH_IN_FOLDER' | translate | async"
+        [(ngModel)]="searchQuery" (ngModelChange)="applySearch()" />
     </div>
 
     <div class="view-btns">
-      <button class="view-btn" [class.active]="fileViewMode === 'grid'" nz-tooltip nzTooltipTitle="Vista cuadrícula"
+      <button class="view-btn" [class.active]="fileViewMode === 'grid'"
+        nz-tooltip [nzTooltipTitle]="'CATEGORY_VIEW.TOOLBAR.TOOLTIP_GRID' | translate | async"
         (click)="fileViewMode = 'grid'">
         <i nz-icon nzType="appstore"></i>
       </button>
-      <button class="view-btn" [class.active]="fileViewMode === 'list'" nz-tooltip nzTooltipTitle="Vista lista"
+      <button class="view-btn" [class.active]="fileViewMode === 'list'"
+        nz-tooltip [nzTooltipTitle]="'CATEGORY_VIEW.TOOLBAR.TOOLTIP_LIST' | translate | async"
         (click)="fileViewMode = 'list'">
         <i nz-icon nzType="unordered-list"></i>
       </button>
-      <button class="view-btn" nz-tooltip nzTooltipTitle="Agregar nuevo material" (click)="addNewMaterial()">
+      <button class="view-btn"
+        nz-tooltip [nzTooltipTitle]="'CATEGORY_VIEW.TOOLBAR.TOOLTIP_ADD' | translate | async"
+        (click)="addNewMaterial()">
         <i nz-icon nzType="plus"></i>
       </button>
     </div>
@@ -37,15 +41,17 @@
   <ng-container *ngIf="viewMode === 'favorites'">
     <div class="fm-search-wrap">
       <i nz-icon nzType="search" class="fm-search-icon"></i>
-      <input class="fm-search" placeholder="Buscar en favoritos..." [(ngModel)]="favoritesSearchQuery"
-        (ngModelChange)="applyFavoritesSearch()" />
+      <input class="fm-search" [placeholder]="'CATEGORY_VIEW.TOOLBAR.SEARCH_IN_FAVORITES' | translate | async"
+        [(ngModel)]="favoritesSearchQuery" (ngModelChange)="applyFavoritesSearch()" />
     </div>
     <div class="view-btns">
-      <button class="view-btn" [class.active]="fileViewMode === 'grid'" nz-tooltip nzTooltipTitle="Vista cuadrícula"
+      <button class="view-btn" [class.active]="fileViewMode === 'grid'"
+        nz-tooltip [nzTooltipTitle]="'CATEGORY_VIEW.TOOLBAR.TOOLTIP_GRID' | translate | async"
         (click)="fileViewMode = 'grid'">
         <i nz-icon nzType="appstore"></i>
       </button>
-      <button class="view-btn" [class.active]="fileViewMode === 'list'" nz-tooltip nzTooltipTitle="Vista lista"
+      <button class="view-btn" [class.active]="fileViewMode === 'list'"
+        nz-tooltip [nzTooltipTitle]="'CATEGORY_VIEW.TOOLBAR.TOOLTIP_LIST' | translate | async"
         (click)="fileViewMode = 'list'">
         <i nz-icon nzType="unordered-list"></i>
       </button>
@@ -64,7 +70,7 @@
       {{ getBrandDisplayDescription() }}
     </div>
     <ng-template #defaultBrandSub>
-      <div class="category-brand-sub">Selecciona una categoría para explorar sus materiales</div>
+      <div class="category-brand-sub">{{ 'CATEGORY_VIEW.CATEGORY.DEFAULT_SUBTITLE' | translate | async }}</div>
     </ng-template>
   </div>
 
@@ -96,15 +102,16 @@
 
     <!-- Folders section -->
     <div *ngIf="filteredFolders.length > 0">
-      <div class="sec-label">Carpetas</div>
+      <div class="sec-label">{{ 'CATEGORY_VIEW.FILES.SECTION_FOLDERS' | translate | async }}</div>
 
       <!-- Grid -->
       <div class="folders-grid" *ngIf="fileViewMode === 'grid'">
         <div class="folder-card" *ngFor="let folder of filteredFolders"
           (click)="renamingFolderId !== folder.id && openFolder(folder)"
           (contextmenu)="contextMenu($event, contextMenuTpl, folder, 'folder')">
-          <button class="fav-btn" [class.starred]="folder.favorite" nz-tooltip
-            [nzTooltipTitle]="folder.favorite ? 'Quitar de favoritos' : 'Agregar a favoritos'"
+          <button class="fav-btn" [class.starred]="folder.favorite"
+            nz-tooltip
+            [nzTooltipTitle]="folder.favorite ? ('CATEGORY_VIEW.FILES.TOOLTIP_REMOVE_FAV' | translate | async) : ('CATEGORY_VIEW.FILES.TOOLTIP_ADD_FAV' | translate | async)"
             (click)="$event.stopPropagation(); toggleFolderFav(folder)">
             <i nz-icon nzType="star" [nzTheme]="folder.favorite ? 'fill' : 'outline'"></i>
           </button>
@@ -113,7 +120,7 @@
           <input *ngIf="renamingFolderId === folder.id" nz-input [ngModel]="renamingFolderName"
             (ngModelChange)="renamingFolderName = $event" (keydown)="onRenameFolderKeydown($event, folder)"
             (blur)="confirmRenameFolder(folder)" (click)="$event.stopPropagation()" autocomplete="off" />
-          <div class="folder-count">{{ folder.count }} archivos</div>
+          <div class="folder-count">{{ folder.count }} {{ 'CATEGORY_VIEW.FILES.FILES_COUNT' | translate | async }}</div>
         </div>
       </div>
 
@@ -127,7 +134,7 @@
           <input *ngIf="renamingFolderId === folder.id" nz-input class="list-name" [ngModel]="renamingFolderName"
             (ngModelChange)="renamingFolderName = $event" (keydown)="onRenameFolderKeydown($event, folder)"
             (blur)="confirmRenameFolder(folder)" (click)="$event.stopPropagation()" autocomplete="off" />
-          <span class="list-meta">{{ folder.count }} archivos</span>
+          <span class="list-meta">{{ folder.count }} {{ 'CATEGORY_VIEW.FILES.FILES_COUNT' | translate | async }}</span>
           <button class="fav-btn-sm" (click)="$event.stopPropagation(); toggleFolderFav(folder)">
             <i nz-icon nzType="star" [nzTheme]="folder.favorite ? 'fill' : 'outline'"></i>
           </button>
@@ -137,7 +144,7 @@
 
     <!-- Files section -->
     <div *ngIf="filteredFiles.length > 0">
-      <div class="sec-label">Archivos</div>
+      <div class="sec-label">{{ 'CATEGORY_VIEW.FILES.SECTION_FILES' | translate | async }}</div>
 
       <!-- Grid -->
       <div class="files-grid" *ngIf="fileViewMode === 'grid'">
@@ -177,8 +184,8 @@
     <!-- Empty state -->
     <div class="empty-state" *ngIf="filteredFolders.length === 0 && filteredFiles.length === 0">
       <div class="empty-icon">📂</div>
-      <div class="empty-title">Esta carpeta está vacía</div>
-      <div class="empty-sub">No se encontraron archivos o carpetas</div>
+      <div class="empty-title">{{ 'CATEGORY_VIEW.FILES.EMPTY_TITLE' | translate | async }}</div>
+      <div class="empty-sub">{{ 'CATEGORY_VIEW.FILES.EMPTY_SUB' | translate | async }}</div>
     </div>
   </div>
 
@@ -204,69 +211,62 @@
       </div>
       <nz-divider class="preview-divider"></nz-divider>
       <div class="preview-meta">
-        <div class="meta-row"><span class="meta-key">Tipo</span><span class="meta-val">{{ selectedFile.type | uppercase
-            }}</span></div>
-        <div class="meta-row"><span class="meta-key">Tamaño</span><span class="meta-val">{{ selectedFile.size }}</span>
-        </div>
-        <div class="meta-row"><span class="meta-key">Descripción</span><span class="meta-val">{{
-            selectedFile.description }}</span></div>
-        <div class="meta-row"><span class="meta-key">Subido</span><span class="meta-val">{{ selectedFile.uploaded_at |
-            date: 'dd/MM/yyyy' }}</span></div>
-        <div class="meta-row"><span class="meta-key">Tags</span><span class="meta-val">{{ selectedFile.tags
-            }}</span></div>
-        <div class="meta-row"><span class="meta-key">Categoría</span><span class="meta-val">{{ selectedFile.category
-            }}</span></div>
-        <div class="meta-row"><span class="meta-key">Descargas</span><span class="meta-val">{{ selectedFile.downloads
-            }}</span></div>
+        <div class="meta-row"><span class="meta-key">{{ 'CATEGORY_VIEW.PREVIEW.META_TYPE' | translate | async }}</span><span class="meta-val">{{ selectedFile.type | uppercase }}</span></div>
+        <div class="meta-row"><span class="meta-key">{{ 'CATEGORY_VIEW.PREVIEW.META_SIZE' | translate | async }}</span><span class="meta-val">{{ selectedFile.size }}</span></div>
+        <div class="meta-row"><span class="meta-key">{{ 'CATEGORY_VIEW.PREVIEW.META_DESC' | translate | async }}</span><span class="meta-val">{{ selectedFile.description }}</span></div>
+        <div class="meta-row"><span class="meta-key">{{ 'CATEGORY_VIEW.PREVIEW.META_UPLOADED' | translate | async }}</span><span class="meta-val">{{ selectedFile.uploaded_at | date: 'dd/MM/yyyy' }}</span></div>
+        <div class="meta-row"><span class="meta-key">{{ 'CATEGORY_VIEW.PREVIEW.META_TAGS' | translate | async }}</span><span class="meta-val">{{ selectedFile.tags }}</span></div>
+        <div class="meta-row"><span class="meta-key">{{ 'CATEGORY_VIEW.PREVIEW.META_CATEGORY' | translate | async }}</span><span class="meta-val">{{ selectedFile.category }}</span></div>
+        <div class="meta-row"><span class="meta-key">{{ 'CATEGORY_VIEW.PREVIEW.META_DOWNLOADS' | translate | async }}</span><span class="meta-val">{{ selectedFile.downloads }}</span></div>
       </div>
       <button class="btn-download" (click)="downloadFile(selectedFile)">
-        <i nz-icon nzType="download"></i> Descargar
+        <i nz-icon nzType="download"></i> {{ 'CATEGORY_VIEW.PREVIEW.BTN_DOWNLOAD' | translate | async }}
       </button>
       <button class="btn-share" (click)="shareFile(selectedFile)">
-        <i nz-icon nzType="share-alt"></i> Compartir
+        <i nz-icon nzType="share-alt"></i> {{ 'CATEGORY_VIEW.PREVIEW.BTN_SHARE' | translate | async }}
       </button>
       <button class="btn-share" (click)="openFilePreview(selectedFile)">
-        <i nz-icon nzType="eye"></i> Previsualizar
+        <i nz-icon nzType="eye"></i> {{ 'CATEGORY_VIEW.PREVIEW.BTN_PREVIEW' | translate | async }}
       </button>
       <button class="btn-share" (click)="openEditContent(selectedFile)">
-        <i nz-icon nzType="edit"></i> Editar información
+        <i nz-icon nzType="edit"></i> {{ 'CATEGORY_VIEW.PREVIEW.BTN_EDIT' | translate | async }}
       </button>
       <div class="fav-link" (click)="toggleFileFav(selectedFile)">
         <i nz-icon nzType="star" [nzTheme]="selectedFile.favorite ? 'fill' : 'outline'"
           [style.color]="selectedFile.favorite ? '#F59E0B' : '#94A3B8'"></i>
-        {{ selectedFile.favorite ? 'Quitar de favoritos' : 'Agregar a favoritos' }}
+        {{ selectedFile.favorite ? ('CATEGORY_VIEW.FILES.REMOVE_FROM_FAVORITES' | translate | async) : ('CATEGORY_VIEW.FILES.ADD_TO_FAVORITES' | translate | async) }}
       </div>
     </ng-container>
 
     <!-- ── Formulario de edición ── -->
     <ng-container *ngIf="isEditingContent">
       <div class="preview-header">
-        <div class="preview-name">Editar información</div>
+        <div class="preview-name">{{ 'CATEGORY_VIEW.EDIT_FORM.TITLE' | translate | async }}</div>
       </div>
       <nz-divider class="preview-divider"></nz-divider>
 
       <form nz-form nzLayout="vertical" [formGroup]="editContentForm" style="padding: 0 4px;">
 
         <nz-form-item>
-          <nz-form-label nzRequired>Título</nz-form-label>
-          <nz-form-control nzErrorTip="El título es obligatorio">
-            <input nz-input formControlName="title" placeholder="Título del archivo" />
+          <nz-form-label nzRequired>{{ 'CATEGORY_VIEW.EDIT_FORM.LABEL_TITLE' | translate | async }}</nz-form-label>
+          <nz-form-control [nzErrorTip]="('CATEGORY_VIEW.EDIT_FORM.ERROR_TITLE' | translate | async) || ''">
+            <input nz-input formControlName="title" [placeholder]="'CATEGORY_VIEW.EDIT_FORM.PLACEHOLDER_TITLE' | translate | async" />
           </nz-form-control>
         </nz-form-item>
 
         <nz-form-item>
-          <nz-form-label>Descripción</nz-form-label>
+          <nz-form-label>{{ 'CATEGORY_VIEW.EDIT_FORM.LABEL_DESC' | translate | async }}</nz-form-label>
           <nz-form-control>
-            <textarea nz-input rows="3" formControlName="description" placeholder="Descripción del archivo"></textarea>
+            <textarea nz-input rows="3" formControlName="description" [placeholder]="'CATEGORY_VIEW.EDIT_FORM.PLACEHOLDER_DESC' | translate | async"></textarea>
           </nz-form-control>
         </nz-form-item>
 
         <nz-form-item>
-          <nz-form-label>Tags</nz-form-label>
+          <nz-form-label>{{ 'CATEGORY_VIEW.EDIT_FORM.LABEL_TAGS' | translate | async }}</nz-form-label>
           <nz-form-control>
             <nz-select nzMode="tags" [nzTokenSeparators]="[',']" [nzNotFoundContent]="null"
               [nzAutoClearSearchValue]="true" (nzOpenChange)="preventOpen($event)" formControlName="tags"
-              nzPlaceHolder="Agrega tags separados por coma">
+              [nzPlaceHolder]="'CATEGORY_VIEW.EDIT_FORM.PLACEHOLDER_TAGS' | translate | async">
             </nz-select>
           </nz-form-control>
         </nz-form-item>
@@ -276,10 +276,10 @@
       <div style="display:flex; gap:8px; margin-top:12px;">
         <button nz-button nzType="primary" [disabled]="!editContentForm.valid" (click)="saveEditContent()"
           style="flex:1">
-          <i nz-icon nzType="save"></i> Guardar
+          <i nz-icon nzType="save"></i> {{ 'CATEGORY_VIEW.EDIT_FORM.BTN_SAVE' | translate | async }}
         </button>
         <button nz-button nzType="default" (click)="cancelEditContent()" style="flex:1">
-          Cancelar
+          {{ 'CATEGORY_VIEW.EDIT_FORM.BTN_CANCEL' | translate | async }}
         </button>
       </div>
     </ng-container>
@@ -288,8 +288,8 @@
 
   <!-- No selection placeholder -->
   <div class="preview-panel preview-empty" *ngIf="!selectedFile">
-    <div class="preview-empty-icon">👆</div>
-    <div class="preview-empty-text">Selecciona un archivo para ver su detalle</div>
+    <div class="preview-empty-icon">{{ 'CATEGORY_VIEW.PREVIEW.PLACEHOLDER_ICON' | translate | async }}</div>
+    <div class="preview-empty-text">{{ 'CATEGORY_VIEW.PREVIEW.PLACEHOLDER_TEXT' | translate | async }}</div>
   </div>
 
 </div>
@@ -304,25 +304,26 @@
     <!-- Loading -->
     <div class="fav-loading" *ngIf="favoritesLoading">
       <nz-spin nzSimple></nz-spin>
-      <span>Cargando favoritos...</span>
+      <span>{{ 'CATEGORY_VIEW.FAVORITES.LOADING' | translate | async }}</span>
     </div>
 
     <ng-container *ngIf="!favoritesLoading">
 
       <!-- Carpetas favoritas -->
       <div *ngIf="filteredFavFolders.length > 0">
-        <div class="sec-label">Carpetas guardadas</div>
+        <div class="sec-label">{{ 'CATEGORY_VIEW.FAVORITES.SECTION_FOLDERS' | translate | async }}</div>
 
         <!-- Grid -->
         <div class="folders-grid" *ngIf="fileViewMode === 'grid'">
           <div class="folder-card" *ngFor="let folder of filteredFavFolders" (click)="openFavoriteFolder(folder)">
-            <button class="fav-btn starred" nz-tooltip nzTooltipTitle="Quitar de favoritos"
+            <button class="fav-btn starred"
+              nz-tooltip [nzTooltipTitle]="'CATEGORY_VIEW.FAVORITES.TOOLTIP_REMOVE_FAV' | translate | async"
               (click)="$event.stopPropagation(); removeFavFolder(folder)">
               <i nz-icon nzType="star" nzTheme="fill"></i>
             </button>
             <div class="folder-icon">📂</div>
             <div class="folder-name">{{ folder.name }}</div>
-            <div class="folder-count">{{ folder.count }} archivos</div>
+            <div class="folder-count">{{ folder.count }} {{ 'CATEGORY_VIEW.FILES.FILES_COUNT' | translate | async }}</div>
           </div>
         </div>
 
@@ -332,8 +333,9 @@
             (click)="openFavoriteFolder(folder)">
             <span class="list-icon">📂</span>
             <span class="list-name">{{ folder.name }}</span>
-            <span class="list-meta">{{ folder.count }} archivos</span>
-            <button class="fav-btn-sm" nz-tooltip nzTooltipTitle="Quitar de favoritos"
+            <span class="list-meta">{{ folder.count }} {{ 'CATEGORY_VIEW.FILES.FILES_COUNT' | translate | async }}</span>
+            <button class="fav-btn-sm"
+              nz-tooltip [nzTooltipTitle]="'CATEGORY_VIEW.FAVORITES.TOOLTIP_REMOVE_FAV' | translate | async"
               (click)="removeFavFolder(folder)">
               <i nz-icon nzType="star" nzTheme="fill" style="color:#F59E0B"></i>
             </button>
@@ -343,7 +345,7 @@
 
       <!-- Archivos favoritos -->
       <div *ngIf="filteredFavFiles.length > 0">
-        <div class="sec-label">Archivos guardados</div>
+        <div class="sec-label">{{ 'CATEGORY_VIEW.FAVORITES.SECTION_FILES' | translate | async }}</div>
 
         <!-- Grid -->
         <div class="files-grid" *ngIf="fileViewMode === 'grid'">
@@ -376,9 +378,9 @@
 
       <!-- Empty state -->
       <div class="empty-state fav-empty" *ngIf="filteredFavFiles.length === 0 && filteredFavFolders.length === 0">
-        <div class="empty-icon">⭐</div>
-        <div class="empty-title">No tienes favoritos aún</div>
-        <div class="empty-sub">Marca archivos o carpetas con ★ para verlos aquí</div>
+        <div class="empty-icon">{{ 'CATEGORY_VIEW.FAVORITES.EMPTY_ICON' | translate | async }}</div>
+        <div class="empty-title">{{ 'CATEGORY_VIEW.FAVORITES.EMPTY_TITLE' | translate | async }}</div>
+        <div class="empty-sub">{{ 'CATEGORY_VIEW.FAVORITES.EMPTY_SUB' | translate | async }}</div>
       </div>
 
     </ng-container>
@@ -400,38 +402,32 @@
     </div>
     <nz-divider class="preview-divider"></nz-divider>
     <div class="preview-meta">
-      <div class="meta-row"><span class="meta-key">Tipo</span><span class="meta-val">{{ selectedFile.type | uppercase
-          }}</span></div>
-      <div class="meta-row"><span class="meta-key">Tamaño</span><span class="meta-val">{{ selectedFile.size }}</span>
-      </div>
-      <div class="meta-row"><span class="meta-key">Descripción</span><span class="meta-val">{{ selectedFile.description
-          }}</span></div>
-      <div class="meta-row"><span class="meta-key">Subido</span><span class="meta-val">{{ selectedFile.uploaded_at |
-          date: 'dd/MM/yyyy' }}</span></div>
-      <div class="meta-row"><span class="meta-key">Por</span><span class="meta-val">{{ selectedFile.uploaded_by
-          }}</span></div>
-      <div class="meta-row"><span class="meta-key">Categoría</span><span class="meta-val">{{ selectedFile.category
-          }}</span></div>
+      <div class="meta-row"><span class="meta-key">{{ 'CATEGORY_VIEW.PREVIEW.META_TYPE' | translate | async }}</span><span class="meta-val">{{ selectedFile.type | uppercase }}</span></div>
+      <div class="meta-row"><span class="meta-key">{{ 'CATEGORY_VIEW.PREVIEW.META_SIZE' | translate | async }}</span><span class="meta-val">{{ selectedFile.size }}</span></div>
+      <div class="meta-row"><span class="meta-key">{{ 'CATEGORY_VIEW.PREVIEW.META_DESC' | translate | async }}</span><span class="meta-val">{{ selectedFile.description }}</span></div>
+      <div class="meta-row"><span class="meta-key">{{ 'CATEGORY_VIEW.PREVIEW.META_UPLOADED' | translate | async }}</span><span class="meta-val">{{ selectedFile.uploaded_at | date: 'dd/MM/yyyy' }}</span></div>
+      <div class="meta-row"><span class="meta-key">{{ 'CATEGORY_VIEW.PREVIEW.META_BY' | translate | async }}</span><span class="meta-val">{{ selectedFile.uploaded_by }}</span></div>
+      <div class="meta-row"><span class="meta-key">{{ 'CATEGORY_VIEW.PREVIEW.META_CATEGORY' | translate | async }}</span><span class="meta-val">{{ selectedFile.category }}</span></div>
     </div>
     <button class="btn-download" (click)="downloadFile(selectedFile)">
-      <i nz-icon nzType="download"></i> Descargar
+      <i nz-icon nzType="download"></i> {{ 'CATEGORY_VIEW.PREVIEW.BTN_DOWNLOAD' | translate | async }}
     </button>
     <button class="btn-share" (click)="shareFile(selectedFile)">
-      <i nz-icon nzType="share-alt"></i> Compartir
+      <i nz-icon nzType="share-alt"></i> {{ 'CATEGORY_VIEW.PREVIEW.BTN_SHARE' | translate | async }}
     </button>
     <button class="btn-share" (click)="openFilePreview(selectedFile)">
-      <i nz-icon nzType="eye"></i> Previsualizar
+      <i nz-icon nzType="eye"></i> {{ 'CATEGORY_VIEW.PREVIEW.BTN_PREVIEW' | translate | async }}
     </button>
     <div class="fav-link fav-link--remove" (click)="removeFavFile(selectedFile)">
       <i nz-icon nzType="star" nzTheme="fill" style="color:#F59E0B"></i>
-      Quitar de favoritos
+      {{ 'CATEGORY_VIEW.FAVORITES.REMOVE_FROM_FAVORITES' | translate | async }}
     </div>
   </div>
 
   <!-- No selection placeholder -->
   <div class="preview-panel preview-empty" *ngIf="!selectedFile">
-    <div class="preview-empty-icon">⭐</div>
-    <div class="preview-empty-text">Selecciona un archivo para ver su detalle</div>
+    <div class="preview-empty-icon">{{ 'CATEGORY_VIEW.FAVORITES.PLACEHOLDER_ICON' | translate | async }}</div>
+    <div class="preview-empty-text">{{ 'CATEGORY_VIEW.FAVORITES.PLACEHOLDER_TEXT' | translate | async }}</div>
   </div>
 
 </div>
@@ -443,19 +439,19 @@
   <ul nz-menu>
     <li nz-menu-item *ngIf="selectedContextType === 'file'" (click)="contextDownload()">
       <i nz-icon nzType="download"></i>
-      Descargar
+      {{ 'CATEGORY_VIEW.CONTEXT_MENU.DOWNLOAD' | translate | async }}
     </li>
     <li nz-menu-item (click)="contextRename()">
       <i nz-icon nzType="edit"></i>
-      Renombrar
+      {{ 'CATEGORY_VIEW.CONTEXT_MENU.RENAME' | translate | async }}
     </li>
     <li nz-menu-item (click)="contextMove()">
       <i nz-icon nzType="drag"></i>
-      Mover
+      {{ 'CATEGORY_VIEW.CONTEXT_MENU.MOVE' | translate | async }}
     </li>
     <li nz-menu-item nzDanger (click)="contextDelete()">
       <i nz-icon nzType="delete"></i>
-      Eliminar
+      {{ 'CATEGORY_VIEW.CONTEXT_MENU.DELETE' | translate | async }}
     </li>
   </ul>
 </nz-dropdown-menu>
@@ -468,14 +464,14 @@
 
     <!-- Header info del ítem a mover -->
     <div class="move-item-info">
-      <span class="move-item-icon">{{ moveItemIsFolder ? '📂' : getFileIcon(moveContextItem?.type || '') }}</span>
+      <span class="move-item-icon">{{ moveItemIsFolder ? '📂' : getFileIcon($any(moveContextItem)?.type || '') }}</span>
       <span class="move-item-name">{{ moveContextItem?.name }}</span>
     </div>
 
     <!-- Breadcrumb de navegación dentro del modal -->
     <div class="move-breadcrumb">
       <span class="move-crumb-root" (click)="moveNavToRoot()">
-        <i nz-icon nzType="home"></i> Subcategorías
+        <i nz-icon nzType="home"></i> {{ 'CATEGORY_VIEW.MOVE_MODAL.BREADCRUMB_ROOT' | translate | async }}
       </span>
       <ng-container *ngFor="let crumb of moveBreadcrumbs; let i = index">
         <span class="move-crumb-sep">›</span>
@@ -487,7 +483,7 @@
     <div class="move-folder-list" *ngIf="moveBreadcrumbs.length === 0">
       <div class="move-empty" *ngIf="moveAvailableSubcategories.length === 0">
         <i nz-icon nzType="folder-open"></i>
-        <span>No hay subcategorías disponibles</span>
+        <span>{{ 'CATEGORY_VIEW.MOVE_MODAL.NO_SUBCATEGORIES' | translate | async }}</span>
       </div>
       <div
         *ngFor="let sub of moveAvailableSubcategories"
@@ -495,7 +491,8 @@
         (click)="moveNavIntoSubcategory(sub)">
         <span class="move-folder-icon">🗂️</span>
         <span class="move-folder-name">{{ sub.name }}</span>
-        <span class="move-folder-enter" nz-tooltip nzTooltipTitle="Entrar a subcategoría">
+        <span class="move-folder-enter"
+          nz-tooltip [nzTooltipTitle]="'CATEGORY_VIEW.MOVE_MODAL.TOOLTIP_ENTER_SUB' | translate | async">
           <i nz-icon nzType="right"></i>
         </span>
       </div>
@@ -507,7 +504,7 @@
       <!-- Loading -->
       <div class="move-loading" *ngIf="moveLoadingFolders">
         <nz-spin nzSimple nzSize="small"></nz-spin>
-        <span>Cargando carpetas...</span>
+        <span>{{ 'CATEGORY_VIEW.MOVE_MODAL.LOADING_FOLDERS' | translate | async }}</span>
       </div>
 
       <ng-container *ngIf="!moveLoadingFolders">
@@ -518,14 +515,14 @@
           (click)="moveSelectedFolderId = null; moveSelectedFolderNode = null; moveSelectedSubcategoryId = moveCurrentSubcategoryId">
           <span class="move-folder-icon">📂</span>
           <span class="move-folder-name" style="font-style: italic; color: var(--muted)">
-            Raíz de {{ moveBreadcrumbs[0]?.name }}
+            {{ 'CATEGORY_VIEW.MOVE_MODAL.ROOT_OF' | translate | async }} {{ moveBreadcrumbs[0]?.name }}
           </span>
         </div>
 
         <!-- Subcarpetas -->
         <div class="move-empty" *ngIf="moveAvailableFolders.length === 0">
           <i nz-icon nzType="folder-open"></i>
-          <span>No hay subcarpetas aquí</span>
+          <span>{{ 'CATEGORY_VIEW.MOVE_MODAL.NO_SUBFOLDERS' | translate | async }}</span>
         </div>
         <div
           *ngFor="let folder of moveAvailableFolders"
@@ -536,7 +533,8 @@
           (dblclick)="!isMoveTargetDisabled(folder) && moveNavIntoFolder(folder)">
           <span class="move-folder-icon">📂</span>
           <span class="move-folder-name">{{ folder.name }}</span>
-          <span class="move-folder-enter" *ngIf="!isMoveTargetDisabled(folder)" nz-tooltip nzTooltipTitle="Entrar a carpeta"
+          <span class="move-folder-enter" *ngIf="!isMoveTargetDisabled(folder)"
+            nz-tooltip [nzTooltipTitle]="'CATEGORY_VIEW.MOVE_MODAL.TOOLTIP_ENTER_FOLDER' | translate | async"
             (click)="$event.stopPropagation(); moveNavIntoFolder(folder)">
             <i nz-icon nzType="right"></i>
           </span>
@@ -547,16 +545,16 @@
     <!-- Destino seleccionado -->
     <div class="move-destination">
       <i nz-icon nzType="environment"></i>
-      Mover a: <strong>{{ getMoveDestinationLabel() }}</strong>
+      {{ 'CATEGORY_VIEW.MOVE_MODAL.MOVE_TO' | translate | async }} <strong>{{ getMoveDestinationLabel() }}</strong>
     </div>
 
   </div>
 </ng-template>
 
 <ng-template #moveFooterTpl>
-  <button nz-button nzType="default" (click)="cancelMove()">Cancelar</button>
+  <button nz-button nzType="default" (click)="cancelMove()">{{ 'CATEGORY_VIEW.MOVE_MODAL.BTN_CANCEL' | translate | async }}</button>
   <button nz-button nzType="primary" [disabled]="!canConfirmMove()" [nzLoading]="isMoving" (click)="confirmMove()">
-    <i nz-icon nzType="drag"></i> Mover aquí
+    <i nz-icon nzType="drag"></i> {{ 'CATEGORY_VIEW.MOVE_MODAL.BTN_MOVE' | translate | async }}
   </button>
 </ng-template>
 
@@ -565,49 +563,52 @@
   <form nz-form nzLayout="vertical" [formGroup]="uploadForm">
 
     <nz-form-item>
-      <nz-form-label nzRequired>Tipo</nz-form-label>
+      <nz-form-label nzRequired>{{ 'CATEGORY_VIEW.UPLOAD_MODAL.LABEL_TYPE' | translate | async }}</nz-form-label>
       <nz-form-control>
         <nz-radio-group formControlName="type">
           <label nz-radio nzValue="file">
-            <span nz-icon nzType="file"></span> Archivo
+            <span nz-icon nzType="file"></span> {{ 'CATEGORY_VIEW.UPLOAD_MODAL.TYPE_FILE' | translate | async }}
           </label>
           <label nz-radio nzValue="folder">
-            <span nz-icon nzType="folder"></span> Carpeta
+            <span nz-icon nzType="folder"></span> {{ 'CATEGORY_VIEW.UPLOAD_MODAL.TYPE_FOLDER' | translate | async }}
           </label>
         </nz-radio-group>
       </nz-form-control>
     </nz-form-item>
 
     <nz-form-item *ngIf="uploadForm.get('type')?.value === 'file'">
-      <nz-form-label nzRequired>Archivo</nz-form-label>
+      <nz-form-label nzRequired>{{ 'CATEGORY_VIEW.UPLOAD_MODAL.LABEL_FILE' | translate | async }}</nz-form-label>
       <nz-form-control>
         <nz-upload nzName="file" nzListType="text" [nzBeforeUpload]="beforeUpload" [nzShowUploadList]="true">
           <button nz-button class="btn-files">
             <span nz-icon nzType="upload"></span>
-            Seleccionar archivo
+            {{ 'CATEGORY_VIEW.UPLOAD_MODAL.BTN_SELECT_FILE' | translate | async }}
           </button>
         </nz-upload>
       </nz-form-control>
     </nz-form-item>
 
     <nz-form-item>
-      <nz-form-label nzRequired>Título</nz-form-label>
+      <nz-form-label nzRequired>{{ 'CATEGORY_VIEW.UPLOAD_MODAL.LABEL_TITLE' | translate | async }}</nz-form-label>
       <nz-form-control>
         <input nz-input formControlName="title"
-          [placeholder]="uploadForm.get('type')?.value === 'folder' ? 'Nombre de la carpeta' : 'Título del archivo'">
+          [placeholder]="uploadForm.get('type')?.value === 'folder'
+            ? ('CATEGORY_VIEW.UPLOAD_MODAL.PLACEHOLDER_TITLE_FOLDER' | translate | async)
+            : ('CATEGORY_VIEW.UPLOAD_MODAL.PLACEHOLDER_TITLE_FILE' | translate | async)">
       </nz-form-control>
     </nz-form-item>
 
     <nz-form-item *ngIf="uploadForm.get('type')?.value === 'file'">
-      <nz-form-label>Descripción</nz-form-label>
+      <nz-form-label>{{ 'CATEGORY_VIEW.UPLOAD_MODAL.LABEL_DESC' | translate | async }}</nz-form-label>
       <nz-form-control>
-        <textarea nz-input rows="3" formControlName="description" placeholder="Descripción del archivo">
+        <textarea nz-input rows="3" formControlName="description"
+          [placeholder]="'CATEGORY_VIEW.UPLOAD_MODAL.PLACEHOLDER_DESC' | translate | async">
         </textarea>
       </nz-form-control>
     </nz-form-item>
 
     <nz-form-item *ngIf="uploadForm.get('type')?.value === 'file'">
-      <nz-form-label>Tags</nz-form-label>
+      <nz-form-label>{{ 'CATEGORY_VIEW.UPLOAD_MODAL.LABEL_TAGS' | translate | async }}</nz-form-label>
       <nz-form-control>
         <nz-select nzMode="tags" [nzTokenSeparators]="[',']" [nzNotFoundContent]="null" [nzAutoClearSearchValue]="true"
           (nzOpenChange)="preventOpen($event)" formControlName="tags">
@@ -619,9 +620,9 @@
 </ng-template>
 
 <ng-template #tplFooter>
-  <button nz-button nzType="default" (click)="cancelNewMaterial()">Cancelar</button>
+  <button nz-button nzType="default" (click)="cancelNewMaterial()">{{ 'CATEGORY_VIEW.UPLOAD_MODAL.BTN_CANCEL' | translate | async }}</button>
   <button nz-button nzType="primary" [disabled]="!uploadForm.valid" (click)="enviarArchivo()"
-    [nzLoading]="isUploading">Guardar</button>
+    [nzLoading]="isUploading">{{ 'CATEGORY_VIEW.UPLOAD_MODAL.BTN_SAVE' | translate | async }}</button>
 </ng-template>
 
 <ng-template #previewModalTpl>
@@ -632,6 +633,6 @@
     <video [src]="previewModalVideoUrl" controls class="preview-modal-video"></video>
   </div>
   <div *ngIf="previewModalType === 'image' && previewModalImageUrl" class="preview-modal-wrap preview-modal-image-wrap">
-    <img [src]="previewModalImageUrl" class="preview-modal-image" alt="Previsualización" />
+    <img [src]="previewModalImageUrl" class="preview-modal-image" alt="Preview" />
   </div>
 </ng-template>

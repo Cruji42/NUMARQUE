@@ -19,6 +19,7 @@ ng build --configuration production --base-href=http://137.184.132.38/
  
 ng build --configuration production --base-href=http://dev.numarquecenter.com
 
+npx ng build --configuration production --base-href=https://app.numarquecenter.com
 
 ng build --configuration production --base-href=http://137.184.132.38/NUMARQUE/
 

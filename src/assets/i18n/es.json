@@ -222,6 +222,102 @@
       "Necesito una presentación de ventas del sector pecuario..."
     ]
   },
+  "CATEGORY_VIEW": {
+    "TOOLBAR": {
+      "SEARCH_IN_FOLDER": "Buscar en esta carpeta...",
+      "SEARCH_IN_FAVORITES": "Buscar en favoritos...",
+      "TOOLTIP_GRID": "Vista cuadrícula",
+      "TOOLTIP_LIST": "Vista lista",
+      "TOOLTIP_ADD": "Agregar nuevo material"
+    },
+    "CATEGORY": {
+      "DEFAULT_SUBTITLE": "Selecciona una categoría para explorar sus materiales"
+    },
+    "FILES": {
+      "SECTION_FOLDERS": "Carpetas",
+      "SECTION_FILES": "Archivos",
+      "FILES_COUNT": "archivos",
+      "TOOLTIP_ADD_FAV": "Agregar a favoritos",
+      "TOOLTIP_REMOVE_FAV": "Quitar de favoritos",
+      "ADD_TO_FAVORITES": "Agregar a favoritos",
+      "REMOVE_FROM_FAVORITES": "Quitar de favoritos",
+      "EMPTY_TITLE": "Esta carpeta está vacía",
+      "EMPTY_SUB": "No se encontraron archivos o carpetas"
+    },
+    "PREVIEW": {
+      "META_TYPE": "Tipo",
+      "META_SIZE": "Tamaño",
+      "META_DESC": "Descripción",
+      "META_UPLOADED": "Subido",
+      "META_BY": "Por",
+      "META_TAGS": "Tags",
+      "META_CATEGORY": "Categoría",
+      "META_DOWNLOADS": "Descargas",
+      "BTN_DOWNLOAD": "Descargar",
+      "BTN_SHARE": "Compartir",
+      "BTN_PREVIEW": "Previsualizar",
+      "BTN_EDIT": "Editar información",
+      "PLACEHOLDER_ICON": "👆",
+      "PLACEHOLDER_TEXT": "Selecciona un archivo para ver su detalle"
+    },
+    "EDIT_FORM": {
+      "TITLE": "Editar información",
+      "LABEL_TITLE": "Título",
+      "ERROR_TITLE": "El título es obligatorio",
+      "PLACEHOLDER_TITLE": "Título del archivo",
+      "LABEL_DESC": "Descripción",
+      "PLACEHOLDER_DESC": "Descripción del archivo",
+      "LABEL_TAGS": "Tags",
+      "PLACEHOLDER_TAGS": "Agrega tags separados por coma",
+      "BTN_SAVE": "Guardar",
+      "BTN_CANCEL": "Cancelar"
+    },
+    "FAVORITES": {
+      "LOADING": "Cargando favoritos...",
+      "SECTION_FOLDERS": "Carpetas guardadas",
+      "SECTION_FILES": "Archivos guardados",
+      "TOOLTIP_REMOVE_FAV": "Quitar de favoritos",
+      "EMPTY_ICON": "⭐",
+      "EMPTY_TITLE": "No tienes favoritos aún",
+      "EMPTY_SUB": "Marca archivos o carpetas con ★ para verlos aquí",
+      "PLACEHOLDER_ICON": "⭐",
+      "PLACEHOLDER_TEXT": "Selecciona un archivo para ver su detalle",
+      "REMOVE_FROM_FAVORITES": "Quitar de favoritos"
+    },
+    "CONTEXT_MENU": {
+      "DOWNLOAD": "Descargar",
+      "RENAME": "Renombrar",
+      "MOVE": "Mover",
+      "DELETE": "Eliminar"
+    },
+    "MOVE_MODAL": {
+      "BREADCRUMB_ROOT": "Subcategorías",
+      "NO_SUBCATEGORIES": "No hay subcategorías disponibles",
+      "TOOLTIP_ENTER_SUB": "Entrar a subcategoría",
+      "LOADING_FOLDERS": "Cargando carpetas...",
+      "ROOT_OF": "Raíz de",
+      "NO_SUBFOLDERS": "No hay subcarpetas aquí",
+      "TOOLTIP_ENTER_FOLDER": "Entrar a carpeta",
+      "MOVE_TO": "Mover a:",
+      "BTN_CANCEL": "Cancelar",
+      "BTN_MOVE": "Mover aquí"
+    },
+    "UPLOAD_MODAL": {
+      "LABEL_TYPE": "Tipo",
+      "TYPE_FILE": "Archivo",
+      "TYPE_FOLDER": "Carpeta",
+      "LABEL_FILE": "Archivo",
+      "BTN_SELECT_FILE": "Seleccionar archivo",
+      "LABEL_TITLE": "Título",
+      "PLACEHOLDER_TITLE_FILE": "Título del archivo",
+      "PLACEHOLDER_TITLE_FOLDER": "Nombre de la carpeta",
+      "LABEL_DESC": "Descripción",
+      "PLACEHOLDER_DESC": "Descripción del archivo",
+      "LABEL_TAGS": "Tags",
+      "BTN_CANCEL": "Cancelar",
+      "BTN_SAVE": "Guardar"
+    }
+  },
   "SETTINGS": {
     "PAGE_TITLE": "Mi perfil",
     "PAGE_SUBTITLE": "Administra tu información",
