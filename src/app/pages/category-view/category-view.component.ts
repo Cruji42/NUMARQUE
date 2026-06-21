@@ -6,6 +6,7 @@ import { combineLatest, Subject } from 'rxjs';
 import { finalize, takeUntil } from 'rxjs/operators';
 import { EndPointFilesService } from '../../core/apis/end-point-files.service';
 import { SideNavMenuService, ApiDepartment } from '../../core/service/sidenav.service';
+import { TranslationService } from '../../shared/services/translation.service';
 import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { FilesService } from 'src/app/core/service/files.service';
@@ -233,7 +234,8 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
         private endPointUsersService: EndPointUsersService,
         private sanitizer: DomSanitizer,
         private usersService: UsersService,
-        private previewCache: PreviewUrlCacheService, // ← NUEVO
+        private previewCache: PreviewUrlCacheService,
+        private translationService: TranslationService,
     ) { }
 
     ngOnInit(): void {
@@ -1730,6 +1732,11 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
     private resolveBrandName(brand: BrandInfoItem | null): string {
         if (!brand) return '';
         return (brand.name || brand.brand_name || brand.title || '').toString().trim();
+    }
+
+    getSubcategoryDisplayName(name: string): string {
+        const section = this.translationService.translations['SUBCATEGORIES'] as Record<string, string> | undefined;
+        return section?.[name?.trim().toUpperCase()] || name;
     }
 
     getBrandDisplayName(): string { return this.resolveBrandName(this.brandInfo) || this.activeBrand; }

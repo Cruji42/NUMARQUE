@@ -4,8 +4,8 @@
 <div class="fm-toolbar">
   <div class="breadcrumb">
     <span *ngFor="let crumb of breadcrumbs; let i = index; let last = last" class="crumb-item">
-      <span *ngIf="!last" class="crumb-link" (click)="navigateToBreadcrumb(crumb, i)">{{ crumb.label }}</span>
-      <span *ngIf="last" class="crumb-current">{{ crumb.label }}</span>
+      <span *ngIf="!last" class="crumb-link" (click)="navigateToBreadcrumb(crumb, i)">{{ crumb.crumbType === 'subcategory' ? getSubcategoryDisplayName(crumb.label) : crumb.label }}</span>
+      <span *ngIf="last" class="crumb-current">{{ crumb.crumbType === 'subcategory' ? getSubcategoryDisplayName(crumb.label) : crumb.label }}</span>
       <span *ngIf="!last" class="crumb-sep">›</span>
     </span>
   </div>
@@ -82,7 +82,7 @@
         <span *ngIf="!card.logo" class="card-icon">{{ card.icon }}</span>
       </div>
       <div class="card-body">
-        <div class="card-title">{{ card.title }}</div>
+        <div class="card-title">{{ getSubcategoryDisplayName(card.title) }}</div>
         <div class="card-desc">{{ card.description }}</div>
       </div>
       <div class="card-arrow">
