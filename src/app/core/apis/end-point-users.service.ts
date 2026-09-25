@@ -37,6 +37,10 @@ export class EndPointUsersService {
         return this.http.post<any>(`${this.apiUrl}/users/`, userData, { observe: 'response' });
     }
 
+    getCountries(): Observable<any> {
+        return this.http.get<any>(`${this.apiUrl}/countries/`);
+    }
+
     updateUser(userData: User, id: any): Observable<any>{
         return this.http.put<any>(`${this.apiUrl}/users/` + id, userData, { headers: this.configHeadersFilea() })
     }

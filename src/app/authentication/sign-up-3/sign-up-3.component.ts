@@ -15,7 +15,10 @@ export class SignUp3Component {
     signUpForm!: UntypedFormGroup;
     
     isSubmitting = false;
-    
+
+    countries: { id_country: number, label: string }[] = [];
+    loadingCountries = false;
+
     patternPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&._-])[A-Za-z\d@$!%*?&._-]{8,}$/
 
     // submitForm(): void {
@@ -87,6 +90,27 @@ export class SignUp3Component {
             this.specialCharValidator]],
             checkPassword: [null, [Validators.required, this.confirmationValidator]],
             agree: [false, [Validators.requiredTrue]]
+        });
+
+        this.loadCountries();
+    }
+
+    loadCountries(): void {
+        this.loadingCountries = true;
+        this.usersService.getCountries().pipe(
+            finalize(() => this.loadingCountries = false)
+        ).subscribe({
+            next: (countries) => {
+                this.countries = countries
+                    .filter((c: any) => c.is_visible)
+                    .map((c: any) => ({
+                        id_country: c.id_country,
+                        label: c.emoji ? `${c.emoji} ${c.country}` : c.country
+                    }));
+            },
+            error: (err) => {
+                console.error('Error fetching countries', err);
+            }
         });
     }
 

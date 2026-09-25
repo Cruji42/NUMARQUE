@@ -28,6 +28,17 @@ export class UsersService {
         );
     }
 
+    getCountries(): Observable<any[]> {
+        return this.endPointUsersService.getCountries().pipe(
+            map((response: any) => {
+                return response.data ?? [];
+            }),
+            catchError((error) => {
+                return throwError(() => error);
+            })
+        );
+    }
+
     getUsers(): Observable<User[]> {
         return this.endPointUsersService.getUsers().pipe(            
             map((users: any) => {

@@ -73,9 +73,11 @@
           <nz-form-item>
             <nz-form-label>País</nz-form-label>
             <nz-form-control>
-              <nz-select formControlName="country_id">
-                <nz-option nzLabel="México" [nzValue]="1"></nz-option>
-                <nz-option nzLabel="Estados Unidos" [nzValue]="2"></nz-option>
+              <nz-select formControlName="country_id" nzShowSearch nzPlaceHolder="Selecciona tu país"
+                [nzLoading]="loadingCountries">
+                @for (c of countries; track c.id_country) {
+                  <nz-option [nzLabel]="c.label" [nzValue]="c.id_country"></nz-option>
+                }
               </nz-select>
             </nz-form-control>
           </nz-form-item>
