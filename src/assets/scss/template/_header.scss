@@ -39,6 +39,20 @@
         &.logo-white {
             display: block;
         }
+
+        // Móvil/tablet: mostrar solo el logo compacto
+        @include screen-tablet {
+            width: $side-nav-folded;
+
+            img {
+                display: none;
+            }
+
+            .logo-fold {
+                display: block;
+                margin: 0 auto;
+            }
+        }
     }
 
     .nav-wrap {

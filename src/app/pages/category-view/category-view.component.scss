@@ -434,6 +434,35 @@
     .preview-empty-text { font-size: 13px; color: var(--muted); max-width: 160px; line-height: 1.5; }
 }
 
+// Botón cerrar: solo visible en móvil
+.preview-close {
+    display: none;
+    position: absolute; top: 10px; right: 10px;
+    width: 32px; height: 32px;
+    background: var(--navy3); color: var(--text);
+    border: 1px solid var(--border); border-radius: 50%;
+    font-size: 14px; cursor: pointer;
+    align-items: center; justify-content: center;
+    z-index: 1;
+}
+
+// Móvil: el panel vacío se oculta y la vista previa se muestra como hoja inferior
+@media (max-width: 768px) {
+    .preview-empty { display: none !important; }
+
+    .preview-panel {
+        position: fixed; left: 0; right: 0; bottom: 0;
+        width: 100%; max-height: 70vh;
+        border-left: none; border-top: 1px solid var(--border);
+        border-radius: 16px 16px 0 0;
+        box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.35);
+        padding-top: 48px;
+        z-index: 1000;
+    }
+
+    .preview-close { display: flex; }
+}
+
 /* ============================================================
    Modal: Agregar nuevo material
    ============================================================ */

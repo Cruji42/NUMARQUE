@@ -191,6 +191,7 @@
 
   <!-- Preview panel -->
   <div class="preview-panel" *ngIf="selectedFile">
+    <button class="preview-close" type="button" (click)="selectedFile = null" aria-label="Cerrar">✕</button>
 
     <!-- ── Vista normal ── -->
     <ng-container *ngIf="!isEditingContent">
@@ -388,6 +389,7 @@
 
   <!-- Preview panel favoritos -->
   <div class="preview-panel" *ngIf="selectedFile">
+    <button class="preview-close" type="button" (click)="selectedFile = null" aria-label="Cerrar">✕</button>
     <div class="preview-thumb">
       <img *ngIf="isImageType(selectedFile.type) && selectedFile.url" [src]="selectedFile.url" [alt]="selectedFile.name"
         class="preview-media-image" />
