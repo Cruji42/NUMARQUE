@@ -21,11 +21,15 @@ import { NzListModule } from 'ng-zorro-antd/list';
 import { NzCalendarModule } from 'ng-zorro-antd/calendar';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
+import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
+import { NzInputModule } from 'ng-zorro-antd/input';
+import { NzSpinModule } from 'ng-zorro-antd/spin';
 
 import { DefaultDashboardComponent } from './default/default-dashboard.component';
 import { EcommerceDashboardComponent } from './e-commerce/e-commerce-dashboard.component';
 import { ProjectsDashboardComponent } from './projects/projects-dashboard.component';
 import { CrmDashboardComponent } from './crm/crm-dashboard.component';
+import { DownloadsReportComponent } from './downloads-report/downloads-report.component';
 import { BaseChartDirective, NgChartsModule } from 'ng2-charts';
 import { WelcomeComponent } from '../pages/welcome/welcome.component';
 
@@ -45,7 +49,10 @@ const antdModule = [
     NzListModule,
     NzCalendarModule,
     NzToolTipModule,
-    NzCheckboxModule
+    NzCheckboxModule,
+    NzDatePickerModule,
+    NzInputModule,
+    NzSpinModule
 ]
 
 @NgModule({
@@ -62,6 +69,7 @@ const antdModule = [
         EcommerceDashboardComponent,
         ProjectsDashboardComponent,
         CrmDashboardComponent,
+        DownloadsReportComponent,
         WelcomeComponent
     ],
     providers: [

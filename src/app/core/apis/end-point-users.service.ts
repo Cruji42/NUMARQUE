@@ -1,8 +1,8 @@
 import { Inject, Injectable } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpParams, HttpResponse } from "@angular/common/http";
 import { Observable } from "rxjs";
 import { environment } from "src/environments/environment";
-import { User } from "../interfaces";
+import { DownloadsReport, User } from "../interfaces";
 
 @Injectable({
   providedIn: 'root'
@@ -76,6 +76,26 @@ export class EndPointUsersService {
 
     getDownloadsByBrand(): Observable<any> {
         return this.http.get<any>(`${this.apiUrl}/metrics/downloads-by-brand`, { headers: this.configHeaders() });
+    }
+
+    getDownloadsReport(startDate: string, endDate: string, top: number = 10): Observable<DownloadsReport> {
+        const params = new HttpParams()
+            .set('start_date', startDate)
+            .set('end_date', endDate)
+            .set('top', top);
+        return this.http.get<DownloadsReport>(`${this.apiUrl}/metrics/downloads-report`, { headers: this.configHeaders(), params });
+    }
+
+    exportDownloadsReport(startDate: string, endDate: string): Observable<HttpResponse<Blob>> {
+        const params = new HttpParams()
+            .set('start_date', startDate)
+            .set('end_date', endDate);
+        return this.http.get(`${this.apiUrl}/metrics/downloads-report/export`, {
+            headers: this.configHeadersFilea(),
+            params,
+            responseType: 'blob',
+            observe: 'response'
+        });
     }
 
     getDownloadLogs(): Observable<any> {

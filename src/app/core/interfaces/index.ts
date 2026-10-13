@@ -2,6 +2,7 @@ export * from './auth-status.enum'
 export * from './token.interface';
 export * from './user.interface';
 export * from './brands.interface';
+export * from './downloads-report.interface';
 // export * from './auth-status.enum';
 // export * from './cat-licencia.interface';
 // export * from './cat-puesto.interface';

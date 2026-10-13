@@ -1,0 +1,186 @@
+<div class="justify-content-start my-3">
+    <h1><b>Reporte de descargas</b></h1>
+    <h5 class="text-mutted">Corte de descargas de material por periodo</h5>
+</div>
+
+<!-- Filtro -->
+<nz-card class="dr-filter">
+    <div class="dr-filter-row">
+        <div class="dr-field">
+            <label class="dr-label" for="dr-start">Fecha inicio</label>
+            <nz-date-picker id="dr-start" [(ngModel)]="startDate" (ngModelChange)="onDateChange()"
+                nzFormat="dd/MM/yyyy" [nzAllowClear]="false" [nzDisabled]="isLoading || isExporting"
+                nzPlaceHolder="dd/mm/aaaa"></nz-date-picker>
+        </div>
+        <div class="dr-field">
+            <label class="dr-label" for="dr-end">Fecha fin</label>
+            <nz-date-picker id="dr-end" [(ngModel)]="endDate" (ngModelChange)="onDateChange()"
+                nzFormat="dd/MM/yyyy" [nzAllowClear]="false" [nzDisabledDate]="disabledEndDate"
+                [nzDisabled]="isLoading || isExporting" nzPlaceHolder="dd/mm/aaaa"></nz-date-picker>
+        </div>
+
+        <div class="dr-actions">
+            <button nz-button nzType="primary" class="dr-btn-primary" [nzLoading]="isLoading"
+                [disabled]="isLoading || isExporting" (click)="generate()">
+                <i nz-icon nzType="bar-chart" *ngIf="!isLoading"></i>
+                <span>Generar</span>
+            </button>
+            <button nz-button class="dr-btn-export" [nzLoading]="isExporting" [disabled]="!canExport"
+                (click)="exportPdf()">
+                <i nz-icon nzType="file-pdf" *ngIf="!isExporting"></i>
+                <span>{{ isExporting ? 'Generando PDF...' : 'Exportar PDF' }}</span>
+            </button>
+        </div>
+    </div>
+
+    <div class="dr-presets">
+        <button type="button" *ngFor="let preset of presets" class="dr-chip"
+            [class.dr-chip-active]="activePreset === preset.key" [disabled]="isLoading || isExporting"
+            (click)="applyPreset(preset.key)">
+            {{ preset.label }}
+        </button>
+    </div>
+
+    <p class="dr-form-error" *ngIf="formError" role="alert">
+        <i nz-icon nzType="exclamation-circle"></i> {{ formError }}
+    </p>
+</nz-card>
+
+<nz-spin [nzSpinning]="isLoading" nzTip="Cargando reporte...">
+    <div class="dr-sheet" *ngIf="report; else noReport">
+
+        <!-- Encabezado -->
+        <header class="dr-header">
+            <h2 class="dr-title">Descargas de NUMARQUE, {{ report.period.label }}</h2>
+            <p class="dr-subtitle">Corte al {{ report.period.cut_label }}</p>
+        </header>
+
+        <!-- Estado vacío -->
+        <div class="dr-empty" *ngIf="!hasDownloads">
+            <i nz-icon nzType="inbox"></i>
+            <p>No se registraron descargas en el periodo seleccionado</p>
+        </div>
+
+        <ng-container *ngIf="hasDownloads">
+
+            <!-- KPIs -->
+            <section class="dr-kpis">
+                <div class="dr-kpi">
+                    <span class="dr-kpi-value">{{ formatInt(report.summary.total_downloads) }}</span>
+                    <span class="dr-kpi-label">Descargas totales</span>
+                </div>
+                <div class="dr-kpi">
+                    <span class="dr-kpi-value">{{ formatInt(report.summary.downloaded_files) }}</span>
+                    <span class="dr-kpi-label">Archivos descargados</span>
+                </div>
+                <div class="dr-kpi">
+                    <span class="dr-kpi-value">{{ formatInt(report.summary.new_users) }}</span>
+                    <span class="dr-kpi-label">Usuarios nuevos en el periodo</span>
+                </div>
+                <div class="dr-kpi">
+                    <span class="dr-kpi-value">{{ formatDecimal(report.summary.avg_downloads_per_file) }}</span>
+                    <span class="dr-kpi-label">Promedio de descargas por archivo</span>
+                </div>
+            </section>
+
+            <!-- Hallazgos -->
+            <section class="dr-insights" *ngIf="report.insights?.length">
+                <article class="dr-insight" *ngFor="let insight of report.insights">
+                    <h4>{{ insight.title }}</h4>
+                    <p>{{ insight.text }}</p>
+                </article>
+            </section>
+
+            <!-- Archivos más descargados -->
+            <section class="dr-section" *ngIf="report.top_files?.length">
+                <h3 class="dr-section-title">Archivos más descargados</h3>
+                <div class="dr-hbar" *ngFor="let file of report.top_files; trackBy: trackByFile">
+                    <div class="dr-hbar-info">
+                        <span class="dr-hbar-name" [title]="file.file_name">{{ file.file_name }}</span>
+                        <span class="dr-hbar-meta">{{ file.brand }} · {{ file.format }}</span>
+                    </div>
+                    <div class="dr-hbar-track">
+                        <div class="dr-hbar-fill" [class.dr-hbar-fill-muted]="file.downloads === 1"
+                            [style.width.%]="file.bar_width"></div>
+                    </div>
+                    <span class="dr-hbar-value">{{ formatInt(file.downloads) }}</span>
+                </div>
+            </section>
+
+            <!-- Por tipo de contenido -->
+            <section class="dr-section" *ngIf="report.by_content_type?.length">
+                <h3 class="dr-section-title">Por tipo de contenido</h3>
+                <div class="dr-hbar" *ngFor="let item of report.by_content_type; trackBy: trackByLabel">
+                    <div class="dr-hbar-info">
+                        <span class="dr-hbar-name">{{ item.label }}</span>
+                        <span class="dr-hbar-meta">{{ formatInt(item.files) }} archivos · {{ item.percentage }}% del total</span>
+                    </div>
+                    <div class="dr-hbar-track">
+                        <div class="dr-hbar-fill" [style.width.%]="item.percentage"></div>
+                    </div>
+                    <span class="dr-hbar-value">{{ formatInt(item.downloads) }}</span>
+                </div>
+            </section>
+
+            <!-- Por formato / Por marca -->
+            <div class="dr-split">
+                <section class="dr-section" *ngFor="let group of stackGroups">
+                    <ng-container *ngIf="group.items.length">
+                        <h3 class="dr-section-title">{{ group.title }}</h3>
+                        <div class="dr-stack">
+                            <div class="dr-stack-seg" *ngFor="let item of group.items; let i = index; trackBy: trackByLabel"
+                                [style.flex-grow]="item.percentage" [style.background]="stackColor(i)"
+                                [title]="item.label + ': ' + item.percentage + '%'"></div>
+                        </div>
+                        <ul class="dr-legend">
+                            <li *ngFor="let item of group.items; let i = index; trackBy: trackByLabel">
+                                <span class="dr-legend-dot" [style.background]="stackColor(i)"></span>
+                                <span class="dr-legend-label">{{ item.label }}</span>
+                                <span class="dr-legend-value">{{ formatInt(item.downloads) }} · {{ item.percentage }}%</span>
+                            </li>
+                        </ul>
+                    </ng-container>
+                </section>
+            </div>
+
+            <!-- Detalle de archivos -->
+            <section class="dr-section">
+                <div class="dr-table-head">
+                    <h3 class="dr-section-title">Detalle de archivos</h3>
+                    <nz-input-group class="dr-search" [nzPrefix]="searchIcon">
+                        <input type="text" nz-input placeholder="Buscar archivo, marca, formato..."
+                            [(ngModel)]="searchTerm" (ngModelChange)="applySearch()" />
+                    </nz-input-group>
+                    <ng-template #searchIcon><i nz-icon nzType="search"></i></ng-template>
+                </div>
+
+                <div class="dr-table-scroll">
+                    <nz-table #filesTable class="dr-table" [nzData]="filteredFiles" [nzPageSize]="15"
+                        [nzShowSizeChanger]="false" [nzHideOnSinglePage]="true" nzSize="small"
+                        [nzNoResult]="'Sin coincidencias'">
+                        <thead>
+                            <tr>
+                                <th *ngFor="let column of fileColumns" [nzSortFn]="column.compare">{{ column.title }}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let file of filesTable.data; trackBy: trackByFile">
+                                <td class="dr-td-name">{{ file.file_name }}</td>
+                                <td>{{ file.content_type }}</td>
+                                <td>{{ file.brand }}</td>
+                                <td><span class="dr-badge">{{ file.format }}</span></td>
+                                <td class="dr-td-num">{{ formatInt(file.downloads) }}</td>
+                            </tr>
+                        </tbody>
+                    </nz-table>
+                </div>
+            </section>
+        </ng-container>
+    </div>
+
+    <ng-template #noReport>
+        <div class="dr-placeholder" *ngIf="!isLoading">
+            Selecciona un rango de fechas y presiona "Generar".
+        </div>
+    </ng-template>
+</nz-spin>

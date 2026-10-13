@@ -1,7 +1,8 @@
 import { Observable, catchError, map, of, throwError } from 'rxjs';
 import { EndPointUsersService } from '../apis/end-point-users.service';
 import { computed, Injectable, signal } from '@angular/core';
-import { User } from '../interfaces';
+import { HttpResponse } from '@angular/common/http';
+import { DownloadsReport, User } from '../interfaces';
 import { jwtDecode, JwtDecodeOptions } from 'jwt-decode';
 
 
@@ -134,6 +135,22 @@ export class UsersService {
             map((downloadsByBrandResponse: any) => {
                 return downloadsByBrandResponse;
             }),
+            catchError((error) => {
+                return throwError(() => error);
+            })
+        );
+    }
+
+    getDownloadsReport(startDate: string, endDate: string, top: number = 10): Observable<DownloadsReport> {
+        return this.endPointUsersService.getDownloadsReport(startDate, endDate, top).pipe(
+            catchError((error) => {
+                return throwError(() => error);
+            })
+        );
+    }
+
+    exportDownloadsReport(startDate: string, endDate: string): Observable<HttpResponse<Blob>> {
+        return this.endPointUsersService.exportDownloadsReport(startDate, endDate).pipe(
             catchError((error) => {
                 return throwError(() => error);
             })

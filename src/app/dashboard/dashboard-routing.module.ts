@@ -5,6 +5,7 @@ import { DefaultDashboardComponent } from './default/default-dashboard.component
 import { EcommerceDashboardComponent } from './e-commerce/e-commerce-dashboard.component';
 import { ProjectsDashboardComponent } from './projects/projects-dashboard.component';
 import { CrmDashboardComponent } from './crm/crm-dashboard.component';
+import { DownloadsReportComponent } from './downloads-report/downloads-report.component';
 
 const routes: Routes = [
     {
@@ -36,6 +37,14 @@ const routes: Routes = [
         component: CrmDashboardComponent,
         data: {
             title: 'CRM',
+            headerDisplay: "none"
+        }
+    },
+    {
+        path: 'downloads-report',
+        component: DownloadsReportComponent,
+        data: {
+            title: 'Reporte de descargas',
             headerDisplay: "none"
         }
     }

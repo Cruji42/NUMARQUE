@@ -1,0 +1,471 @@
+// Colores Grupo NUTEC (no existen como variables globales en el proyecto)
+:host {
+    --nutec-blue: #0085CA;
+    --nutec-navy: #1B365D;
+    --nutec-gray: #75787B;
+    --nutec-gray-light: #B1B3B3;
+    --nutec-line: #E9EDF1;
+
+    display: block;
+}
+
+// ── Filtro ──────────────────────────────────────────────────────────
+.dr-filter {
+    margin-bottom: 20px;
+}
+
+.dr-filter-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 16px;
+}
+
+.dr-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+
+    nz-date-picker {
+        width: 180px;
+    }
+}
+
+.dr-label {
+    font-size: 13px;
+    color: var(--muted);
+}
+
+.dr-actions {
+    display: flex;
+    gap: 10px;
+    margin-left: auto;
+}
+
+.dr-btn-primary {
+    background: var(--nutec-blue) !important;
+    border-color: var(--nutec-blue) !important;
+    border-radius: 999px;
+}
+
+.dr-btn-export {
+    border-radius: 999px;
+}
+
+.dr-presets {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 14px;
+}
+
+.dr-chip {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    border-radius: 999px;
+    padding: 4px 14px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all .2s ease;
+
+    &:hover:not(:disabled) {
+        border-color: var(--nutec-blue);
+        color: var(--text);
+    }
+
+    &:disabled {
+        opacity: .5;
+        cursor: not-allowed;
+    }
+}
+
+.dr-chip-active {
+    background: var(--nutec-blue);
+    border-color: var(--nutec-blue);
+    color: #fff;
+}
+
+.dr-form-error {
+    margin: 12px 0 0;
+    color: #ff7875;
+    font-size: 13px;
+}
+
+.dr-placeholder {
+    padding: 48px 16px;
+    text-align: center;
+    color: var(--muted);
+}
+
+// ── Hoja del reporte (imita el PDF) ─────────────────────────────────
+.dr-sheet {
+    background: #fff;
+    color: var(--nutec-navy);
+    border-radius: 1.5rem;
+    padding: 32px;
+    min-height: 200px;
+}
+
+.dr-header {
+    border-bottom: 3px solid var(--nutec-blue);
+    padding-bottom: 14px;
+    margin-bottom: 24px;
+}
+
+.dr-title {
+    color: var(--nutec-navy);
+    font-weight: 700;
+    margin: 0;
+}
+
+.dr-subtitle {
+    color: var(--nutec-gray);
+    margin: 4px 0 0;
+}
+
+.dr-empty {
+    text-align: center;
+    padding: 48px 16px;
+    color: var(--nutec-gray);
+
+    i {
+        font-size: 40px;
+        color: var(--nutec-gray-light);
+    }
+
+    p {
+        margin: 12px 0 0;
+        font-size: 15px;
+    }
+}
+
+// KPIs
+.dr-kpis {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.dr-kpi {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 16px;
+    border: 1px solid var(--nutec-line);
+    border-top: 4px solid var(--nutec-blue);
+    border-radius: 12px;
+}
+
+.dr-kpi-value {
+    font-size: 32px;
+    font-weight: 700;
+    line-height: 1.1;
+    color: var(--nutec-navy);
+}
+
+.dr-kpi-label {
+    font-size: 13px;
+    color: var(--nutec-gray);
+}
+
+// Hallazgos
+.dr-insights {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+    margin-bottom: 28px;
+}
+
+.dr-insight {
+    background: var(--nutec-line);
+    border-left: 4px solid var(--nutec-blue);
+    border-radius: 8px;
+    padding: 14px 16px;
+
+    h4 {
+        color: var(--nutec-navy);
+        font-weight: 700;
+        margin: 0 0 6px;
+        font-size: 15px;
+    }
+
+    p {
+        color: var(--nutec-gray);
+        margin: 0;
+        font-size: 13px;
+    }
+}
+
+// Secciones
+.dr-section {
+    margin-bottom: 28px;
+}
+
+.dr-section-title {
+    color: var(--nutec-navy);
+    font-weight: 700;
+    font-size: 17px;
+    margin: 0 0 14px;
+}
+
+// Barras horizontales
+.dr-hbar {
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax(0, 3fr) 48px;
+    align-items: center;
+    gap: 12px;
+    padding: 6px 0;
+    border-bottom: 1px solid var(--nutec-line);
+}
+
+.dr-hbar-info {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.dr-hbar-name {
+    color: var(--nutec-navy);
+    font-size: 13px;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.dr-hbar-meta {
+    color: var(--nutec-gray);
+    font-size: 12px;
+}
+
+.dr-hbar-track {
+    height: 12px;
+    background: var(--nutec-line);
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.dr-hbar-fill {
+    height: 100%;
+    background: var(--nutec-blue);
+    border-radius: 6px;
+}
+
+.dr-hbar-fill-muted {
+    background: var(--nutec-gray-light);
+}
+
+.dr-hbar-value {
+    text-align: right;
+    font-weight: 700;
+    color: var(--nutec-navy);
+}
+
+// Barras apiladas 100%
+.dr-split {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 32px;
+}
+
+.dr-stack {
+    display: flex;
+    height: 22px;
+    border-radius: 6px;
+    overflow: hidden;
+    background: var(--nutec-line);
+}
+
+.dr-stack-seg {
+    flex-basis: 0;
+    min-width: 2px;
+}
+
+.dr-legend {
+    list-style: none;
+    padding: 0;
+    margin: 12px 0 0;
+
+    li {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 4px 0;
+        font-size: 13px;
+    }
+}
+
+.dr-legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+    flex-shrink: 0;
+}
+
+.dr-legend-label {
+    color: var(--nutec-navy);
+    flex: 1;
+}
+
+.dr-legend-value {
+    color: var(--nutec-gray);
+}
+
+// Tabla
+.dr-table-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 12px;
+
+    .dr-section-title {
+        margin: 0;
+    }
+}
+
+.dr-search {
+    max-width: 280px;
+}
+
+:host ::ng-deep .dr-search,
+:host ::ng-deep .dr-search .ant-input {
+    background: #fff !important;
+    border-color: var(--nutec-gray-light) !important;
+    color: var(--nutec-navy) !important;
+
+    .anticon {
+        color: var(--nutec-gray) !important;
+    }
+}
+
+.dr-table-scroll {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+// Sobrescribe el tema oscuro global solo dentro de la hoja
+:host ::ng-deep .dr-table {
+    min-width: 640px;
+
+    .ant-table,
+    .ant-spin-container,
+    .ant-table-placeholder {
+        background: #fff !important;
+        color: var(--nutec-navy) !important;
+    }
+
+    .ant-table-thead > tr > th {
+        background: var(--nutec-navy) !important;
+        color: #fff !important;
+        border-color: var(--nutec-navy) !important;
+    }
+
+    .ant-table-column-sorter {
+        color: rgba(255, 255, 255, .6);
+    }
+
+    .ant-table-column-sorter-up.active,
+    .ant-table-column-sorter-down.active {
+        color: #fff;
+    }
+
+    .ant-table-tbody > tr > td {
+        background: #fff !important;
+        color: var(--nutec-navy) !important;
+        border-color: var(--nutec-line) !important;
+    }
+
+    .ant-table-tbody > tr:nth-child(even) > td {
+        background: #F7F9FB !important;
+    }
+
+    .ant-table-tbody > tr:hover > td {
+        background: var(--nutec-line) !important;
+    }
+
+    .ant-empty-description {
+        color: var(--nutec-gray) !important;
+    }
+}
+
+.dr-td-name {
+    font-weight: 600;
+}
+
+.dr-td-num {
+    text-align: right;
+    font-weight: 700;
+}
+
+.dr-badge {
+    display: inline-block;
+    padding: 1px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+    background: rgba(0, 133, 202, .12);
+    color: var(--nutec-blue);
+}
+
+// ── Móvil ───────────────────────────────────────────────────────────
+@media (max-width: 991px) {
+    .dr-split {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+}
+
+@media (max-width: 767px) {
+    .dr-sheet {
+        padding: 20px 16px;
+        border-radius: 1rem;
+    }
+
+    .dr-kpis {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+    }
+
+    .dr-kpi {
+        padding: 12px;
+    }
+
+    .dr-kpi-value {
+        font-size: 24px;
+    }
+
+    .dr-field {
+        flex: 1 1 140px;
+
+        nz-date-picker {
+            width: 100%;
+        }
+    }
+
+    .dr-actions {
+        width: 100%;
+        margin-left: 0;
+
+        button {
+            flex: 1;
+        }
+    }
+
+    .dr-hbar {
+        grid-template-columns: minmax(0, 1fr) 40px;
+
+        .dr-hbar-track {
+            grid-column: 1 / -1;
+            grid-row: 2;
+        }
+    }
+
+    .dr-search {
+        max-width: none;
+        width: 100%;
+    }
+}

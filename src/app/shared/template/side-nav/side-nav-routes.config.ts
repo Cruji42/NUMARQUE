@@ -44,6 +44,15 @@ export const ROUTES: SideNavInterface[] = [
                 submenu: []
             },
             {
+                path: '/dashboard/downloads-report',
+                title: 'MENU.SIDENAV.DOWNLOADS_REPORT',
+                iconType: 'nzIcon',
+                icon: 'file-pdf',
+                iconTheme: 'outline',
+                canAccess: [1],
+                submenu: []
+            },
+            {
                 path: '/users',
                 title: 'MENU.SIDENAV.USERS',      // ← antes: 'Usuarios'
                 iconType: 'nzIcon',
