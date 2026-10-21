@@ -24,7 +24,9 @@ export class ErrorHandlingService {
 
 
     public getErrorMessage(error: HttpErrorResponse | any): { icon: 'warning' | 'error' | 'success' | 'info', title: string, text: string } {
-             
+        // FastAPI manda el mensaje específico en error.error.detail (string)
+        const backendDetail = typeof error?.error?.detail === 'string' ? error.error.detail : null;
+
          if (!navigator.onLine) {
             return {
                 icon: 'warning',
@@ -41,26 +43,29 @@ export class ErrorHandlingService {
             return {
                 icon: 'error',
                 title: 'Solicitud Incorrecta',
-                text: 'La solicitud enviada no es válida. Por favor, verifica la información y vuelve a intentarlo.'
+                text: backendDetail || 'La solicitud enviada no es válida. Por favor, verifica la información y vuelve a intentarlo.'
             };
         } else if (error.status === 401) {
             return {
                 icon: 'error',
                 title: 'No Autorizado',
-                text: 'Debes iniciar sesión para acceder a este recurso.'
+                text: backendDetail || 'Debes iniciar sesión para acceder a este recurso.'
             };
         } else if (error.status === 403) {
-            this.router.navigateByUrl(`/dashboard/error-handler`);
+            // En el login (cuenta inactiva) solo se muestra el mensaje, sin redirigir
+            if (!error?.url?.includes('/auth/')) {
+                this.router.navigateByUrl(`/dashboard/error-handler`);
+            }
             return {
                 icon: 'error',
                 title: 'Acceso Denegado',
-                text: 'No cuentas con los permisos para acceder a este recurso.'
+                text: backendDetail || 'No cuentas con los permisos para acceder a este recurso.'
             };
         } else if (error.status === 404) {
             return {
                 icon: 'error',
                 title: 'Recurso No Encontrado',
-                text: 'El recurso al que intentas acceder no existe.'
+                text: backendDetail || 'El recurso al que intentas acceder no existe.'
             };
         } else if (error.status === 408 || error.status === 504) {
             return {
