@@ -79,6 +79,21 @@
         <div class="legal">© 2026 GRUPO NUTEC® · <a href="#">Términos</a> · <a href="#">Privacidad</a></div>
       </form>
 
+      <nz-modal
+        [(nzVisible)]="isNewSiteNoticeVisible"
+        nzTitle="¡Bienvenido al nuevo sitio de NUMARQUE!"
+        [nzFooter]="newSiteNoticeFooter"
+        (nzOnCancel)="closeNewSiteNotice()">
+        <ng-container *nzModalContent>
+          <p>Hemos construido un nuevo sitio de NUMARQUE. Las credenciales del sitio anterior <strong>ya no son válidas</strong>.</p>
+          <p>Por favor, ayúdanos a renovar tu acceso creando tu cuenta. Uno de nuestros administradores validará tus datos y te dará acceso a la plataforma.</p>
+        </ng-container>
+      </nz-modal>
+      <ng-template #newSiteNoticeFooter>
+        <button nz-button nzType="default" (click)="closeNewSiteNotice()">Ya tengo cuenta</button>
+        <button nz-button nzType="primary" (click)="goToSignUp()">Crear mi cuenta</button>
+      </ng-template>
+
       <ng-template #prefixUser><i nz-icon nzType="user"></i></ng-template>
       <ng-template #prefixLock><i nz-icon nzType="lock"></i></ng-template>
     </div>

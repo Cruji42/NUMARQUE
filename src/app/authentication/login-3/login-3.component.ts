@@ -16,6 +16,8 @@ declare const google: any;
 export class Login3Component implements AfterViewInit {
   isPasswordVisible = false;
   isSubmitting = false;
+  isNewSiteNoticeVisible = false;
+  private readonly newSiteNoticeKey = 'newSiteNoticeSeen';
   loginForm!: UntypedFormGroup;
   private googleInitialized = false;
 
@@ -33,6 +35,12 @@ export class Login3Component implements AfterViewInit {
       email: [null, [Validators.required, Validators.email]],
       password: [null, [Validators.required]]
     });
+
+    try {
+      this.isNewSiteNoticeVisible = !localStorage.getItem(this.newSiteNoticeKey);
+    } catch {
+      this.isNewSiteNoticeVisible = true;
+    }
   }
 
   ngAfterViewInit(): void {
@@ -51,6 +59,18 @@ export class Login3Component implements AfterViewInit {
         text: 'signin_with'
       }
     );
+  }
+
+  closeNewSiteNotice(): void {
+    this.isNewSiteNoticeVisible = false;
+    try {
+      localStorage.setItem(this.newSiteNoticeKey, 'true');
+    } catch { }
+  }
+
+  goToSignUp(): void {
+    this.closeNewSiteNotice();
+    this.router.navigate(['/authentication/sign']);
   }
 
   togglePasswordVisibility(): void {
