@@ -9,8 +9,8 @@
       "PROFILE": "Profile",
       "FAVORITES": "Favorites",
       "DOWNLOADS_REPORT": "Downloads report",
-      "Pecuario":"Livestock",
-      "Petfood":"Petfood"
+      "Pecuario": "Livestock",
+      "Petfood": "Petfood"
     }
   },
   "WELCOME": {
@@ -389,7 +389,19 @@
       "UPDATE_BTN": "Update password",
       "CONFIRM_TITLE": "Do you want to change your password?",
       "CONFIRM_OK": "Yes, change it",
-      "CONFIRM_CANCEL": "Cancel"
+      "CONFIRM_CANCEL": "Cancel",
+      "CONFIRM_PW": "Confirm new password",
+      "PW_MISMATCH": "Passwords do not match",
+      "RULES_TITLE": "Your new password must contain:",
+      "SAME_AS_CURRENT": "Must be different from your current password",
+      "RULES": {
+        "MIN_LENGTH": "At least 8 characters",
+        "UPPERCASE": "One uppercase letter",
+        "LOWERCASE": "One lowercase letter",
+        "NUMBER": "One number",
+        "SPECIAL": "One special character (e.g. $ ! @ # .)",
+        "NO_SPACES": "No spaces"
+      }
     },
     "ROLES": {
       "ADMIN": "Administrator",
@@ -402,7 +414,10 @@
       "PROFILE_ERROR": "Error updating profile",
       "PHOTO_UPDATED": "Profile photo updated",
       "PHOTO_ERROR": "Error uploading photo",
-      "PW_UPDATED": "Password updated successfully"
+      "PW_UPDATED": "Password updated successfully",
+      "PW_ERROR": "Could not update the password. Please try again.",
+      "PW_WRONG_CURRENT": "The current password is incorrect",
+      "PW_POLICY": "The new password does not meet the requirements"
     }
   }
 }
