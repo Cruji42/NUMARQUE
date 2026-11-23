@@ -224,6 +224,8 @@
     ]
   },
   "SUBCATEGORIES": {
+    "COMUNICADOS": "ANNOUNCEMENTS",
+    "CORPORATIVO": "CORPORATE",
     "TRAINING": "TRAINING",
     "EVENTOS Y BTL": "EVENTS & POS",
     "TÉCNICO": "TECHNICAL",
@@ -260,7 +262,9 @@
       "TOOLTIP_ADD": "Add new material"
     },
     "CATEGORY": {
-      "DEFAULT_SUBTITLE": "Select a category to explore its materials"
+      "DEFAULT_SUBTITLE": "Select a category to explore its materials",
+      "SUBCATEGORY_DESC": "{{name}} materials.",
+      "ENTITY_DESC": "Explore the {{name}} line."
     },
     "FILES": {
       "SECTION_FOLDERS": "Folders",

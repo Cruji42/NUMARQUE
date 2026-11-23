@@ -22,6 +22,10 @@ export interface CategoryCard {
     key: string;
     title: string;
     description: string;
+    /** English description from DB (subcategories.description_en). */
+    descriptionEn?: string;
+    /** i18n key used when there is no description in DB; {{name}} is replaced with the title. */
+    descriptionKey?: string;
     logo?: string | null;
     icon: string;
     color: string;
@@ -80,6 +84,7 @@ interface SubcategoryItem {
     id?: number;
     name?: string;
     description?: string;
+    description_en?: string | null;
     icon_url?: string | null;
     department_id?: number;
     created_at?: string;
@@ -664,7 +669,8 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
         return {
             key: entity.name.toUpperCase(),
             title: entity.name,
-            description: `Explorar línea ${entity.name}.`,
+            description: '',
+            descriptionKey: 'CATEGORY_VIEW.CATEGORY.ENTITY_DESC',
             logo: entity.logo || null,
             icon: style.icon,
             color: style.color,
@@ -700,7 +706,9 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
                 return {
                     key: name.toUpperCase(),
                     title: name,
-                    description: item?.description || `Materiales de ${name}.`,
+                    description: (item?.description || '').trim(),
+                    descriptionEn: (item?.description_en || '').trim(),
+                    descriptionKey: 'CATEGORY_VIEW.CATEGORY.SUBCATEGORY_DESC',
                     icon: style.icon,
                     color: style.color,
                     bgColor: style.bgColor,
@@ -1737,6 +1745,23 @@ export class CategoryViewComponent implements OnInit, OnDestroy {
     getSubcategoryDisplayName(name: string): string {
         const section = this.translationService.translations['SUBCATEGORIES'] as Record<string, string> | undefined;
         return section?.[name?.trim().toUpperCase()] || name;
+    }
+
+    getCardDescription(card: CategoryCard): string {
+        const isEn = this.translationService.currentLang === 'en';
+        const fromDb = isEn ? (card.descriptionEn || card.description) : card.description;
+        if (fromDb) return fromDb;
+        if (!card.descriptionKey) return '';
+        const template = this.getTranslationValue(card.descriptionKey);
+        return template ? template.replace('{{name}}', this.getSubcategoryDisplayName(card.title)) : '';
+    }
+
+    private getTranslationValue(key: string): string {
+        const value = key.split('.').reduce<any>(
+            (acc, part) => (acc && typeof acc === 'object' ? acc[part] : undefined),
+            this.translationService.translations
+        );
+        return typeof value === 'string' ? value : '';
     }
 
     getBrandDisplayName(): string { return this.resolveBrandName(this.brandInfo) || this.activeBrand; }
