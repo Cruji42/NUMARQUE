@@ -234,6 +234,34 @@
 }
 
 // Buttons
+.pw-rules {
+  margin-bottom: 16px;
+  font-size: 13px;
+
+  .pw-rules-title {
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  li {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    line-height: 22px;
+    color: var(--muted);
+    transition: color 0.18s;
+
+    &.met   { color: #22C55E; }
+    &.unmet { color: #F87171; }
+  }
+}
+
 .form-actions {
   display: flex;
   justify-content: flex-end;

@@ -9,8 +9,8 @@
       "PROFILE": "Perfil",
       "FAVORITES": "Favoritos",
       "DOWNLOADS_REPORT": "Reporte de descargas",
-      "Pecuario":"Pecuario",
-      "Petfood":"Petfood"
+      "Pecuario": "Pecuario",
+      "Petfood": "Petfood"
     }
   },
   "WELCOME": {
@@ -389,7 +389,19 @@
       "UPDATE_BTN": "Actualizar contraseña",
       "CONFIRM_TITLE": "¿Deseas cambiar tu contraseña?",
       "CONFIRM_OK": "Sí, cambiar",
-      "CONFIRM_CANCEL": "Cancelar"
+      "CONFIRM_CANCEL": "Cancelar",
+      "CONFIRM_PW": "Confirmar nueva contraseña",
+      "PW_MISMATCH": "Las contraseñas no coinciden",
+      "RULES_TITLE": "Tu nueva contraseña debe tener:",
+      "SAME_AS_CURRENT": "Debe ser distinta a tu contraseña actual",
+      "RULES": {
+        "MIN_LENGTH": "Al menos 8 caracteres",
+        "UPPERCASE": "Una letra mayúscula",
+        "LOWERCASE": "Una letra minúscula",
+        "NUMBER": "Un número",
+        "SPECIAL": "Un carácter especial (ej. $ ! @ # .)",
+        "NO_SPACES": "Sin espacios"
+      }
     },
     "ROLES": {
       "ADMIN": "Administrador",
@@ -402,7 +414,10 @@
       "PROFILE_ERROR": "Error al actualizar el perfil",
       "PHOTO_UPDATED": "Foto de perfil actualizada",
       "PHOTO_ERROR": "Error al subir la foto",
-      "PW_UPDATED": "Contraseña actualizada correctamente"
+      "PW_UPDATED": "Contraseña actualizada correctamente",
+      "PW_ERROR": "No se pudo actualizar la contraseña. Inténtalo de nuevo.",
+      "PW_WRONG_CURRENT": "La contraseña actual es incorrecta",
+      "PW_POLICY": "La nueva contraseña no cumple con los requisitos"
     }
   }
 }

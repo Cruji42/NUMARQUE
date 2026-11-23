@@ -34,6 +34,13 @@ export class EndPointAuthService {
         return this.http.post<any>(`${this.apiUrl}/auth/reset-password`, data);
     }
 
+    changePassword(data: { currentPassword: string; newPassword: string }): Observable<any> {
+        const token = localStorage.getItem('token');
+        return this.http.post<any>(`${this.apiUrl}/auth/change-password`, data, {
+            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }
+        });
+    }
+
 
     // checkExpiredToken( token: string): Observable<any> {
 
