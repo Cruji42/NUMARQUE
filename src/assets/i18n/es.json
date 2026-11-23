@@ -224,6 +224,8 @@
     ]
   },
   "SUBCATEGORIES": {
+    "COMUNICADOS": "COMUNICADOS",
+    "CORPORATIVO": "CORPORATIVO",
     "TRAINING": "TRAINING",
     "EVENTOS Y BTL": "EVENTOS Y PDV",
     "TÉCNICO": "TÉCNICO",
@@ -260,7 +262,9 @@
       "TOOLTIP_ADD": "Agregar nuevo material"
     },
     "CATEGORY": {
-      "DEFAULT_SUBTITLE": "Selecciona una categoría para explorar sus materiales"
+      "DEFAULT_SUBTITLE": "Selecciona una categoría para explorar sus materiales",
+      "SUBCATEGORY_DESC": "Materiales de {{name}}.",
+      "ENTITY_DESC": "Explorar línea {{name}}."
     },
     "FILES": {
       "SECTION_FOLDERS": "Carpetas",
